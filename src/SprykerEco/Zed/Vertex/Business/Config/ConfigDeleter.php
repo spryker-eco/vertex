@@ -11,9 +11,9 @@ use Exception;
 use Generated\Shared\Transfer\VertexConfigCriteriaTransfer;
 use Spryker\Shared\Kernel\Transfer\Exception\NullValueException;
 use Spryker\Shared\Log\LoggerTrait;
-use Spryker\Zed\Vertex\Business\Exception\VertexConfigurationCouldNotBeDeleted;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
-use Spryker\Zed\Vertex\Persistence\VertexEntityManagerInterface;
+use SprykerEco\Zed\Vertex\Business\Exception\VertexConfigurationCouldNotBeDeleted;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
+use SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface;
 
 class ConfigDeleter implements ConfigDeleterInterface
 {

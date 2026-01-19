@@ -14,8 +14,8 @@ use Generated\Shared\Transfer\ItemTransfer;
 use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\VertexShipmentTransfer;
-use Spryker\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetriever;
-use Spryker\Zed\Vertex\Business\Mapper\VertexMapper;
+use SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetriever;
+use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapper;
 
 class PriceAggregator implements PriceAggregatorInterface
 {

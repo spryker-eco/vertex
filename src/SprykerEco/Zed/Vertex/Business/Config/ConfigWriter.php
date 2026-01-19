@@ -9,9 +9,9 @@ namespace SprykerEco\Zed\Vertex\Business\Config;
 
 use Exception;
 use Generated\Shared\Transfer\VertexConfigTransfer;
-use Spryker\Zed\Vertex\Business\Exception\VertexConfigurationCouldNotBeSaved;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
-use Spryker\Zed\Vertex\Persistence\VertexEntityManagerInterface;
+use SprykerEco\Zed\Vertex\Business\Exception\VertexConfigurationCouldNotBeSaved;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
+use SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface;
 
 class ConfigWriter implements ConfigWriterInterface
 {

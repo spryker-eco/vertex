@@ -11,12 +11,12 @@ use Generated\Shared\Transfer\AcpHttpRequestTransfer;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Generated\Shared\Transfer\TaxIdValidationHistoryTransfer;
-use Spryker\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface;
-use Spryker\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
-use Spryker\Zed\Vertex\Business\Config\ConfigReaderInterface;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeInterface;
-use Spryker\Zed\Vertex\Persistence\VertexEntityManagerInterface;
-use Spryker\Zed\Vertex\VertexConfig;
+use SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface;
+use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
+use SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeInterface;
+use SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface;
+use SprykerEco\Zed\Vertex\VertexConfig;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -15,11 +15,11 @@ use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
 use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
 use Generated\Shared\Transfer\TaxTotalTransfer;
-use Spryker\Client\Vertex\VertexClientInterface;
-use Spryker\Shared\Log\LoggerTrait;
-use Spryker\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
-use Spryker\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface;
-use Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface;
+//use Spryker\Client\Vertex\VertexClientInterface; TODO
+//use Spryker\Shared\Log\LoggerTrait; TODO
+use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
+use SprykerEco\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface;
+use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
 
 class VertexCalculator implements VertexCalculatorInterface
 {

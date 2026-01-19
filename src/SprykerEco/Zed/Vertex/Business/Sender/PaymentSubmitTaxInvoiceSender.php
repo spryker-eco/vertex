@@ -12,10 +12,10 @@ use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Spryker\Shared\Log\LoggerTrait;
-use Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeInterface;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
+use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeInterface;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 
 class PaymentSubmitTaxInvoiceSender implements PaymentSubmitTaxInvoiceSenderInterface
 {

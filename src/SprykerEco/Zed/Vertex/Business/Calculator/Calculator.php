@@ -10,11 +10,11 @@ namespace SprykerEco\Zed\Vertex\Business\Calculator;
 use Generated\Shared\Transfer\CalculableObjectTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Spryker\Shared\Log\LoggerTrait;
-use Spryker\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
-use Spryker\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface;
-use Spryker\Zed\Vertex\Business\Config\ConfigReaderInterface;
-use Spryker\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetriever;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
+use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
+use SprykerEco\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface;
+use SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface;
+use SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetriever;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 
 class Calculator implements CalculatorInterface
 {

@@ -11,8 +11,8 @@ use Generated\Shared\Transfer\SortTransfer;
 use Generated\Shared\Transfer\VertexConfigConditionsTransfer;
 use Generated\Shared\Transfer\VertexConfigCriteriaTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
-use Spryker\Zed\Vertex\Persistence\VertexRepositoryInterface;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
+use SprykerEco\Zed\Vertex\Persistence\VertexRepositoryInterface;
 
 class ConfigReader implements ConfigReaderInterface
 {

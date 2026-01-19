@@ -25,10 +25,10 @@ use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\VertexShipmentTransfer;
 use Ramsey\Uuid\Uuid;
-use Spryker\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface;
-use Spryker\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetrieverInterface;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
-use Spryker\Zed\Vertex\VertexConfig;
+use SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface;
+use SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetrieverInterface;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
+use SprykerEco\Zed\Vertex\VertexConfig;
 
 class VertexMapper implements VertexMapperInterface
 {

@@ -9,9 +9,9 @@ namespace SprykerEco\Zed\Vertex\Business\AccessTokenProvider;
 
 use Generated\Shared\Transfer\AccessTokenRequestOptionsTransfer;
 use Generated\Shared\Transfer\AccessTokenRequestTransfer;
-use Spryker\Zed\Vertex\Business\Exception\AccessTokenNotFoundException;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToOauthClientFacadeInterface;
-use Spryker\Zed\Vertex\VertexConfig;
+use SprykerEco\Zed\Vertex\Business\Exception\AccessTokenNotFoundException;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToOauthClientFacadeInterface;
+use SprykerEco\Zed\Vertex\VertexConfig;
 
 class AccessTokenProvider implements AccessTokenProviderInterface
 {

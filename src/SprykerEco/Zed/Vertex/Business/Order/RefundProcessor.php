@@ -14,11 +14,11 @@ use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\TaxRefundRequestTransfer;
 use Spryker\Client\Vertex\VertexClientInterface;
 use Spryker\Shared\Log\LoggerTrait;
-use Spryker\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
-use Spryker\Zed\Vertex\Business\Config\ConfigReaderInterface;
-use Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
+use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
+use SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface;
+use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 
 class RefundProcessor implements RefundProcessorInterface
 {

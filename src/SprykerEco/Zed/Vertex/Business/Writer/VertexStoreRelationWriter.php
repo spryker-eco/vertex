@@ -8,8 +8,8 @@
 namespace SprykerEco\Zed\Vertex\Business\Writer;
 
 use Generated\Shared\Transfer\VertexConfigCriteriaTransfer;
-use Spryker\Zed\Vertex\Business\Config\ConfigWriterInterface;
-use Spryker\Zed\Vertex\Persistence\VertexRepositoryInterface;
+use SprykerEco\Zed\Vertex\Business\Config\ConfigWriterInterface;
+use SprykerEco\Zed\Vertex\Persistence\VertexRepositoryInterface;
 
 class VertexStoreRelationWriter implements VertexStoreRelationWriterInterface
 {
