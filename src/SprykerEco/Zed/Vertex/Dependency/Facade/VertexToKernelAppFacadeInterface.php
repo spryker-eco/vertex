@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
+namespace SprykerEco\Zed\Vertex\Dependency\Facade;
+
+use Generated\Shared\Transfer\AcpHttpRequestTransfer;
+use Generated\Shared\Transfer\AcpHttpResponseTransfer;
+
+interface VertexToKernelAppFacadeInterface
+{
+    /**
+     * @param \Generated\Shared\Transfer\AcpHttpRequestTransfer $acpHttpRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\AcpHttpResponseTransfer
+     */
+    public function makeRequest(AcpHttpRequestTransfer $acpHttpRequestTransfer): AcpHttpResponseTransfer;
+}
