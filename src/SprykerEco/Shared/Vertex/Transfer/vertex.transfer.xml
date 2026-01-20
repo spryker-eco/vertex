@@ -283,4 +283,10 @@
         <property name="clientSecret" type="string"/>
         <property name="securityUri" type="string"/>
     </transfer>
+
+    <transfer name="VertexAuthResponse" strict="true">
+        <property name="accessToken" type="string"/>
+        <property name="expiresIn" type="int"/>
+        <property name="errors" type="string[]" singular="error"/>
+    </transfer>
 </transfers>
