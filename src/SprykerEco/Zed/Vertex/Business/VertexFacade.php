@@ -27,34 +27,6 @@ class VertexFacade extends AbstractFacade implements VertexFacadeInterface
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $VertexConfigTransfer
-     *
-     * @return void
-     */
-    public function saveVertexConfig(VertexConfigTransfer $VertexConfigTransfer): void
-    {
-        $this->getFactory()->createConfigWriter()->write($VertexConfigTransfer);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\VertexConfigCriteriaTransfer $VertexConfigCriteriaTransfer
-     *
-     * @return void
-     */
-    public function deleteVertexConfig(VertexConfigCriteriaTransfer $VertexConfigCriteriaTransfer): void
-    {
-        $this->getFactory()->createConfigDeleter()->delete($VertexConfigCriteriaTransfer);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
      * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
      *
      * @return void
@@ -105,18 +77,5 @@ class VertexFacade extends AbstractFacade implements VertexFacadeInterface
     public function validateTaxId(VertexValidationRequestTransfer $VertexValidationRequestTransfer): VertexValidationResponseTransfer
     {
         return $this->getFactory()->createTaxIdValidator()->validate($VertexValidationRequestTransfer);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
-     * @return void
-     */
-    public function refreshVertexStoreRelations(): void
-    {
-        $this->getFactory()->createVertexStoreRelationWriter()
-            ->refreshVertexStoreRelations();
     }
 }

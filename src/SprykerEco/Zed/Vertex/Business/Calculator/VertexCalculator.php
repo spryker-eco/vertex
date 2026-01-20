@@ -15,8 +15,8 @@ use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
 use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
 use Generated\Shared\Transfer\TaxTotalTransfer;
-//use Spryker\Client\Vertex\VertexClientInterface; TODO
-//use Spryker\Shared\Log\LoggerTrait; TODO
+use SprykerEco\Client\Vertex\VertexClientInterface;
+use Spryker\Shared\Log\LoggerTrait;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
@@ -33,62 +33,24 @@ class VertexCalculator implements VertexCalculatorInterface
     protected const PRICE_MODE_NET = 'NET_MODE';
 
     /**
-     * @var \Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface
-     */
-    protected VertexMapperInterface $VertexMapper;
-
-    /**
-     * @var \Spryker\Client\Vertex\VertexClientInterface
-     */
-    protected VertexClientInterface $VertexClient;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface
-     */
-    protected AccessTokenProviderInterface $accessTokenProvider;
-
-    /**
-     * @var array<int, \Spryker\Zed\VertexExtension\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface>
-     */
-    protected array $calculableObjectVertexExpanderPlugins;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface
-     */
-    protected PriceAggregatorInterface $priceAggregator;
-
-    /**
-     * @param \Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface $VertexMapper
-     * @param \Spryker\Client\Vertex\VertexClientInterface $VertexClient
+     * @param \Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface $vertexMapper
+     * @param \SprykerEco\Client\Vertex\VertexClientInterface $vertexClient
      * @param \Spryker\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface $accessTokenProvider
      * @param array<\SprykerEco\Zed\VertexExtension\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface> $calculableObjectVertexExpanderPlugins
      * @param \Spryker\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface $priceAggregator
      */
     public function __construct(
-        VertexMapperInterface $VertexMapper,
-        VertexClientInterface $VertexClient,
-        AccessTokenProviderInterface $accessTokenProvider,
-        array $calculableObjectVertexExpanderPlugins,
-        PriceAggregatorInterface $priceAggregator
-    ) {
-        $this->VertexMapper = $VertexMapper;
-        $this->VertexClient = $VertexClient;
-        $this->accessTokenProvider = $accessTokenProvider;
-        $this->calculableObjectVertexExpanderPlugins = $calculableObjectVertexExpanderPlugins;
-        $this->priceAggregator = $priceAggregator;
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $VertexConfigTransfer
-     *
-     * @return void
-     */
+        protected VertexMapperInterface $vertexMapper,
+        protected VertexClientInterface $vertexClient,
+        protected AccessTokenProviderInterface $accessTokenProvider,
+        protected array $calculableObjectVertexExpanderPlugins,
+        protected PriceAggregatorInterface $priceAggregator
+    ) {}
     public function recalculate(CalculableObjectTransfer $calculableObjectTransfer, VertexConfigTransfer $VertexConfigTransfer): void
     {
         $calculableObjectTransfer = $this->executeCalculableObjectVertexExpanderPlugins($calculableObjectTransfer);
 
-        $VertexSaleTransfer = $this->VertexMapper->mapCalculableObjectToVertexSaleTransfer($calculableObjectTransfer, new VertexSaleTransfer());
+        $VertexSaleTransfer = $this->vertexMapper->mapCalculableObjectToVertexSaleTransfer($calculableObjectTransfer, new VertexSaleTransfer());
 
         // for correct tax calculation in NET price mode, at least one shipment must be selected, otherwise tax calculation is skipped.
         if ($calculableObjectTransfer->getPriceModeOrFail() === static::PRICE_MODE_NET && $VertexSaleTransfer->getShipments()->count() === 0) {
@@ -105,7 +67,7 @@ class VertexCalculator implements VertexCalculatorInterface
             $taxCalculationResponseTransfer = $this->getTaxCalculationResponse(
                 $VertexSaleTransfer,
                 $VertexConfigTransfer,
-                $calculableObjectTransfer->getStoreOrFail(),
+                $calculableObjectTransfer->getStoreOrFail()
             );
 
             if (!$taxCalculationResponseTransfer->getIsSuccessful()) {
@@ -143,7 +105,7 @@ class VertexCalculator implements VertexCalculatorInterface
             ->setSale($VertexSaleTransfer)
             ->setAuthorization($this->accessTokenProvider->getAccessToken());
 
-        return $this->VertexClient->requestTaxQuotation($taxCalculationRequestTransfer, $VertexConfigTransfer, $storeTransfer);
+        return $this->vertexClient->calculateTax($taxCalculationRequestTransfer);
     }
 
     /**

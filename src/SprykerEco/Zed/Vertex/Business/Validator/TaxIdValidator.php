@@ -35,12 +35,12 @@ class TaxIdValidator implements TaxIdValidatorInterface
     /**
      * @var string
      */
-    protected const GLOSSARY_KEY_TAX_APP_IS_DISABLED = 'tax_app.vertex.tax-app-disabled';
+    protected const GLOSSARY_KEY_VERTEX_IS_DISABLED = 'vertex.vertex-disabled';
 
     /**
      * @var string
      */
-    protected const GLOSSARY_KEY_TAX_VALIDATOR_IS_UNAVAILABLE = 'tax_app.vertex.tax-validator-unavailable';
+    protected const GLOSSARY_KEY_TAX_VALIDATOR_IS_UNAVAILABLE = 'vertex.tax-validator-unavailable';
 
     /**
      * @param \Spryker\Zed\Vertex\Business\Config\ConfigReaderInterface $configReader
@@ -75,7 +75,7 @@ class TaxIdValidator implements TaxIdValidatorInterface
             !$VertexConfigTransfer->getApiUrls() ||
             !$VertexConfigTransfer->getApiUrls()->getTaxIdValidationUrl()
         ) {
-            return $this->createVertexValidationResponseTransfer(false, VertexConfig::MESSAGE_TAX_APP_IS_DISABLED, static::GLOSSARY_KEY_TAX_APP_IS_DISABLED);
+            return $this->createVertexValidationResponseTransfer(false, VertexConfig::MESSAGE_VERTEX_IS_DISABLED, static::GLOSSARY_KEY_VERTEX_IS_DISABLED);
         }
 
         $acpHttpResponseTransfer = $this->kernelAppFacade->makeRequest(

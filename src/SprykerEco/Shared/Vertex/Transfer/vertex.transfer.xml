@@ -10,7 +10,7 @@
         <property name="priceMode" type="string"/>
         <property name="expenses" type="Expense[]" singular="expense"/>
         <property name="originalOrder" type="Order"/>
-        <property name="taxAppSaleHash" type="string" strict="true"/>
+        <property name="vertexSaleHash" type="string" strict="true"/>
         <property name="taxCalculationResponse" type="TaxCalculationResponse" strict="true"/>
     </transfer>
 
@@ -70,33 +70,12 @@
         <!--- the contents provided on a project level -->
     </transfer>
 
-<!--    <transfer name="MessageAttributes">-->
-<!--        <property name="storeReference" type="string"/>-->
-<!--        <property name="tenantIdentifier" type="string"/>-->
-<!--        <property name="actorId" type="string"/>-->
-<!--        <property name="emitter" type="string"/>-->
-<!--    </transfer>-->
-
-    <transfer name="VertexConfig" strict="true">
-        <property name="applicationId" type="string"/>
-        <property name="isActive" type="bool"/>
-        <property name="apiUrls" type="TaxAppApiUrls"/>
-        <property name="vendorCode" type="string"/>
-        <property name="storeReference" type="string"/>
-<!--        <property name="tenantIdentifier" type="string" deprecated="Will be removed in next major."/>-->
-    </transfer>
-
-    <transfer name="TaxAppApiUrls" strict="true">
+    <transfer name="VertexApiUrls" strict="true">
         <property name="quotationUrl" type="string"/>
         <property name="refundsUrl" type="string"/>
         <property name="taxIdValidationUrl" type="string"/>
     </transfer>
 
-    <transfer name="VertexConfigCriteria" strict="true">
-        <property name="taxAppConfigConditions" type="TaxAppConfigConditions"/>
-        <property name="pagination" type="Pagination"/>
-        <property name="sortCollection" type="Sort[]" singular="sort"/>
-    </transfer>
 
     <transfer name="Pagination">
         <property name="offset" type="int"/>
@@ -108,31 +87,6 @@
         <property name="field" type="string"/>
         <property name="isAscending" type="bool"/>
     </transfer>
-
-    <transfer name="VertexConfigConditions" strict="true">
-        <property name="applicationIds" type="string[]" singular="applicationId"/>
-        <property name="vendorCodes" type="string[]" singular="vendorCode"/>
-        <property name="storeReferences" type="string[]" singular="storeReference"/>
-        <property name="fkStores" type="int[]" singular="fkStore"/>
-    </transfer>
-
-    <transfer name="VertexConfigCollection" strict="true">
-        <property name="vertexConfigs" type="VertexConfig[]" singular="vertexConfig"/>
-        <property name="pagination" type="Pagination"/>
-    </transfer>
-
-<!--    <transfer name="ConfigureVertex" strict="true">-->
-<!--        <property name="messageAttributes" type="MessageAttributes"/>-->
-<!--        <property name="isActive" type="bool"/>-->
-<!--        <property name="apiUrls" type="TaxAppApiUrls"/>-->
-<!--        <property name="vendorCode" type="string"/>-->
-<!--    </transfer>-->
-
-<!--    <transfer name="DeleteTaxApp" strict="true">-->
-<!--        <property name="messageAttributes" type="MessageAttributes"/>-->
-<!--        <property name="vendorCode" type="string"/>-->
-<!--        <property name="storeReference" type="string"/>-->
-<!--    </transfer>-->
 
     <transfer name="VertexSale" strict="true">
         <property name="transactionId" type="string"/>
@@ -324,15 +278,9 @@
         <property name="responseData" type="string"/>
     </transfer>
 
-<!--    <transfer name="AcpHttpRequest" strict="true">-->
-<!--        <property name="uri" type="string"/>-->
-<!--        <property name="method" type="string"/>-->
-<!--        <property name="body" type="string"/>-->
-<!--        <property name="headers" type="array" associative="true" singular="header"/>-->
-<!--    </transfer>-->
-
-<!--    <transfer name="AcpHttpResponse" strict="true">-->
-<!--        <property name="content" type="string"/>-->
-<!--        <property name="httpStatusCode" type="int"/>-->
-<!--    </transfer>-->
+    <transfer name="VertexConfig" strict="true">
+        <property name="clientId" type="string"/>
+        <property name="clientSecret" type="string"/>
+        <property name="securityUri" type="string"/>
+    </transfer>
 </transfers>

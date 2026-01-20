@@ -15,7 +15,7 @@ class VertexConfig extends AbstractBundleConfig
     /**
      * @var string
      */
-    public const MESSAGE_TAX_APP_IS_DISABLED = 'Tax service is disabled.';
+    public const MESSAGE_VERTEX_IS_DISABLED = 'Tax service is disabled.';
 
     /**
      * @var string
