@@ -25,66 +25,23 @@ class RefundProcessor implements RefundProcessorInterface
     use LoggerTrait;
 
     /**
-     * @var \Spryker\Client\Vertex\VertexClientInterface
-     */
-    protected VertexClientInterface $VertexClient;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface
-     */
-    protected VertexToStoreFacadeInterface $storeFacade;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface
-     */
-    protected VertexToSalesFacadeInterface $salesFacade;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface
-     */
-    protected VertexMapperInterface $VertexMapper;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface
-     */
-    protected AccessTokenProviderInterface $accessTokenProvider;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Business\Config\ConfigReaderInterface
-     */
-    protected ConfigReaderInterface $configReader;
-
-    /**
-     * @var array<\Spryker\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface>
-     */
-    protected array $orderVertexExpanderPlugins;
-
-    /**
-     * @param \Spryker\Client\Vertex\VertexClientInterface $VertexClient
-     * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
-     * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface $salesFacade
-     * @param \Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface $VertexMapper
-     * @param \Spryker\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface $accessTokenProvider
-     * @param \Spryker\Zed\Vertex\Business\Config\ConfigReaderInterface $configReader
-     * @param array<\Spryker\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface> $orderVertexExpanderPlugins
+     * @param \SprykerEco\Client\Vertex\VertexClientInterface $VertexClient
+     * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
+     * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface $salesFacade
+     * @param \SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface $VertexMapper
+     * @param \SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface $accessTokenProvider
+     * @param \SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface $configReader
+     * @param array<\SprykerEco\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface> $orderVertexExpanderPlugins // TODO
      */
     public function __construct(
-        VertexClientInterface $VertexClient,
+        VertexClientInterface $vertexClient,
         VertexToStoreFacadeInterface $storeFacade,
         VertexToSalesFacadeInterface $salesFacade,
         VertexMapperInterface $VertexMapper,
         AccessTokenProviderInterface $accessTokenProvider,
         ConfigReaderInterface $configReader,
         array $orderVertexExpanderPlugins
-    ) {
-        $this->VertexClient = $VertexClient;
-        $this->storeFacade = $storeFacade;
-        $this->salesFacade = $salesFacade;
-        $this->VertexMapper = $VertexMapper;
-        $this->accessTokenProvider = $accessTokenProvider;
-        $this->configReader = $configReader;
-        $this->orderVertexExpanderPlugins = $orderVertexExpanderPlugins;
-    }
+    ) {}
 
     /**
      * @param array<int> $orderItemIds
@@ -127,7 +84,7 @@ class RefundProcessor implements RefundProcessorInterface
 
         $taxRefundRequestTransfer = $this->expandTaxRefundRequestWithAccessToken($taxRefundRequestTransfer);
 
-        $this->VertexClient->requestTaxRefund($taxRefundRequestTransfer, $VertexConfigTransfer, $storeTransfer);
+        $this->vertexClient->requestTaxRefund($taxRefundRequestTransfer, $VertexConfigTransfer, $storeTransfer); // TODO
     }
 
     /**

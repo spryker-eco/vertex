@@ -16,9 +16,9 @@ use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Spryker\Zed\Kernel\Business\AbstractFacade;
 
 /**
- * @method \Spryker\Zed\Vertex\Business\VertexBusinessFactory getFactory()
- * @method \Spryker\Zed\Vertex\Persistence\VertexRepositoryInterface getRepository()
- * @method \Spryker\Zed\Vertex\Persistence\VertexEntityManagerInterface getEntityManager()
+ * @method \SprykerEco\Zed\Vertex\Business\VertexBusinessFactory getFactory()
+ * @method \SprykerEco\Zed\Vertex\Persistence\VertexRepositoryInterface getRepository()
+ * @method \SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface getEntityManager()
  */
 class VertexFacade extends AbstractFacade implements VertexFacadeInterface
 {
