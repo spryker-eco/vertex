@@ -58,27 +58,27 @@ class Calculator implements CalculatorInterface
     /**
      * @var \Spryker\Zed\Vertex\Business\Calculator\VertexCalculatorInterface
      */
-    protected VertexCalculatorInterface $VertexCalculator;
+    protected VertexCalculatorInterface $vertexCalculator;
 
     /**
      * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
      * @param \Spryker\Zed\Vertex\Business\Config\ConfigReaderInterface $configReader
      * @param \Spryker\Zed\Vertex\Business\Calculator\FallbackCalculatorInterface $fallbackQuoteCalculator
      * @param \Spryker\Zed\Vertex\Business\Calculator\FallbackCalculatorInterface $fallbackOrderCalculator
-     * @param \Spryker\Zed\Vertex\Business\Calculator\VertexCalculatorInterface $VertexCalculator
+     * @param \Spryker\Zed\Vertex\Business\Calculator\VertexCalculatorInterface $vertexCalculator
      */
     public function __construct(
         VertexToStoreFacadeInterface $storeFacade,
         ConfigReaderInterface $configReader,
         FallbackCalculatorInterface $fallbackQuoteCalculator,
         FallbackCalculatorInterface $fallbackOrderCalculator,
-        VertexCalculatorInterface $VertexCalculator
+        VertexCalculatorInterface $vertexCalculator
     ) {
         $this->storeFacade = $storeFacade;
         $this->configReader = $configReader;
         $this->fallbackQuoteCalculator = $fallbackQuoteCalculator;
         $this->fallbackOrderCalculator = $fallbackOrderCalculator;
-        $this->VertexCalculator = $VertexCalculator;
+        $this->vertexCalculator = $vertexCalculator;
     }
 
     /**
@@ -103,7 +103,7 @@ class Calculator implements CalculatorInterface
         }
         $this->setHideTaxInCartFlagToTrue($calculableObjectTransfer);
 
-        $this->VertexCalculator->recalculate($calculableObjectTransfer, $VertexConfigTransfer);
+        $this->vertexCalculator->recalculate($calculableObjectTransfer, $VertexConfigTransfer);
     }
 
     /**

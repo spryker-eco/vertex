@@ -61,7 +61,7 @@ class VertexCalculator implements VertexCalculatorInterface
      * @param \Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface $VertexMapper
      * @param \Spryker\Client\Vertex\VertexClientInterface $VertexClient
      * @param \Spryker\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface $accessTokenProvider
-     * @param array<\Spryker\Zed\VertexExtension\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface> $calculableObjectVertexExpanderPlugins
+     * @param array<\SprykerEco\Zed\VertexExtension\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface> $calculableObjectVertexExpanderPlugins
      * @param \Spryker\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface $priceAggregator
      */
     public function __construct(

@@ -62,7 +62,7 @@ class AccessTokenProvider implements AccessTokenProviderInterface
      */
     protected function getAuthorizationValue(AccessTokenRequestTransfer $accessTokenRequestTransfer): string
     {
-        $accessTokenResponseTransfer = $this->oauthClientFacade->getAccessToken($accessTokenRequestTransfer);
+        $accessTokenResponseTransfer = $this->oauthClientFacade->getAccessToken($accessTokenRequestTransfer); // TODO
 
         if (!$accessTokenResponseTransfer->getIsSuccessful()) {
             throw new AccessTokenNotFoundException(
