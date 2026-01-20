@@ -33,9 +33,9 @@ class VertexClient extends AbstractClient implements VertexClientInterface
      *
      * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
      *
-     * @return \Generated\Shared\Transfer\VertexApiAuthResponseTransfer
+     * @return \Generated\Shared\Transfer\VertexAuthResponseTransfer
      */
-    public function authenticate(VertexConfigTransfer $vertexConfigTransfer): VertexApiAuthResponseTransfer
+    public function authenticate(VertexConfigTransfer $vertexConfigTransfer): VertexAuthResponseTransfer
     {
         return $this->getFactory()->createVertexApiAuthenticator()->authenticate($vertexConfigTransfer);
     }
