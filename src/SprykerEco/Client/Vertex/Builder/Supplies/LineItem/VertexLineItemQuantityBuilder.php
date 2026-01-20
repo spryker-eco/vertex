@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+namespace Pyz\Zed\VertexApi\Business\Builder\Supplies\LineItem;
+
+use Generated\Shared\Transfer\SaleItemTransfer;
+use Generated\Shared\Transfer\ShipmentTransfer;
+use Generated\Shared\Transfer\VertexLineItemTransfer;
+use Generated\Shared\Transfer\VertexQuantityTransfer;
+use Pyz\Zed\VertexApi\Business\Builder\VertexLineItemBuilderInterface;
+
+class VertexLineItemQuantityBuilder implements VertexLineItemBuilderInterface
+{
+    /**
+     * @var string
+     */
+    protected const UNIT_OF_MEASURE_EACH = 'EA';
+
+    /**
+     * @param \Generated\Shared\Transfer\SaleItemTransfer|\Generated\Shared\Transfer\ShipmentTransfer $itemTransfer
+     * @param \Generated\Shared\Transfer\VertexLineItemTransfer $vertexLineItemTransfer
+     *
+     * @return \Generated\Shared\Transfer\VertexLineItemTransfer
+     */
+    public function build(SaleItemTransfer|ShipmentTransfer $itemTransfer, VertexLineItemTransfer $vertexLineItemTransfer): VertexLineItemTransfer
+    {
+        $vertexQuantityTransfer = (new VertexQuantityTransfer())
+            ->setUnitOfMeasure(static::UNIT_OF_MEASURE_EACH)
+            ->setValue((float)$itemTransfer->getQuantityOrFail());
+
+        $vertexLineItemTransfer
+            ->setQuantity($vertexQuantityTransfer);
+
+        return $vertexLineItemTransfer;
+    }
+}
