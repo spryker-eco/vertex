@@ -491,4 +491,5 @@
         <property name="taxamoApiUrl" type="string"/>
         <property name="taxId" type="string"/>
         <property name="countryCode" type="string"/>
+    </transfer>
 </transfers>
