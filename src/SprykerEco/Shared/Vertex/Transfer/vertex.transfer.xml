@@ -122,11 +122,6 @@
         <property name="sku" type="string"/>
     </transfer>
 
-    <transfer name="ShippingWarehouse" strict="true">
-        <property name="quantity" type="int"/>
-        <property name="warehouseAddress" type="VertexAddress"/>
-    </transfer>
-
     <transfer name="VertexShipment" strict="true">
         <property name="id" type="string"/>
         <property name="shipmentMethodKey" type="string"/>
