@@ -20,9 +20,8 @@ use Generated\Shared\Transfer\VertexConfigTransfer;
 use Spryker\Client\Kernel\AbstractClient;
 
 /**
- * @method \Pyz\Zed\VertexApi\Business\VertexApiBusinessFactory getFactory()
- * @method \Pyz\Zed\VertexApi\Persistence\VertexApiRepositoryInterface getRepository()
- * @method \Pyz\Zed\VertexApi\Persistence\VertexApiEntityManagerInterface getEntityManager()
+ * @method \SprykerEco\Client\Vertex\VertexFactory getFactory()
+ * @method \SprykerEco\Client\Vertex\VertexConfig getConfig()
  */
 class VertexClient extends AbstractClient implements VertexClientInterface
 {
@@ -94,7 +93,9 @@ class VertexClient extends AbstractClient implements VertexClientInterface
     public function handleSubmitPaymentTaxInvoice(
         SubmitPaymentTaxInvoiceTransfer $submitPaymentTaxInvoiceTransfer
     ): SubmitPaymentTaxInvoiceResponseTransfer {
-        return $this->getFactory()->createVertexApiMessageHandler()->handleSubmitPaymentTaxInvoice($submitPaymentTaxInvoiceTransfer);
+        return $this->getFactory()
+            ->createVertexApiMessageHandler()
+            ->handleSubmitPaymentTaxInvoice($submitPaymentTaxInvoiceTransfer);
     }
 
     /**
@@ -108,6 +109,8 @@ class VertexClient extends AbstractClient implements VertexClientInterface
      */
     public function submitVoidPaymentTaxInvoice(TaxCalculationRequestTransfer $taxCalculationRequestTransfer): TaxCalculationResponseTransfer
     {
-        return $this->getFactory()->createVertexApiRefunds()->submitVoidPaymentTaxInvoice($taxCalculationRequestTransfer);
+        return $this->getFactory()
+            ->createVertexApiRefunds()
+            ->submitVoidPaymentTaxInvoice($taxCalculationRequestTransfer);
     }
 }
