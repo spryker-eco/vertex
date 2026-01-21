@@ -85,15 +85,4 @@ interface VertexFacadeInterface
      * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
      */
     public function validateTaxId(VertexValidationRequestTransfer $VertexValidationRequestTransfer): VertexValidationResponseTransfer;
-
-    /**
-     * Specification:
-     * - Fetches a collection of Vertex configs from the Persistence.
-     * - Iterates over the collection and triggers an update for each Vertex config, creating non-existent store relations.
-     *
-     * @api
-     *
-     * @return void
-     */
-    public function refreshVertexStoreRelations(): void;
 }
