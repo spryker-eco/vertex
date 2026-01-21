@@ -12,72 +12,31 @@ use Spryker\Zed\Kernel\AbstractBundleConfig;
 
 class VertexConfig extends AbstractBundleConfig
 {
-    /**
-     * @var string
-     */
-    public const MESSAGE_VERTEX_IS_DISABLED = 'Tax service is disabled.';
+    protected string const CLIENT_ID = 'VERTEX:CLIENT_ID';
 
-    /**
-     * @var string
-     */
-    public const MESSAGE_TAX_VALIDATOR_IS_UNAVAILABLE = 'Tax Validator API is unavailable.';
+    protected string const CLIENT_SECRET = 'VERTEX:CLIENT_SECRET';
 
-    /**
-     * @api
-     *
-     * @return string
-     */
-    public function getOauthProviderNameForTaxCalculation(): string
+    protected string const SECURITY_URI = 'VERTEX:SECURITY_URI';
+
+    protected string const TRANSACTION_CALLS_URI = 'VERTEX:TRANSACTION_CALLS_URI';
+
+    public function getClientId(): string
     {
-        return $this->get(VertexConstants::OAUTH_PROVIDER_NAME, '');
+        return $this->get(static::CLIENT_ID, null);
     }
 
-    /**
-     * @api
-     *
-     * @return string
-     */
-    public function getOauthGrantTypeForTaxCalculation(): string
+    public function getClientSecret(): string
     {
-        return $this->get(VertexConstants::OAUTH_GRANT_TYPE, '');
+        return $this->get(static::CLIENT_SECRET, null);
     }
 
-    /**
-     * @api
-     *
-     * @return string
-     */
-    public function getOauthOptionAudienceForTaxCalculation(): string
+    public function getSecurityUri(): string
     {
-        return $this->get(VertexConstants::OAUTH_OPTION_AUDIENCE, '');
+        return $this->get(static::SECURITY_URI, null);
     }
 
-    /**
-     * Specification:
-     * - 2 letters ISO country code, for example US, DE
-     * - Overrides the default value (the first country of the store defined in the Quote/Order).
-     *
-     * @api
-     *
-     * @return string
-     */
-    public function getSellerCountryCode(): string
+    public function getTransactionCallsUri(): string
     {
-        return '';
-    }
-
-    /**
-     * Specification:
-     * - 2 letters ISO country code, for example US, DE
-     * - Used for tax calculation when a customer did not provide shipping address.
-     * - Overrides the default value (the first country of the store defined in the Quote/Order).
-     *
-     * @api
-     *
-     * @return string
-     */
-    public function getCustomerCountryCode(): string
-    {
-        return '';
+        return $this->get(static::TRANSACTION_CALLS_URI, null);
     }
 }

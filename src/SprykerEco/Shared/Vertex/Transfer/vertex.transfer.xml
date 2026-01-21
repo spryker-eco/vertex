@@ -282,6 +282,7 @@
         <property name="clientId" type="string"/>
         <property name="clientSecret" type="string"/>
         <property name="securityUri" type="string"/>
+        <property name="transactionCallsUri" type="string"/>
     </transfer>
 
     <transfer name="VertexAuthResponse" strict="true">
