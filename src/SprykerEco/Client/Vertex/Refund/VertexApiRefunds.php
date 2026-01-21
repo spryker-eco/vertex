@@ -5,40 +5,31 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\VertexApi\Business\Refund;
+namespace SprykerEco\Client\Vertex\Refund;
 
 use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
 use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
-use Generated\Shared\Transfer\VertexConfigCriteriaTransfer;
-use Pyz\Zed\VertexApi\Business\TaxCalculator\VertexTaxCalculatorInterface;
-use Pyz\Zed\VertexConfig\Business\VertexConfigFacadeInterface;
+use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface;
 
 class VertexApiRefunds implements VertexApiRefundsInterface
 {
-    protected VertexConfigFacadeInterface $vertexConfigFacade;
-
-    protected VertexTaxCalculatorInterface $vertexTaxCalculator;
-
     /**
-     * @param \Pyz\Zed\VertexConfig\Business\VertexConfigFacadeInterface $vertexConfigFacade
-     * @param \Pyz\Zed\VertexApi\Business\TaxCalculator\VertexTaxCalculatorInterface $vertexTaxCalculator
+     * @param \SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface $vertexTaxCalculator
      */
-    public function __construct(VertexConfigFacadeInterface $vertexConfigFacade, VertexTaxCalculatorInterface $vertexTaxCalculator)
+    public function __construct(protected VertexTaxCalculatorInterface $vertexTaxCalculator)
     {
-        $this->vertexConfigFacade = $vertexConfigFacade;
-        $this->vertexTaxCalculator = $vertexTaxCalculator;
     }
 
     /**
-     * @inheritDoc
+     * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
+     *
+     * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
      */
-    public function submitVoidPaymentTaxInvoice(TaxCalculationRequestTransfer $taxCalculationRequestTransfer): TaxCalculationResponseTransfer
-    {
-        $vertexConfigCriteriaTransfer = (new VertexConfigCriteriaTransfer())
-            ->setStoreReference($taxCalculationRequestTransfer->getTenantIdentifierOrFail());
-
-        $vertexConfigTransfer = $this->vertexConfigFacade->getConfig($vertexConfigCriteriaTransfer);
-
+    public function submitVoidPaymentTaxInvoice(
+        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
+        VertexConfigTransfer $vertexConfigTransfer
+    ): TaxCalculationResponseTransfer {
         if (!$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsInvoicingEnabled()) {
             $taxCalculationResponseTransfer = new TaxCalculationResponseTransfer();
             $taxCalculationResponseTransfer->setIsSuccessful(false);
@@ -47,6 +38,6 @@ class VertexApiRefunds implements VertexApiRefundsInterface
             return $taxCalculationResponseTransfer;
         }
 
-        return $this->vertexTaxCalculator->calculateTax($taxCalculationRequestTransfer);
+        return $this->vertexTaxCalculator->calculateTax($taxCalculationRequestTransfer, $vertexConfigTransfer);
     }
 }

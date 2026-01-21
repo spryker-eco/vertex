@@ -7,11 +7,12 @@
 
 namespace SprykerEco\Zed\Vertex\Business;
 
-use Spryker\Client\Vertex\VertexClientInterface;
+use Spryker\Client\SecretsManager\SecretsManagerClientInterface;
 use Spryker\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
-use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProvider;
-use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
+use SprykerEco\Client\Vertex\VertexClientInterface as VertexVertexClientInterface;
+use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProvider;
+use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Aggregator\PriceAggregator;
 use SprykerEco\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface;
 use SprykerEco\Zed\Vertex\Business\Calculator\Calculator;
@@ -26,6 +27,8 @@ use SprykerEco\Zed\Vertex\Business\Config\ConfigReader;
 use SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface;
 use SprykerEco\Zed\Vertex\Business\Config\ConfigWriter;
 use SprykerEco\Zed\Vertex\Business\Config\ConfigWriterInterface;
+use SprykerEco\Zed\Vertex\Business\EncryptionConfigurator\TenantPropelEncryptionConfigurator;
+use SprykerEco\Zed\Vertex\Business\EncryptionConfigurator\TenantPropelEncryptionConfiguratorInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapper;
 use SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetriever;
@@ -36,6 +39,8 @@ use SprykerEco\Zed\Vertex\Business\Order\RefundProcessor;
 use SprykerEco\Zed\Vertex\Business\Order\RefundProcessorInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolver;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
+use SprykerEco\Zed\Vertex\Business\SecretsManager\SecretsManager;
+use SprykerEco\Zed\Vertex\Business\SecretsManager\SecretsManagerInterface;
 use SprykerEco\Zed\Vertex\Business\Sender\PaymentSubmitTaxInvoiceSender;
 use SprykerEco\Zed\Vertex\Business\Sender\PaymentSubmitTaxInvoiceSenderInterface;
 use SprykerEco\Zed\Vertex\Business\Validator\TaxIdValidator;
@@ -48,14 +53,14 @@ use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 use SprykerEco\Zed\Vertex\VertexDependencyProvider;
 
 /**
- * @method \Spryker\Zed\Vertex\Persistence\VertexEntityManagerInterface getEntityManager()()
- * @method \Spryker\Zed\Vertex\Persistence\VertexRepositoryInterface getRepository()
- * @method \Spryker\Zed\Vertex\VertexConfig getConfig()
+ * @method \SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface getEntityManager()()
+ * @method \SprykerEco\Zed\Vertex\Persistence\VertexRepositoryInterface getRepository()
+ * @method \SprykerEco\Zed\Vertex\VertexConfig getConfig()
  */
 class VertexBusinessFactory extends AbstractBusinessFactory
 {
     /**
-     * @return \Spryker\Zed\Vertex\Business\Config\ConfigWriterInterface
+     * @return \SprykerEco\Zed\Vertex\Business\Config\ConfigWriterInterface
      */
     public function createConfigWriter(): ConfigWriterInterface
     {
@@ -63,7 +68,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Business\Config\ConfigDeleterInterface
+     * @return \SprykerEco\Zed\Vertex\Business\Config\ConfigDeleterInterface
      */
     public function createConfigDeleter(): ConfigDeleterInterface
     {
@@ -71,7 +76,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Business\Config\ConfigReaderInterface
+     * @return \SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface
      */
     public function createConfigReader(): ConfigReaderInterface
     {
@@ -79,15 +84,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Business\Writer\VertexStoreRelationWriterInterface
-     */
-    public function createVertexStoreRelationWriter(): VertexStoreRelationWriterInterface
-    {
-        return new VertexStoreRelationWriter($this->getRepository(), $this->createConfigWriter());
-    }
-
-    /**
-     * @return \Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface
+     * @return \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface
      */
     public function getStoreFacade(): VertexToStoreFacadeInterface
     {
@@ -95,7 +92,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return array<\Spryker\Zed\VertexExtension\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface>
+     * @return array<\SprykerEco\Zed\VertexExtension\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface>
      */
     public function getCalculableObjectVertexExpanderPlugins(): array
     {
@@ -103,7 +100,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return array<\Spryker\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface>
+     * @return array<\SprykerEco\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface>
      */
     public function getOrderVertexExpanderPlugins(): array
     {
@@ -111,7 +108,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Business\Calculator\CalculatorInterface
+     * @return \SprykerEco\Zed\Vertex\Business\Calculator\CalculatorInterface
      */
     public function createCalculator(): CalculatorInterface
     {
@@ -125,7 +122,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Business\Calculator\FallbackCalculatorInterface
+     * @return \SprykerEco\Zed\Vertex\Business\Calculator\FallbackCalculatorInterface
      */
     public function createFallbackQuoteCalculator(): FallbackCalculatorInterface
     {
@@ -135,7 +132,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Business\Calculator\FallbackCalculatorInterface
+     * @return \SprykerEco\Zed\Vertex\Business\Calculator\FallbackCalculatorInterface
      */
     public function createFallbackOrderCalculator(): FallbackCalculatorInterface
     {
@@ -145,32 +142,71 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Business\Calculator\VertexCalculatorInterface
+     * @return \SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface
+     */
+    public function createVertexAccessTokenProvider(): VertexAccessTokenProviderInterface
+    {
+        return new VertexAccessTokenProvider(
+            $this->getVertexClient(),
+            $this->getRepository(),
+            $this->getEntityManager(),
+            $this->createTenantPropelEncryptionConfigurator(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\Vertex\Business\EncryptionConfigurator\TenantPropelEncryptionConfiguratorInterface
+     */
+    public function createTenantPropelEncryptionConfigurator(): TenantPropelEncryptionConfiguratorInterface
+    {
+        return new TenantPropelEncryptionConfigurator(
+            $this->createSecretsManager(),
+        );
+    }
+
+    /**
+     * @return \Spryker\Service\UtilText\UtilTextServiceInterface
+     */
+    public function getUtilTextService(): UtilTextServiceInterface
+    {
+        return $this->getProvidedDependency(VertexDependencyProvider::SERVICE_UTIL_TEXT);
+    }
+
+    /**
+     * @return \SprykerEco\Zed\Vertex\Business\SecretsManager\SecretsManagerInterface
+     */
+    public function createSecretsManager(): SecretsManagerInterface
+    {
+        return new SecretsManager(
+            $this->getSecretsManagerClient(),
+            $this->getUtilTextService(),
+        );
+    }
+
+    /**
+     * @return \Spryker\Client\SecretsManager\SecretsManagerClientInterface
+     */
+    public function getSecretsManagerClient(): SecretsManagerClientInterface
+    {
+        return $this->getProvidedDependency(VertexDependencyProvider::CLIENT_SECRETS_MANAGER);
+    }
+
+    /**
+     * @return \SprykerEco\Zed\Vertex\Business\Calculator\VertexCalculatorInterface
      */
     public function createVertexCalculator(): VertexCalculatorInterface
     {
         return new VertexCalculator(
             $this->createVertexMapper(),
             $this->getVertexClient(),
-            $this->createAccessTokenProvider(),
             $this->getCalculableObjectVertexExpanderPlugins(),
             $this->createPriceAggregator(),
+            $this->createVertexAccessTokenProvider(),
         );
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface
-     */
-    public function createAccessTokenProvider(): AccessTokenProviderInterface
-    {
-        return new AccessTokenProvider(
-            $this->getOauthClientFacade(),
-            $this->getConfig(),
-        );
-    }
-
-    /**
-     * @return \Spryker\Zed\Vertex\Business\Sender\PaymentSubmitTaxInvoiceSenderInterface
+     * @return \SprykerEco\Zed\Vertex\Business\Sender\PaymentSubmitTaxInvoiceSenderInterface
      */
     public function createPaymentSubmitTaxInvoiceSender(): PaymentSubmitTaxInvoiceSenderInterface
     {
@@ -184,7 +220,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Business\Order\RefundProcessorInterface
+     * @return \SprykerEco\Zed\Vertex\Business\Order\RefundProcessorInterface
      */
     public function createRefundProcessor(): RefundProcessorInterface
     {
@@ -200,7 +236,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeInterface
+     * @return \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeInterface
      */
     public function getMessageBrokerFacade(): VertexToMessageBrokerFacadeInterface
     {
@@ -208,7 +244,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface
+     * @return \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface
      */
     public function getSalesFacade(): VertexToSalesFacadeInterface
     {
@@ -216,7 +252,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface
+     * @return \SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface
      */
     public function createVertexMapper(): VertexMapperInterface
     {
@@ -229,7 +265,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface
+     * @return \SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface
      */
     public function createAddressMapper(): AddressMapperInterface
     {
@@ -237,7 +273,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetrieverInterface
+     * @return \SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetrieverInterface
      */
     public function createItemExpensePriceRetriever(): ItemExpensePriceRetrieverInterface
     {
@@ -245,7 +281,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Business\Validator\TaxIdValidatorInterface
+     * @return \SprykerEco\Zed\Vertex\Business\Validator\TaxIdValidatorInterface
      */
     public function createTaxIdValidator(): TaxIdValidatorInterface
     {
@@ -259,15 +295,15 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Client\Vertex\VertexClientInterface
+     * @return \SprykerEco\Client\Vertex\VertexClientInterface
      */
-    public function getVertexClient(): VertexClientInterface
+    public function getVertexClient(): VertexVertexClientInterface
     {
         return $this->getProvidedDependency(VertexDependencyProvider::CLIENT_VERTEX);
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Dependency\Facade\VertexToOauthClientFacadeInterface
+     * @return \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToOauthClientFacadeInterface
      */
     public function getOauthClientFacade(): VertexToOauthClientFacadeInterface
     {
@@ -275,7 +311,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface
+     * @return \SprykerEco\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface
      */
     public function createPriceAggregator(): PriceAggregatorInterface
     {
@@ -304,7 +340,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeInterface
+     * @return \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeInterface
      */
     public function getKernelAppFacade(): VertexToKernelAppFacadeInterface
     {

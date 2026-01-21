@@ -5,7 +5,7 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\VertexApi\Business\Builder\Supplies;
+namespace SprykerEco\Client\Vertex\Builder\Supplies;
 
 use Generated\Shared\Transfer\SaleItemTransfer;
 use Generated\Shared\Transfer\SaleTransfer;
@@ -15,7 +15,7 @@ use Generated\Shared\Transfer\VertexCustomerTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
 use Generated\Shared\Transfer\VertexLocationTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
-use Pyz\Zed\VertexApi\Business\Builder\VertexSuppliesRequestBuilderInterface;
+use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
 
 class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInterface
 {
@@ -30,12 +30,12 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
     protected const PRICE_MODE_NET = 'NET_MODE';
 
     /**
-     * @var array<\Pyz\Zed\VertexApi\Business\Builder\VertexLineItemBuilderInterface>
+     * @var array<\SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface>
      */
     protected array $vertexLineItemBuilders;
 
     /**
-     * @param array<\Pyz\Zed\VertexApi\Business\Builder\VertexLineItemBuilderInterface> $vertexLineItemBuilders
+     * @param array<\SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface> $vertexLineItemBuilders
      */
     public function __construct(array $vertexLineItemBuilders)
     {

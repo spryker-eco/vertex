@@ -5,17 +5,15 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\VertexApi\Business\TaxCalculator;
+namespace SprykerEco\Client\Vertex\TaxCalculator;
 
 use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
 use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigCriteriaTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
-use Pyz\Zed\VertexApi\Business\AccessTokenProvider\AccessTokenProviderInterface;
-use Pyz\Zed\VertexApi\Business\Api\V2\Client\SuppliesApiInterface;
-use Pyz\Zed\VertexApi\Business\Builder\SuppliesRequestBuilder;
-use Pyz\Zed\VertexApi\Business\ResponseBuilder\VertexSuppliesResponseBuilderInterface;
-use Pyz\Zed\VertexConfig\Business\VertexConfigFacadeInterface;
+use SprykerEco\Client\Vertex\Api\V2\Client\SuppliesApiInterface;
+use SprykerEco\Client\Vertex\Builder\SuppliesRequestBuilder;
+use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterface;
 
 /**
  * This class is used for tax calculation (`quotation`) AND for `invoice` request sending, depending on SuppliesRequestBuilder builders list.
@@ -38,42 +36,33 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
 
     protected VertexSuppliesResponseBuilderInterface $responseBuilder;
 
-    protected VertexConfigFacadeInterface $vertexConfigFacade;
-
-    protected AccessTokenProviderInterface $accessTokenProvider;
-
     /**
-     * @param \Pyz\Zed\VertexApi\Business\Builder\SuppliesRequestBuilder $vertexSuppliesRequestBuilder
-     * @param \Pyz\Zed\VertexApi\Business\Api\V2\Client\SuppliesApiInterface $suppliesApi
-     * @param \Pyz\Zed\VertexApi\Business\ResponseBuilder\VertexSuppliesResponseBuilderInterface $vertexSuppliesResponseBuilder
-     * @param \Pyz\Zed\VertexConfig\Business\VertexConfigFacadeInterface $vertexConfigFacade
-     * @param \Pyz\Zed\VertexApi\Business\AccessTokenProvider\AccessTokenProviderInterface $accessTokenProvider
+     * @param \SprykerEco\Client\Vertex\Builder\SuppliesRequestBuilder $vertexSuppliesRequestBuilder
+     * @param \SprykerEco\Client\Vertex\Api\V2\Client\SuppliesApiInterface $suppliesApi
+     * @param \SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterface $vertexSuppliesResponseBuilder
      */
     public function __construct(
         SuppliesRequestBuilder $vertexSuppliesRequestBuilder,
         SuppliesApiInterface $suppliesApi,
         VertexSuppliesResponseBuilderInterface $vertexSuppliesResponseBuilder,
-        VertexConfigFacadeInterface $vertexConfigFacade,
-        AccessTokenProviderInterface $accessTokenProvider
     ) {
         $this->vertexSuppliesRequestBuilder = $vertexSuppliesRequestBuilder;
         $this->suppliesApi = $suppliesApi;
         $this->responseBuilder = $vertexSuppliesResponseBuilder;
-        $this->vertexConfigFacade = $vertexConfigFacade;
-        $this->accessTokenProvider = $accessTokenProvider;
     }
 
     /**
      * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
      *
      * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
      */
-    public function calculateTax(TaxCalculationRequestTransfer $taxCalculationRequestTransfer): TaxCalculationResponseTransfer
-    {
+    public function calculateTax(
+        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
+        VertexConfigTransfer $vertexConfigTransfer
+    ): TaxCalculationResponseTransfer {
         $vertexConfigCriteriaTransfer = (new VertexConfigCriteriaTransfer())
             ->setStoreReference($taxCalculationRequestTransfer->getTenantIdentifierOrFail());
-
-        $vertexConfigTransfer = $this->vertexConfigFacade->getConfig($vertexConfigCriteriaTransfer);
 
         if (!$vertexConfigTransfer->getIsActive()) {
             return $this->responseBuilder->buildErrorResponse($taxCalculationRequestTransfer, static::ERROR_MESSAGE_INACTIVE_VERTEX_APP);
@@ -81,9 +70,9 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
 
         $taxCalculationRequestTransfer->setVertexConfiguration($vertexConfigTransfer);
 
-        $vertexApiAccessTokenTransfer = $this->accessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
+        $vertexApiAccessTokenTransfer = $vertexConfigTransfer->getVertexApiAccessToken();
 
-        if (!$vertexApiAccessTokenTransfer->getAccessToken()) {
+        if (!$vertexApiAccessTokenTransfer?->getAccessToken()) {
             return $this->responseBuilder->buildErrorResponse($taxCalculationRequestTransfer, static::ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN);
         }
 

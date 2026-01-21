@@ -5,9 +5,9 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\VertexApi\Business\Api\V2\Client;
+namespace SprykerEco\Client\Vertex\Api\V2\Client;
 
-use Generated\Shared\Transfer\VertexApiAuthResponseTransfer;
+use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Generated\Shared\Transfer\VertexApiCredentialTransfer;
 
 interface SecurityApiInterface
@@ -15,9 +15,9 @@ interface SecurityApiInterface
     /**
      * @param \Generated\Shared\Transfer\VertexApiCredentialTransfer $vertexApiCredentialTransfer
      *
-     * @return \Generated\Shared\Transfer\VertexApiAuthResponseTransfer
+     * @return \Generated\Shared\Transfer\VertexAuthResponseTransfer
      */
     public function requestAccessToken(
         VertexApiCredentialTransfer $vertexApiCredentialTransfer
-    ): VertexApiAuthResponseTransfer;
+    ): VertexAuthResponseTransfer;
 }

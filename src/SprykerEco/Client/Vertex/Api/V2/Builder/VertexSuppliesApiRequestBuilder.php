@@ -5,7 +5,7 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\VertexApi\Business\Api\V2\Builder;
+namespace SprykerEco\Client\Vertex\Api\V2\Builder;
 
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
 

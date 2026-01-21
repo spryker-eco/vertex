@@ -5,13 +5,13 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\VertexApi\Business\Builder\Supplies\LineItem;
+namespace SprykerEco\Client\Vertex\Builder\Supplies\LineItem;
 
 use Generated\Shared\Transfer\SaleItemTransfer;
 use Generated\Shared\Transfer\ShipmentTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
 use Generated\Shared\Transfer\VertexQuantityTransfer;
-use Pyz\Zed\VertexApi\Business\Builder\VertexLineItemBuilderInterface;
+use SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface;
 
 class VertexLineItemQuantityBuilder implements VertexLineItemBuilderInterface
 {

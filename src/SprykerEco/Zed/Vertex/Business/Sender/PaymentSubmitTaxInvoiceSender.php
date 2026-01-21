@@ -39,7 +39,7 @@ class PaymentSubmitTaxInvoiceSender implements PaymentSubmitTaxInvoiceSenderInte
     /**
      * @var \Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface
      */
-    protected VertexMapperInterface $VertexMapper;
+    protected VertexMapperInterface $vertexMapper;
 
     /**
      * @var array<\Spryker\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface>
@@ -50,20 +50,20 @@ class PaymentSubmitTaxInvoiceSender implements PaymentSubmitTaxInvoiceSenderInte
      * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeInterface $messageBrokerFacade
      * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
      * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface $salesFacade
-     * @param \Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface $VertexMapper
+     * @param \Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface $vertexMapper
      * @param array<\Spryker\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface> $orderVertexExpanderPlugins
      */
     public function __construct(
         VertexToMessageBrokerFacadeInterface $messageBrokerFacade,
         VertexToStoreFacadeInterface $storeFacade,
         VertexToSalesFacadeInterface $salesFacade,
-        VertexMapperInterface $VertexMapper,
+        VertexMapperInterface $vertexMapper,
         array $orderVertexExpanderPlugins
     ) {
         $this->messageBrokerFacade = $messageBrokerFacade;
         $this->storeFacade = $storeFacade;
         $this->salesFacade = $salesFacade;
-        $this->VertexMapper = $VertexMapper;
+        $this->vertexMapper = $vertexMapper;
         $this->orderVertexExpanderPlugins = $orderVertexExpanderPlugins;
     }
 
@@ -85,12 +85,13 @@ class PaymentSubmitTaxInvoiceSender implements PaymentSubmitTaxInvoiceSenderInte
 
         $orderTransfer = $this->executeOrderVertexExpanderPlugins($orderTransfer);
 
-        $VertexSaleTransfer = $this->VertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
+        $vertexSaleTransfer = $this->vertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
 
         $submitPaymentTaxInvoiceTransfer = new SubmitPaymentTaxInvoiceTransfer();
-        $submitPaymentTaxInvoiceTransfer->setSale($VertexSaleTransfer);
+        $submitPaymentTaxInvoiceTransfer->setSale($vertexSaleTransfer);
 
         $this->setMessageAttributesTransfer($submitPaymentTaxInvoiceTransfer, $orderTransfer);
+//TODO: Check it we need to use a MessageBroker.
 
         $this->messageBrokerFacade->sendMessage($submitPaymentTaxInvoiceTransfer);
     }

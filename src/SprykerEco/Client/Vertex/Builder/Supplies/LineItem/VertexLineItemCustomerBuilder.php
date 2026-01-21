@@ -5,24 +5,24 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\VertexApi\Business\Builder\Supplies\LineItem;
+namespace SprykerEco\Client\Vertex\Builder\Supplies\LineItem;
 
 use Generated\Shared\Transfer\SaleItemTransfer;
 use Generated\Shared\Transfer\ShipmentTransfer;
 use Generated\Shared\Transfer\VertexCustomerTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
-use Pyz\Zed\VertexApi\Business\Builder\LocationMapper;
-use Pyz\Zed\VertexApi\Business\Builder\VertexLineItemBuilderInterface;
+use SprykerEco\Client\Vertex\Builder\LocationMapper;
+use SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface;
 
 class VertexLineItemCustomerBuilder implements VertexLineItemBuilderInterface
 {
     /**
-     * @var \Pyz\Zed\VertexApi\Business\Builder\LocationMapper
+     * @var \SprykerEco\Client\Vertex\Builder\LocationMapper
      */
     protected $locationMapper;
 
     /**
-     * @param \Pyz\Zed\VertexApi\Business\Builder\LocationMapper $locationMapper
+     * @param \SprykerEco\Client\Vertex\Builder\LocationMapper $locationMapper
      */
     public function __construct(LocationMapper $locationMapper)
     {

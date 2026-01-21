@@ -5,15 +5,13 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\VertexApi\Business\Validator;
+namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\TaxamoApiRequestTransfer;
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
 use Generated\Shared\Transfer\TaxIdValidationResponseTransfer;
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
-use Generated\Shared\Transfer\VertexConfigCriteriaTransfer;
-use Pyz\Zed\VertexApi\Business\Api\V2\Client\TaxamoApi;
-use Pyz\Zed\VertexConfig\Business\VertexConfigFacadeInterface;
+use SprykerEco\Client\Vertex\Api\V2\Client\TaxamoApi;
 
 /**
  * This class validates a tax ID using the Vertex Validator API.
@@ -31,25 +29,20 @@ class VertexTaxIdValidator
     protected const ERROR_MESSAGE_KEY_INACTIVE_VERTEX_APP = 'validator-api-inactive';
 
     /**
-     * @param \Pyz\Zed\VertexApi\Business\Api\V2\Client\TaxamoApi $taxamoApi
-     * @param \Pyz\Zed\VertexConfig\Business\VertexConfigFacadeInterface $vertexConfigFacade
+     * @param \SprykerEco\Client\Vertex\Api\V2\Client\TaxamoApi $taxamoApi
      */
-    public function __construct(protected TaxamoApi $taxamoApi, protected VertexConfigFacadeInterface $vertexConfigFacade)
+    public function __construct(protected TaxamoApi $taxamoApi)
     {
     }
 
     /**
      * @param \Generated\Shared\Transfer\TaxIdValidationRequestTransfer $taxIdValidationRequest
+     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
      *
      * @return \Generated\Shared\Transfer\TaxIdValidationResponseTransfer
      */
-    public function validate(TaxIdValidationRequestTransfer $taxIdValidationRequest): TaxIdValidationResponseTransfer
+    public function validate(TaxIdValidationRequestTransfer $taxIdValidationRequest, VertexConfigTransfer $vertexConfigTransfer): TaxIdValidationResponseTransfer
     {
-        $vertexConfigCriteriaTransfer = (new VertexConfigCriteriaTransfer())
-            ->setStoreReference($taxIdValidationRequest->getTenantIdentifierOrFail());
-
-        $vertexConfigTransfer = $this->vertexConfigFacade->getConfig($vertexConfigCriteriaTransfer);
-
         if (!$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsTaxIdValidatorEnabled()) {
             return $this->createTaxIdValidationResponseTransfer(false, static::ERROR_MESSAGE_INACTIVE_VERTEX_APP);
         }

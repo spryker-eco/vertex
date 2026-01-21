@@ -15,61 +15,61 @@ use SprykerEco\Zed\Vertex\VertexConfig;
 
 class AccessTokenProvider implements AccessTokenProviderInterface
 {
-    /**
-     * @var \Spryker\Zed\Vertex\Dependency\Facade\VertexToOauthClientFacadeInterface
-     */
-    protected VertexToOauthClientFacadeInterface $oauthClientFacade;
+    // /**
+    //  * @var \Spryker\Zed\Vertex\Dependency\Facade\VertexToOauthClientFacadeInterface
+    //  */
+    // protected VertexToOauthClientFacadeInterface $oauthClientFacade;
 
-    /**
-     * @var \Spryker\Zed\Vertex\VertexConfig
-     */
-    protected VertexConfig $VertexConfig;
+    // /**
+    //  * @var \Spryker\Zed\Vertex\VertexConfig
+    //  */
+    // protected VertexConfig $VertexConfig;
 
-    /**
-     * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToOauthClientFacadeInterface $oauthClientFacade
-     * @param \Spryker\Zed\Vertex\VertexConfig $VertexConfig
-     */
-    public function __construct(
-        VertexToOauthClientFacadeInterface $oauthClientFacade,
-        VertexConfig $VertexConfig
-    ) {
-        $this->oauthClientFacade = $oauthClientFacade;
-        $this->VertexConfig = $VertexConfig;
-    }
+    // /**
+    //  * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToOauthClientFacadeInterface $oauthClientFacade
+    //  * @param \Spryker\Zed\Vertex\VertexConfig $VertexConfig
+    //  */
+    // public function __construct(
+    //     VertexToOauthClientFacadeInterface $oauthClientFacade,
+    //     VertexConfig $VertexConfig
+    // ) {
+    //     $this->oauthClientFacade = $oauthClientFacade;
+    //     $this->VertexConfig = $VertexConfig;
+    // }
 
-    /**
-     * @return string
-     */
-    public function getAccessToken(): string
-    {
-        $accessTokenRequestOptionsTransfer = (new AccessTokenRequestOptionsTransfer())
-            ->setAudience($this->VertexConfig->getOauthOptionAudienceForTaxCalculation());
+    // /**
+    //  * @return string
+    //  */
+    // public function getAccessToken(): string
+    // {
+    //     $accessTokenRequestOptionsTransfer = (new AccessTokenRequestOptionsTransfer())
+    //         ->setAudience($this->VertexConfig->getOauthOptionAudienceForTaxCalculation());
 
-        $accessTokenRequestTransfer = (new AccessTokenRequestTransfer())
-            ->setGrantType($this->VertexConfig->getOauthGrantTypeForTaxCalculation())
-            ->setProviderName($this->VertexConfig->getOauthProviderNameForTaxCalculation())
-            ->setAccessTokenRequestOptions($accessTokenRequestOptionsTransfer);
+    //     $accessTokenRequestTransfer = (new AccessTokenRequestTransfer())
+    //         ->setGrantType($this->VertexConfig->getOauthGrantTypeForTaxCalculation())
+    //         ->setProviderName($this->VertexConfig->getOauthProviderNameForTaxCalculation())
+    //         ->setAccessTokenRequestOptions($accessTokenRequestOptionsTransfer);
 
-        return $this->getAuthorizationValue($accessTokenRequestTransfer);
-    }
+    //     return $this->getAuthorizationValue($accessTokenRequestTransfer);
+    // }
 
-    /**
-     * @param \Generated\Shared\Transfer\AccessTokenRequestTransfer $accessTokenRequestTransfer
-     *
-     * @throws \Spryker\Zed\Vertex\Business\Exception\AccessTokenNotFoundException
-     *
-     * @return string
-     */
-    protected function getAuthorizationValue(AccessTokenRequestTransfer $accessTokenRequestTransfer): string
-    {
-        $accessTokenResponseTransfer = $this->oauthClientFacade->getAccessToken($accessTokenRequestTransfer); // TODO
+    // /**
+    //  * @param \Generated\Shared\Transfer\AccessTokenRequestTransfer $accessTokenRequestTransfer
+    //  *
+    //  * @throws \Spryker\Zed\Vertex\Business\Exception\AccessTokenNotFoundException
+    //  *
+    //  * @return string
+    //  */
+    // protected function getAuthorizationValue(AccessTokenRequestTransfer $accessTokenRequestTransfer): string
+    // {
+    //     $accessTokenResponseTransfer = $this->oauthClientFacade->getAccessToken($accessTokenRequestTransfer); // TODO
 
-        if (!$accessTokenResponseTransfer->getIsSuccessful()) {
-            throw new AccessTokenNotFoundException(
-                $accessTokenResponseTransfer->getAccessTokenErrorOrFail()->getErrorOrFail(),
-            );
-        }
+    //     if (!$accessTokenResponseTransfer->getIsSuccessful()) {
+    //         throw new AccessTokenNotFoundException(
+    //             $accessTokenResponseTransfer->getAccessTokenErrorOrFail()->getErrorOrFail(),
+    //         );
+    //     }
 
-        return sprintf('Bearer %s', $accessTokenResponseTransfer->getAccessToken());
-    }
+    //     return sprintf('Bearer %s', $accessTokenResponseTransfer->getAccessToken());
+    // }
 }

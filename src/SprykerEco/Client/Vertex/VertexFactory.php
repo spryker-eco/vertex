@@ -17,8 +17,6 @@ use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
-use SprykerEco\Client\Vertex\AccessTokenProvider\AccessTokenProvider;
-use SprykerEco\Client\Vertex\AccessTokenProvider\AccessTokenProviderInterface;
 use SprykerEco\Client\Vertex\Api\V2\Builder\VertexSuppliesApiRequestBuilder;
 use SprykerEco\Client\Vertex\Api\V2\Client\SecurityApi;
 use SprykerEco\Client\Vertex\Api\V2\Client\SecurityApiInterface;
@@ -63,14 +61,6 @@ use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterf
 use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculator;
 use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexTaxIdValidator;
-// use Pyz\Zed\VertexApi\VertexApiConfig;
-// use Pyz\Zed\VertexApi\VertexApiDependencyProvider;
-// use Pyz\Zed\VertexConfig\Business\EncryptionConfigurator\TenantPropelEncryptionConfigurator;
-// use Pyz\Zed\VertexConfig\Business\EncryptionConfigurator\TenantPropelEncryptionConfiguratorInterface;
-// use Pyz\Zed\VertexConfig\Business\SecretsManager\SecretsManager;
-// use Pyz\Zed\VertexConfig\Business\SecretsManager\SecretsManagerInterface;
-// use Pyz\Zed\VertexConfig\Business\VertexConfigFacadeInterface;
-use Spryker\Client\SecretsManager\SecretsManagerClientInterface;
 use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
 use Spryker\Service\UtilText\UtilTextServiceInterface;
 use Spryker\Shared\Log\LoggerTrait;
@@ -84,47 +74,12 @@ class VertexFactory extends AbstractFactory
     use LoggerTrait;
 
     /**
-     * @return \Spryker\Client\SecretsManager\SecretsManagerClientInterface
-     */
-    public function getSecretsManagerClient(): SecretsManagerClientInterface
-    {
-        return $this->getProvidedDependency(VertexDependencyProvider::CLIENT_SECRETS_MANAGER);
-    }
-
-    /**
-     * @return \Pyz\Zed\VertexConfig\Business\SecretsManager\SecretsManagerInterface
-     */
-    public function createSecretsManager(): SecretsManagerInterface
-    {
-        return new SecretsManager($this->getSecretsManagerClient(), $this->getUtilTextService());
-    }
-
-    /**
-     * @return \Spryker\Service\UtilText\UtilTextServiceInterface
-     */
-    public function getUtilTextService(): UtilTextServiceInterface
-    {
-        return $this->getProvidedDependency(VertexDependencyProvider::SERVICE_UTIL_TEXT);
-    }
-
-    /**
-     * @return \Pyz\Zed\VertexConfig\Business\EncryptionConfigurator\TenantPropelEncryptionConfiguratorInterface
-     */
-    public function createTenantPropelEncryptionConfigurator(): TenantPropelEncryptionConfiguratorInterface
-    {
-        return new TenantPropelEncryptionConfigurator(
-            $this->createSecretsManager(),
-        );
-    }
-
-    /**
      * @return \SprykerEco\Client\Vertex\Authenticator\VertexApiAuthenticatorInterface
      */
     public function createVertexApiAuthenticator(): VertexApiAuthenticatorInterface
     {
         return new VertexApiAuthenticator(
             $this->createSecurityApi(),
-            $this->getEntityManager(),
         );
     }
 
@@ -137,8 +92,6 @@ class VertexFactory extends AbstractFactory
             $this->createSuppliesQuotationRequestBuilder(),
             $this->createSuppliesApi(),
             $this->createVertexSuppliesResponseBuilder(),
-            $this->getVertexConfigFacade(),
-            $this->createAccessTokenProvider(),
         );
     }
 
@@ -151,8 +104,6 @@ class VertexFactory extends AbstractFactory
             $this->createSuppliesInvoiceRequestBuilder(),
             $this->createSuppliesApi(),
             $this->createVertexSuppliesResponseBuilder(),
-            $this->getVertexConfigFacade(),
-            $this->createAccessTokenProvider(),
         );
     }
 
@@ -163,7 +114,6 @@ class VertexFactory extends AbstractFactory
     {
         return new VertexTaxIdValidator(
             $this->createTaxamoApi(),
-            $this->getVertexConfigFacade(),
         );
     }
 
@@ -175,18 +125,6 @@ class VertexFactory extends AbstractFactory
         return new TaxamoApi(
             $this->createHttpClient(),
             $this->getUtilEncodingService(),
-        );
-    }
-
-    /**
-     * @return \SprykerEco\Client\Vertex\AccessTokenProvider\AccessTokenProviderInterface
-     */
-    public function createAccessTokenProvider(): AccessTokenProviderInterface
-    {
-        return new AccessTokenProvider(
-            $this->createVertexApiAuthenticator(),
-            $this->getRepository(),
-            $this->createTenantPropelEncryptionConfigurator(),
         );
     }
 
@@ -233,15 +171,7 @@ class VertexFactory extends AbstractFactory
      */
     protected function getUtilEncodingService(): UtilEncodingServiceInterface
     {
-        return $this->getProvidedDependency(VertexApiDependencyProvider::SERVICE_UTIL_ENCODING);
-    }
-
-    /**
-     * @return \Pyz\Zed\VertexConfig\Business\VertexConfigFacadeInterface
-     */
-    protected function getVertexConfigFacade(): VertexConfigFacadeInterface
-    {
-        return $this->getProvidedDependency(VertexApiDependencyProvider::FACADE_VERTEX_CONFIG);
+        return $this->getProvidedDependency(VertexDependencyProvider::SERVICE_UTIL_ENCODING);
     }
 
     /**
@@ -261,8 +191,8 @@ class VertexFactory extends AbstractFactory
 
         return new Client([
             'handler' => $handlerStack,
-            RequestOptions::TIMEOUT => VertexApiConfig::REQUEST_TIMEOUT,
-            RequestOptions::CONNECT_TIMEOUT => VertexApiConfig::REQUEST_CONNECT_TIMEOUT,
+            RequestOptions::TIMEOUT => VertexConfig::REQUEST_TIMEOUT,
+            RequestOptions::CONNECT_TIMEOUT => VertexConfig::REQUEST_CONNECT_TIMEOUT,
         ]);
     }
 
@@ -507,7 +437,6 @@ class VertexFactory extends AbstractFactory
     public function createVertexApiMessageHandler(): VertexApiMessageHandlerInterface
     {
         return new VertexApiMessageHandler(
-            $this->getVertexConfigFacade(),
             $this->createInvoiceVertexTaxCalculator(),
         );
     }
@@ -518,7 +447,6 @@ class VertexFactory extends AbstractFactory
     public function createVertexApiRefunds(): VertexApiRefundsInterface
     {
         return new VertexApiRefunds(
-            $this->getVertexConfigFacade(),
             $this->createInvoiceVertexTaxCalculator(),
         );
     }

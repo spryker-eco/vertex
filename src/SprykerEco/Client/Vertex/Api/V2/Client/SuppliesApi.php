@@ -5,7 +5,7 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\VertexApi\Business\Api\V2\Client;
+namespace SprykerEco\Client\Vertex\Api\V2\Client;
 
 use Generated\Shared\Transfer\VertexApiAccessTokenTransfer;
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
@@ -13,7 +13,7 @@ use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
 use GuzzleHttp\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
-use Pyz\Zed\VertexApi\Business\Api\V2\Builder\VertexSuppliesApiRequestBuilder;
+use SprykerEco\Client\Vertex\Api\V2\Builder\VertexSuppliesApiRequestBuilder;
 use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
 use Spryker\Shared\Log\LoggerTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,7 +41,7 @@ class SuppliesApi implements SuppliesApiInterface
 
     /**
      * @param \GuzzleHttp\ClientInterface $client
-     * @param \Pyz\Zed\VertexApi\Business\Api\V2\Builder\VertexSuppliesApiRequestBuilder $vertexSuppliesApiRequestBuilder
+     * @param \SprykerEco\Client\Vertex\Api\V2\Builder\VertexSuppliesApiRequestBuilder $vertexSuppliesApiRequestBuilder
      * @param \Spryker\Service\UtilEncoding\UtilEncodingServiceInterface $utilEncodingService
      */
     public function __construct(

@@ -5,22 +5,22 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\VertexApi\Business\Builder\Supplies;
+namespace SprykerEco\Client\Vertex\Builder\Supplies;
 
 use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
-use Pyz\Zed\VertexApi\Business\Builder\VertexSuppliesRequestBuilderInterface;
+use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
 
 class VertexSuppliesShipmentBuilder implements VertexSuppliesRequestBuilderInterface
 {
     /**
-     * @var array<\Pyz\Zed\VertexApi\Business\Builder\VertexLineItemBuilderInterface>
+     * @var array<\SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface>
      */
     protected array $vertexLineItemBuilders;
 
     /**
-     * @param array<\Pyz\Zed\VertexApi\Business\Builder\VertexLineItemBuilderInterface> $vertexLineItemBuilders
+     * @param array<\SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface> $vertexLineItemBuilders
      */
     public function __construct(array $vertexLineItemBuilders)
     {

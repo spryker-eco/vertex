@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<database xmlns="spryker:schema-01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="zed"
+          xsi:schemaLocation="spryker:schema-01 https://static.spryker.com/schema-01.xsd"
+          namespace="Orm\Zed\Vertex\Persistence" package="src.Orm.Zed.Vertex.Persistence">
+
+    <table name="spy_vertex_api_access_token" identifierQuoting="true">
+        <column name="id_vertex_api_access_token" required="true" type="INTEGER" autoIncrement="true" primaryKey="true"/>
+        <column name="credential_hash" required="true" type="VARCHAR" size="32"/>
+        <column name="access_token" required="true" type="LONGVARCHAR"/>
+        <column name="expiration_date" required="true" type="DATETIME"/>
+
+        <unique name="spy_vertex_api_access_token-unique-credential_hash">
+            <unique-column name="credential_hash"/>
+        </unique>
+
+        <index name="spy_vertex_api_access_token-expiration_date">
+            <index-column name="expiration_date"/>
+        </index>
+
+        <behavior name="timestampable">
+            <parameter name="create_column" value="created_at"/>
+            <parameter name="update_column" value="updated_at"/>
+        </behavior>
+    </table>
+
+</database>

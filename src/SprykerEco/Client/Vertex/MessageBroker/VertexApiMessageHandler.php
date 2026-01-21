@@ -5,47 +5,38 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\VertexApi\Business\MessageBroker;
+namespace SprykerEco\Client\Vertex\MessageBroker;
 
 use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceResponseTransfer;
 use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer;
 use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
-use Generated\Shared\Transfer\VertexConfigCriteriaTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
-use Pyz\Zed\VertexApi\Business\TaxCalculator\VertexTaxCalculatorInterface;
-use Pyz\Zed\VertexConfig\Business\VertexConfigFacadeInterface;
 use Spryker\Shared\Log\LoggerTrait;
+use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface;
 
 class VertexApiMessageHandler implements VertexApiMessageHandlerInterface
 {
     use LoggerTrait;
 
-    protected VertexConfigFacadeInterface $vertexConfigFacade;
-
-    protected VertexTaxCalculatorInterface $vertexTaxCalculator;
-
     /**
-     * @param \Pyz\Zed\VertexConfig\Business\VertexConfigFacadeInterface $vertexConfigFacade
-     * @param \Pyz\Zed\VertexApi\Business\TaxCalculator\VertexTaxCalculatorInterface $vertexTaxCalculator
+     * @param \SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface $vertexTaxCalculator
      */
-    public function __construct(VertexConfigFacadeInterface $vertexConfigFacade, VertexTaxCalculatorInterface $vertexTaxCalculator)
+    public function __construct(protected VertexTaxCalculatorInterface $vertexTaxCalculator)
     {
-        $this->vertexConfigFacade = $vertexConfigFacade;
-        $this->vertexTaxCalculator = $vertexTaxCalculator;
     }
 
     /**
      * @param \Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer $submitPaymentTaxInvoiceTransfer
+     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
      *
      * @return \Generated\Shared\Transfer\SubmitPaymentTaxInvoiceResponseTransfer
      */
-    public function handleSubmitPaymentTaxInvoice(SubmitPaymentTaxInvoiceTransfer $submitPaymentTaxInvoiceTransfer): SubmitPaymentTaxInvoiceResponseTransfer
-    {
+    public function handleSubmitPaymentTaxInvoice(
+        SubmitPaymentTaxInvoiceTransfer $submitPaymentTaxInvoiceTransfer,
+        VertexConfigTransfer $vertexConfigTransfer
+    ): SubmitPaymentTaxInvoiceResponseTransfer {
         $storeReference = $submitPaymentTaxInvoiceTransfer->getMessageAttributes()->getStoreReferenceOrFail();
-
-        $vertexConfigCriteriaTransfer = (new VertexConfigCriteriaTransfer())
-            ->setStoreReference($storeReference);
-        $vertexConfigTransfer = $this->vertexConfigFacade->getConfig($vertexConfigCriteriaTransfer);
+        //TODO: check $storeReference, where to get it from?
 
         $submitPaymentTaxInvoiceResponseTransfer = (new SubmitPaymentTaxInvoiceResponseTransfer())->setIsSuccessful(false);
 
@@ -69,7 +60,7 @@ class VertexApiMessageHandler implements VertexApiMessageHandlerInterface
                 'requestTransfer' => $taxCalculationRequestTransfer->modifiedToArray(),
             ],
         );
-        $taxCalculationResponseTransfer = $this->vertexTaxCalculator->calculateTax($taxCalculationRequestTransfer);
+        $taxCalculationResponseTransfer = $this->vertexTaxCalculator->calculateTax($taxCalculationRequestTransfer, $vertexConfigTransfer);
 
         $this->getLogger()->info(
             'Finished tax calculation request for invoicing process',

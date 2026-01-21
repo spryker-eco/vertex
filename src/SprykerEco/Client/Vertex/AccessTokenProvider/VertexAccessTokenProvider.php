@@ -5,7 +5,7 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\VertexApi\Business\AccessTokenProvider;
+namespace Pyz\Zed\Vertex\Business\AccessTokenProvider;
 
 use DateTime;
 use Generated\Shared\Transfer\VertexApiAccessTokenCriteriaTransfer;
@@ -16,7 +16,7 @@ use Pyz\Zed\VertexApi\Persistence\VertexApiRepositoryInterface;
 use Pyz\Zed\VertexConfig\Business\EncryptionConfigurator\TenantPropelEncryptionConfiguratorInterface;
 use Spryker\Shared\Log\LoggerTrait;
 
-class AccessTokenProvider implements AccessTokenProviderInterface
+class VertexAccessTokenProvider implements AccessTokenProviderInterface
 {
     use LoggerTrait;
 

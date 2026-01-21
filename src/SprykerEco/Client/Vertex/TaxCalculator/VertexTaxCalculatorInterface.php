@@ -5,17 +5,22 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\VertexApi\Business\TaxCalculator;
+namespace SprykerEco\Client\Vertex\TaxCalculator;
 
 use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
 use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
+use Generated\Shared\Transfer\VertexConfigTransfer;
 
 interface VertexTaxCalculatorInterface
 {
     /**
      * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
      *
      * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
      */
-    public function calculateTax(TaxCalculationRequestTransfer $taxCalculationRequestTransfer): TaxCalculationResponseTransfer;
+    public function calculateTax(
+        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
+        VertexConfigTransfer $vertexConfigTransfer
+    ): TaxCalculationResponseTransfer;
 }

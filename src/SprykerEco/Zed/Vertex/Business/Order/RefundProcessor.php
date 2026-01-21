@@ -12,11 +12,11 @@ use DateTime;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\TaxRefundRequestTransfer;
-use Spryker\Client\Vertex\VertexClientInterface;
 use Spryker\Shared\Log\LoggerTrait;
+use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface;
-use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
+use SprykerEco\Zed\Vertex\Business\Mapper\vertexMapperInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 
@@ -28,19 +28,17 @@ class RefundProcessor implements RefundProcessorInterface
      * @param \SprykerEco\Client\Vertex\VertexClientInterface $VertexClient
      * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
      * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface $salesFacade
-     * @param \SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface $VertexMapper
-     * @param \SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface $accessTokenProvider
+     * @param \SprykerEco\Zed\Vertex\Business\Mapper\vertexMapperInterface $vertexMapper
      * @param \SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface $configReader
      * @param array<\SprykerEco\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface> $orderVertexExpanderPlugins // TODO
      */
     public function __construct(
-        VertexClientInterface $vertexClient,
-        VertexToStoreFacadeInterface $storeFacade,
-        VertexToSalesFacadeInterface $salesFacade,
-        VertexMapperInterface $VertexMapper,
-        AccessTokenProviderInterface $accessTokenProvider,
-        ConfigReaderInterface $configReader,
-        array $orderVertexExpanderPlugins
+        protected VertexClientInterface $vertexClient,
+        protected VertexToStoreFacadeInterface $storeFacade,
+        protected VertexToSalesFacadeInterface $salesFacade,
+        protected vertexMapperInterface $vertexMapper,
+        protected ConfigReaderInterface $configReader,
+        protected array $orderVertexExpanderPlugins
     ) {}
 
     /**
@@ -66,9 +64,9 @@ class RefundProcessor implements RefundProcessorInterface
         }
 
         $storeTransfer = $this->storeFacade->getStoreByName($orderTransfer->getStoreOrFail());
-        $VertexConfigTransfer = $this->configReader->getVertexConfigByIdStore($storeTransfer->getIdStoreOrFail());
+        $vertexConfigTransfer = $this->configReader->getVertexConfigByIdStore($storeTransfer->getIdStoreOrFail());
 
-        if ($VertexConfigTransfer === null || !$VertexConfigTransfer->getIsActive()) {
+        if ($vertexConfigTransfer === null || !$vertexConfigTransfer->getIsActive()) {
             $this->getLogger()->warning('App is not configured or is not active.');
 
             return;
@@ -76,7 +74,7 @@ class RefundProcessor implements RefundProcessorInterface
 
         $orderTransfer = $this->executeOrderVertexExpanderPlugins($orderTransfer);
 
-        $VertexSaleTransfer = $this->VertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
+        $VertexSaleTransfer = $this->vertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
 
         $taxRefundRequestTransfer = new TaxRefundRequestTransfer();
         $taxRefundRequestTransfer->setSale($VertexSaleTransfer);
@@ -84,7 +82,7 @@ class RefundProcessor implements RefundProcessorInterface
 
         $taxRefundRequestTransfer = $this->expandTaxRefundRequestWithAccessToken($taxRefundRequestTransfer);
 
-        $this->vertexClient->requestTaxRefund($taxRefundRequestTransfer, $VertexConfigTransfer, $storeTransfer); // TODO
+        $this->vertexClient->requestTaxRefund($taxRefundRequestTransfer, $vertexConfigTransfer, $storeTransfer); // TODO
     }
 
     /**

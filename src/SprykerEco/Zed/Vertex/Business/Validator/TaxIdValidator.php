@@ -59,30 +59,30 @@ class TaxIdValidator implements TaxIdValidatorInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $VertexValidationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $vertexValidationRequestTransfer
      *
      * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
      */
-    public function validate(VertexValidationRequestTransfer $VertexValidationRequestTransfer): VertexValidationResponseTransfer
+    public function validate(VertexValidationRequestTransfer $vertexValidationRequestTransfer): VertexValidationResponseTransfer
     {
-        $VertexValidationRequestTransfer->requireTaxId();
-        $VertexValidationRequestTransfer->requireCountryCode();
-        $VertexConfigTransfer = $this->configReader->findVertexConfigForCurrentStore();
+        $vertexValidationRequestTransfer->requireTaxId();
+        $vertexValidationRequestTransfer->requireCountryCode();
+        $vertexConfigTransfer = $this->configReader->findVertexConfigForCurrentStore();
 
         if (
-            !$VertexConfigTransfer ||
-            !$VertexConfigTransfer->getIsActive() ||
-            !$VertexConfigTransfer->getApiUrls() ||
-            !$VertexConfigTransfer->getApiUrls()->getTaxIdValidationUrl()
+            !$vertexConfigTransfer ||
+            !$vertexConfigTransfer->getIsActive() ||
+            !$vertexConfigTransfer->getApiUrls() ||
+            !$vertexConfigTransfer->getApiUrls()->getTaxIdValidationUrl()
         ) {
             return $this->createVertexValidationResponseTransfer(false, VertexConfig::MESSAGE_VERTEX_IS_DISABLED, static::GLOSSARY_KEY_VERTEX_IS_DISABLED);
         }
 
         $acpHttpResponseTransfer = $this->kernelAppFacade->makeRequest(
             (new AcpHttpRequestTransfer())
-                ->setUri($VertexConfigTransfer->getApiUrls()->getTaxIdValidationUrlOrFail())
+                ->setUri($vertexConfigTransfer->getApiUrls()->getTaxIdValidationUrlOrFail())
                 ->setMethod(Request::METHOD_POST)
-                ->setBody((string)$this->utilEncodingService->encodeJson($VertexValidationRequestTransfer->toArray(true, true)))
+                ->setBody((string)$this->utilEncodingService->encodeJson($vertexValidationRequestTransfer->toArray(true, true)))
                 ->setHeaders([static::HEADER_AUTHORIZATION => $this->accessTokenProvider->getAccessToken()]),
         );
         if ($acpHttpResponseTransfer->getHttpStatusCode() !== Response::HTTP_OK && $acpHttpResponseTransfer->getContent() === null) {
@@ -96,22 +96,22 @@ class TaxIdValidator implements TaxIdValidatorInterface
         }
         $content = $acpHttpResponseTransfer->getHttpStatusCode() === Response::HTTP_OK ? $content : current($content);
         $messageKey = $content[static::CONTENT_KEY_CODE] ?? null;
-        $VertexValidationResponseTransfer = (new VertexValidationResponseTransfer())
+        $vertexValidationResponseTransfer = (new VertexValidationResponseTransfer())
             ->setMessageKey($messageKey)
             ->setIsValid(false)
             ->fromArray($content, true);
 
-        if ($VertexValidationResponseTransfer->getIsValid() === true) {
+        if ($vertexValidationResponseTransfer->getIsValid() === true) {
             $this->entityManager->saveTaxIdValidationHistory(
                 (new TaxIdValidationHistoryTransfer())
-                    ->fromArray($VertexValidationResponseTransfer->toArray(), true)
-                    ->setTaxId((string)$VertexValidationRequestTransfer->getTaxId())
-                    ->setCountryCode((string)$VertexValidationRequestTransfer->getCountryCode())
-                    ->setResponseData((string)$VertexValidationResponseTransfer->getAdditionalInfo()),
+                    ->fromArray($vertexValidationResponseTransfer->toArray(), true)
+                    ->setTaxId((string)$vertexValidationRequestTransfer->getTaxId())
+                    ->setCountryCode((string)$vertexValidationRequestTransfer->getCountryCode())
+                    ->setResponseData((string)$vertexValidationResponseTransfer->getAdditionalInfo()),
             );
         }
 
-        return $VertexValidationResponseTransfer;
+        return $vertexValidationResponseTransfer;
     }
 
     /**

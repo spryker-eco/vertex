@@ -5,9 +5,9 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\VertexApi\Business\Authenticator;
+namespace SprykerEco\Client\Vertex\Authenticator;
 
-use Generated\Shared\Transfer\VertexApiAuthResponseTransfer;
+use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 
 interface VertexApiAuthenticatorInterface
@@ -15,7 +15,7 @@ interface VertexApiAuthenticatorInterface
     /**
      * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
      *
-     * @return \Generated\Shared\Transfer\VertexApiAuthResponseTransfer
+     * @return \Generated\Shared\Transfer\VertexAuthResponseTransfer
      */
-    public function authenticate(VertexConfigTransfer $vertexConfigTransfer): VertexApiAuthResponseTransfer;
+    public function authenticate(VertexConfigTransfer $vertexConfigTransfer): VertexAuthResponseTransfer;
 }
