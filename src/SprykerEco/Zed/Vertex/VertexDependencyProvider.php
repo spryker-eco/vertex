@@ -85,11 +85,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
      * @var string
      */
     public const SERVICE_UTIL_ENCODING = 'SERVICE_UTIL_ENCODING';
-    
-    /**
-     * @var string
-     */
-    public const SERVICE_UTIL_TEXT = 'SERVICE_UTIL_TEXT';
 
     /**
      * @param \Spryker\Zed\Kernel\Container $container
@@ -111,7 +106,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
         $container = $this->addFallbackQuoteCalculationPlugins($container);
         $container = $this->addFallbackOrderCalculationPlugins($container);
         $container = $this->provideKernelAppFacade($container);
-        $container = $this->addUtilTextService($container);
 
         return $container;
     }
@@ -208,20 +202,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     {
         $container->set(static::CLIENT_SECRETS_MANAGER, function (Container $container) {
             return $container->getLocator()->secretsManager()->client();
-        });
-
-        return $container;
-    }
-
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
-    protected function addUtilTextService(Container $container): Container
-    {
-        $container->set(static::SERVICE_UTIL_TEXT, function (Container $container) {
-            return $container->getLocator()->utilText()->service();
         });
 
         return $container;

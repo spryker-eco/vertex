@@ -59,29 +59,6 @@ use SprykerEco\Zed\Vertex\VertexDependencyProvider;
  */
 class VertexBusinessFactory extends AbstractBusinessFactory
 {
-    /**
-     * @return \SprykerEco\Zed\Vertex\Business\Config\ConfigWriterInterface
-     */
-    public function createConfigWriter(): ConfigWriterInterface
-    {
-        return new ConfigWriter($this->getEntityManager(), $this->getStoreFacade());
-    }
-
-    /**
-     * @return \SprykerEco\Zed\Vertex\Business\Config\ConfigDeleterInterface
-     */
-    public function createConfigDeleter(): ConfigDeleterInterface
-    {
-        return new ConfigDeleter($this->getEntityManager(), $this->getStoreFacade());
-    }
-
-    /**
-     * @return \SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface
-     */
-    public function createConfigReader(): ConfigReaderInterface
-    {
-        return new ConfigReader($this->getRepository(), $this->getStoreFacade());
-    }
 
     /**
      * @return \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface
@@ -150,45 +127,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
             $this->getVertexClient(),
             $this->getRepository(),
             $this->getEntityManager(),
-            $this->createTenantPropelEncryptionConfigurator(),
         );
-    }
-
-    /**
-     * @return \SprykerEco\Zed\Vertex\Business\EncryptionConfigurator\TenantPropelEncryptionConfiguratorInterface
-     */
-    public function createTenantPropelEncryptionConfigurator(): TenantPropelEncryptionConfiguratorInterface
-    {
-        return new TenantPropelEncryptionConfigurator(
-            $this->createSecretsManager(),
-        );
-    }
-
-    /**
-     * @return \Spryker\Service\UtilText\UtilTextServiceInterface
-     */
-    public function getUtilTextService(): UtilTextServiceInterface
-    {
-        return $this->getProvidedDependency(VertexDependencyProvider::SERVICE_UTIL_TEXT);
-    }
-
-    /**
-     * @return \SprykerEco\Zed\Vertex\Business\SecretsManager\SecretsManagerInterface
-     */
-    public function createSecretsManager(): SecretsManagerInterface
-    {
-        return new SecretsManager(
-            $this->getSecretsManagerClient(),
-            $this->getUtilTextService(),
-        );
-    }
-
-    /**
-     * @return \Spryker\Client\SecretsManager\SecretsManagerClientInterface
-     */
-    public function getSecretsManagerClient(): SecretsManagerClientInterface
-    {
-        return $this->getProvidedDependency(VertexDependencyProvider::CLIENT_SECRETS_MANAGER);
     }
 
     /**
@@ -300,14 +239,6 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     public function getVertexClient(): VertexVertexClientInterface
     {
         return $this->getProvidedDependency(VertexDependencyProvider::CLIENT_VERTEX);
-    }
-
-    /**
-     * @return \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToOauthClientFacadeInterface
-     */
-    public function getOauthClientFacade(): VertexToOauthClientFacadeInterface
-    {
-        return $this->getProvidedDependency(VertexDependencyProvider::FACADE_OAUTH_CLIENT);
     }
 
     /**

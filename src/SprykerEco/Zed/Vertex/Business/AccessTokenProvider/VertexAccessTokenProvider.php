@@ -33,24 +33,19 @@ class VertexAccessTokenProvider implements VertexAccessTokenProviderInterface
 
     protected VertexEntityManagerInterface $vertexEntityManager;
 
-    protected TenantPropelEncryptionConfiguratorInterface $tenantPropelEncryptionConfigurator;
-
     /**
      * @param \SprykerEco\Client\Vertex\VertexClientInterface $vertexClient
      * @param \SprykerEco\Zed\Vertex\Persistence\VertexRepositoryInterface $vertexRepository
      * @param \SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface $vertexEntityManager
-     * @param \SprykerEco\Zed\Vertex\Business\EncryptionConfigurator\TenantPropelEncryptionConfiguratorInterface $tenantPropelEncryptionConfigurator
      */
     public function __construct(
         VertexClientInterface $vertexClient,
         VertexRepositoryInterface $vertexRepository,
         VertexEntityManagerInterface $vertexEntityManager,
-        TenantPropelEncryptionConfiguratorInterface $tenantPropelEncryptionConfigurator
     ) {
         $this->vertexClient = $vertexClient;
         $this->vertexRepository = $vertexRepository;
         $this->vertexEntityManager = $vertexEntityManager;
-        $this->tenantPropelEncryptionConfigurator = $tenantPropelEncryptionConfigurator;
     }
 
     /**
@@ -140,16 +135,6 @@ class VertexAccessTokenProvider implements VertexAccessTokenProviderInterface
         }
 
         return false;
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return void
-     */
-    protected function configurePropelEncryption(VertexConfigTransfer $vertexConfigTransfer): void
-    {
-        $this->tenantPropelEncryptionConfigurator->configurePropelEncryption($vertexConfigTransfer->getStoreReference());
     }
 
     /**

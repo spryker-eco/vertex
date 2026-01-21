@@ -12,13 +12,13 @@ use Spryker\Zed\Kernel\AbstractBundleConfig;
 
 class VertexConfig extends AbstractBundleConfig
 {
-    protected string const CLIENT_ID = 'VERTEX:CLIENT_ID';
+    protected const CLIENT_ID = 'VERTEX:CLIENT_ID';
 
-    protected string const CLIENT_SECRET = 'VERTEX:CLIENT_SECRET';
+    protected const CLIENT_SECRET = 'VERTEX:CLIENT_SECRET';
 
-    protected string const SECURITY_URI = 'VERTEX:SECURITY_URI';
+    protected const SECURITY_URI = 'VERTEX:SECURITY_URI';
 
-    protected string const TRANSACTION_CALLS_URI = 'VERTEX:TRANSACTION_CALLS_URI';
+    protected const TRANSACTION_CALLS_URI = 'VERTEX:TRANSACTION_CALLS_URI';
 
     public function getClientId(): string
     {
