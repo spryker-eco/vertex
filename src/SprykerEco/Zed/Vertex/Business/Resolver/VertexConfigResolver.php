@@ -3,11 +3,29 @@
 namespace SprykerEco\Zed\Vertex\Business\Resolver;
 
 use Generated\Shared\Transfer\VertexConfigTransfer;
+use SprykerEco\Zed\Vertex\VertexConfig;
 
 class VertexConfigResolver implements VertexConfigResolverInterface
 {
-    public function resolve(int $idStore): VertexConfigTransfer
+    public function __construct(protected VertexConfig $vertexConfig)
     {
-        return new VertexConfigTransfer();
+    }
+
+    public function resolve(int $idStore): ?VertexConfigTransfer
+    {
+        $clientId = $this->vertexConfig->getClientId();
+        $clientSecret = $this->vertexConfig->getClientSecret();
+        $securityUri = $this->vertexConfig->getSecurityUri();
+        $transactionCallsUri = $this->vertexConfig->getTransactionCallsUri();
+
+        if (!$clientId || !$clientSecret || !$securityUri || !$transactionCallsUri) {
+            return null;
+        }
+
+        return (new VertexConfigTransfer())
+            ->setClientId($clientId)
+            ->setClientSecret($clientSecret)
+            ->setSecurityUri($securityUri)
+            ->setTransactionCallsUri($transactionCallsUri);
     }
 }

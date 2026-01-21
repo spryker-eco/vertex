@@ -6,5 +6,5 @@ use Generated\Shared\Transfer\VertexConfigTransfer;
 
 interface VertexConfigResolverInterface
 {
-    public function resolve(int $idStore): VertexConfigTransfer;
+    public function resolve(int $idStore): ?VertexConfigTransfer;
 }

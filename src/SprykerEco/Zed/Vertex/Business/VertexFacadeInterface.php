@@ -18,34 +18,6 @@ interface VertexFacadeInterface
 {
     /**
      * Specification:
-     * - Saves tax app config.
-     * - Requires VertexConfigTransfer.VertexConfigConditionsTransfer.applicationId.
-     * - Requires VertexConfigTransfer.VertexConfigConditionsTransfer.apiUrls.
-     * - Requires VertexConfigTransfer.VertexConfigConditionsTransfer.vendorCode.
-     *
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $VertexConfigTransfer
-     *
-     * @return void
-     */
-    public function saveVertexConfig(VertexConfigTransfer $VertexConfigTransfer): void;
-
-    /**
-     * Specification:
-     * - Deletes tax app config.
-     * - Requires VertexConfigCriteriaTransfer.VertexConfigConditionsTransfer.vendorCode.
-     *
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\VertexConfigCriteriaTransfer $VertexConfigCriteriaTransfer
-     *
-     * @return void
-     */
-    public function deleteVertexConfig(VertexConfigCriteriaTransfer $VertexConfigCriteriaTransfer): void;
-
-    /**
-     * Specification:
      * - Requires `CalculableObject.store.name`, `CalculableObject.priceMode` to be set.
      * - Executes {@link \Spryker\Zed\VertexExtension\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface} plugins stack.
      * - Sets `CalculableObject.totals.taxTotal` with returned amount, if tax quotation request is successful.
@@ -113,15 +85,4 @@ interface VertexFacadeInterface
      * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
      */
     public function validateTaxId(VertexValidationRequestTransfer $VertexValidationRequestTransfer): VertexValidationResponseTransfer;
-
-    /**
-     * Specification:
-     * - Fetches a collection of Vertex configs from the Persistence.
-     * - Iterates over the collection and triggers an update for each Vertex config, creating non-existent store relations.
-     *
-     * @api
-     *
-     * @return void
-     */
-    public function refreshVertexStoreRelations(): void;
 }

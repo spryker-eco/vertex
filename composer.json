@@ -40,7 +40,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Spryker\\": "src/Spryker/",
+            "SprykerEco\\": "src/SprykerEco/",
             "SprykerEcoTest\\Shared\\Vertex\\Helper\\": "tests/SprykerEcoTest/Shared/Vertex/_support/Helper/",
             "SprykerEcoTest\\AsyncApi\\Vertex\\Helper\\": "tests/SprykerEcoTest/AsyncApi/Vertex/_support/Helper/"
         }

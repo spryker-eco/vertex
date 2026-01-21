@@ -296,7 +296,6 @@
         <property name="defaultTaxpayerCompanyCode" type="string"/>
         <property name="createdAt" type="string"/>
         <property name="updatedAt" type="string"/>
-
     </transfer>
 
     <transfer name="VertexAuthResponse" strict="true">
