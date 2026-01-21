@@ -134,15 +134,6 @@
         <property name="billingAddress" type="VertexAddress"/>
     </transfer>
 
-    <transfer name="VertexAddress" strict="true">
-        <property name="address1" type="string"/>
-        <property name="address2" type="string"/>
-        <property name="city" type="string"/>
-        <property name="state" type="string"/>
-        <property name="country" type="string"/>
-        <property name="zipCode" type="string"/>
-    </transfer>
-
     <transfer name="TaxCalculationRequest" strict="true">
         <property name="sale" type="VertexSale"/>
         <property name="authorization" type="string"/>
@@ -347,6 +338,9 @@
         <property name="sku" type="string"/>
     </transfer>
 
+    <transfer name="Address" strict="true">
+    </transfer>
+
     <transfer name="ShippingWarehouse" strict="true">
         <property name="quantity" type="int"/>
         <property name="warehouseAddress" type="Address"/>
@@ -364,7 +358,7 @@
         <property name="billingAddress" type="Address"/>
     </transfer>
 
-    <transfer name="Address" strict="true">
+    <transfer name="VertexAddress" strict="true">
         <property name="address1" type="string"/>
         <property name="address2" type="string"/>
         <property name="city" type="string"/>
