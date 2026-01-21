@@ -17,9 +17,9 @@ use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
 use Generated\Shared\Transfer\TaxTotalTransfer;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 use Spryker\Shared\Log\LoggerTrait;
-use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
+use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 
 class VertexCalculator implements VertexCalculatorInterface
 {
@@ -42,33 +42,29 @@ class VertexCalculator implements VertexCalculatorInterface
     public function __construct(
         protected VertexMapperInterface $vertexMapper,
         protected VertexClientInterface $vertexClient,
-        protected AccessTokenProviderInterface $accessTokenProvider,
         protected array $calculableObjectVertexExpanderPlugins,
-        protected PriceAggregatorInterface $priceAggregator
+        protected PriceAggregatorInterface $priceAggregator,
+        protected VertexConfigResolverInterface $configResolver,
     ) {}
     public function recalculate(CalculableObjectTransfer $calculableObjectTransfer, VertexConfigTransfer $VertexConfigTransfer): void
     {
         $calculableObjectTransfer = $this->executeCalculableObjectVertexExpanderPlugins($calculableObjectTransfer);
 
-        $VertexSaleTransfer = $this->vertexMapper->mapCalculableObjectToVertexSaleTransfer($calculableObjectTransfer, new VertexSaleTransfer());
+        $vertexSaleTransfer = $this->vertexMapper->mapCalculableObjectToVertexSaleTransfer($calculableObjectTransfer, new VertexSaleTransfer());
 
         // for correct tax calculation in NET price mode, at least one shipment must be selected, otherwise tax calculation is skipped.
-        if ($calculableObjectTransfer->getPriceModeOrFail() === static::PRICE_MODE_NET && $VertexSaleTransfer->getShipments()->count() === 0) {
+        if ($calculableObjectTransfer->getPriceModeOrFail() === static::PRICE_MODE_NET && $vertexSaleTransfer->getShipments()->count() === 0) {
             $taxTotalTransfer = (new TaxTotalTransfer())->setAmount(0);
             $calculableObjectTransfer->getTotalsOrFail()->setTaxTotal($taxTotalTransfer);
-            $this->priceAggregator->calculatePriceAggregation($VertexSaleTransfer, $calculableObjectTransfer);
+            $this->priceAggregator->calculatePriceAggregation($vertexSaleTransfer, $calculableObjectTransfer);
 
             return;
         }
 
-        $taxCalculationResponseTransfer = $this->getCachedVertexResponseTransfer($calculableObjectTransfer, $VertexSaleTransfer);
+        $taxCalculationResponseTransfer = $this->getCachedVertexResponseTransfer($calculableObjectTransfer, $vertexSaleTransfer);
 
         if (!$taxCalculationResponseTransfer) {
-            $taxCalculationResponseTransfer = $this->getTaxCalculationResponse(
-                $VertexSaleTransfer,
-                $VertexConfigTransfer,
-                $calculableObjectTransfer->getStoreOrFail()
-            );
+            $taxCalculationResponseTransfer = $this->getTaxCalculationResponse($vertexSaleTransfer);
 
             if (!$taxCalculationResponseTransfer->getIsSuccessful()) {
                 $apiErrorMessages = array_map(function (ApiErrorMessageTransfer $apiErrorMessageTransfer) {
@@ -76,62 +72,51 @@ class VertexCalculator implements VertexCalculatorInterface
                 }, $taxCalculationResponseTransfer->getApiErrorMessages()->getArrayCopy());
                 $this->getLogger()->error('Tax calculation failed.', ['apiErrorMessages' => $apiErrorMessages]);
 
-                $VertexSaleTransfer = $this->resetVertexSaleTaxTotals($VertexSaleTransfer);
-                $taxCalculationResponseTransfer->setSale($VertexSaleTransfer);
+                $vertexSaleTransfer = $this->resetVertexSaleTaxTotals($vertexSaleTransfer);
+                $taxCalculationResponseTransfer->setSale($vertexSaleTransfer);
             }
         }
 
         $calculableObjectTransfer = $this->priceAggregator->calculatePriceAggregation($taxCalculationResponseTransfer->getSaleOrFail(), $calculableObjectTransfer);
 
         if ($taxCalculationResponseTransfer->getIsSuccessful()) {
-            $calculableObjectTransfer->setVertexSaleHash($this->getVertexSaleHash($VertexSaleTransfer));
+            $calculableObjectTransfer->setVertexSaleHash($this->getVertexSaleHash($vertexSaleTransfer));
             $calculableObjectTransfer->setTaxCalculationResponse($taxCalculationResponseTransfer);
         }
     }
 
     /**
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $VertexSaleTransfer
+     * @param \Generated\Shared\Transfer\VertexSaleTransfer $vertexSaleTransfer
      * @param \Generated\Shared\Transfer\VertexConfigTransfer $VertexConfigTransfer
      * @param \Generated\Shared\Transfer\StoreTransfer $storeTransfer
      *
      * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
      */
     protected function getTaxCalculationResponse(
-        VertexSaleTransfer $VertexSaleTransfer,
-        VertexConfigTransfer $VertexConfigTransfer,
-        StoreTransfer $storeTransfer
+        VertexSaleTransfer $vertexSaleTransfer
     ): TaxCalculationResponseTransfer {
-        $taxCalculationRequestTransfer = (new TaxCalculationRequestTransfer())
-            ->setSale($VertexSaleTransfer)
-            ->setAuthorization($this->accessTokenProvider->getAccessToken());
+        $authorisation = ''; // TODO: call auth provider
 
-        return $this->vertexClient->calculateTax($taxCalculationRequestTransfer);
+        return $this->vertexClient->calculateTax(
+            (new TaxCalculationRequestTransfer())
+                ->setSale($vertexSaleTransfer)
+                ->setAuthorization($authorisation)
+        );
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $VertexSaleTransfer
-     *
-     * @return string
-     */
-    protected function getVertexSaleHash(VertexSaleTransfer $VertexSaleTransfer): string
+    protected function getVertexSaleHash(VertexSaleTransfer $vertexSaleTransfer): string
     {
-        return md5(json_encode($VertexSaleTransfer->toArray()) ?: '');
+        return md5(json_encode($vertexSaleTransfer->toArray()) ?: '');
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $VertexSaleTransfer
-     *
-     * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer|null
-     */
     protected function getCachedVertexResponseTransfer(
         CalculableObjectTransfer $calculableObjectTransfer,
-        VertexSaleTransfer $VertexSaleTransfer
+        VertexSaleTransfer $vertexSaleTransfer
     ): ?TaxCalculationResponseTransfer {
         $currentTaxRequestHash = null;
 
         if ($calculableObjectTransfer->getVertexSaleHash()) {
-            $currentTaxRequestHash = $this->getVertexSaleHash($VertexSaleTransfer);
+            $currentTaxRequestHash = $this->getVertexSaleHash($vertexSaleTransfer);
         }
 
         // Quote was not changed since last tax calculation request. Tax calculation is skipped.
@@ -142,29 +127,19 @@ class VertexCalculator implements VertexCalculatorInterface
         return null;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $VertexSaleTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexSaleTransfer
-     */
-    protected function resetVertexSaleTaxTotals(VertexSaleTransfer $VertexSaleTransfer): VertexSaleTransfer
+    protected function resetVertexSaleTaxTotals(VertexSaleTransfer $vertexSaleTransfer): VertexSaleTransfer
     {
-        $VertexSaleTransfer->setTaxTotal(0);
-        foreach ($VertexSaleTransfer->getItems() as $VertexItemTransfer) {
+        $vertexSaleTransfer->setTaxTotal(0);
+        foreach ($vertexSaleTransfer->getItems() as $VertexItemTransfer) {
             $VertexItemTransfer->setTaxTotal(0);
         }
-        foreach ($VertexSaleTransfer->getShipments() as $VertexShipmentTransfer) {
+        foreach ($vertexSaleTransfer->getShipments() as $VertexShipmentTransfer) {
             $VertexShipmentTransfer->setTaxTotal(0);
         }
 
-        return $VertexSaleTransfer;
+        return $vertexSaleTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return \Generated\Shared\Transfer\CalculableObjectTransfer
-     */
     protected function executeCalculableObjectVertexExpanderPlugins(CalculableObjectTransfer $calculableObjectTransfer): CalculableObjectTransfer
     {
         foreach ($this->calculableObjectVertexExpanderPlugins as $calculableObjectVertexExpanderPlugin) {
