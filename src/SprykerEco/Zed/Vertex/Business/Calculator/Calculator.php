@@ -14,72 +14,20 @@ use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterf
 use SprykerEco\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface;
 use SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetriever;
+use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 
 class Calculator implements CalculatorInterface
 {
     use LoggerTrait;
 
-    /**
-     * @var \Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface
-     */
-    protected VertexToStoreFacadeInterface $storeFacade;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Business\Config\ConfigReaderInterface
-     */
-    protected ConfigReaderInterface $configReader;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface
-     */
-    protected AccessTokenProviderInterface $accessTokenProvider;
-
-    /**
-     * @var array<int, \Spryker\Zed\VertexExtension\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface>
-     */
-    protected array $calculableObjectVertexExpanderPlugins;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface
-     */
-    protected PriceAggregatorInterface $priceAggregator;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Business\Calculator\FallbackCalculatorInterface
-     */
-    protected FallbackCalculatorInterface $fallbackQuoteCalculator;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Business\Calculator\FallbackCalculatorInterface
-     */
-    protected FallbackCalculatorInterface $fallbackOrderCalculator;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Business\Calculator\VertexCalculatorInterface
-     */
-    protected VertexCalculatorInterface $vertexCalculator;
-
-    /**
-     * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
-     * @param \Spryker\Zed\Vertex\Business\Config\ConfigReaderInterface $configReader
-     * @param \Spryker\Zed\Vertex\Business\Calculator\FallbackCalculatorInterface $fallbackQuoteCalculator
-     * @param \Spryker\Zed\Vertex\Business\Calculator\FallbackCalculatorInterface $fallbackOrderCalculator
-     * @param \Spryker\Zed\Vertex\Business\Calculator\VertexCalculatorInterface $vertexCalculator
-     */
     public function __construct(
-        VertexToStoreFacadeInterface $storeFacade,
-        ConfigReaderInterface $configReader,
-        FallbackCalculatorInterface $fallbackQuoteCalculator,
-        FallbackCalculatorInterface $fallbackOrderCalculator,
-        VertexCalculatorInterface $vertexCalculator
-    ) {
-        $this->storeFacade = $storeFacade;
-        $this->configReader = $configReader;
-        $this->fallbackQuoteCalculator = $fallbackQuoteCalculator;
-        $this->fallbackOrderCalculator = $fallbackOrderCalculator;
-        $this->vertexCalculator = $vertexCalculator;
-    }
+        protected VertexToStoreFacadeInterface $storeFacade,
+        protected VertexConfigResolverInterface $vertexConfigResolver,
+        protected FallbackCalculatorInterface $fallbackQuoteCalculator,
+        protected FallbackCalculatorInterface $fallbackOrderCalculator,
+        protected VertexCalculatorInterface $vertexCalculator
+    ) {}
 
     /**
      * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
@@ -88,9 +36,9 @@ class Calculator implements CalculatorInterface
      */
     public function recalculate(CalculableObjectTransfer $calculableObjectTransfer): void
     {
-        $VertexConfigTransfer = $this->getVertexConfigTransfer($calculableObjectTransfer);
+        $vertexConfigTransfer = $this->getVertexConfigTransfer($calculableObjectTransfer);
 
-        if ($VertexConfigTransfer === null || !$VertexConfigTransfer->getIsActive()) {
+        if ($vertexConfigTransfer === null || !$vertexConfigTransfer->getIsActive()) {
             $this->setHideTaxInCartFlagToFalse($calculableObjectTransfer);
 
             $this->recalculateUsingFallbackCalculator($calculableObjectTransfer);
@@ -99,11 +47,11 @@ class Calculator implements CalculatorInterface
         }
 
         if ($calculableObjectTransfer->getOriginalQuote()) {
-            $calculableObjectTransfer->getOriginalQuoteOrFail()->setTaxVendor($VertexConfigTransfer->getVendorCode());
+            $calculableObjectTransfer->getOriginalQuoteOrFail()->setTaxVendor($vertexConfigTransfer->getVendorCode());
         }
         $this->setHideTaxInCartFlagToTrue($calculableObjectTransfer);
 
-        $this->vertexCalculator->recalculate($calculableObjectTransfer, $VertexConfigTransfer);
+        $this->vertexCalculator->recalculate($calculableObjectTransfer, $vertexConfigTransfer);
     }
 
     /**
@@ -120,7 +68,7 @@ class Calculator implements CalculatorInterface
             $idStore = $this->storeFacade->getStoreByName($storeTransfer->getNameOrFail())->getIdStoreOrFail();
         }
 
-        return $this->configReader->getVertexConfigByIdStore($idStore);
+        return $this->vertexConfigResolver->resolve($idStore);
     }
 
     /**

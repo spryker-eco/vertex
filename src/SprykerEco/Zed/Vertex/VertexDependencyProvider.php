@@ -7,15 +7,15 @@
 
 namespace SprykerEco\Zed\Vertex;
 
-use Spryker\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceBridge;
+use SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceBridge;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeBridge;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeInterface;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeBridge;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToOauthClientFacadeBridge;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeBridge;
-use Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeBridge;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeBridge;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeInterface;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeBridge;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToOauthClientFacadeBridge;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeBridge;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeBridge;
 
 /**
  * @method \Spryker\Zed\Vertex\VertexConfig getConfig()
@@ -45,12 +45,12 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     /**
      * @var string
      */
-    public const PLUGINS_CALCULABLE_OBJECT_TAX_APP_EXPANDER = 'PLUGINS_CALCULABLE_OBJECT_TAX_APP_EXPANDER';
+    public const PLUGINS_CALCULABLE_OBJECT_VERTEX_EXPANDER = 'PLUGINS_CALCULABLE_OBJECT_VERTEX_EXPANDER';
 
     /**
      * @var string
      */
-    public const PLUGINS_ORDER_TAX_APP_EXPANDER = 'PLUGINS_ORDER_TAX_APP_EXPANDER';
+    public const PLUGINS_ORDER_VERTEX_EXPANDER = 'PLUGINS_ORDER_VERTEX_EXPANDER';
 
     /**
      * string
@@ -69,7 +69,7 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     /**
      * @var string
      */
-    public const CLIENT_TAX_APP = 'CLIENT_TAX_APP';
+    public const CLIENT_VERTEX = 'CLIENT_VERTEX';
 
     /**
      * @var string
@@ -138,7 +138,7 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
      */
     protected function addVertexClient(Container $container): Container
     {
-        $container->set(static::CLIENT_TAX_APP, function (Container $container) {
+        $container->set(static::CLIENT_VERTEX, function (Container $container) {
             return $container->getLocator()->Vertex()->client();
         });
 
@@ -222,7 +222,7 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
      */
     protected function addCalculableObjectVertexExpanderPlugins(Container $container): Container
     {
-        $container->set(static::PLUGINS_CALCULABLE_OBJECT_TAX_APP_EXPANDER, function () {
+        $container->set(static::PLUGINS_CALCULABLE_OBJECT_VERTEX_EXPANDER, function () {
             return $this->getCalculableObjectVertexExpanderPlugins();
         });
 
@@ -236,7 +236,7 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
      */
     protected function addOrderVertexExpanderPlugins(Container $container): Container
     {
-        $container->set(static::PLUGINS_ORDER_TAX_APP_EXPANDER, function () {
+        $container->set(static::PLUGINS_ORDER_VERTEX_EXPANDER, function () {
             return $this->getOrderVertexExpanderPlugins();
         });
 

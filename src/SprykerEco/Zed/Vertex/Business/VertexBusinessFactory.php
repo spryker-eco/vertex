@@ -34,12 +34,12 @@ use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapper;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Order\RefundProcessor;
 use SprykerEco\Zed\Vertex\Business\Order\RefundProcessorInterface;
+use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolver;
+use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use SprykerEco\Zed\Vertex\Business\Sender\PaymentSubmitTaxInvoiceSender;
 use SprykerEco\Zed\Vertex\Business\Sender\PaymentSubmitTaxInvoiceSenderInterface;
 use SprykerEco\Zed\Vertex\Business\Validator\TaxIdValidator;
 use SprykerEco\Zed\Vertex\Business\Validator\TaxIdValidatorInterface;
-use SprykerEco\Zed\Vertex\Business\Writer\VertexStoreRelationWriter;
-use SprykerEco\Zed\Vertex\Business\Writer\VertexStoreRelationWriterInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToOauthClientFacadeInterface;
@@ -99,7 +99,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
      */
     public function getCalculableObjectVertexExpanderPlugins(): array
     {
-        return $this->getProvidedDependency(VertexDependencyProvider::PLUGINS_CALCULABLE_OBJECT_TAX_APP_EXPANDER);
+        return $this->getProvidedDependency(VertexDependencyProvider::PLUGINS_CALCULABLE_OBJECT_VERTEX_EXPANDER);
     }
 
     /**
@@ -107,7 +107,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
      */
     public function getOrderVertexExpanderPlugins(): array
     {
-        return $this->getProvidedDependency(VertexDependencyProvider::PLUGINS_ORDER_TAX_APP_EXPANDER);
+        return $this->getProvidedDependency(VertexDependencyProvider::PLUGINS_ORDER_VERTEX_EXPANDER);
     }
 
     /**
@@ -117,10 +117,10 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     {
         return new Calculator(
             $this->getStoreFacade(),
-            $this->createConfigReader(),
+            $this->createVertexConfigResolver(),
             $this->createFallbackQuoteCalculator(),
             $this->createFallbackOrderCalculator(),
-            $this->createVertexCalculator(),
+            $this->createVertexCalculator()
         );
     }
 
@@ -263,7 +263,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
      */
     public function getVertexClient(): VertexClientInterface
     {
-        return $this->getProvidedDependency(VertexDependencyProvider::CLIENT_TAX_APP);
+        return $this->getProvidedDependency(VertexDependencyProvider::CLIENT_VERTEX);
     }
 
     /**
@@ -280,6 +280,11 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     public function createPriceAggregator(): PriceAggregatorInterface
     {
         return new PriceAggregator();
+    }
+
+    public function createVertexConfigResolver(): VertexConfigResolverInterface
+    {
+        return new VertexConfigResolver();
     }
 
     /**
