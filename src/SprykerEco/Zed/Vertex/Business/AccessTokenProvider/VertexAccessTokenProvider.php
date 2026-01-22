@@ -94,8 +94,6 @@ class VertexAccessTokenProvider implements VertexAccessTokenProviderInterface
      */
     protected function retrieveNewAccessToken(VertexConfigTransfer $vertexConfigTransfer): VertexApiAccessTokenTransfer
     {
-        $this->configurePropelEncryption($vertexConfigTransfer);
-
         $vertexApiAccessTokenTransfer = (new VertexApiAccessTokenTransfer());
 
         $vertexAuthResponseTransfer = $this->vertexClient->authenticate($vertexConfigTransfer);

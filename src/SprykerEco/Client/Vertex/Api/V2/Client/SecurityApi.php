@@ -8,6 +8,7 @@
 namespace SprykerEco\Client\Vertex\Api\V2\Client;
 
 use Generated\Shared\Transfer\VertexApiCredentialTransfer;
+use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use GuzzleHttp\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use SprykerEco\Client\Vertex\VertexConfig;

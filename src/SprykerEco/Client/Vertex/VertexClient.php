@@ -16,6 +16,7 @@ use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
 use Generated\Shared\Transfer\TaxIdValidationResponseTransfer;
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
+use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Spryker\Client\Kernel\AbstractClient;
 
 /**

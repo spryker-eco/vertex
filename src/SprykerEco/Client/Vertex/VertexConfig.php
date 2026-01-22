@@ -7,9 +7,10 @@
 
 namespace SprykerEco\Client\Vertex;
 
+use Spryker\Client\Kernel\AbstractBundleConfig;
 use Spryker\Client\Kernel\AbstractConfig;
 
-class VertexConfig extends AbstractConfig
+class VertexConfig extends AbstractBundleConfig
 {
     /**
      * @var string

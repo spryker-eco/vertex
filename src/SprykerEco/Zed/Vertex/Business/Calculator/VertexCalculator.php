@@ -102,7 +102,7 @@ class VertexCalculator implements VertexCalculatorInterface
         return $this->vertexClient->calculateTax(
             (new TaxCalculationRequestTransfer())
                 ->setSale($vertexSaleTransfer)
-                ->setAuthorization($vertexApiAccessTokenTransfer->getAccessToken()),
+                ->setAuthorization($vertexApiAccessTokenTransfer->getAccessToken()), // TODO: refactor ???
             $vertexConfigTransfer
         );
     }

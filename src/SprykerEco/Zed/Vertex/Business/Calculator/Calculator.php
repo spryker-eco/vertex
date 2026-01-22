@@ -35,7 +35,7 @@ class Calculator implements CalculatorInterface
     {
         $vertexConfigTransfer = $this->getVertexConfigTransfer($calculableObjectTransfer);
 
-        if ($vertexConfigTransfer === null || !$vertexConfigTransfer->getIsActive()) {
+        if (!$vertexConfigTransfer->getIsActive()) {
             $this->setHideTaxInCartFlagToFalse($calculableObjectTransfer);
 
             $this->recalculateUsingFallbackCalculator($calculableObjectTransfer);
@@ -56,9 +56,9 @@ class Calculator implements CalculatorInterface
      *
      * @return \Generated\Shared\Transfer\VertexConfigTransfer|null
      */
-    protected function getVertexConfigTransfer(CalculableObjectTransfer $calculableObjectTransfer): ?VertexConfigTransfer
+    protected function getVertexConfigTransfer(CalculableObjectTransfer $calculableObjectTransfer): VertexConfigTransfer
     {
-        $storeTransfer = $calculableObjectTransfer->getStoreOrFail();
+        $storeTransfer = $calculableObjectTransfer->getStoreOrFail(); // TODO: remove ???
         $idStore = $storeTransfer->getIdStore();
 
         if (!$idStore) {

@@ -11,7 +11,7 @@ class VertexConfigResolver implements VertexConfigResolverInterface
     {
     }
 
-    public function resolve(?int $idStore = null): ?VertexConfigTransfer // TODO: is idStore needed?
+    public function resolve(?int $idStore = null): VertexConfigTransfer // TODO: is idStore needed?
     {
         $clientId = $this->vertexConfig->getClientId();
         $clientSecret = $this->vertexConfig->getClientSecret();

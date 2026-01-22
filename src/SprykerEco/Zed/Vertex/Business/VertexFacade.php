@@ -52,7 +52,7 @@ class VertexFacade extends AbstractFacade implements VertexFacadeInterface
 
     public function handleSubmitPaymentTaxInvoice(OrderTransfer  $orderTransfer): void
     {
-        return $this->getFactory()->createPaymentSubmitTaxInvoiceHandler()->sendSubmitPaymentTaxInvoiceMessage($orderTransfer);
+        $this->getFactory()->createPaymentSubmitTaxInvoiceHandler()->sendSubmitPaymentTaxInvoiceMessage($orderTransfer);
     }
 
     /**

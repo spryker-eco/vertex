@@ -11,6 +11,7 @@ use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
 use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigCriteriaTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
+use Generated\Shared\Transfer\VertexConfigTransfer;
 use SprykerEco\Client\Vertex\Api\V2\Client\SuppliesApiInterface;
 use SprykerEco\Client\Vertex\Builder\SuppliesRequestBuilder;
 use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterface;

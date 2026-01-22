@@ -136,13 +136,13 @@
 
     <transfer name="TaxCalculationRequest" strict="true">
         <property name="sale" type="VertexSale"/>
-        <property name="authorization" type="string"/>
+        <property name="vertexApiAccessToken" type="VertexApiAccessToken"/>
     </transfer>
 
     <transfer name="TaxRefundRequest" strict="true">
         <property name="sale" type="VertexSale"/>
         <property name="reportingDate" type="string"/>
-        <property name="authorization" type="string"/>
+        <property name="vertexApiAccessToken" type="VertexApiAccessToken"/>
     </transfer>
 
     <transfer name="TaxCalculationResponse" strict="true">
