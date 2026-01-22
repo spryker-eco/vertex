@@ -40,7 +40,7 @@ class VertexApiMessageHandler implements VertexApiMessageHandlerInterface
 
         $submitPaymentTaxInvoiceResponseTransfer = (new SubmitPaymentTaxInvoiceResponseTransfer())->setIsSuccessful(false);
 
-        if (!$this->shouldHandleSubmitTaxInvoice($vertexConfigTransfer)) {
+        if (!$this->shouldHandleSubmitTaxInvoice($vertexConfigTransfer)) { // TODO: move to zed
             $infoMessage = sprintf('[Vertex] App is Inactive or configured to not submit invoice for Store Reference %s, message discarded.', $submitPaymentTaxInvoiceTransfer->getMessageAttributes()->getStoreReference());
             $submitPaymentTaxInvoiceResponseTransfer->setInfoMessage($infoMessage);
             $this->getLogger()->warning($infoMessage);

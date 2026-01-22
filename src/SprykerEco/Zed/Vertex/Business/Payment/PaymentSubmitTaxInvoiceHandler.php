@@ -5,46 +5,24 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEco\Zed\Vertex\Business\Sender;
+namespace SprykerEco\Zed\Vertex\Business\Payment;
 
 use Generated\Shared\Transfer\MessageAttributesTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Spryker\Shared\Log\LoggerTrait;
+use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface;
+use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
+use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 
-class PaymentSubmitTaxInvoiceSender implements PaymentSubmitTaxInvoiceSenderInterface
+class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerInterface
 {
     use LoggerTrait;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeInterface
-     */
-    protected VertexToMessageBrokerFacadeInterface $messageBrokerFacade;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface
-     */
-    protected VertexToStoreFacadeInterface $storeFacade;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface
-     */
-    protected VertexToSalesFacadeInterface $salesFacade;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface
-     */
-    protected VertexMapperInterface $vertexMapper;
-
-    /**
-     * @var array<\Spryker\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface>
-     */
-    protected array $orderVertexExpanderPlugins;
 
     /**
      * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeInterface $messageBrokerFacade
@@ -54,18 +32,14 @@ class PaymentSubmitTaxInvoiceSender implements PaymentSubmitTaxInvoiceSenderInte
      * @param array<\Spryker\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface> $orderVertexExpanderPlugins
      */
     public function __construct(
-        VertexToMessageBrokerFacadeInterface $messageBrokerFacade,
-        VertexToStoreFacadeInterface $storeFacade,
-        VertexToSalesFacadeInterface $salesFacade,
-        VertexMapperInterface $vertexMapper,
-        array $orderVertexExpanderPlugins
-    ) {
-        $this->messageBrokerFacade = $messageBrokerFacade;
-        $this->storeFacade = $storeFacade;
-        $this->salesFacade = $salesFacade;
-        $this->vertexMapper = $vertexMapper;
-        $this->orderVertexExpanderPlugins = $orderVertexExpanderPlugins;
-    }
+        protected VertexToStoreFacadeInterface $storeFacade,
+        protected VertexToSalesFacadeInterface $salesFacade,
+        protected VertexMapperInterface $vertexMapper,
+        protected array $orderVertexExpanderPlugins,
+        protected VertexConfigResolverInterface $configResolver,
+        protected VertexAccessTokenProviderInterface $accessTokenProvider,
+        protected VertexTaxCalculatorInterface $taxCalculator,
+    ) {}
 
     /**
      * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer
@@ -91,9 +65,32 @@ class PaymentSubmitTaxInvoiceSender implements PaymentSubmitTaxInvoiceSenderInte
         $submitPaymentTaxInvoiceTransfer->setSale($vertexSaleTransfer);
 
         $this->setMessageAttributesTransfer($submitPaymentTaxInvoiceTransfer, $orderTransfer);
-//TODO: Check it we need to use a MessageBroker.
 
-        $this->messageBrokerFacade->sendMessage($submitPaymentTaxInvoiceTransfer);
+        $vertexConfigTransfer = $this->configResolver->resolve();
+        $vertexApiAccessTokenTransfer = $this->accessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
+        $vertexConfigTransfer->setVertexApiAccessToken($vertexApiAccessTokenTransfer);
+
+        $taxCalculationRequestTransfer = (new TaxCalculationRequestTransfer())
+            ->setSale($vertexSaleTransfer)
+            ->setAuthorization($vertexApiAccessTokenTransfer->getAccessToken());
+
+        $this->getLogger()->info(
+            'Starting tax calculation request for invoicing process',
+            [
+                'transactionId' => $taxCalculationRequestTransfer->getSale()->getTransactionId(),
+                'requestTransfer' => $taxCalculationRequestTransfer->modifiedToArray(),
+            ],
+        );
+
+        $taxCalculationResponseTransfer = $this->taxCalculator->calculateTax($taxCalculationRequestTransfer, $vertexConfigTransfer);
+
+        $this->getLogger()->info(
+            'Finished tax calculation request for invoicing process',
+            [
+                'transactionId' => $taxCalculationRequestTransfer->getSale()->getTransactionId(),
+                'responseTransfer' => $taxCalculationResponseTransfer->modifiedToArray(),
+            ],
+        );
     }
 
     /**

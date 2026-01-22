@@ -5,11 +5,11 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEco\Zed\Vertex\Business\Sender;
+namespace SprykerEco\Zed\Vertex\Business\Payment;
 
 use Generated\Shared\Transfer\OrderTransfer;
 
-interface PaymentSubmitTaxInvoiceSenderInterface
+interface PaymentSubmitTaxInvoiceHandlerInterface
 {
     /**
      * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer

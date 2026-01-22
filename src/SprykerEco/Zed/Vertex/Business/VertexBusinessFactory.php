@@ -41,8 +41,8 @@ use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolver;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use SprykerEco\Zed\Vertex\Business\SecretsManager\SecretsManager;
 use SprykerEco\Zed\Vertex\Business\SecretsManager\SecretsManagerInterface;
-use SprykerEco\Zed\Vertex\Business\Sender\PaymentSubmitTaxInvoiceSender;
-use SprykerEco\Zed\Vertex\Business\Sender\PaymentSubmitTaxInvoiceSenderInterface;
+use SprykerEco\Zed\Vertex\Business\Payment\PaymentSubmitTaxInvoiceHandler;
+use SprykerEco\Zed\Vertex\Business\Payment\PaymentSubmitTaxInvoiceHandlerInterface;
 use SprykerEco\Zed\Vertex\Business\Validator\TaxIdValidator;
 use SprykerEco\Zed\Vertex\Business\Validator\TaxIdValidatorInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeInterface;
@@ -130,6 +130,19 @@ class VertexBusinessFactory extends AbstractBusinessFactory
         );
     }
 
+    public function createPaymentSubmitTaxInvoiceHandler(): PaymentSubmitTaxInvoiceHandlerInterface
+    {
+        return new PaymentSubmitTaxInvoiceHandler(
+            $this->getStoreFacade(),
+            $this->getSalesFacade(),
+            $this->createVertexMapper(),
+            $this->getOrderVertexExpanderPlugins(),
+            $this->createVertexConfigResolver(),
+            $this->createVertexAccessTokenProvider(),
+            $this->createVertexCalculator(),
+        );
+    }
+
     /**
      * @return \SprykerEco\Zed\Vertex\Business\Calculator\VertexCalculatorInterface
      */
@@ -145,11 +158,11 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \SprykerEco\Zed\Vertex\Business\Sender\PaymentSubmitTaxInvoiceSenderInterface
+     * @return \SprykerEco\Zed\Vertex\Business\Payment\PaymentSubmitTaxInvoiceHandlerInterface
      */
-    public function createPaymentSubmitTaxInvoiceSender(): PaymentSubmitTaxInvoiceSenderInterface
+    public function createPaymentSubmitTaxInvoiceSender(): PaymentSubmitTaxInvoiceHandlerInterface
     {
-        return new PaymentSubmitTaxInvoiceSender(
+        return new PaymentSubmitTaxInvoiceHandler(
             $this->getMessageBrokerFacade(),
             $this->getStoreFacade(),
             $this->getSalesFacade(),

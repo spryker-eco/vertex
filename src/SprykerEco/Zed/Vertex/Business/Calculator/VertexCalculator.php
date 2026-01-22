@@ -97,7 +97,6 @@ class VertexCalculator implements VertexCalculatorInterface
         VertexConfigTransfer $vertexConfigTransfer
     ): TaxCalculationResponseTransfer {
         $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
-        $vertexConfigTransfer->setVertexApiAccessToken($vertexApiAccessTokenTransfer);
 
         //TODO: Add an early return if the access token is not available
         return $this->vertexClient->calculateTax(

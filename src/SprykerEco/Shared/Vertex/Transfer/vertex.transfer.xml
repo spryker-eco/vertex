@@ -263,7 +263,6 @@
         <property name="clientId" type="string"/>
         <property name="clientSecret" type="string"/>
         <property name="securityUri" type="string"/>
-        <property name="vertexApiAccessToken" type="VertexApiAccessToken"/>
         <property name="idVertexConfig" type="int"/>
         <property name="storeReference" type="string"/>
         <property name="credentialHash" type="string"/>
@@ -277,6 +276,7 @@
         <property name="defaultTaxpayerCompanyCode" type="string"/>
         <property name="createdAt" type="string"/>
         <property name="updatedAt" type="string"/>
+        <property name="vendorCode" type="string"/>
     </transfer>
 
     <transfer name="VertexAuthResponse" strict="true">

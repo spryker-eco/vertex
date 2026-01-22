@@ -41,23 +41,25 @@ interface VertexFacadeInterface
      */
     public function recalculate(CalculableObjectTransfer $calculableObjectTransfer): void;
 
-    /**
-     * Specification:
-     * - Requires `Order.idSalesOrder`, `Order.store.name`, 'Order.priceMode' to be set.
-     * - Executes {@link \Spryker\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface} plugins stack.
-     * - Uses {@link \Spryker\Zed\Vertex\VertexConfig::getSellerCountryCode()} to determine the country code of the store (seller).
-     *   The default value is the first country of the store defined in the Order.
-     * - Uses {@link \Spryker\Zed\Vertex\VertexConfig::getCustomerCountryCode()} to determine the country code of the customer (buyer), when shipping address is not provided.
-     *   The default value is the first country of the store defined in the Order.
-     * - Sends `SubmitPaymentTaxInvoice` message to the message broker.
-     *
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer
-     *
-     * @return void
-     */
-    public function sendSubmitPaymentTaxInvoiceMessage(OrderTransfer $orderTransfer): void;
+//    /**
+//     * Specification:
+//     * - Requires `Order.idSalesOrder`, `Order.store.name`, 'Order.priceMode' to be set.
+//     * - Executes {@link \Spryker\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface} plugins stack.
+//     * - Uses {@link \Spryker\Zed\Vertex\VertexConfig::getSellerCountryCode()} to determine the country code of the store (seller).
+//     *   The default value is the first country of the store defined in the Order.
+//     * - Uses {@link \Spryker\Zed\Vertex\VertexConfig::getCustomerCountryCode()} to determine the country code of the customer (buyer), when shipping address is not provided.
+//     *   The default value is the first country of the store defined in the Order.
+//     * - Sends `SubmitPaymentTaxInvoice` message to the message broker.
+//     *
+//     * @api
+//     *
+//     * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer
+//     *
+//     * @return void
+//     */
+//    public function sendSubmitPaymentTaxInvoiceMessage(OrderTransfer $orderTransfer): void;
+
+    public function handleSubmitPaymentTaxInvoice(OrderTransfer  $orderTransfer): void;
 
     /**
      * Specification:

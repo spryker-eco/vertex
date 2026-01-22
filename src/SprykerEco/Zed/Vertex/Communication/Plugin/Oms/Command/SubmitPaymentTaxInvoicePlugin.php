@@ -14,9 +14,9 @@ use Spryker\Zed\Oms\Business\Util\ReadOnlyArrayObject;
 use Spryker\Zed\Oms\Dependency\Plugin\Command\CommandByOrderInterface;
 
 /**
- * @method \Spryker\Zed\Vertex\Business\VertexFacadeInterface getFacade()
- * @method \Spryker\Zed\Vertex\Communication\VertexCommunicationFactory getFactory()
- * @method \Spryker\Zed\Vertex\VertexConfig getConfig()
+ * @method \SprykerEco\Zed\Vertex\Business\VertexFacadeInterface getFacade()
+ * @method \SprykerEco\Zed\Vertex\Communication\VertexCommunicationFactory getFactory()
+ * @method \SprykerEco\Zed\Vertex\VertexConfig getConfig()
  */
 class SubmitPaymentTaxInvoicePlugin extends AbstractPlugin implements CommandByOrderInterface
 {
@@ -38,7 +38,7 @@ class SubmitPaymentTaxInvoicePlugin extends AbstractPlugin implements CommandByO
         $orderTransfer->setIdSalesOrder($orderEntity->getIdSalesOrder());
         $orderTransfer->setStore($orderEntity->getStore());
 
-        $this->getFacade()->sendSubmitPaymentTaxInvoiceMessage($orderTransfer);
+        $this->getFacade()->handleSubmitPaymentTaxInvoice($orderTransfer);
 
         return [];
     }
