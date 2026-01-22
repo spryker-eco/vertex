@@ -62,9 +62,6 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
         TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
         VertexConfigTransfer $vertexConfigTransfer
     ): TaxCalculationResponseTransfer {
-        $vertexConfigCriteriaTransfer = (new VertexConfigCriteriaTransfer())
-            ->setStoreReference($taxCalculationRequestTransfer->getTenantIdentifierOrFail());
-
         if (!$vertexConfigTransfer->getIsActive()) {
             return $this->responseBuilder->buildErrorResponse($taxCalculationRequestTransfer, static::ERROR_MESSAGE_INACTIVE_VERTEX_APP);
         }
