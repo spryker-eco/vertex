@@ -148,7 +148,7 @@
     <transfer name="TaxCalculationResponse" strict="true">
         <property name="sale" type="VertexSale"/>
         <property name="isSuccessful" type="bool"/>
-        <property name="apiErrorMessages" type="ApiErrorMessage[]" singular="apiErrorMessage"/>
+        <property name="errorMessage" type="string"/>
     </transfer>
 
     <transfer name="ApiErrorMessage" strict="true">

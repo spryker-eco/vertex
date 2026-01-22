@@ -139,7 +139,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
             $this->getOrderVertexExpanderPlugins(),
             $this->createVertexConfigResolver(),
             $this->createVertexAccessTokenProvider(),
-            $this->createVertexCalculator(),
+            $this->createCalculator(),
         );
     }
 
