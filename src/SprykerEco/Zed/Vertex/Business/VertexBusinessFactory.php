@@ -139,7 +139,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
             $this->getOrderVertexExpanderPlugins(),
             $this->createVertexConfigResolver(),
             $this->createVertexAccessTokenProvider(),
-            $this->createCalculator(),
+            $this->getVertexClient(),
         );
     }
 
@@ -154,20 +154,6 @@ class VertexBusinessFactory extends AbstractBusinessFactory
             $this->getCalculableObjectVertexExpanderPlugins(),
             $this->createPriceAggregator(),
             $this->createVertexAccessTokenProvider(),
-        );
-    }
-
-    /**
-     * @return \SprykerEco\Zed\Vertex\Business\Payment\PaymentSubmitTaxInvoiceHandlerInterface
-     */
-    public function createPaymentSubmitTaxInvoiceSender(): PaymentSubmitTaxInvoiceHandlerInterface
-    {
-        return new PaymentSubmitTaxInvoiceHandler(
-            $this->getMessageBrokerFacade(),
-            $this->getStoreFacade(),
-            $this->getSalesFacade(),
-            $this->createVertexMapper(),
-            $this->getOrderVertexExpanderPlugins(),
         );
     }
 

@@ -15,8 +15,10 @@ use Generated\Shared\Transfer\TaxRefundRequestTransfer;
 use Spryker\Shared\Log\LoggerTrait;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
+use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\vertexMapperInterface;
+use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 
@@ -38,7 +40,9 @@ class RefundProcessor implements RefundProcessorInterface
         protected VertexToSalesFacadeInterface $salesFacade,
         protected vertexMapperInterface $vertexMapper,
         protected ConfigReaderInterface $configReader,
-        protected array $orderVertexExpanderPlugins
+        protected array $orderVertexExpanderPlugins,
+        protected VertexAccessTokenProviderInterface $vertexAccessTokenProvider,
+        protected VertexConfigResolverInterface $configResolver,
     ) {}
 
     /**
@@ -64,7 +68,7 @@ class RefundProcessor implements RefundProcessorInterface
         }
 
         $storeTransfer = $this->storeFacade->getStoreByName($orderTransfer->getStoreOrFail());
-        $vertexConfigTransfer = $this->configReader->getVertexConfigByIdStore($storeTransfer->getIdStoreOrFail());
+        $vertexConfigTransfer = $this->configResolver->resolve($storeTransfer->getIdStoreOrFail());
 
         if ($vertexConfigTransfer === null || !$vertexConfigTransfer->getIsActive()) {
             $this->getLogger()->warning('App is not configured or is not active.');
@@ -74,28 +78,29 @@ class RefundProcessor implements RefundProcessorInterface
 
         $orderTransfer = $this->executeOrderVertexExpanderPlugins($orderTransfer);
 
-        $VertexSaleTransfer = $this->vertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
+        $vertexSaleTransfer = $this->vertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
 
         $taxRefundRequestTransfer = new TaxRefundRequestTransfer();
-        $taxRefundRequestTransfer->setSale($VertexSaleTransfer);
+        $taxRefundRequestTransfer->setSale($vertexSaleTransfer);
         $taxRefundRequestTransfer->setReportingDate((new DateTime())->format('Y-m-d'));
 
-        $taxRefundRequestTransfer = $this->expandTaxRefundRequestWithAccessToken($taxRefundRequestTransfer);
+        if (!$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsInvoicingEnabled()) {
+            $taxCalculationResponseTransfer = new TaxCalculationResponseTransfer();
+            $taxCalculationResponseTransfer->setIsSuccessful(false);
+            $taxCalculationResponseTransfer->setErrorMessage('App is Inactive or configured to not submit void invoice');
 
-        $this->vertexClient->requestTaxRefund($taxRefundRequestTransfer, $vertexConfigTransfer, $storeTransfer); // TODO
-    }
+            return;
+        }
 
-    /**
-     * @param \Generated\Shared\Transfer\TaxRefundRequestTransfer $taxRefundRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\TaxRefundRequestTransfer
-     */
-    protected function expandTaxRefundRequestWithAccessToken(
-        TaxRefundRequestTransfer $taxRefundRequestTransfer
-    ): TaxRefundRequestTransfer {
-        $taxRefundRequestTransfer->setAuthorization($this->accessTokenProvider->getAccessToken());
+        $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 
-        return $taxRefundRequestTransfer;
+        //TODO: Add an early return if the access token is not available
+        $this->vertexClient->calculateTax(
+            (new TaxCalculationRequestTransfer())
+                ->setSale($vertexSaleTransfer)
+                ->setAuthorization($vertexApiAccessTokenTransfer->getAccessToken()), // TODO: refactor ???
+            $vertexConfigTransfer
+        );
     }
 
     /**

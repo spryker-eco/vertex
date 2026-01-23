@@ -16,7 +16,7 @@ use Pyz\Zed\VertexApi\Persistence\VertexApiRepositoryInterface;
 use Pyz\Zed\VertexConfig\Business\EncryptionConfigurator\TenantPropelEncryptionConfiguratorInterface;
 use Spryker\Shared\Log\LoggerTrait;
 
-class VertexAccessTokenProvider implements AccessTokenProviderInterface
+class VertexAccessTokenProvider implements AccessTokenProviderInterface // TODO: remove
 {
     use LoggerTrait;
 

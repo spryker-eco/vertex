@@ -71,6 +71,9 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
         $this->setMessageAttributesTransfer($submitPaymentTaxInvoiceTransfer, $orderTransfer);
 
         $vertexConfigTransfer = $this->configResolver->resolve();
+
+        // DOTO: add check if ( $vertexConfigTransfer->getIsActive() && $vertexConfigTransfer->getIsInvoicingEnabled())
+
         $vertexApiAccessTokenTransfer = $this->accessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 
         $taxCalculationRequestTransfer = (new TaxCalculationRequestTransfer())

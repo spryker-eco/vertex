@@ -18,7 +18,7 @@ use Spryker\Zed\Oms\Dependency\Plugin\Command\CommandByOrderInterface;
  * @method \SprykerEco\Zed\Vertex\Communication\VertexCommunicationFactory getFactory()
  * @method \SprykerEco\Zed\Vertex\VertexConfig getConfig()
  */
-class SubmitPaymentTaxInvoicePlugin extends AbstractPlugin implements CommandByOrderInterface
+class VertexSubmitPaymentTaxInvoicePlugin extends AbstractPlugin implements CommandByOrderInterface
 {
     /**
      * {@inheritDoc}
