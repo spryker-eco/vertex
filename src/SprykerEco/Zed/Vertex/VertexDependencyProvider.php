@@ -13,7 +13,6 @@ use Spryker\Zed\Kernel\Container;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeBridge;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeBridge;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToOauthClientFacadeBridge;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeBridge;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeBridge;
 
@@ -36,11 +35,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
      * @var string
      */
     public const FACADE_STORE = 'FACADE_STORE';
-
-    /**
-     * @var string
-     */
-    public const FACADE_MESSAGE_BROKER = 'FACADE_MESSAGE_BROKER';
 
     /**
      * @var string
@@ -79,11 +73,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     /**
      * @var string
      */
-    public const FACADE_OAUTH_CLIENT = 'FACADE_OAUTH_CLIENT';
-
-    /**
-     * @var string
-     */
     public const SERVICE_UTIL_ENCODING = 'SERVICE_UTIL_ENCODING';
 
     /**
@@ -98,10 +87,8 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
         $container = $this->addCalculableObjectVertexExpanderPlugins($container);
         $container = $this->addOrderVertexExpanderPlugins($container);
         $container = $this->addSalesFacade($container);
-        $container = $this->addMessageBrokerFacade($container);
         $container = $this->addVertexClient($container);
         $container = $this->addSecretsManagerClient($container);
-        $container = $this->addOauthClientFacade($container);
         $container = $this->addUtilEncodingService($container);
         $container = $this->addFallbackQuoteCalculationPlugins($container);
         $container = $this->addFallbackOrderCalculationPlugins($container);
@@ -146,20 +133,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     {
         $container->set(static::CLIENT_VERTEX, function (Container $container) {
             return $container->getLocator()->Vertex()->client();
-        });
-
-        return $container;
-    }
-
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
-    protected function addOauthClientFacade(Container $container): Container
-    {
-        $container->set(static::FACADE_OAUTH_CLIENT, function (Container $container) {
-            return new VertexToOauthClientFacadeBridge($container->getLocator()->oauthClient()->facade());
         });
 
         return $container;
@@ -216,20 +189,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     {
         $container->set(static::SERVICE_UTIL_ENCODING, function (Container $container) {
             return new VertexToUtilEncodingServiceBridge($container->getLocator()->utilEncoding()->service());
-        });
-
-        return $container;
-    }
-
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
-    protected function addMessageBrokerFacade(Container $container): Container
-    {
-        $container->set(static::FACADE_MESSAGE_BROKER, function (Container $container) {
-            return new VertexToMessageBrokerFacadeBridge($container->getLocator()->messageBroker()->facade());
         });
 
         return $container;

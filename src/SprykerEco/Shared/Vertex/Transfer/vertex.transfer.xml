@@ -70,24 +70,6 @@
         <!--- the contents provided on a project level -->
     </transfer>
 
-    <transfer name="VertexApiUrls" strict="true">
-        <property name="quotationUrl" type="string"/>
-        <property name="refundsUrl" type="string"/>
-        <property name="taxIdValidationUrl" type="string"/>
-    </transfer>
-
-
-    <transfer name="Pagination">
-        <property name="offset" type="int"/>
-        <property name="limit" type="int"/>
-        <property name="nbResults" type="int"/>
-    </transfer>
-
-    <transfer name="Sort">
-        <property name="field" type="string"/>
-        <property name="isAscending" type="bool"/>
-    </transfer>
-
     <transfer name="VertexSale" strict="true">
         <property name="transactionId" type="string"/>
         <property name="documentNumber" type="string"/>
@@ -137,12 +119,7 @@
     <transfer name="TaxCalculationRequest" strict="true">
         <property name="sale" type="VertexSale"/>
         <property name="vertexApiAccessToken" type="VertexApiAccessToken"/>
-    </transfer>
-
-    <transfer name="TaxRefundRequest" strict="true">
-        <property name="sale" type="VertexSale"/>
         <property name="reportingDate" type="string"/>
-        <property name="vertexApiAccessToken" type="VertexApiAccessToken"/>
     </transfer>
 
     <transfer name="TaxCalculationResponse" strict="true">

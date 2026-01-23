@@ -174,14 +174,6 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeInterface
-     */
-    public function getMessageBrokerFacade(): VertexToMessageBrokerFacadeInterface
-    {
-        return $this->getProvidedDependency(VertexDependencyProvider::FACADE_MESSAGE_BROKER);
-    }
-
-    /**
      * @return \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface
      */
     public function getSalesFacade(): VertexToSalesFacadeInterface

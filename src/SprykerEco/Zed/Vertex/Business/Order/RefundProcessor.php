@@ -11,7 +11,6 @@ use ArrayObject;
 use DateTime;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
-use Generated\Shared\Transfer\TaxRefundRequestTransfer;
 use Spryker\Shared\Log\LoggerTrait;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
@@ -80,10 +79,6 @@ class RefundProcessor implements RefundProcessorInterface
 
         $vertexSaleTransfer = $this->vertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
 
-        $taxRefundRequestTransfer = new TaxRefundRequestTransfer();
-        $taxRefundRequestTransfer->setSale($vertexSaleTransfer);
-        $taxRefundRequestTransfer->setReportingDate((new DateTime())->format('Y-m-d'));
-
         if (!$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsInvoicingEnabled()) {
             $taxCalculationResponseTransfer = new TaxCalculationResponseTransfer();
             $taxCalculationResponseTransfer->setIsSuccessful(false);
@@ -98,6 +93,7 @@ class RefundProcessor implements RefundProcessorInterface
         $this->vertexClient->calculateTax(
             (new TaxCalculationRequestTransfer())
                 ->setSale($vertexSaleTransfer)
+                ->setReportingDate((new DateTime())->format('Y-m-d'))
                 ->setAuthorization($vertexApiAccessTokenTransfer->getAccessToken()), // TODO: refactor ???
             $vertexConfigTransfer
         );
