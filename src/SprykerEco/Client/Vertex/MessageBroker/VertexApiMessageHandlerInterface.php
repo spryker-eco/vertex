@@ -11,7 +11,7 @@ use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceResponseTransfer;
 use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 
-interface VertexApiMessageHandlerInterface
+interface VertexApiMessageHandlerInterface // TODO: remove
 {
     /**
      * @param \Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer $submitPaymentTaxInvoiceTransfer

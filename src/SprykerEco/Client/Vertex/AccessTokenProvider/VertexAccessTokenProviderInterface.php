@@ -10,7 +10,7 @@ namespace Pyz\Zed\Vertex\Business\AccessTokenProvider;
 use Generated\Shared\Transfer\VertexApiAccessTokenTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 
-interface VertexAccessTokenProviderInterface
+interface VertexAccessTokenProviderInterface // TODO: remove
 {
     /**
      * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer

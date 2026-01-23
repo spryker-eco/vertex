@@ -14,7 +14,7 @@ use Generated\Shared\Transfer\VertexConfigTransfer;
 use Spryker\Shared\Log\LoggerTrait;
 use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface;
 
-class VertexApiMessageHandler implements VertexApiMessageHandlerInterface
+class VertexApiMessageHandler implements VertexApiMessageHandlerInterface // TODO: remove
 {
     use LoggerTrait;
 
