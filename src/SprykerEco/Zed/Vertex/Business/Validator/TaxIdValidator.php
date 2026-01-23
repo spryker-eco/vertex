@@ -7,18 +7,14 @@
 
 namespace SprykerEco\Zed\Vertex\Business\Validator;
 
-use Generated\Shared\Transfer\AcpHttpRequestTransfer;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Generated\Shared\Transfer\TaxIdValidationHistoryTransfer;
+use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface;
-use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
-use SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeInterface;
+use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface;
 use SprykerEco\Zed\Vertex\VertexConfig;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class TaxIdValidator implements TaxIdValidatorInterface
 {
@@ -50,11 +46,10 @@ class TaxIdValidator implements TaxIdValidatorInterface
      * @param \Spryker\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface $utilEncodingService
      */
     public function __construct(
-        protected ConfigReaderInterface $configReader,
-        protected AccessTokenProviderInterface $accessTokenProvider,
-        protected VertexToKernelAppFacadeInterface $kernelAppFacade,
+        protected VertexConfigResolverInterface $vertexConfigResolver,
         protected VertexEntityManagerInterface $entityManager,
-        protected VertexToUtilEncodingServiceInterface $utilEncodingService
+        protected VertexToUtilEncodingServiceInterface $utilEncodingService,
+        protected VertexClientInterface $vertexClient,
     ) {
     }
 
@@ -67,7 +62,7 @@ class TaxIdValidator implements TaxIdValidatorInterface
     {
         $vertexValidationRequestTransfer->requireTaxId();
         $vertexValidationRequestTransfer->requireCountryCode();
-        $vertexConfigTransfer = $this->configReader->findVertexConfigForCurrentStore();
+        $vertexConfigTransfer = $this->vertexConfigResolver->resolve();
 
         if (
             !$vertexConfigTransfer ||
@@ -78,28 +73,16 @@ class TaxIdValidator implements TaxIdValidatorInterface
             return $this->createVertexValidationResponseTransfer(false, VertexConfig::MESSAGE_VERTEX_IS_DISABLED, static::GLOSSARY_KEY_VERTEX_IS_DISABLED);
         }
 
-        $acpHttpResponseTransfer = $this->kernelAppFacade->makeRequest(
-            (new AcpHttpRequestTransfer())
-                ->setUri($vertexConfigTransfer->getApiUrls()->getTaxIdValidationUrlOrFail())
-                ->setMethod(Request::METHOD_POST)
-                ->setBody((string)$this->utilEncodingService->encodeJson($vertexValidationRequestTransfer->toArray(true, true)))
-                ->setHeaders([static::HEADER_AUTHORIZATION => $this->accessTokenProvider->getAccessToken()]),
-        );
-        if ($acpHttpResponseTransfer->getHttpStatusCode() !== Response::HTTP_OK && $acpHttpResponseTransfer->getContent() === null) {
+        $taxIdValidationRequestTransfer = (new TaxIdValidationRequestTransfer())
+            ->fromArray($vertexValidationRequestTransfer->toArray(), true);
+        $taxIdValidationResponseTransfer = $this->vertexClient->validateTaxId($taxIdValidationRequestTransfer, $vertexConfigTransfer);
+        
+        if ($taxIdValidationResponseTransfer->getErrorCode() !== null) {
             return $this->createVertexValidationResponseTransfer(false, VertexConfig::MESSAGE_TAX_VALIDATOR_IS_UNAVAILABLE, static::GLOSSARY_KEY_TAX_VALIDATOR_IS_UNAVAILABLE);
         }
 
-        $content = (array)$this->utilEncodingService->decodeJson((string)$acpHttpResponseTransfer->getContent(), true);
-
-        if (!$content) {
-            return $this->createVertexValidationResponseTransfer(false, VertexConfig::MESSAGE_TAX_VALIDATOR_IS_UNAVAILABLE, static::GLOSSARY_KEY_TAX_VALIDATOR_IS_UNAVAILABLE);
-        }
-        $content = $acpHttpResponseTransfer->getHttpStatusCode() === Response::HTTP_OK ? $content : current($content);
-        $messageKey = $content[static::CONTENT_KEY_CODE] ?? null;
         $vertexValidationResponseTransfer = (new VertexValidationResponseTransfer())
-            ->setMessageKey($messageKey)
-            ->setIsValid(false)
-            ->fromArray($content, true);
+            ->fromArray($taxIdValidationResponseTransfer->toArray(), true);
 
         if ($vertexValidationResponseTransfer->getIsValid() === true) {
             $this->entityManager->saveTaxIdValidationHistory(

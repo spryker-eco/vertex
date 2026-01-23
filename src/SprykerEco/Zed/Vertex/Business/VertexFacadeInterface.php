@@ -82,9 +82,9 @@ interface VertexFacadeInterface
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $VertexValidationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $vertexValidationRequestTransfer
      *
      * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
      */
-    public function validateTaxId(VertexValidationRequestTransfer $VertexValidationRequestTransfer): VertexValidationResponseTransfer;
+    public function validateTaxId(VertexValidationRequestTransfer $vertexValidationRequestTransfer): VertexValidationResponseTransfer;
 }

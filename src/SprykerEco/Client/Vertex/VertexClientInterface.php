@@ -71,6 +71,21 @@ interface VertexClientInterface
     ): TaxIdValidationResponseTransfer;
 
     /**
+     * Specification:
+     * - Makes Zed request.
+     * - Validates Tax id for specific country.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $vertexValidationRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
+     */
+    public function requestTaxIdValidation(
+        VertexValidationRequestTransfer $vertexValidationRequestTransfer
+    ): VertexValidationResponseTransfer;
+
+    /**
      * Specification
      * - Sends Api request to validate a country's tax ID in the Vertex Validator API.
      *

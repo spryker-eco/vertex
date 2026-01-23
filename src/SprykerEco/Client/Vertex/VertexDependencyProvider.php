@@ -10,6 +10,8 @@ namespace SprykerEco\Client\Vertex;
 use Pyz\Zed\VertexConfig\VertexConfigDependencyProvider;
 use Spryker\Client\Kernel\AbstractDependencyProvider;
 use Spryker\Client\Kernel\Container;
+use SprykerEco\Client\Vertex\Dependency\Client\VertexToZedRequestClientBridge;
+use SprykerEco\Client\Vertex\Dependency\Client\VertexToZedRequestClientInterface;
 
 class VertexDependencyProvider extends AbstractDependencyProvider
 {
@@ -24,6 +26,11 @@ class VertexDependencyProvider extends AbstractDependencyProvider
     public const SERVICE_UTIL_ENCODING = 'SERVICE_UTIL_ENCODING';
 
     /**
+     * @var string
+     */
+    public const CLIENT_ZED_REQUEST = 'CLIENT_ZED_REQUEST';
+
+    /**
      * @param \Spryker\Client\Kernel\Container $container
      *
      * @return \Spryker\Client\Kernel\Container
@@ -34,6 +41,7 @@ class VertexDependencyProvider extends AbstractDependencyProvider
 
         $container = $this->addUtilEncodingService($container);
         $container = $this->addSecretsManagerClient($container);
+        $container = $this->addZedRequestClient($container);
 
         return $container;
     }
@@ -61,6 +69,22 @@ class VertexDependencyProvider extends AbstractDependencyProvider
     {
         $container->set(static::CLIENT_SECRETS_MANAGER, function (Container $container) {
             return $container->getLocator()->secretsManager()->client();
+        });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Client\Kernel\Container $container
+     *
+     * @return \Spryker\Client\Kernel\Container
+     */
+    protected function addZedRequestClient(Container $container): Container
+    {
+        $container->set(static::CLIENT_ZED_REQUEST, function (Container $container): VertexToZedRequestClientInterface {
+            return new VertexToZedRequestClientBridge(
+                $container->getLocator()->zedRequest()->client(),
+            );
         });
 
         return $container;

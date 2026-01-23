@@ -450,4 +450,26 @@
         <property name="taxId" type="string"/>
         <property name="countryCode" type="string"/>
     </transfer>
+
+    <transfer name="RestVertexValidationAttributes" strict="true">
+        <property name="countryCode" type="string" description="The code for a country."/>
+        <property name="taxId" type="string" description="A tax identification number provided by a customer or company."/>
+    </transfer>
+
+    <transfer name="VertexValidationRequest" strict="true">
+        <property name="countryCode" type="string" description="The code for a country."/>
+        <property name="taxId" type="string" description="A tax identification number provided by a customer or company."/>
+    </transfer>
+
+    <transfer name="VertexValidationResponse" strict="true">
+        <property name="isValid" type="bool" description="A boolean flag indicating if a token or request is valid."/>
+        <property name="message" type="string" description="A message providing information, success, or error details."/>
+        <property name="additionalInfo" type="string" description="JSON string containing additional info to be displayed"/>
+        <property name="messageKey" type="string" description="A key for a message."/>
+    </transfer>
+
+    <transfer name="RestErrorMessage">
+        <property name="status" type="int" description="A HTTP status code."/>
+        <property name="detail" type="string" description="A detailed error message providing more specific information about an issue."/>
+    </transfer>
 </transfers>

@@ -16,7 +16,7 @@ use SprykerEco\Client\Vertex\Api\V2\Client\TaxamoApi;
 /**
  * This class validates a tax ID using the Vertex Validator API.
  */
-class VertexTaxIdValidator
+class VertexTaxIdValidator implements VertexTaxIdValidatorInterface
 {
     /**
      * @var string

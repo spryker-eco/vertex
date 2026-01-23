@@ -12,7 +12,7 @@ use Spryker\Zed\Kernel\Communication\AbstractPlugin;
 use Spryker\Zed\OmsExtension\Dependency\Plugin\OmsEventTriggeredListenerPluginInterface;
 
 /**
- * @method \Spryker\Zed\Vertex\Business\VertexFacadeInterface getFacade()
+ * @method \SprykerEco\Zed\Vertex\Business\VertexFacadeInterface getFacade()
  * @method \Spryker\Zed\Vertex\Communication\VertexCommunicationFactory getFactory()
  * @method \Spryker\Zed\Vertex\VertexConfig getConfig()
  */

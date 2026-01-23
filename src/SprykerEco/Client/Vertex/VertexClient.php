@@ -78,6 +78,25 @@ class VertexClient extends AbstractClient implements VertexClientInterface
     }
 
     /**
+     * Specification:
+     * - Makes Zed request.
+     * - Validates Tax id for specific country.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $vertexValidationRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
+     */
+    public function requestTaxIdValidation(
+        VertexValidationRequestTransfer $vertexValidationRequestTransfer
+    ): VertexValidationResponseTransfer {
+        return $this->getFactory()
+            ->createZedStub()
+            ->requestTaxIdValidation($vertexValidationRequestTransfer);
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @api

@@ -5,17 +5,17 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEco\Zed\Vertex\Business\Validator;
+namespace SprykerEco\Glue\VertexRestApi\Dependency;
 
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
-interface TaxIdValidatorInterface
+interface VertexRestApiToVertexClientInterface
 {
     /**
      * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $vertexValidationRequestTransfer
      *
      * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
      */
-    public function validate(VertexValidationRequestTransfer $vertexValidationRequestTransfer): VertexValidationResponseTransfer;
+    public function requestTaxIdValidation(VertexValidationRequestTransfer $vertexValidationRequestTransfer): VertexValidationResponseTransfer;
 }

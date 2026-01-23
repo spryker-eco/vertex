@@ -65,6 +65,8 @@ use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
 use Spryker\Service\UtilText\UtilTextServiceInterface;
 use Spryker\Shared\Log\LoggerTrait;
 use Spryker\Client\Kernel\AbstractFactory;
+use SprykerEco\Client\Vertex\Dependency\Client\VertexToZedRequestClientInterface;
+use SprykerEco\Client\Vertex\Validator\VertexTaxIdValidatorInterface;
 
 /**
  * @method \SprykerEco\Client\Vertex\VertexConfig getConfig()
@@ -108,9 +110,9 @@ class VertexFactory extends AbstractFactory
     }
 
     /**
-     * @return \SprykerEco\Client\Vertex\Validator\VertexTaxIdValidator
+     * @return \SprykerEco\Client\Vertex\Validator\VertexTaxIdValidatorInterface
      */
-    public function createVertexTaxIdValidator(): VertexTaxIdValidator
+    public function createVertexTaxIdValidator(): VertexTaxIdValidatorInterface
     {
         return new VertexTaxIdValidator(
             $this->createTaxamoApi(),
@@ -483,5 +485,23 @@ class VertexFactory extends AbstractFactory
                 );
             };
         };
+    }
+
+    /**
+     * @return \SprykerEco\Client\Vertex\Dependency\Client\VertexToZedRequestClientInterface
+     */
+    public function getZedRequestClient(): VertexToZedRequestClientInterface
+    {
+        return $this->getProvidedDependency(VertexDependencyProvider::CLIENT_ZED_REQUEST);
+    }
+
+    /**
+     * @return \SprykerEco\Client\Vertex\Zed\VertexStubInterface
+     */
+    public function createZedStub(): VertexStubInterface
+    {
+        return new VertexStub(
+            $this->getZedRequestClient(),
+        );
     }
 }

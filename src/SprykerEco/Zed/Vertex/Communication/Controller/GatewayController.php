@@ -12,20 +12,20 @@ use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Spryker\Zed\Kernel\Communication\Controller\AbstractGatewayController;
 
 /**
- * @method \Spryker\Zed\Vertex\Business\VertexFacadeInterface getFacade()
- * @method \Spryker\Zed\Vertex\Persistence\VertexRepositoryInterface getRepository()
- * @method \Spryker\Zed\Vertex\Communication\VertexCommunicationFactory getFactory()
+ * @method \SprykerEco\Zed\Vertex\Business\VertexFacadeInterface getFacade()
+ * @method \SprykerEco\Zed\Vertex\Persistence\VertexRepositoryInterface getRepository()
+ * @method \SprykerEco\Zed\Vertex\Communication\VertexCommunicationFactory getFactory()
  */
 class GatewayController extends AbstractGatewayController
 {
     /**
-     * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $VertexValidationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $vertexValidationRequestTransfer
      *
      * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
      */
-    public function validateTaxIdAction(VertexValidationRequestTransfer $VertexValidationRequestTransfer): VertexValidationResponseTransfer
+    public function requestTaxIdValidationAction(VertexValidationRequestTransfer $vertexValidationRequestTransfer): VertexValidationResponseTransfer
     {
         return $this->getFacade()
-            ->validateTaxId($VertexValidationRequestTransfer);
+            ->validateTaxId($vertexValidationRequestTransfer);
     }
 }

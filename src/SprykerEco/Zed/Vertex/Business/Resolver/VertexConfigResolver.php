@@ -3,23 +3,24 @@
 namespace SprykerEco\Zed\Vertex\Business\Resolver;
 
 use Generated\Shared\Transfer\VertexConfigTransfer;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 use SprykerEco\Zed\Vertex\VertexConfig;
 
 class VertexConfigResolver implements VertexConfigResolverInterface
 {
-    public function __construct(protected VertexConfig $vertexConfig)
+    public function __construct(protected VertexConfig $vertexConfig, protected VertexToStoreFacadeInterface $storeFacade)
     {
     }
 
-    public function resolve(?int $idStore = null): VertexConfigTransfer // TODO: is idStore needed?
+    public function resolve(?int $idStore = null): VertexConfigTransfer
     {
         $clientId = $this->vertexConfig->getClientId();
         $clientSecret = $this->vertexConfig->getClientSecret();
         $securityUri = $this->vertexConfig->getSecurityUri();
         $transactionCallsUri = $this->vertexConfig->getTransactionCallsUri();
 
-        if (!$this->vertexConfig->isActive()) {
-            return null;
+        if (!$idStore) {
+            $idStore = (int)$this->storeFacade->getCurrentStore()->getIdStore();
         }
 
         return (new VertexConfigTransfer())
