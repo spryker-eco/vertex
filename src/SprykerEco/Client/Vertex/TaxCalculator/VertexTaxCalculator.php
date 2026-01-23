@@ -66,7 +66,7 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
             return $this->responseBuilder->buildErrorResponse($taxCalculationRequestTransfer, static::ERROR_MESSAGE_INACTIVE_VERTEX_APP);
         }
 
-        $vertexApiAccessTokenTransfer = $vertexConfigTransfer->getVertexApiAccessToken();
+        $vertexApiAccessTokenTransfer = $taxCalculationRequestTransfer->getVertexApiAccessToken();
 
         if (!$vertexApiAccessTokenTransfer?->getAccessToken()) {
             return $this->responseBuilder->buildErrorResponse($taxCalculationRequestTransfer, static::ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN);

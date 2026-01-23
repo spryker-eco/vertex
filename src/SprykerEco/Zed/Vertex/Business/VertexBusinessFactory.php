@@ -241,7 +241,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
 
     public function createVertexConfigResolver(): VertexConfigResolverInterface
     {
-        return new VertexConfigResolver($this->getConfig());
+        return new VertexConfigResolver($this->getConfig(), $this->getStoreFacade());
     }
 
     /**
