@@ -39,11 +39,10 @@ class TaxIdValidator implements TaxIdValidatorInterface
     protected const GLOSSARY_KEY_TAX_VALIDATOR_IS_UNAVAILABLE = 'vertex.tax-validator-unavailable';
 
     /**
-     * @param \Spryker\Zed\Vertex\Business\Config\ConfigReaderInterface $configReader
-     * @param \Spryker\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface $accessTokenProvider
-     * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeInterface $kernelAppFacade
-     * @param \Spryker\Zed\Vertex\Persistence\VertexEntityManagerInterface $entityManager
-     * @param \Spryker\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface $utilEncodingService
+     * @param \SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface $vertexConfigResolver
+     * @param \SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface $entityManager
+     * @param \SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface $utilEncodingService
+     * @param \SprykerEco\Client\Vertex\VertexClientInterface $vertexClient
      */
     public function __construct(
         protected VertexConfigResolverInterface $vertexConfigResolver,

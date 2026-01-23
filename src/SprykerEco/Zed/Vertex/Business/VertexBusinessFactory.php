@@ -8,9 +8,9 @@
 namespace SprykerEco\Zed\Vertex\Business;
 
 use Spryker\Client\SecretsManager\SecretsManagerClientInterface;
-use Spryker\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use SprykerEco\Client\Vertex\VertexClientInterface as VertexVertexClientInterface;
+use SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProvider;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Aggregator\PriceAggregator;
@@ -224,11 +224,10 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     public function createTaxIdValidator(): TaxIdValidatorInterface
     {
         return new TaxIdValidator(
-            $this->createConfigReader(),
-            $this->createAccessTokenProvider(),
-            $this->getKernelAppFacade(),
+            $this->createVertexConfigResolver(),
             $this->getEntityManager(),
             $this->getUtilEncodingService(),
+            $this->getVertexClient(),
         );
     }
 
@@ -278,7 +277,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface
+     * @return \SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface
      */
     public function getUtilEncodingService(): VertexToUtilEncodingServiceInterface
     {
