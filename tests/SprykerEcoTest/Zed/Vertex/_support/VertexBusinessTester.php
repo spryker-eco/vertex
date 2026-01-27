@@ -74,7 +74,7 @@ use SprykerEcoTest\Shared\Vertex\Plugins\CalculableObjectVertexExpanderPlugin;
  */
 class VertexBusinessTester extends Actor
 {
-    use _generated\TaxAppBusinessTesterActions;
+    use _generated\VertexBusinessTesterActions;
 
     /**
      * @param \Generated\Shared\Transfer\AcpHttpResponseTransfer $acpHttpResponseTransfer
