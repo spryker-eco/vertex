@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<transfers
+    xmlns="spryker:databuilder-01"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="spryker:databuilder-01 http://static.spryker.com/databuilder-01.xsd"
+>
+
+    <transfer name="VertexValidationRequest" strict="true">
+        <property name="countryCode" dataBuilderRule="lexify('??')"/>
+        <property name="taxId" dataBuilderRule="lexify('??????????')"/>
+    </transfer>
+
+    <transfer name="VertexConfig" strict="true">
+        <property name="applicationId" dataBuilderRule="lexify('??????????')"/>
+        <property name="apiUrls" dataBuilderRule="VertexApiUrls"/>
+        <property name="vendorCode" dataBuilderRule="lexify('??????????')"/>
+        <property name="storeReference" dataBuilderRule="=de-DE"/>
+        <property name="tenantIdentifier" dataBuilderRule="lexify('??????????')"/>
+    </transfer>
+
+    <transfer name="VertexApiUrls" strict="true">
+        <property name="quotationUrl" dataBuilderRule="lexify('??????????')"/>
+        <property name="refundsUrl" dataBuilderRule="lexify('??????????')"/>
+        <property name="taxIdValidationUrl" dataBuilderRule="lexify('??????????')"/>
+    </transfer>
+
+    <transfer name="VertexConfigCriteria" strict="true">
+    </transfer>
+
+    <transfer name="VertexConfigConditions" strict="true">
+    </transfer>
+
+    <transfer name="Order">
+        <property name="items" dataBuilderRule="Item[]"/>
+    </transfer>
+
+    <transfer name="CalculableObject">
+        <property name="items" dataBuilderRule="Item[]"/>
+    </transfer>
+
+    <transfer name="Item">
+        <property name="taxMetadata" dataBuilderRule="ItemTaxMetadata" strict="true"/>
+    </transfer>
+
+    <transfer name="VertexSale" strict="true">
+        <property name="transactionId" dataBuilderRule="lexify('??????????')"/>
+        <property name="items" dataBuilderRule="VertexItem[]"/>
+        <property name="shipments" dataBuilderRule="VertexShipment[]"/>
+        <property name="taxTotal" dataBuilderRule="numberBetween(100, 1000)"/>
+    </transfer>
+
+    <transfer name="VertexItem" strict="true">
+        <property name="id" dataBuilderRule="lexify('??????????')"/>
+        <property name="sku" dataBuilderRule="lexify('??????????')"/>
+        <property name="priceAmount" dataBuilderRule="numberBetween(100, 1000)"/>
+        <property name="discountAmount" dataBuilderRule="numberBetween(100, 1000)"/>
+        <property name="quantity" dataBuilderRule="numberBetween(1, 3)"/>
+        <property name="taxTotal" dataBuilderRule="numberBetween(100, 1000)"/>
+        <property name="shippingAddress" dataBuilderRule="VertexAddress"/>
+        <property name="billingAddress" dataBuilderRule="VertexAddress"/>
+        <property name="sellerAddress" dataBuilderRule="VertexAddress"/>
+        <property name="shippingWarehouses" dataBuilderRule="ShippingWarehouse"/>
+    </transfer>
+
+    <transfer name="ShippingWarehouse" strict="true">
+        <property name="quantity" dataBuilderRule="numberBetween(1, 9)"/>
+        <property name="warehouseAddress" dataBuilderRule="VertexAddress"/>
+    </transfer>
+
+    <transfer name="VertexShipment" strict="true">
+        <property name="id" dataBuilderRule="lexify('??????????')"/>
+        <property name="priceAmount" dataBuilderRule="numberBetween(100, 1000)"/>
+        <property name="discountAmount" dataBuilderRule="numberBetween(100, 1000)"/>
+        <property name="taxTotal" dataBuilderRule="numberBetween(100, 1000)"/>
+    </transfer>
+
+    <transfer name="VertexAddress" strict="true">
+        <property name="address1" dataBuilderRule="lexify('??????????')"/>
+        <property name="address2" dataBuilderRule="lexify('??????????')"/>
+        <property name="city" dataBuilderRule="lexify('??????????')"/>
+        <property name="state" dataBuilderRule="lexify('??????????')"/>
+        <property name="country" dataBuilderRule="lexify('??????????')"/>
+        <property name="zipCode" dataBuilderRule="lexify('??????????')"/>
+    </transfer>
+
+    <transfer name="TaxCalculationRequest" strict="true">
+        <property name="sale" dataBuilderRule="VertexSale"/>
+    </transfer>
+
+    <transfer name="TaxRefundRequest" strict="true">
+        <property name="sale" dataBuilderRule="VertexSale"/>
+    </transfer>
+
+</transfers>
