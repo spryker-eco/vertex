@@ -431,7 +431,7 @@ class VertexBusinessTester extends Actor
     public function mockVertexClientWithTaxCalculationResponse(TaxCalculationResponseTransfer $taxCalculationResponseTransfer): void
     {
         $vertexClientMock = Stub::makeEmpty(VertexClient::class);
-        $vertexClientMock->expects(Expected::once()->getMatcher())->method('requestTaxQuotation')->willReturn($taxCalculationResponseTransfer);
+        $vertexClientMock->expects(Expected::once()->getMatcher())->method('calculateTax')->willReturn($taxCalculationResponseTransfer);
         $this->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
         $this->mockOauthClient();

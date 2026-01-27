@@ -21,7 +21,7 @@ use Spryker\Zed\Calculation\Communication\Plugin\Calculator\GrandTotalCalculator
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemDiscountAmountFullAggregatorPlugin;
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemSubtotalAggregatorPlugin;
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\PriceCalculatorPlugin;
-use Spryker\Zed\TaxApp\Dependency\Facade\TaxAppToStoreFacadeInterface;
+use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 use SprykerEco\Client\Vertex\VertexClient;
 use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
 
@@ -65,7 +65,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->tester->setQuoteTaxMetadataExpanderPlugins();
 //        $this->tester->mockOauthClient();
 
-        $storeFacadeMock = Stub::makeEmpty(TaxAppToStoreFacadeInterface::class, [
+        $storeFacadeMock = Stub::makeEmpty(VertexToStoreFacadeInterface::class, [
             'getStoreByName' => $this->storeTransfer,
         ]);
         $this->tester->mockFactoryMethod('getStoreFacade', $storeFacadeMock); // TODO: set dependency
@@ -104,7 +104,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $taxCalculationResponseTransfer = $this->tester->haveTaxCalculationResponseTransfer(['isSuccessful' => true]);
 
         $clientMock = $this->createMock(VertexClient::class);
-        $clientMock->expects($this->once())->method('requestTaxQuotation')->willReturn($taxCalculationResponseTransfer);
+        $clientMock->expects($this->once())->method('calculateTax')->willReturn($taxCalculationResponseTransfer);
         $this->tester->mockFactoryMethod('getVertexClient', $clientMock);
 
         // Act
@@ -129,7 +129,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $taxCalculationResponseTransfer = $this->tester->haveTaxCalculationResponseTransfer(['isSuccessful' => true]);
 
         $clientMock = $this->createMock(TaxAppClient::class);
-        $clientMock->expects($this->exactly(2))->method('requestTaxQuotation')->willReturn($taxCalculationResponseTransfer);
+        $clientMock->expects($this->exactly(2))->method('calculateTax')->willReturn($taxCalculationResponseTransfer);
         $this->tester->mockFactoryMethod('getTaxAppClient', $clientMock);
 
         // Act
@@ -155,7 +155,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransferWithoutShipment($this->storeTransfer);
 
         $clientMock = $this->createMock(VertexClient::class);
-        $clientMock->expects($this->never())->method('requestTaxQuotation');
+        $clientMock->expects($this->never())->method('calculateTax');
         $this->tester->mockFactoryMethod('getVertexClient', $clientMock);
 
         $originalQuote = $calculableObjectTransfer->getOriginalQuote();
@@ -209,7 +209,7 @@ class TaxAppFacadeCalculationTest extends Unit
 
         $taxAppClientMock = $this->makeEmpty(TaxAppClientInterface::class);
         $taxCalculationResponseTransfer = $this->tester->haveTaxCalculationResponseTransfer(['isSuccessful' => true]);
-        $taxAppClientMock->expects($this->once())->method('requestTaxQuotation')->willReturn($taxCalculationResponseTransfer);
+        $taxAppClientMock->expects($this->once())->method('calculateTax')->willReturn($taxCalculationResponseTransfer);
         $this->tester->mockFactoryMethod('getTaxAppClient', $taxAppClientMock);
 
         // Assert
@@ -227,7 +227,7 @@ class TaxAppFacadeCalculationTest extends Unit
         // Arrange
         $taxAppClientMock = $this->makeEmpty(TaxAppClientInterface::class);
         $taxCalculationResponseTransfer = $this->tester->haveTaxCalculationResponseTransfer(['isSuccessful' => true]);
-        $taxAppClientMock->expects($this->once())->method('requestTaxQuotation')->willReturn($taxCalculationResponseTransfer);
+        $taxAppClientMock->expects($this->once())->method('calculateTax')->willReturn($taxCalculationResponseTransfer);
         $this->tester->mockFactoryMethod('getTaxAppClient', $taxAppClientMock);
 
         /** @var \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer */
@@ -444,7 +444,7 @@ class TaxAppFacadeCalculationTest extends Unit
 
         // Assert
         $taxAppClientMock->expects(new InvokedCountMatcher(1))
-            ->method('requestTaxQuotation')
+            ->method('calculateTax')
             ->with(new Callback(function (TaxCalculationRequestTransfer $taxCalculationRequestTransfer) use ($expectedCountryCode) {
                 self::assertSame($expectedCountryCode, $taxCalculationRequestTransfer->getSale()->getSellerCountryCode());
 
@@ -472,7 +472,7 @@ class TaxAppFacadeCalculationTest extends Unit
 
         // Assert
         $taxAppClientMock->expects(new InvokedCountMatcher(1))
-            ->method('requestTaxQuotation')
+            ->method('calculateTax')
             ->with(new Callback(function (TaxCalculationRequestTransfer $taxCalculationRequestTransfer) {
                 self::assertSame('FR', $taxCalculationRequestTransfer->getSale()->getSellerCountryCode());
 
@@ -501,7 +501,7 @@ class TaxAppFacadeCalculationTest extends Unit
 
         // Assert
         $taxAppClientMock->expects(new InvokedCountMatcher(1))
-            ->method('requestTaxQuotation')
+            ->method('calculateTax')
             ->with(new Callback(function (TaxCalculationRequestTransfer $taxCalculationRequestTransfer) use ($expectedCountryCode) {
                 self::assertSame($expectedCountryCode, $taxCalculationRequestTransfer->getSale()->getCustomerCountryCode());
 
@@ -529,7 +529,7 @@ class TaxAppFacadeCalculationTest extends Unit
 
         // Assert
         $taxAppClientMock->expects(new InvokedCountMatcher(1))
-            ->method('requestTaxQuotation')
+            ->method('calculateTax')
             ->with(new Callback(function (TaxCalculationRequestTransfer $taxCalculationRequestTransfer) {
                 self::assertSame('FR', $taxCalculationRequestTransfer->getSale()->getCustomerCountryCode());
 
@@ -557,7 +557,7 @@ class TaxAppFacadeCalculationTest extends Unit
 
         // Assert
         $taxAppClientMock->expects(new InvokedCountMatcher(1))
-            ->method('requestTaxQuotation')
+            ->method('calculateTax')
             ->with(new Callback(function (TaxCalculationRequestTransfer $taxCalculationRequestTransfer) {
                 self::assertSame('FOO', $taxCalculationRequestTransfer->getSale()->getCustomerCountryCode());
 
