@@ -25,6 +25,13 @@ class VertexCalculator implements VertexCalculatorInterface
     use LoggerTrait;
 
     /**
+     * @uses \Spryker\Shared\Shipment\ShipmentConfig::SHIPMENT_EXPENSE_TYPE
+     *
+     * @var string
+     */
+    public const SHIPMENT_EXPENSE_TYPE = 'SHIPMENT_EXPENSE_TYPE';
+
+    /**
      * @uses \Spryker\Shared\Price\PriceConfig::PRICE_MODE_NET
      *
      * @var string
@@ -53,9 +60,8 @@ class VertexCalculator implements VertexCalculatorInterface
         $vertexSaleTransfer = $this->vertexMapper->mapCalculableObjectToVertexSaleTransfer($calculableObjectTransfer, new VertexSaleTransfer());
 
         // for correct tax calculation in NET price mode, at least one shipment must be selected, otherwise tax calculation is skipped.
-        if ($calculableObjectTransfer->getPriceModeOrFail() === static::PRICE_MODE_NET && $vertexSaleTransfer->getShipments()->count() === 0) {
-            $taxTotalTransfer = (new TaxTotalTransfer())->setAmount(0);
-            $calculableObjectTransfer->getTotalsOrFail()->setTaxTotal($taxTotalTransfer);
+        if ($calculableObjectTransfer->getPriceModeOrFail() === static::PRICE_MODE_NET && $this->getShipmentExpenses($calculableObjectTransfer) === 0) {
+            $calculableObjectTransfer->getTotalsOrFail()->setTaxTotal((new TaxTotalTransfer())->setAmount(0));
             $this->priceAggregator->calculatePriceAggregation($vertexSaleTransfer, $calculableObjectTransfer);
 
             return;
@@ -83,6 +89,19 @@ class VertexCalculator implements VertexCalculatorInterface
             $calculableObjectTransfer->setVertexSaleHash($this->getVertexSaleHash($vertexSaleTransfer));
             $calculableObjectTransfer->setTaxCalculationResponse($taxCalculationResponseTransfer);
         }
+    }
+
+    protected function getShipmentExpenses(CalculableObjectTransfer $calculableObjectTransfer): \ArrayObject
+    {
+        $shipmentExpenses = new \ArrayObject();
+
+        foreach ($calculableObjectTransfer->getExpenses() as $hash => $expenseTransfer) {
+            if ($expenseTransfer->getType() !== static::SHIPMENT_EXPENSE_TYPE) {
+                $shipmentExpenses->append($expenseTransfer);
+            }
+        }
+
+        return $shipmentExpenses;
     }
 
     /**

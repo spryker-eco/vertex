@@ -36,23 +36,18 @@ class VertexFacade extends AbstractFacade implements VertexFacadeInterface
         $this->getFactory()->createCalculator()->recalculate($calculableObjectTransfer);
     }
 
-//    /**
-//     * {@inheritDoc}
-//     *
-//     * @api
-//     *
-//     * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer
-//     *
-//     * @return void
-////     */
-//    public function sendSubmitPaymentTaxInvoiceMessage(OrderTransfer $orderTransfer): void
-//    {
-//        $this->getFactory()->createPaymentSubmitTaxInvoiceSender()->sendSubmitPaymentTaxInvoiceMessage($orderTransfer);
-//    }
-
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer
+     *
+     * @return void
+     */
     public function handleSubmitPaymentTaxInvoice(OrderTransfer  $orderTransfer): void
     {
-        $this->getFactory()->createPaymentSubmitTaxInvoiceHandler()->sendSubmitPaymentTaxInvoiceMessage($orderTransfer);
+        $this->getFactory()->createPaymentSubmitTaxInvoiceHandler()->handleSubmitPaymentTaxInvoice($orderTransfer);
     }
 
     /**

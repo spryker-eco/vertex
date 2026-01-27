@@ -29,11 +29,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     /**
      * @var string
      */
-    public const FACADE_KERNEL_APP = 'FACADE_KERNEL_APP';
-
-    /**
-     * @var string
-     */
     public const FACADE_STORE = 'FACADE_STORE';
 
     /**
@@ -92,7 +87,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
         $container = $this->addUtilEncodingService($container);
         $container = $this->addFallbackQuoteCalculationPlugins($container);
         $container = $this->addFallbackOrderCalculationPlugins($container);
-        $container = $this->provideKernelAppFacade($container);
 
         return $container;
     }
@@ -106,20 +100,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     {
         $container = parent::providePersistenceLayerDependencies($container);
         $container = $this->addUtilEncodingService($container);
-
-        return $container;
-    }
-
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
-    protected function provideKernelAppFacade(Container $container): Container
-    {
-        $container->set(static::FACADE_KERNEL_APP, function (Container $container): VertexToKernelAppFacadeInterface {
-            return new VertexToKernelAppFacadeBridge($container->getLocator()->kernelApp()->facade());
-        });
 
         return $container;
     }
@@ -259,7 +239,7 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     }
 
     /**
-     * @return array<\Spryker\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface>
+     * @return array<\SprykerEco\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface>
      */
     protected function getOrderVertexExpanderPlugins(): array
     {
