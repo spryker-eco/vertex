@@ -1,4 +1,4 @@
-namespace: SprykerTest\Glue\TaxAppRestApi
+namespace: SprykerEcoTest\Glue\TaxAppRestApi
 paths:
     tests: .
     data: ../../../_data
