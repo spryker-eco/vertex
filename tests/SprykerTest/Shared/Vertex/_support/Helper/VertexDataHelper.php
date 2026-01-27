@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerTest\Shared\TaxApp\Helper;
+namespace SprykerEcoTest\Shared\Vertex\Helper;
 
 use ArrayObject;
 use Codeception\Module;

@@ -24,7 +24,7 @@ suites:
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper
                 - \SprykerTest\Shared\Propel\Helper\TransactionHelper
                 - \SprykerTest\Shared\Store\Helper\StoreDataHelper
-                - \SprykerTest\Shared\Vertex\Helper\VertexDataHelper
+                - \SprykerEcoTest\Shared\Vertex\Helper\VertexDataHelper
                 - \SprykerTest\Shared\Testify\Helper\TableRelationsCleanupHelper
                 - \SprykerTest\Shared\Sales\Helper\SalesDataHelper
                 - \SprykerTest\Shared\Customer\Helper\CustomerDataHelper
@@ -33,5 +33,5 @@ suites:
                 - \SprykerTest\Zed\Merchant\Helper\MerchantHelper
                 - \SprykerTest\Zed\MerchantProfile\Helper\MerchantProfileHelper
                 - \SprykerTest\Zed\Store\Helper\StoreDependencyHelper
-                - \SprykerTest\Zed\Vertex\Helper\TaxAppBusinessAssertionHelper
+                - \SprykerEcoTest\Zed\Vertex\Helper\VertexBusinessAssertionHelper
                 - \SprykerTest\Zed\Testify\Helper\Business\DependencyProviderHelper

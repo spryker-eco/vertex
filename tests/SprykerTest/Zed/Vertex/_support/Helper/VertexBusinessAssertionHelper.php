@@ -110,7 +110,7 @@ class VertexBusinessAssertionHelper extends Module
                 );
 
                 foreach ($taxCalculationRequestTransfer->getSale()->getItems() as $index => $saleItem) {
-                    /** @var \SprykerTest\Zed\TaxApp\Helper\ItemTransfer $calculableObjectItem */
+                    /** @var \SprykerEcoTest\Zed\Vertex\Helper\ItemTransfer $calculableObjectItem */
                     $calculableObjectItem = $mockedCalculableObjectTransfer->getItems()->offsetGet($index);
 
                     self::assertEquals(

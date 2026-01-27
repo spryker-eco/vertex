@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerTest\Zed\TaxApp\Business;
+namespace SprykerEcoTest\Zed\Vertex\Business;
 
 use Codeception\Stub;
 use Codeception\Test\Unit;
@@ -22,12 +22,12 @@ use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemDiscountAmountFu
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemSubtotalAggregatorPlugin;
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\PriceCalculatorPlugin;
 use Spryker\Zed\TaxApp\Dependency\Facade\TaxAppToStoreFacadeInterface;
-use SprykerTest\Zed\TaxApp\VertexBusinessTester;
+use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
 
 /**
  * Auto-generated group annotations
  *
- * @group SprykerTest
+ * @group SprykerEcoTest
  * @group Zed
  * @group Vertex
  * @group Business
@@ -43,7 +43,7 @@ class TaxAppFacadeCalculationTest extends Unit
     protected const PRICE_MODE_GROSS = 'GROSS_MODE';
 
     /**
-     * @var \SprykerTest\Zed\TaxApp\VertexBusinessTester
+     * @var \SprykerEcoTest\Zed\Vertex\VertexBusinessTester
      */
     protected VertexBusinessTester $tester;
 

@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace SprykerTest\Zed\TaxApp;
+namespace SprykerEcoTest\Zed\Vertex;
 
 use Codeception\Actor;
 use Codeception\Stub;
@@ -52,7 +52,7 @@ use Spryker\Zed\Oms\Business\OrderStateMachine\PersistenceManager;
 use Spryker\Zed\TaxApp\Dependency\Facade\TaxAppToKernelAppFacadeBridge;
 use Spryker\Zed\TaxApp\Dependency\Facade\TaxAppToOauthClientFacadeBridge;
 use Spryker\Zed\TaxApp\TaxAppDependencyProvider;
-use SprykerTest\Shared\TaxApp\Plugins\CalculableObjectTaxAppExpanderPlugin;
+use SprykerEcoTest\Shared\Vertex\Plugins\CalculableObjectVertexExpanderPlugin;
 
 /**
  * Inherited Methods
@@ -70,7 +70,7 @@ use SprykerTest\Shared\TaxApp\Plugins\CalculableObjectTaxAppExpanderPlugin;
  * @method \Spryker\Zed\TaxApp\Business\TaxAppBusinessFactory getFactory(?string $moduleName = NULL)
  * @method \Spryker\Zed\TaxApp\Business\TaxAppFacadeInterface getFacade
  *
- * @SuppressWarnings(\SprykerTest\Zed\TaxApp\PHPMD)
+ * @SuppressWarnings(\SprykerEcoTest\Zed\Vertex\PHPMD)
  */
 class VertexBusinessTester extends Actor
 {
