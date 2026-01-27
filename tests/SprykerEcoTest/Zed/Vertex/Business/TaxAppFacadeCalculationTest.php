@@ -22,6 +22,7 @@ use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemDiscountAmountFu
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemSubtotalAggregatorPlugin;
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\PriceCalculatorPlugin;
 use Spryker\Zed\TaxApp\Dependency\Facade\TaxAppToStoreFacadeInterface;
+use SprykerEco\Client\Vertex\VertexClient;
 use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
 
 /**
@@ -60,14 +61,14 @@ class TaxAppFacadeCalculationTest extends Unit
         parent::setUp();
 
         $this->storeTransfer = $this->tester->haveStore([StoreTransfer::COUNTRIES => ['US']], false);
-        $this->tester->haveTaxAppConfig(['vendor_code' => 'vendorCode', 'fk_store' => $this->storeTransfer->getIdStore(), 'is_active' => true]);
+//        $this->tester->haveTaxAppConfig(['vendor_code' => 'vendorCode', 'fk_store' => $this->storeTransfer->getIdStore(), 'is_active' => true]);
         $this->tester->setQuoteTaxMetadataExpanderPlugins();
-        $this->tester->mockOauthClient();
+//        $this->tester->mockOauthClient();
 
         $storeFacadeMock = Stub::makeEmpty(TaxAppToStoreFacadeInterface::class, [
             'getStoreByName' => $this->storeTransfer,
         ]);
-        $this->tester->mockFactoryMethod('getStoreFacade', $storeFacadeMock);
+        $this->tester->mockFactoryMethod('getStoreFacade', $storeFacadeMock); // TODO: set dependency
     }
 
     /**
@@ -79,7 +80,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
 
         $taxCalculationResponseTransfer = $this->tester->haveTaxCalculationResponseTransfer(['isSuccessful' => true]);
-        $this->tester->mockTaxAppClientWithTaxCalculationResponse($taxCalculationResponseTransfer);
+        $this->tester->mockVertexClientWithTaxCalculationResponse($taxCalculationResponseTransfer);
 
         // Act
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
@@ -102,18 +103,18 @@ class TaxAppFacadeCalculationTest extends Unit
 
         $taxCalculationResponseTransfer = $this->tester->haveTaxCalculationResponseTransfer(['isSuccessful' => true]);
 
-        $clientMock = $this->createMock(TaxAppClient::class);
+        $clientMock = $this->createMock(VertexClient::class);
         $clientMock->expects($this->once())->method('requestTaxQuotation')->willReturn($taxCalculationResponseTransfer);
-        $this->tester->mockFactoryMethod('getTaxAppClient', $clientMock);
+        $this->tester->mockFactoryMethod('getVertexClient', $clientMock);
 
         // Act
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
 
-        $firstCalculationHash = $calculableObjectTransfer->getTaxAppSaleHash();
+        $firstCalculationHash = $calculableObjectTransfer->getVertexSaleHash();
 
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
 
-        $secondCalculationHash = $calculableObjectTransfer->getTaxAppSaleHash();
+        $secondCalculationHash = $calculableObjectTransfer->getVertexSaleHash();
 
         $this->assertSame($firstCalculationHash, $secondCalculationHash);
     }
@@ -153,9 +154,9 @@ class TaxAppFacadeCalculationTest extends Unit
         // Arrange
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransferWithoutShipment($this->storeTransfer);
 
-        $clientMock = $this->createMock(TaxAppClient::class);
+        $clientMock = $this->createMock(VertexClient::class);
         $clientMock->expects($this->never())->method('requestTaxQuotation');
-        $this->tester->mockFactoryMethod('getTaxAppClient', $clientMock);
+        $this->tester->mockFactoryMethod('getVertexClient', $clientMock);
 
         $originalQuote = $calculableObjectTransfer->getOriginalQuote();
         $originalQuote->setPriceMode('NET_MODE');
