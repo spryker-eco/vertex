@@ -7,6 +7,7 @@
 
 namespace SprykerEco\Zed\Vertex\Persistence;
 
+use Generated\Shared\Transfer\TaxIdValidationHistoryTransfer;
 use Generated\Shared\Transfer\VertexApiAccessTokenTransfer;
 
 interface VertexEntityManagerInterface
@@ -17,4 +18,11 @@ interface VertexEntityManagerInterface
      * @return void
      */
     public function saveAccessToken(VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer): void;
+
+    /**
+     * @param \Generated\Shared\Transfer\TaxIdValidationHistoryTransfer $taxIdValidationHistoryTransfer
+     *
+     * @return void
+     */
+    public function saveTaxIdValidationHistory(TaxIdValidationHistoryTransfer $taxIdValidationHistoryTransfer): void;
 }

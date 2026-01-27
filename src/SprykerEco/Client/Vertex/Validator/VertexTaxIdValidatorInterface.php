@@ -9,6 +9,7 @@ namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
 use Generated\Shared\Transfer\TaxIdValidationResponseTransfer;
+use Generated\Shared\Transfer\VertexConfigTransfer;
 
 interface VertexTaxIdValidatorInterface
 {

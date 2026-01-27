@@ -7,6 +7,8 @@
 
 namespace SprykerEco\Client\Vertex\Zed;
 
+use Generated\Shared\Transfer\VertexValidationRequestTransfer;
+use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use SprykerEco\Client\Vertex\Dependency\Client\VertexToZedRequestClientInterface;
 use SprykerEco\Client\Vertex\Zed\VertexStubInterface;
 

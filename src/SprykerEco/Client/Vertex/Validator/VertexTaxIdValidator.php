@@ -11,6 +11,7 @@ use Generated\Shared\Transfer\TaxamoApiRequestTransfer;
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
 use Generated\Shared\Transfer\TaxIdValidationResponseTransfer;
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
+use Generated\Shared\Transfer\VertexConfigTransfer;
 use SprykerEco\Client\Vertex\Api\V2\Client\TaxamoApi;
 
 /**
@@ -55,7 +56,7 @@ class VertexTaxIdValidator implements VertexTaxIdValidatorInterface
         );
         $errorMessage = $this->getValidationMessage($vertexApiResponse);
         $errorCode = $this->getErrorCode($vertexApiResponse);
-
+        
         return $this->createTaxIdValidationResponseTransfer(
             $errorMessage ? false : $vertexApiResponse->getIsSuccessful(),
             $errorMessage,

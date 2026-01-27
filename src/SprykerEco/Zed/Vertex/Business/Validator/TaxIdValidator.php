@@ -10,6 +10,7 @@ namespace SprykerEco\Zed\Vertex\Business\Validator;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Generated\Shared\Transfer\TaxIdValidationHistoryTransfer;
+use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
@@ -65,9 +66,9 @@ class TaxIdValidator implements TaxIdValidatorInterface
 
         if (
             !$vertexConfigTransfer ||
-            !$vertexConfigTransfer->getIsActive() ||
-            !$vertexConfigTransfer->getApiUrls() ||
-            !$vertexConfigTransfer->getApiUrls()->getTaxIdValidationUrl()
+            !$vertexConfigTransfer->getIsActive()
+            // !$vertexConfigTransfer->getApiUrls() ||
+            // !$vertexConfigTransfer->getApiUrls()->getTaxIdValidationUrl()
         ) {
             return $this->createVertexValidationResponseTransfer(false, VertexConfig::MESSAGE_VERTEX_IS_DISABLED, static::GLOSSARY_KEY_VERTEX_IS_DISABLED);
         }

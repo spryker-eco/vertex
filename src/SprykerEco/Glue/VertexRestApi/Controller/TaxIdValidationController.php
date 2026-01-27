@@ -7,7 +7,7 @@
 
 namespace SprykerEco\Glue\VertexRestApi\Controller;
 
-use Generated\Shared\Transfer\RestTaxAppValidationAttributesTransfer;
+use Generated\Shared\Transfer\RestVertexValidationAttributesTransfer;
 use Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface;
 use Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface;
 use Spryker\Glue\Kernel\Controller\AbstractController;

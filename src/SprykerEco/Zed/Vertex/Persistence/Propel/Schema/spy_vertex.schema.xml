@@ -23,4 +23,17 @@
         </behavior>
     </table>
 
+    <table name="spy_vertex_tax_id_validation_history" identifierQuoting="true">
+        <column name="id_vertex_tax_id_validation_history" required="true" type="INTEGER" autoIncrement="true" primaryKey="true"/>
+        <id-method-parameter value="spy_vertex_tax_id_validation_history_pk_seq"/>
+        <column name="tax_id" required="true" type="VARCHAR" size="255" description="A tax identification number provided by a customer or company."/>
+        <column name="is_valid" required="true" type="BOOLEAN" default="TRUE" description="A boolean flag indicating if a token or request is valid."/>
+        <column name="country_code" type="VARCHAR" size="3" required="false" description="The code for a country."/>
+        <column name="response_data" required="false" type="LONGVARCHAR" description="The raw response data received from a tax ID validation service."/>
+
+        <behavior name="timestampable">
+            <parameter name="disable_updated_at" value="true"/>
+        </behavior>
+    </table>
+
 </database>

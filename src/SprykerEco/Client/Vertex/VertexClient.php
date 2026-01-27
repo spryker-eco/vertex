@@ -17,6 +17,8 @@ use Generated\Shared\Transfer\TaxIdValidationResponseTransfer;
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
+use Generated\Shared\Transfer\VertexValidationRequestTransfer;
+use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Spryker\Client\Kernel\AbstractClient;
 
 /**
@@ -78,9 +80,7 @@ class VertexClient extends AbstractClient implements VertexClientInterface
     }
 
     /**
-     * Specification:
-     * - Makes Zed request.
-     * - Validates Tax id for specific country.
+     * {@inheritDoc}
      *
      * @api
      *
@@ -110,43 +110,5 @@ class VertexClient extends AbstractClient implements VertexClientInterface
         return $this->getFactory()
             ->createTaxamoApi()
             ->validateTaxId($taxamoApiRequestTransfer);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer $submitPaymentTaxInvoiceTransfer
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return \Generated\Shared\Transfer\SubmitPaymentTaxInvoiceResponseTransfer
-     */
-    public function handleSubmitPaymentTaxInvoice(
-        SubmitPaymentTaxInvoiceTransfer $submitPaymentTaxInvoiceTransfer,
-        VertexConfigTransfer $vertexConfigTransfer
-    ): SubmitPaymentTaxInvoiceResponseTransfer {
-        return $this->getFactory()
-            ->createVertexApiMessageHandler()
-            ->handleSubmitPaymentTaxInvoice($submitPaymentTaxInvoiceTransfer, $vertexConfigTransfer);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
-     */
-    public function submitVoidPaymentTaxInvoice(
-        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
-        VertexConfigTransfer $vertexConfigTransfer
-    ): TaxCalculationResponseTransfer {
-        return $this->getFactory()
-            ->createVertexApiRefunds()
-            ->submitVoidPaymentTaxInvoice($taxCalculationRequestTransfer, $vertexConfigTransfer);
     }
 }

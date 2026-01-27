@@ -17,6 +17,8 @@ use Generated\Shared\Transfer\TaxIdValidationResponseTransfer;
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
+use Generated\Shared\Transfer\VertexValidationRequestTransfer;
+use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
 interface VertexClientInterface
 {
@@ -96,35 +98,4 @@ interface VertexClientInterface
      * @return \Generated\Shared\Transfer\VertexApiResponseTransfer
      */
     public function sendValidationApiRequestTaxId(TaxamoApiRequestTransfer $taxamoApiRequest): VertexApiResponseTransfer;
-
-    /**
-     * Specification:
-     * - See documentation for {@link self::calculateTax() }
-     * - Performs an `invoice` call against Vertex API instead of a `quotation` call.
-     * - Requires VertexConfigTransfer.vertexAuthResponse.
-     *
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer $submitPaymentTaxInvoiceTransfer
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return \Generated\Shared\Transfer\SubmitPaymentTaxInvoiceResponseTransfer
-     */
-    public function handleSubmitPaymentTaxInvoice(
-        SubmitPaymentTaxInvoiceTransfer $submitPaymentTaxInvoiceTransfer,
-        VertexConfigTransfer $vertexConfigTransfer
-    ): SubmitPaymentTaxInvoiceResponseTransfer;
-
-    /**
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
-     */
-    public function submitVoidPaymentTaxInvoice(
-        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
-        VertexConfigTransfer $vertexConfigTransfer
-    ): TaxCalculationResponseTransfer;
 }

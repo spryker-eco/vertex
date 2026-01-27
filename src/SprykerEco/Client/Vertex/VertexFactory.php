@@ -52,21 +52,18 @@ use SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface;
 use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
 use SprykerEco\Client\Vertex\HttpClient\FilteringMessageFormatter;
 use SprykerEco\Client\Vertex\HttpClient\MessageFormatterInterface;
-use SprykerEco\Client\Vertex\MessageBroker\VertexApiMessageHandler;
-use SprykerEco\Client\Vertex\MessageBroker\VertexApiMessageHandlerInterface;
-use SprykerEco\Client\Vertex\Refund\VertexApiRefunds;
-use SprykerEco\Client\Vertex\Refund\VertexApiRefundsInterface;
 use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilder;
 use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterface;
 use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculator;
 use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexTaxIdValidator;
 use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
-use Spryker\Service\UtilText\UtilTextServiceInterface;
 use Spryker\Shared\Log\LoggerTrait;
 use Spryker\Client\Kernel\AbstractFactory;
 use SprykerEco\Client\Vertex\Dependency\Client\VertexToZedRequestClientInterface;
 use SprykerEco\Client\Vertex\Validator\VertexTaxIdValidatorInterface;
+use SprykerEco\Client\Vertex\Zed\VertexStub;
+use SprykerEco\Client\Vertex\Zed\VertexStubInterface;
 
 /**
  * @method \SprykerEco\Client\Vertex\VertexConfig getConfig()
@@ -433,26 +430,7 @@ class VertexFactory extends AbstractFactory
         return new VertexLineItemMetadataBuilder();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\MessageBroker\VertexApiMessageHandlerInterface
-     */
-    public function createVertexApiMessageHandler(): VertexApiMessageHandlerInterface
-    {
-        return new VertexApiMessageHandler(
-            $this->createInvoiceVertexTaxCalculator(),
-        );
-    }
-
-    /**
-     * @return \SprykerEco\Client\Vertex\Refund\VertexApiRefundsInterface
-     */
-    public function createVertexApiRefunds(): VertexApiRefundsInterface
-    {
-        return new VertexApiRefunds(
-            $this->createInvoiceVertexTaxCalculator(),
-        );
-    }
-
+    
     /**
      * @codeCoverageIgnore We can't use the real client for any of the tests.
      *

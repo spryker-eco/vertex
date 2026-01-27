@@ -28,6 +28,9 @@ class VertexConfigResolver implements VertexConfigResolverInterface
             ->setClientSecret($clientSecret)
             ->setSecurityUri($securityUri)
             ->setTransactionCallsUri($transactionCallsUri)
-            ->setIsActive($this->vertexConfig->isActive());
+            ->setIsActive($this->vertexConfig->isActive())
+            ->setIsTaxIdValidatorEnabled($this->vertexConfig->isTaxIdValidatorEnabled())
+            ->setTaxamoToken($this->vertexConfig->getTaxamoToken())
+            ->setTaxamoApiUrl($this->vertexConfig->getTaxamoApiUrl());
     }
 }

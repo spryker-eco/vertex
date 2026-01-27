@@ -10,6 +10,7 @@ namespace SprykerEco\Zed\Vertex\Persistence;
 use Orm\Zed\Vertex\Persistence\SpyVertexApiAccessTokenQuery;
 use SprykerEco\Zed\Vertex\Persistence\Propel\Mapper\VertexApiAccessTokenMapper;
 use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
+use SprykerEco\Zed\Vertex\Persistence\Propel\Mapper\VertexTaxIdValidationMapper;
 
 /**
  * @method \SprykerEco\Zed\VertexApi\VertexApiConfig getConfig()
@@ -27,10 +28,18 @@ class VertexPersistenceFactory extends AbstractPersistenceFactory
     }
 
     /**
-     * @return \Pyz\Zed\Vertex\Persistence\Propel\Mapper\VertexApiAccessTokenMapper
+     * @return \SprykerEco\Zed\Vertex\Persistence\Propel\Mapper\VertexApiAccessTokenMapper
      */
     public function createVertexApiAccessTokenMapper(): VertexApiAccessTokenMapper
     {
         return new VertexApiAccessTokenMapper();
+    }
+
+    /**
+     * @return \SprykerEco\Zed\Vertex\Persistence\Propel\Mapper\VertexTaxIdValidationMapper
+     */
+    public function createVertexTaxIdValidationMapper(): VertexTaxIdValidationMapper
+    {
+        return new VertexTaxIdValidationMapper();
     }
 }

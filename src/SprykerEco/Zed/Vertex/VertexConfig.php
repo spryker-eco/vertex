@@ -7,21 +7,11 @@
 
 namespace SprykerEco\Zed\Vertex;
 
-use Spryker\Shared\Vertex\VertexConstants;
 use Spryker\Zed\Kernel\AbstractBundleConfig;
+use SprykerEco\Shared\Vertex\VertexConstants;
 
 class VertexConfig extends AbstractBundleConfig
 {
-    public const CLIENT_ID = 'VERTEX:CLIENT_ID';
-
-    public const CLIENT_SECRET = 'VERTEX:CLIENT_SECRET';
-
-    public const SECURITY_URI = 'VERTEX:SECURITY_URI';
-
-    public const TRANSACTION_CALLS_URI = 'VERTEX:TRANSACTION_CALLS_URI';
-
-    public const IS_ACTIVE = 'VERTEX:IS_ACTIVE';
-
     /**
      * @var string
      */
@@ -35,27 +25,42 @@ class VertexConfig extends AbstractBundleConfig
 
     public function getClientId(): string
     {
-        return $this->get(static::CLIENT_ID, null);
+        return $this->get(VertexConstants::CLIENT_ID, null);
     }
 
     public function getClientSecret(): string
     {
-        return $this->get(static::CLIENT_SECRET, null);
+        return $this->get(VertexConstants::CLIENT_SECRET, null);
     }
 
     public function getSecurityUri(): string
     {
-        return $this->get(static::SECURITY_URI, null);
+        return $this->get(VertexConstants::SECURITY_URI, null);
     }
 
     public function getTransactionCallsUri(): string
     {
-        return $this->get(static::TRANSACTION_CALLS_URI, null);
+        return $this->get(VertexConstants::TRANSACTION_CALLS_URI, null);
+    }
+
+    public function getTaxamoApiUrl(): string
+    {
+        return $this->get(VertexConstants::TAXAMO_API_URL, null);
+    }
+
+    public function getTaxamoToken(): string
+    {
+        return $this->get(VertexConstants::TAXAMO_TOKEN, null);
     }
 
     public function isActive(): bool
     {
-        return $this->get(static::IS_ACTIVE, false);
+        return $this->get(VertexConstants::IS_ACTIVE, false);
+    }
+
+    public function isTaxIdValidatorEnabled(): bool
+    {
+        return $this->get(VertexConstants::IS_TAX_ID_VALIDATOR_ENABLED, false);
     }
 
     /**

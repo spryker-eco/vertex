@@ -117,13 +117,13 @@
     </transfer>
 
     <transfer name="TaxCalculationRequest" strict="true">
-        <property name="sale" type="VertexSale"/>
+        <!-- <property name="sale" type="VertexSale"/> -->
         <property name="vertexApiAccessToken" type="VertexApiAccessToken"/>
         <property name="reportingDate" type="string"/>
     </transfer>
 
     <transfer name="TaxCalculationResponse" strict="true">
-        <property name="sale" type="VertexSale"/>
+        <!-- <property name="sale" type="VertexSale"/> -->
         <property name="isSuccessful" type="bool"/>
         <property name="errorMessage" type="string"/>
     </transfer>
@@ -142,7 +142,7 @@
     </transfer>
 
     <transfer name="SubmitPaymentTaxInvoice" strict="true">
-        <property name="sale" type="VertexSale"/>
+        <!-- <property name="sale" type="VertexSale"/> -->
         <property name="messageAttributes" type="MessageAttributes"/>
     </transfer>
 
@@ -304,7 +304,7 @@
         <property name="shippingAddress" type="Address"/>
         <property name="billingAddress" type="Address"/>
         <property name="sellerAddress" type="Address"/>
-        <property name="warehouseAddress" type="Address"/>
+        <!-- <property name="warehouseAddress" type="Address"/> -->
         <property name="shippingWarehouses" type="ShippingWarehouse[]" singular="shippingWarehouse"/>
         <property name="taxMetadata" type="array" associative="true" singular="taxMetadataEntry"/>
         <property name="sku" type="string"/>
@@ -315,7 +315,7 @@
 
     <transfer name="ShippingWarehouse" strict="true">
         <property name="quantity" type="int"/>
-        <property name="warehouseAddress" type="Address"/>
+        <!-- <property name="warehouseAddress" type="Address"/> -->
     </transfer>
 
     <transfer name="VertexAddress" strict="true">

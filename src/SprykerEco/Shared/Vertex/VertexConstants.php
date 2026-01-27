@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Spryker\Shared\TaxApp;
+namespace SprykerEco\Shared\Vertex;
 
 /**
  * Declares global environment configuration keys. Do not use it for other class constants.
@@ -41,4 +41,87 @@ interface VertexConstants
      * @var string
      */
     public const OAUTH_OPTION_AUDIENCE = 'VERTEX:OAUTH_OPTION_AUDIENCE';
+
+    /**
+     * Specification:
+     * - Identifier of the Vertex application.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const CLIENT_ID = 'VERTEX:CLIENT_ID';
+
+    /**
+     * Specification:
+     * - Secret key of the Vertex application.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const CLIENT_SECRET = 'VERTEX:CLIENT_SECRET';
+
+    /**
+     * Specification:
+     * - The URI of the Vertex application.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const SECURITY_URI = 'VERTEX:SECURITY_URI';
+
+    /**
+     * Specification:
+     * - The transactions URI of the Vertex application.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const TRANSACTION_CALLS_URI = 'VERTEX:TRANSACTION_CALLS_URI';
+
+    /**
+     * Specification:
+     * - Determines whether the tax calculation is active or not.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const IS_ACTIVE = 'VERTEX:IS_ACTIVE';
+
+    
+    /**
+     * Specification:
+     * - The Vertex Taxamo API URL for tax calculation.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const TAXAMO_API_URL = 'VERTEX:TAXAMO_API_URL';
+    
+    
+    /**
+     * Specification:
+     * - The Vertex Taxamo API token for tax calculation.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const TAXAMO_TOKEN = 'VERTEX:TAXAMO_TOKEN';
+    
+    /**
+     * Specification:
+     * - Determines whether the tax ID validator is enabled or not.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const IS_TAX_ID_VALIDATOR_ENABLED = 'VERTEX:IS_TAX_ID_VALIDATOR_ENABLED';
 }
+

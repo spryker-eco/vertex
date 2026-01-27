@@ -5,10 +5,10 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\Vertex\Persistence\Propel\Mapper;
+namespace SprykerEco\Zed\Vertex\Persistence\Propel\Mapper;
 
 use Generated\Shared\Transfer\VertexApiAccessTokenTransfer;
-use Orm\Zed\VertexApi\Persistence\SpyVertexApiAccessToken;
+use Orm\Zed\Vertex\Persistence\Base\SpyVertexApiAccessToken;
 
 class VertexApiAccessTokenMapper
 {
