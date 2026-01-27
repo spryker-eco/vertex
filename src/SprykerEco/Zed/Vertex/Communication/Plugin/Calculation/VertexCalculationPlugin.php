@@ -20,7 +20,7 @@ class VertexCalculationPlugin extends AbstractPlugin implements CalculationPlugi
 {
     /**
      * {@inheritDoc}
-     * - If tax app is not configured or disabled runs fallback calculation plugins defined in {@link \SprykerEco\Zed\Vertex\VertexDependencyProvider::getFallbackQuoteCalculationPlugins} and {@link \SprykerEco\Zed\Vertex\VertexDependencyProvider::getFallbackOrderCalculationPlugins} depending on the type of calculation required.
+     * - If vertex is not configured or disabled runs fallback calculation plugins defined in {@link \SprykerEco\Zed\Vertex\VertexDependencyProvider::getFallbackQuoteCalculationPlugins} and {@link \SprykerEco\Zed\Vertex\VertexDependencyProvider::getFallbackOrderCalculationPlugins} depending on the type of calculation required.
      *
      * @api
      *

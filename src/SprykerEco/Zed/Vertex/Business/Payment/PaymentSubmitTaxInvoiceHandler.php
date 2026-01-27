@@ -29,11 +29,10 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
     use LoggerTrait;
 
     /**
-     * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeInterface $messageBrokerFacade
-     * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
-     * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface $salesFacade
-     * @param \Spryker\Zed\Vertex\Business\Mapper\VertexMapperInterface $vertexMapper
-     * @param array<\Spryker\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface> $orderVertexExpanderPlugins
+     * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
+     * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface $salesFacade
+     * @param \SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface $vertexMapper
+     * @param array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface> $orderVertexExpanderPlugins
      */
     public function __construct(
         protected VertexToStoreFacadeInterface $storeFacade,
@@ -50,7 +49,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
      *
      * @return void
      */
-    public function sendSubmitPaymentTaxInvoiceMessage(OrderTransfer $orderTransfer): void
+    public function handleSubmitPaymentTaxInvoice(OrderTransfer $orderTransfer): void
     {
         $idSalesOrder = $orderTransfer->getIdSalesOrderOrFail();
         $orderTransfer = $this->salesFacade->findOrderByIdSalesOrder($idSalesOrder);

@@ -16,5 +16,5 @@ interface PaymentSubmitTaxInvoiceHandlerInterface
      *
      * @return void
      */
-    public function sendSubmitPaymentTaxInvoiceMessage(OrderTransfer $orderTransfer): void;
+    public function handleSubmitPaymentTaxInvoice(OrderTransfer $orderTransfer): void;
 }

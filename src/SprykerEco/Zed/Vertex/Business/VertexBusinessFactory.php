@@ -77,7 +77,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return array<\SprykerEco\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface>
+     * @return array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface>
      */
     public function getOrderVertexExpanderPlugins(): array
     {
@@ -258,14 +258,6 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     public function getFallbackOrderCalculationPlugins(): array
     {
         return $this->getProvidedDependency(VertexDependencyProvider::PLUGINS_FALLBACK_ORDER_CALCULATION);
-    }
-
-    /**
-     * @return \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeInterface
-     */
-    public function getKernelAppFacade(): VertexToKernelAppFacadeInterface
-    {
-        return $this->getProvidedDependency(VertexDependencyProvider::FACADE_KERNEL_APP);
     }
 
     /**
