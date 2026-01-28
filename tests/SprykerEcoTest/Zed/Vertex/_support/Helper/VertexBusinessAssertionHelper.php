@@ -5,593 +5,245 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEcoTest\Zed\Vertex\Business;
+namespace SprykerEcoTest\Zed\Vertex\Helper;
 
-use Codeception\Stub;
-use Codeception\Test\Unit;
-use Generated\Shared\Transfer\StoreTransfer;
+use Codeception\Module;
+use Generated\Shared\Transfer\CalculableObjectTransfer;
+use Generated\Shared\Transfer\TaxAppApiUrlsTransfer;
+use Generated\Shared\Transfer\TaxAppConfigTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
-use Generated\Shared\Transfer\VertexAuthResponseTransfer;
+use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfigQuery;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
-use Ramsey\Uuid\Uuid;
-use Spryker\Client\TaxApp\TaxAppClient;
-use Spryker\Client\TaxApp\TaxAppClientInterface;
-use Spryker\Zed\Calculation\Communication\Plugin\Calculator\DiscountAmountAggregatorForGenericAmountPlugin;
-use Spryker\Zed\Calculation\Communication\Plugin\Calculator\GrandTotalCalculatorPlugin;
-use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemDiscountAmountFullAggregatorPlugin;
-use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemSubtotalAggregatorPlugin;
-use Spryker\Zed\Calculation\Communication\Plugin\Calculator\PriceCalculatorPlugin;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 use SprykerEco\Client\Vertex\VertexClient;
-use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
 
-/**
- * Auto-generated group annotations
- *
- * @group SprykerEcoTest
- * @group Zed
- * @group Vertex
- * @group Business
- * @group Facade
- * @group TaxAppFacadeCalculationTest
- * Add your own group annotations below this line
- */
-class TaxAppFacadeCalculationTest extends Unit
+class VertexBusinessAssertionHelper extends Module
 {
     /**
-     * @var string
-     */
-    protected const PRICE_MODE_GROSS = 'GROSS_MODE';
-
-    /**
-     * @var \SprykerEcoTest\Zed\Vertex\VertexBusinessTester
-     */
-    protected VertexBusinessTester $tester;
-
-    /**
-     * @var \Generated\Shared\Transfer\StoreTransfer
-     */
-    protected $storeTransfer;
-
-    /**
+     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
+     *
      * @return void
      */
-    public function setUp(): void
+    public function assertCalculableObjectTransferExtendedWithTaxMetadata(CalculableObjectTransfer $calculableObjectTransfer): void
     {
-        parent::setUp();
+        $this->assertNotNull($calculableObjectTransfer->getTaxMetadata());
+        $this->assertNotNull($calculableObjectTransfer->getItems()[0]->getTaxMetadata());
+    }
 
-        $this->storeTransfer = $this->tester->haveStore([StoreTransfer::COUNTRIES => ['US']], false);
-//        $this->tester->haveTaxAppConfig(['vendor_code' => 'vendorCode', 'fk_store' => $this->storeTransfer->getIdStore(), 'is_active' => true]);
-        $this->tester->setQuoteTaxMetadataExpanderPlugins();
-//        $this->tester->mockOauthClient();
+    public function assertRequestTaxQuotationReceivesSalesItemMappedWithMerchantStockAddress(VertexClient $vertexClientMock): void
+    {
+        $expectation = $this->haveExpectedTaxQuotationRequestSaleItems();
 
-        $storeFacadeMock = Stub::makeEmpty(VertexToStoreFacadeInterface::class, [
-            'getStoreByName' => $this->storeTransfer,
-        ]);
-        $this->tester->mockFactoryMethod('getStoreFacade', $storeFacadeMock); // TODO: set dependency
+        $vertexClientMock->expects(new InvokedCountMatcher(1))
+            ->method('calculateTax')
+            ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($expectation) {
+                $index = 0;
+
+                foreach ($vertexCalculationRequestTransfer->getSale()->getItems() as $saleItem) {
+                    foreach ($saleItem->getVertexShippingWarehouses() as $quantityWarehouseMap) {
+                        $saleItemExpectation = $expectation[$index++];
+
+                        self::assertEquals(
+                            $saleItemExpectation['quantity'],
+                            $quantityWarehouseMap->getQuantity(),
+                            'Warehouse mapping quantity must match with Calculated Object merchant stock address',
+                        );
+
+                        self::assertEquals(
+                            $saleItemExpectation['warehouseAddress']['address1'],
+                            $quantityWarehouseMap->getWarehouseAddress()->getAddress1(),
+                            'Warehouse mapping address must match with Calculated Object merchant stock address',
+                        );
+
+                        self::assertEquals(
+                            $saleItemExpectation['warehouseAddress']['city'],
+                            $quantityWarehouseMap->getWarehouseAddress()->getCity(),
+                            'Warehouse mapping city must match with Calculated Object merchant stock address',
+                        );
+
+                        self::assertEquals(
+                            $saleItemExpectation['warehouseAddress']['zip_code'],
+                            $quantityWarehouseMap->getWarehouseAddress()->getZipCode(),
+                            'Warehouse mapping zip code must match with Calculated Object merchant stock address',
+                        );
+
+                        self::assertIsString(
+                            $quantityWarehouseMap->getWarehouseAddress()->getCountry(),
+                            'Warehouse mapping country must be a string',
+                        );
+
+                        self::assertTrue(
+                            strlen($quantityWarehouseMap->getWarehouseAddress()->getCountry()) == 2,
+                            'Warehouse mapping country code must be a string with 2 characters',
+                        );
+                    }
+                }
+
+                return true;
+            }));
+    }
+
+    public function assertRequestTaxQuotationReceivesSalesItemWithCorrectItemsAndWithoutWarehouseAddress(
+        VertexClient $vertexClientMock,
+        CalculableObjectTransfer $mockedCalculableObjectTransfer
+    ): void {
+        $expectation = $this->haveExpectedTaxQuotationRequestSaleItems();
+
+        $vertexClientMock->expects(new InvokedCountMatcher(1))
+            ->method('requestTaxQuotation')
+            ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($mockedCalculableObjectTransfer) {
+                self::assertEquals(
+                    $mockedCalculableObjectTransfer->getItems()->count(),
+                    $vertexCalculationRequestTransfer->getSale()->getItems()->count(),
+                    'Sale items count must match with Calculated Object',
+                );
+
+                foreach ($vertexCalculationRequestTransfer->getSale()->getItems() as $index => $saleItem) {
+                    /** @var \SprykerEcoTest\Zed\Vertex\Helper\ItemTransfer $calculableObjectItem */
+                    $calculableObjectItem = $mockedCalculableObjectTransfer->getItems()->offsetGet($index);
+
+                    self::assertEquals(
+                        $calculableObjectItem->getQuantity(),
+                        $saleItem->getQuantity(),
+                        'Sale item quantity must match with Calculated Object',
+                    );
+                }
+
+                return true;
+            }));
     }
 
     /**
+     * @return array<array>
+     */
+    protected function haveExpectedTaxQuotationRequestSaleItems(): array
+    {
+        return [
+            [
+                'quantity' => 3,
+                'warehouseAddress' => [
+                    'address1' => 'address-1-1',
+                    'city' => 'city-1-1',
+                    'zip_code' => 'zipcode-1-1',
+                ],
+            ],
+            [
+                'quantity' => 1,
+                'warehouseAddress' => [
+                    'address1' => 'address-1-2',
+                    'city' => 'city-1-2',
+                    'zip_code' => 'zipcode-1-2',
+                ],
+            ],
+            [
+                'quantity' => 10,
+                'warehouseAddress' => [
+                    'address1' => 'address-2-1',
+                    'city' => 'city-2-1',
+                    'zip_code' => 'zipcode-2-1',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
+     *
      * @return void
      */
-    public function testCalculableObjectHasTaxTotalWhenRecalculateRequestsTaxFromExternalApiSuccessfully(): void
+    public function assertQuoteHasCorrectGrandTotal(CalculableObjectTransfer $calculableObjectTransfer): void
     {
-        // Arrange
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
+        $itemsSumPriceToPayAggregation = 0;
+        foreach ($calculableObjectTransfer->getItems() as $item) {
+            $itemsSumPriceToPayAggregation += $item->getSumPriceToPayAggregation();
+        }
 
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
+        $expensesSumPriceToPayAggregation = 0;
 
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        // Assert
-        $this->assertGreaterThanOrEqual(0, $vertexCalculationResponseTransfer->getSale()->getTaxTotal());
         foreach ($calculableObjectTransfer->getExpenses() as $expense) {
-            $this->assertNotNull($expense->getSumTaxAmount());
-            $this->assertNotNull($expense->getUnitTaxAmount());
+            $expensesSumPriceToPayAggregation += $expense->getSumPriceToPayAggregation();
+        }
+
+        $grandTotal = $calculableObjectTransfer->getOriginalQuote()->getTotals()->getGrandTotal();
+
+        $this->assertEquals($grandTotal, ($expensesSumPriceToPayAggregation + $itemsSumPriceToPayAggregation));
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
+     *
+     * @return void
+     */
+    public function assertQuoteHasZeroTaxTotal(CalculableObjectTransfer $calculableObjectTransfer): void
+    {
+        $itemsSumTaxAmountFullAggregation = 0;
+        foreach ($calculableObjectTransfer->getItems() as $item) {
+            $itemsSumTaxAmountFullAggregation += $item->getSumTaxAmountFullAggregation();
+        }
+
+        $expensesSumTaxAmount = 0;
+
+        foreach ($calculableObjectTransfer->getExpenses() as $expense) {
+            $expensesSumTaxAmount += $expense->getSumTaxAmount();
+        }
+
+        $this->assertEquals(0, $itemsSumTaxAmountFullAggregation);
+        $this->assertEquals(0, $expensesSumTaxAmount);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\TaxAppConfigTransfer $taxAppConfigTransfer
+     *
+     * @return void
+     */
+    public function assertAllTaxAppConfigsForTenantHaveNewApiUrl(
+        TaxAppConfigTransfer $taxAppConfigTransfer
+    ): void {
+        $taxAppConfigEntityCollection = SpyTaxAppConfigQuery::create()
+            ->filterByVendorCode($taxAppConfigTransfer->getVendorCode())
+            ->find();
+
+        $this->assertTrue($taxAppConfigEntityCollection->count() > 1);
+
+        foreach ($taxAppConfigEntityCollection as $taxAppConfigEntity) {
+            $taxAppConfigEntityApiUrls = json_decode($taxAppConfigEntity->getApiUrls(), true);
+            $taxAppConfigEntityApiUrls = (new TaxAppApiUrlsTransfer())->fromArray($taxAppConfigEntityApiUrls, true);
+            $this->assertEquals($taxAppConfigEntityApiUrls->getQuotationUrl(), $taxAppConfigTransfer->getApiUrlsOrFail()->getQuotationUrl());
+            $this->assertEquals($taxAppConfigEntityApiUrls->getRefundsUrl(), $taxAppConfigTransfer->getApiUrlsOrFail()->getRefundsUrl());
         }
     }
 
     /**
-     * @return void
-     */
-    public function testCalculableObjectHasTheSameTaxRequestHashWhenRecalculateWasCalledTwiceWithoutChanges(): void
-    {
-        // Arrange
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
-
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-
-        $clientMock = $this->createMock(VertexClient::class);
-        $clientMock->expects($this->once())->method('calculateTax')->willReturn($vertexCalculationResponseTransfer);
-        $clientMock->expects($this->once())->method('authenticate')->willReturn(
-            (new VertexAuthResponseTransfer())
-                ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
-        );
-        $this->tester->mockFactoryMethod('getVertexClient', $clientMock);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        $firstCalculationHash = $calculableObjectTransfer->getVertexSaleHash();
-
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        $secondCalculationHash = $calculableObjectTransfer->getVertexSaleHash();
-
-        $this->assertSame($firstCalculationHash, $secondCalculationHash);
-    }
-
-    /**
-     * @return void
-     */
-    public function testCalculableObjectHasTheDifferentTaxRequestHashWhenWasRecalculateCalledTwiceWithChanges(): void
-    {
-        // Arrange
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-
-        $clientMock = $this->createMock(VertexClient::class);
-        $clientMock->expects($this->exactly(2))->method('calculateTax')->willReturn($vertexCalculationResponseTransfer);
-        $clientMock->expects($this->once())->method('authenticate')->willReturn(
-            (new VertexAuthResponseTransfer())
-                ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
-        );
-        $this->tester->mockFactoryMethod('getVertexClient', $clientMock);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        $firstCalculationHash = $calculableObjectTransfer->getTaxAppSaleHash();
-
-        $calculableObjectTransfer->getOriginalQuote()->setUuid(Uuid::uuid4()->toString());
-
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        $secondCalculationHash = $calculableObjectTransfer->getTaxAppSaleHash();
-
-        $this->assertNotEquals($firstCalculationHash, $secondCalculationHash);
-    }
-
-    /**
-     * @return void
-     */
-    public function testCalculableObjectHasZeroTaxTotalWhenShipmentIsMissingAndPriceModeIsNet(): void
-    {
-        // Arrange
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransferWithoutShipment($this->storeTransfer);
-
-        $clientMock = $this->createMock(VertexClient::class);
-        $clientMock->expects($this->never())->method('calculateTax');
-        $clientMock->expects($this->once())->method('authenticate')->willReturn(
-            (new VertexAuthResponseTransfer())
-                ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
-        );
-        $this->tester->mockFactoryMethod('getVertexClient', $clientMock);
-
-        $originalQuote = $calculableObjectTransfer->getOriginalQuote();
-        $originalQuote->setPriceMode('NET_MODE');
-
-        $calculationFacade = $this->tester->createCalculationFacade(
-            [
-                new PriceCalculatorPlugin(),
-                new ItemSubtotalAggregatorPlugin(),
-
-                new DiscountAmountAggregatorForGenericAmountPlugin(),
-                new ItemDiscountAmountFullAggregatorPlugin(),
-            ],
-        );
-        $calculationFacade->recalculateQuote($originalQuote);
-        $calculableObjectTransfer->setItems($originalQuote->getItems());
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        // Assert
-        $this->assertSame(0, $calculableObjectTransfer->getTotals()->getTaxTotal()->getAmount());
-    }
-
-    /**
-     * @group test
+     * @param string $vendorCode
      *
      * @return void
      */
-    public function testCalculableObjectIsExpandedWithTaxMetadataWhenRecalculateMethodIsCalled(): void
+    public function assertAllTaxAppConfigsForTenantHaveBeenDeleted(string $vendorCode): void
     {
-        // Arrange
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
+        $taxAppConfigEntityCollectionDeleted = SpyTaxAppConfigQuery::create()
+            ->filterByVendorCode($vendorCode)
+            ->find();
 
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        // Assert
-        $this->tester->assertCalculableObjectTransferExtendedWithTaxMetadata($calculableObjectTransfer);
+        $this->assertTrue($taxAppConfigEntityCollectionDeleted->count() == 0);
     }
 
     /**
+     * @param string $vendorCodeNotDeleted
+     * @param string $vendorCodeDeleted
+     *
      * @return void
      */
-    public function testCalculableObjectHasSaleTransferExpandedWithMerchantStockAddressWhenRecalculateMethodIsCalled(): void
+    public function assertProperTaxAppConfigsHaveBeenDeletedByVendorCodes(string $vendorCodeNotDeleted, string $vendorCodeDeleted): void
     {
-        // Arrange
-        $calculableObjectTransfer = $this->tester->haveCalculableObjectTransferWithMerchantStockAddress($this->storeTransfer);
-
-        $vertexClientMock = $this->makeEmpty(VertexClient::class);
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-        $vertexClientMock->expects($this->once())->method('calculateTax')->willReturn($vertexCalculationResponseTransfer);
-        $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
-            (new VertexAuthResponseTransfer())
-                ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
-        );
-        $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
-
-        // Assert
-        $this->tester->assertRequestTaxQuotationReceivesSalesItemMappedWithMerchantStockAddress($vertexClientMock);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-    }
-
-    /**
-     * @return void
-     */
-    public function testCalculableObjectHasSaleTransferWithItemsWhenMerchantStockAddressIsEmpty(): void
-    {
-        // Arrange
-        $vertexClientMock = $this->makeEmpty(VertexClient::class);
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-        $vertexClientMock->expects($this->once())->method('calculateTax')->willReturn($vertexCalculationResponseTransfer);
-        $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
-            (new VertexAuthResponseTransfer())
-                ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
-        );
-        $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
-
-        /** @var \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer */
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
-
-        // Assert
-        $this->tester->assertRequestTaxQuotationReceivesSalesItemWithCorrectItemsAndWithoutWarehouseAddress(
-            $vertexClientMock,
-            $calculableObjectTransfer,
-        );
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-    }
-
-    /**
-     * @return void
-     */
-    public function testQuoteHasCorrectGrandTotalWhenPriceModeIsNetAndRecalculateRequestsTaxFromExternalApiSuccessfully(): void
-    {
-        // Arrange
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-
-        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
-
-        $originalQuote = $calculableObjectTransfer->getOriginalQuote();
-
-        $calculationFacade = $this->tester->createCalculationFacade(
-            [
-                new GrandTotalCalculatorPlugin(),
-            ],
-        );
-        $calculationFacade->recalculateQuote($originalQuote);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        // Assert
-        $this->tester->assertQuoteHasCorrectGrandTotal($calculableObjectTransfer);
-    }
-
-    /**
-     * @return void
-     */
-    public function testQuoteHasZeroTaxTotalWhenRecalculateExternalApiRequestFails(): void
-    {
-        // Arrange
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
-
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => false]);
-        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
-
-        $originalQuote = $calculableObjectTransfer->getOriginalQuote();
-
-        $calculationFacade = $this->tester->createCalculationFacade(
-            [
-                new GrandTotalCalculatorPlugin(),
-            ],
-        );
-        $calculationFacade->recalculateQuote($originalQuote);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        // Assert
-        $this->tester->assertQuoteHasZeroTaxTotal($calculableObjectTransfer);
-    }
-
-    /**
-     * @return void
-     */
-    public function testQuoteHasCorrectGrandTotalWhenPriceModeIsGrossAndRecalculateRequestsTaxFromExternalApiSuccessfully(): void
-    {
-        // Arrange
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-
-        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
-
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, static::PRICE_MODE_GROSS);
-
-        $originalQuote = $calculableObjectTransfer->getOriginalQuote();
-
-        $calculationFacade = $this->tester->createCalculationFacade(
-            [
-                new GrandTotalCalculatorPlugin(),
-            ],
-        );
-        $calculationFacade->recalculateQuote($originalQuote);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        // Assert
-        $this->tester->assertQuoteHasCorrectGrandTotal($calculableObjectTransfer);
-    }
-
-    /**
-     * @return void
-     */
-    public function testQuoteHasHideTaxInCartFlagWhenTaxAppIsActive(): void
-    {
-        // Arrange
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        // Assert
-        $this->assertTrue($calculableObjectTransfer->getOriginalQuote()->getHideTaxInCart());
-    }
-
-    /**
-     * @return void
-     */
-    public function testQuoteDoesNotHaveHideTaxInCartFlagWhenTaxAppIsNotActive(): void
-    {
-        // Arrange
-        $storeTransfer = $this->tester->haveStore([StoreTransfer::NAME => 'Foo'], false);
-        $this->tester->haveTaxAppConfig(['fk_store' => $storeTransfer->getIdStore(), 'is_active' => false]);
-
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($storeTransfer);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        // Assert
-        $this->assertFalse($calculableObjectTransfer->getOriginalQuote()->getHideTaxInCart());
-    }
-
-    /**
-     * @return void
-     */
-    public function testCalculateObjectItemsHaveSumTaxAmountWhenStoreIdIsNotProvidedInCalculableObject(): void
-    {
-        // Arrange
-        $storeTransfer = clone $this->storeTransfer;
-        $storeTransfer->setIdStore(null);
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($storeTransfer);
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true], $calculableObjectTransfer->getItems()->getArrayCopy());
-        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        // Assert
-        $this->assertSame(
-            $vertexCalculationResponseTransfer->getSale()->getItems()->offsetGet(0)->getTaxTotal(),
-            $calculableObjectTransfer->getItems()->offsetGet(0)->getSumTaxAmount(),
-        );
-        $this->assertSame(
-            $vertexCalculationResponseTransfer->getSale()->getItems()->offsetGet(1)->getTaxTotal(),
-            $calculableObjectTransfer->getItems()->offsetGet(1)->getSumTaxAmount(),
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testRecalculateWithPriceInGrossModeAppliesExternalResultsCorrectly(): void
-    {
-        // Arrange
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, static::PRICE_MODE_GROSS);
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true], $calculableObjectTransfer->getItems()->getArrayCopy());
-        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        // Assert
-        $this->assertSame(
-            $vertexCalculationResponseTransfer->getSale()->getItems()->offsetGet(0)->getTaxTotal(),
-            $calculableObjectTransfer->getItems()->offsetGet(0)->getSumTaxAmount(),
-        );
-        $this->assertSame(
-            $vertexCalculationResponseTransfer->getSale()->getItems()->offsetGet(1)->getTaxTotal(),
-            $calculableObjectTransfer->getItems()->offsetGet(1)->getSumTaxAmount(),
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testRecalculateWithPriceInGrossModeDoesNotHaveHideTaxInCartFlag(): void
-    {
-        // Arrange
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, static::PRICE_MODE_GROSS);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        // Assert
-        $this->assertEmpty($calculableObjectTransfer->getOriginalQuote()->getHideTaxInCart());
-    }
-
-    /**
-     * @return void
-     */
-    public function testRecalculateWithNonConfiguredSellerCountryCodeIsTakenFromDefaultStoreCountry(): void
-    {
-        // Arrange
-        $this->tester->mockConfigMethod('getSellerCountryCode', '');
-        $expectedCountryCode = $this->storeTransfer->getCountries()[0];
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-
-        $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
-
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
-
-        // Assert
-        $taxAppClientMock->expects(new InvokedCountMatcher(1))
-            ->method('calculateTax')
-            ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($expectedCountryCode) {
-                self::assertSame($expectedCountryCode, $vertexCalculationRequestTransfer->getSale()->getSellerCountryCode());
-
-                return true;
-            }))
-            ->willReturn($vertexCalculationResponseTransfer);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-    }
-
-    /**
-     * @return void
-     */
-    public function testRecalculateWithConfiguredSellerCountryCodeIsAppliedToTaxResponse(): void
-    {
-        // Arrange
-        $this->tester->mockConfigMethod('getSellerCountryCode', 'FR');
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-
-        $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
-
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
-
-        // Assert
-        $taxAppClientMock->expects(new InvokedCountMatcher(1))
-            ->method('calculateTax')
-            ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) {
-                self::assertSame('FR', $vertexCalculationRequestTransfer->getSale()->getSellerCountryCode());
-
-                return true;
-            }))
-            ->willReturn($vertexCalculationResponseTransfer);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-    }
-
-    /**
-     * @return void
-     */
-    public function testRecalculateWithNonConfiguredCustomerCountryCodeIsTakenFromDefaultStoreCountry(): void
-    {
-        // Arrange
-        $this->tester->mockConfigMethod('getCustomerCountryCode', '');
-        $expectedCountryCode = $this->storeTransfer->getCountries()[0];
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-
-        $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
-
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, 'GROSS_MODE', false);
-
-        // Assert
-        $taxAppClientMock->expects(new InvokedCountMatcher(1))
-            ->method('calculateTax')
-            ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($expectedCountryCode) {
-                self::assertSame($expectedCountryCode, $vertexCalculationRequestTransfer->getSale()->getCustomerCountryCode());
-
-                return true;
-            }))
-            ->willReturn($vertexCalculationResponseTransfer);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-    }
-
-    /**
-     * @return void
-     */
-    public function testRecalculateWithConfiguredCustomerCountryCodeIsAppliedToTaxResponse(): void
-    {
-        // Arrange
-        $this->tester->mockConfigMethod('getCustomerCountryCode', 'FR');
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-
-        $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
-
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, 'GROSS_MODE', false);
-
-        // Assert
-        $taxAppClientMock->expects(new InvokedCountMatcher(1))
-            ->method('calculateTax')
-            ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) {
-                self::assertSame('FR', $vertexCalculationRequestTransfer->getSale()->getCustomerCountryCode());
-
-                return true;
-            }))
-            ->willReturn($vertexCalculationResponseTransfer);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-    }
-
-    /**
-     * @return void
-     */
-    public function testRecalculateWithProvidedBillingCountryIsSetToCustomerCountryCodeAppliedToTaxResponse(): void
-    {
-        // Arrange
-        $this->tester->mockConfigMethod('getCustomerCountryCode', 'FR');
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-
-        $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
-
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, 'GROSS_MODE', true, ['iso2Code' => 'FOO']);
-
-        // Assert
-        $taxAppClientMock->expects(new InvokedCountMatcher(1))
-            ->method('calculateTax')
-            ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) {
-                self::assertSame('FOO', $vertexCalculationRequestTransfer->getSale()->getCustomerCountryCode());
-
-                return true;
-            }))
-            ->willReturn($vertexCalculationResponseTransfer);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
+        $deletedTaxAppConfigEntityCollection = SpyTaxAppConfigQuery::create()
+            ->filterByVendorCode($vendorCodeDeleted)
+            ->find();
+
+        $notDeletedTaxAppConfigEntityCollection = SpyTaxAppConfigQuery::create()
+            ->filterByVendorCode($vendorCodeNotDeleted)
+            ->find();
+
+        $this->assertTrue($deletedTaxAppConfigEntityCollection->count() == 0);
+        $this->assertTrue($notDeletedTaxAppConfigEntityCollection->count() > 0);
     }
 }
