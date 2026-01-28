@@ -32,7 +32,7 @@ class TaxIdValidator implements TaxIdValidatorInterface
     /**
      * @var string
      */
-    protected const GLOSSARY_KEY_VERTEX_IS_DISABLED = 'vertex.vertex-disabled';
+    protected const GLOSSARY_KEY_VERTEX_IS_DISABLED = 'vertex.tax-app-disabled';
 
     /**
      * @var string
@@ -67,8 +67,6 @@ class TaxIdValidator implements TaxIdValidatorInterface
         if (
             !$vertexConfigTransfer ||
             !$vertexConfigTransfer->getIsActive()
-            // !$vertexConfigTransfer->getApiUrls() ||
-            // !$vertexConfigTransfer->getApiUrls()->getTaxIdValidationUrl()
         ) {
             return $this->createVertexValidationResponseTransfer(false, VertexConfig::MESSAGE_VERTEX_IS_DISABLED, static::GLOSSARY_KEY_VERTEX_IS_DISABLED);
         }
@@ -77,12 +75,9 @@ class TaxIdValidator implements TaxIdValidatorInterface
             ->fromArray($vertexValidationRequestTransfer->toArray(), true);
         $taxIdValidationResponseTransfer = $this->vertexClient->validateTaxId($taxIdValidationRequestTransfer, $vertexConfigTransfer);
         
-        if ($taxIdValidationResponseTransfer->getErrorCode() !== null) {
-            return $this->createVertexValidationResponseTransfer(false, VertexConfig::MESSAGE_TAX_VALIDATOR_IS_UNAVAILABLE, static::GLOSSARY_KEY_TAX_VALIDATOR_IS_UNAVAILABLE);
-        }
-
         $vertexValidationResponseTransfer = (new VertexValidationResponseTransfer())
-            ->fromArray($taxIdValidationResponseTransfer->toArray(), true);
+            ->fromArray($taxIdValidationResponseTransfer->toArray(), true)
+            ->setMessageKey($taxIdValidationResponseTransfer->getErrorCode() ?? null);
 
         if ($vertexValidationResponseTransfer->getIsValid() === true) {
             $this->entityManager->saveTaxIdValidationHistory(

@@ -7,11 +7,10 @@
 
 declare(strict_types=1);
 
-namespace SprykerTest\Glue\TaxAppRestApi;
+namespace SprykerEcoTest\Glue\VertexRestApi;
 
 use Codeception\Actor;
-use Generated\Shared\DataBuilder\RestTaxAppValidationAttributesBuilder;
-use Generated\Shared\Transfer\RestTaxAppValidationAttributesTransfer;
+use Generated\Shared\Transfer\RestVertexValidationAttributesTransfer;
 
 /**
  * Inherited Methods
@@ -29,17 +28,17 @@ use Generated\Shared\Transfer\RestTaxAppValidationAttributesTransfer;
  *
  * @SuppressWarnings(PHPMD)
  */
-class TaxAppRestApiTester extends Actor
+class VertexRestApiTester extends Actor
 {
-    use _generated\TaxAppRestApiTesterActions;
+    use _generated\VertexRestApiTesterActions;
 
     /**
      * @param array $seed
      *
      * @return \Generated\Shared\Transfer\RestTaxAppValidationAttributesTransfer
      */
-    public function createRestTaxAppValidationAttributesTransfer(array $seed = []): RestTaxAppValidationAttributesTransfer
+    public function createRestVertexValidationAttributesTransfer(array $seed = []): RestVertexValidationAttributesTransfer
     {
-        return (new RestTaxAppValidationAttributesBuilder())->seed($seed)->build();
+        return (new RestVertexValidationAttributesBuilder())->seed($seed)->build();
     }
 }

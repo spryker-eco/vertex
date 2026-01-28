@@ -22,12 +22,12 @@ class TaxIdValidator implements TaxIdValidatorInterface
     /**
      * @var string
      */
-    protected const GLOSSARY_KEY_RESPONSE_DETAIL_INVALID_REQUEST_DATA = 'tax_app.vertex.invalid-request-data';
+    protected const GLOSSARY_KEY_RESPONSE_DETAIL_INVALID_REQUEST_DATA = 'vertex.invalid-request-data';
 
     /**
      * @var string
      */
-    protected const GLOSSARY_SUFFIX_VERTEX = 'tax_app.vertex';
+    protected const GLOSSARY_SUFFIX_VERTEX = 'vertex';
 
     /**
      * @param \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceBuilderInterface $restResourceBuilder
