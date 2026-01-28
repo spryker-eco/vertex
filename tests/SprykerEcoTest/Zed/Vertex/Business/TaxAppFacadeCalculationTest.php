@@ -107,7 +107,9 @@ class TaxAppFacadeCalculationTest extends Unit
         $clientMock = $this->createMock(VertexClient::class);
         $clientMock->expects($this->once())->method('calculateTax')->willReturn($vertexCalculationResponseTransfer);
         $clientMock->expects($this->once())->method('authenticate')->willReturn(
-            (new VertexAuthResponseTransfer())->setAccessToken('vdhdjsnkd')
+            (new VertexAuthResponseTransfer())
+                ->setAccessToken('test-token')
+                ->setExpiresIn(1000)
         );
         $this->tester->mockFactoryMethod('getVertexClient', $clientMock);
 
@@ -132,9 +134,14 @@ class TaxAppFacadeCalculationTest extends Unit
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
 
-        $clientMock = $this->createMock(TaxAppClient::class);
+        $clientMock = $this->createMock(VertexClient::class);
         $clientMock->expects($this->exactly(2))->method('calculateTax')->willReturn($vertexCalculationResponseTransfer);
-        $this->tester->mockFactoryMethod('getTaxAppClient', $clientMock);
+        $clientMock->expects($this->once())->method('authenticate')->willReturn(
+            (new VertexAuthResponseTransfer())
+                ->setAccessToken('test-token')
+                ->setExpiresIn(1000)
+        );
+        $this->tester->mockFactoryMethod('getVertexClient', $clientMock);
 
         // Act
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
@@ -160,6 +167,11 @@ class TaxAppFacadeCalculationTest extends Unit
 
         $clientMock = $this->createMock(VertexClient::class);
         $clientMock->expects($this->never())->method('calculateTax');
+        $clientMock->expects($this->once())->method('authenticate')->willReturn(
+            (new VertexAuthResponseTransfer())
+                ->setAccessToken('test-token')
+                ->setExpiresIn(1000)
+        );
         $this->tester->mockFactoryMethod('getVertexClient', $clientMock);
 
         $originalQuote = $calculableObjectTransfer->getOriginalQuote();
@@ -194,7 +206,7 @@ class TaxAppFacadeCalculationTest extends Unit
         // Arrange
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-        $this->tester->mockTaxAppClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
+        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
 
         // Act
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
@@ -211,13 +223,18 @@ class TaxAppFacadeCalculationTest extends Unit
         // Arrange
         $calculableObjectTransfer = $this->tester->haveCalculableObjectTransferWithMerchantStockAddress($this->storeTransfer);
 
-        $taxAppClientMock = $this->makeEmpty(TaxAppClientInterface::class);
+        $vertexClientMock = $this->makeEmpty(VertexClient::class);
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-        $taxAppClientMock->expects($this->once())->method('calculateTax')->willReturn($vertexCalculationResponseTransfer);
-        $this->tester->mockFactoryMethod('getTaxAppClient', $taxAppClientMock);
+        $vertexClientMock->expects($this->once())->method('calculateTax')->willReturn($vertexCalculationResponseTransfer);
+        $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
+            (new VertexAuthResponseTransfer())
+                ->setAccessToken('test-token')
+                ->setExpiresIn(1000)
+        );
+        $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
         // Assert
-        $this->tester->assertRequestTaxQuotationReceivesSalesItemMappedWithMerchantStockAddress($taxAppClientMock);
+        $this->tester->assertRequestTaxQuotationReceivesSalesItemMappedWithMerchantStockAddress($vertexClientMock);
 
         // Act
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
@@ -229,17 +246,22 @@ class TaxAppFacadeCalculationTest extends Unit
     public function testCalculableObjectHasSaleTransferWithItemsWhenMerchantStockAddressIsEmpty(): void
     {
         // Arrange
-        $taxAppClientMock = $this->makeEmpty(TaxAppClientInterface::class);
+        $vertexClientMock = $this->makeEmpty(VertexClient::class);
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-        $taxAppClientMock->expects($this->once())->method('calculateTax')->willReturn($vertexCalculationResponseTransfer);
-        $this->tester->mockFactoryMethod('getTaxAppClient', $taxAppClientMock);
+        $vertexClientMock->expects($this->once())->method('calculateTax')->willReturn($vertexCalculationResponseTransfer);
+        $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
+            (new VertexAuthResponseTransfer())
+                ->setAccessToken('test-token')
+                ->setExpiresIn(1000)
+        );
+        $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
         /** @var \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer */
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
 
         // Assert
         $this->tester->assertRequestTaxQuotationReceivesSalesItemWithCorrectItemsAndWithoutWarehouseAddress(
-            $taxAppClientMock,
+            $vertexClientMock,
             $calculableObjectTransfer,
         );
 
@@ -256,7 +278,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
 
-        $this->tester->mockTaxAppClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
+        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
 
         $originalQuote = $calculableObjectTransfer->getOriginalQuote();
 
@@ -283,7 +305,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
 
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => false]);
-        $this->tester->mockTaxAppClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
+        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
 
         $originalQuote = $calculableObjectTransfer->getOriginalQuote();
 
@@ -309,7 +331,7 @@ class TaxAppFacadeCalculationTest extends Unit
         // Arrange
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
 
-        $this->tester->mockTaxAppClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
+        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
 
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, static::PRICE_MODE_GROSS);
 
@@ -337,7 +359,7 @@ class TaxAppFacadeCalculationTest extends Unit
         // Arrange
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-        $this->tester->mockTaxAppClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
+        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
 
         // Act
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
@@ -374,7 +396,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $storeTransfer->setIdStore(null);
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($storeTransfer);
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true], $calculableObjectTransfer->getItems()->getArrayCopy());
-        $this->tester->mockTaxAppClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
+        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
 
         // Act
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
@@ -398,7 +420,7 @@ class TaxAppFacadeCalculationTest extends Unit
         // Arrange
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, static::PRICE_MODE_GROSS);
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true], $calculableObjectTransfer->getItems()->getArrayCopy());
-        $this->tester->mockTaxAppClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
+        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
 
         // Act
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
@@ -421,7 +443,7 @@ class TaxAppFacadeCalculationTest extends Unit
     {
         // Arrange
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-        $this->tester->mockTaxAppClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
+        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, static::PRICE_MODE_GROSS);
 
         // Act
@@ -442,7 +464,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
 
         $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getTaxAppClient', $taxAppClientMock);
+        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
 
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
 
@@ -470,7 +492,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
 
         $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getTaxAppClient', $taxAppClientMock);
+        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
 
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
 
@@ -499,7 +521,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
 
         $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getTaxAppClient', $taxAppClientMock);
+        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
 
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, 'GROSS_MODE', false);
 
@@ -527,7 +549,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
 
         $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getTaxAppClient', $taxAppClientMock);
+        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
 
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, 'GROSS_MODE', false);
 
@@ -555,7 +577,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
 
         $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getTaxAppClient', $taxAppClientMock);
+        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
 
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, 'GROSS_MODE', true, ['iso2Code' => 'FOO']);
 

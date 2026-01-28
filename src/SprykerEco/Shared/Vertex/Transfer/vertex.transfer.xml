@@ -117,13 +117,13 @@
     </transfer>
 
     <transfer name="VertexCalculationRequest" strict="true">
-        <!-- <property name="sale" type="VertexSale"/> -->
+        <property name="sale" type="VertexSale"/>
         <property name="vertexApiAccessToken" type="VertexApiAccessToken"/>
         <property name="reportingDate" type="string"/>
     </transfer>
 
     <transfer name="VertexCalculationResponse" strict="true">
-        <!-- <property name="sale" type="VertexSale"/> -->
+        <property name="sale" type="VertexSale"/>
         <property name="isSuccessful" type="bool"/>
         <property name="errorMessage" type="string"/>
     </transfer>
@@ -315,7 +315,7 @@
 
     <transfer name="VertexShippingWarehouse" strict="true">
         <property name="quantity" type="int"/>
-         <property name="warehouseAddress" type="Address"/>
+        <property name="warehouseAddress" type="VertexAddress"/>
     </transfer>
 
     <transfer name="VertexAddress" strict="true">
