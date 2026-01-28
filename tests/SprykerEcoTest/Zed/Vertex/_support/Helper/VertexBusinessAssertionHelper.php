@@ -90,7 +90,7 @@ class VertexBusinessAssertionHelper extends Module
         $expectation = $this->haveExpectedTaxQuotationRequestSaleItems();
 
         $vertexClientMock->expects(new InvokedCountMatcher(1))
-            ->method('requestTaxQuotation')
+            ->method('calculateTax')
             ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($mockedCalculableObjectTransfer) {
                 self::assertEquals(
                     $mockedCalculableObjectTransfer->getItems()->count(),

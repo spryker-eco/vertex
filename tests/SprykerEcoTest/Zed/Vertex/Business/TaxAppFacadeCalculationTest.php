@@ -15,8 +15,6 @@ use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
 use Ramsey\Uuid\Uuid;
-use Spryker\Client\TaxApp\TaxAppClient;
-use Spryker\Client\TaxApp\TaxAppClientInterface;
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\DiscountAmountAggregatorForGenericAmountPlugin;
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\GrandTotalCalculatorPlugin;
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemDiscountAmountFullAggregatorPlugin;
@@ -463,13 +461,18 @@ class TaxAppFacadeCalculationTest extends Unit
         $expectedCountryCode = $this->storeTransfer->getCountries()[0];
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
 
-        $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
+        $vertexClient = $this->createMock(VertexClient::class);
+        $vertexClient->expects($this->once())->method('authenticate')->willReturn(
+            (new VertexAuthResponseTransfer())
+                ->setAccessToken('test-token')
+                ->setExpiresIn(1000)
+        );
+        $this->tester->mockFactoryMethod('getVertexClient', $vertexClient);
 
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
 
         // Assert
-        $taxAppClientMock->expects(new InvokedCountMatcher(1))
+        $vertexClient->expects(new InvokedCountMatcher(1))
             ->method('calculateTax')
             ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($expectedCountryCode) {
                 self::assertSame($expectedCountryCode, $vertexCalculationRequestTransfer->getSale()->getSellerCountryCode());
@@ -491,13 +494,18 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->tester->mockConfigMethod('getSellerCountryCode', 'FR');
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
 
-        $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
+        $vertexClientMock = $this->createMock(VertexClient::class);
+        $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
+            (new VertexAuthResponseTransfer())
+                ->setAccessToken('test-token')
+                ->setExpiresIn(1000)
+        );
+        $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
 
         // Assert
-        $taxAppClientMock->expects(new InvokedCountMatcher(1))
+        $vertexClientMock->expects(new InvokedCountMatcher(1))
             ->method('calculateTax')
             ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) {
                 self::assertSame('FR', $vertexCalculationRequestTransfer->getSale()->getSellerCountryCode());
@@ -520,13 +528,18 @@ class TaxAppFacadeCalculationTest extends Unit
         $expectedCountryCode = $this->storeTransfer->getCountries()[0];
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
 
-        $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
+        $vertexClientMock = $this->createMock(VertexClient::class);
+        $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
+            (new VertexAuthResponseTransfer())
+                ->setAccessToken('test-token')
+                ->setExpiresIn(1000)
+        );
+        $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, 'GROSS_MODE', false);
 
         // Assert
-        $taxAppClientMock->expects(new InvokedCountMatcher(1))
+        $vertexClientMock->expects(new InvokedCountMatcher(1))
             ->method('calculateTax')
             ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($expectedCountryCode) {
                 self::assertSame($expectedCountryCode, $vertexCalculationRequestTransfer->getSale()->getCustomerCountryCode());
@@ -548,13 +561,18 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->tester->mockConfigMethod('getCustomerCountryCode', 'FR');
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
 
-        $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
+        $vertexClientMock = $this->createMock(VertexClient::class);
+        $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
+            (new VertexAuthResponseTransfer())
+                ->setAccessToken('test-token')
+                ->setExpiresIn(1000)
+        );
+        $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, 'GROSS_MODE', false);
 
         // Assert
-        $taxAppClientMock->expects(new InvokedCountMatcher(1))
+        $vertexClientMock->expects(new InvokedCountMatcher(1))
             ->method('calculateTax')
             ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) {
                 self::assertSame('FR', $vertexCalculationRequestTransfer->getSale()->getCustomerCountryCode());
@@ -576,13 +594,18 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->tester->mockConfigMethod('getCustomerCountryCode', 'FR');
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
 
-        $taxAppClientMock = $this->createMock(TaxAppClient::class);
-        $this->tester->mockFactoryMethod('getVertexClient', $taxAppClientMock);
+        $vertexClientMock = $this->createMock(VertexClient::class);
+        $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
+            (new VertexAuthResponseTransfer())
+                ->setAccessToken('test-token')
+                ->setExpiresIn(1000)
+        );
+        $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer, 'GROSS_MODE', true, ['iso2Code' => 'FOO']);
 
         // Assert
-        $taxAppClientMock->expects(new InvokedCountMatcher(1))
+        $vertexClientMock->expects(new InvokedCountMatcher(1))
             ->method('calculateTax')
             ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) {
                 self::assertSame('FOO', $vertexCalculationRequestTransfer->getSale()->getCustomerCountryCode());
