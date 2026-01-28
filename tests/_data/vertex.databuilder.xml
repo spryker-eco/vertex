@@ -70,7 +70,6 @@
 
     <transfer name="VertexShippingWarehouse" strict="true">
         <property name="quantity" dataBuilderRule="numberBetween(1, 9)"/>
-         <property name="vertexWarehouseAddress" dataBuilderRule="VertexAddress"/>
     </transfer>
 
     <transfer name="VertexShipment" strict="true">
@@ -87,14 +86,6 @@
         <property name="state" dataBuilderRule="lexify('??????????')"/>
         <property name="country" dataBuilderRule="lexify('??????????')"/>
         <property name="zipCode" dataBuilderRule="lexify('??????????')"/>
-    </transfer>
-
-    <transfer name="VertexCalculationRequest" strict="true">
-        <property name="sale" dataBuilderRule="VertexSale"/>
-    </transfer>
-
-    <transfer name="TaxRefundRequest" strict="true">
-        <!-- <property name="sale" dataBuilderRule="VertexSale"/> -->
     </transfer>
 
 </transfers>
