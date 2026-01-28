@@ -89,8 +89,8 @@
         <property name="zipCode" dataBuilderRule="lexify('??????????')"/>
     </transfer>
 
-    <transfer name="TaxCalculationRequest" strict="true">
-        <!-- <property name="sale" dataBuilderRule="VertexSale"/> -->
+    <transfer name="VertexCalculationRequest" strict="true">
+        <property name="sale" dataBuilderRule="VertexSale"/>
     </transfer>
 
     <transfer name="TaxRefundRequest" strict="true">

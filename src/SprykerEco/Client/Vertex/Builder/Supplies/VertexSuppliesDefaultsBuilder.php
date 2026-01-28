@@ -7,7 +7,7 @@
 
 namespace SprykerEco\Client\Vertex\Builder\Supplies;
 
-use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexLocationTransfer;
 use Generated\Shared\Transfer\VertexSellerTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
@@ -16,17 +16,17 @@ use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
 class VertexSuppliesDefaultsBuilder implements VertexSuppliesRequestBuilderInterface
 {
     /**
-     * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
      * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
      *
      * @return \Generated\Shared\Transfer\VertexSuppliesTransfer
      */
     public function build(
-        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexSuppliesTransfer $vertexSuppliesTransfer
     ): VertexSuppliesTransfer {
-        $vertexConfigTransfer = $taxCalculationRequestTransfer->getVertexConfigurationOrFail();
-        $saleTransfer = $taxCalculationRequestTransfer->getSaleOrFail();
+        $vertexConfigTransfer = $vertexCalculationRequestTransfer->getVertexConfigurationOrFail();
+        $saleTransfer = $vertexCalculationRequestTransfer->getSaleOrFail();
 
         $seller = $vertexSuppliesTransfer->getSeller() ?? new VertexSellerTransfer();
 
@@ -41,7 +41,7 @@ class VertexSuppliesDefaultsBuilder implements VertexSuppliesRequestBuilderInter
         }
 
         $vertexSuppliesTransfer->setSeller($seller);
-        $vertexSuppliesTransfer->setReturnAssistedParametersIndicator($taxCalculationRequestTransfer->getVertexConfigurationOrFail()->getIsTaxAssistEnabledOrFail());
+        $vertexSuppliesTransfer->setReturnAssistedParametersIndicator($vertexCalculationRequestTransfer->getVertexConfigurationOrFail()->getIsTaxAssistEnabledOrFail());
 
         return $vertexSuppliesTransfer;
     }

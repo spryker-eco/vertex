@@ -7,8 +7,8 @@
 
 namespace SprykerEco\Client\Vertex\TaxCalculator;
 
-use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
-use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigCriteriaTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
@@ -53,27 +53,27 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
      * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
      *
-     * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
     public function calculateTax(
-        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexConfigTransfer $vertexConfigTransfer
-    ): TaxCalculationResponseTransfer {
+    ): VertexCalculationResponseTransfer {
         if (!$vertexConfigTransfer->getIsActive()) {
-            return $this->responseBuilder->buildErrorResponse($taxCalculationRequestTransfer, static::ERROR_MESSAGE_INACTIVE_VERTEX_APP);
+            return $this->responseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, static::ERROR_MESSAGE_INACTIVE_VERTEX_APP);
         }
 
-        $vertexApiAccessTokenTransfer = $taxCalculationRequestTransfer->getVertexApiAccessToken();
+        $vertexApiAccessTokenTransfer = $vertexCalculationRequestTransfer->getVertexApiAccessToken();
 
         if (!$vertexApiAccessTokenTransfer?->getAccessToken()) {
-            return $this->responseBuilder->buildErrorResponse($taxCalculationRequestTransfer, static::ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN);
+            return $this->responseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, static::ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN);
         }
 
         $vertexSuppliesRequestTransfer = $this->vertexSuppliesRequestBuilder->build(
-            $taxCalculationRequestTransfer,
+            $vertexCalculationRequestTransfer,
             (new VertexSuppliesTransfer()),
         );
 
@@ -91,9 +91,9 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
         );
 
         if (!$vertexApiResponseTransfer->getIsSuccessful()) {
-            return $this->responseBuilder->buildErrorResponse($taxCalculationRequestTransfer, $vertexApiResponseTransfer->getErrorMessage());
+            return $this->responseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, $vertexApiResponseTransfer->getErrorMessage());
         }
 
-        return $this->responseBuilder->buildResponse($vertexApiResponseTransfer, $taxCalculationRequestTransfer, $lineItemIdToInitialIdentifierMapping);
+        return $this->responseBuilder->buildResponse($vertexApiResponseTransfer, $vertexCalculationRequestTransfer, $lineItemIdToInitialIdentifierMapping);
     }
 }

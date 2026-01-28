@@ -11,8 +11,8 @@ use Generated\Shared\Transfer\ApiErrorMessageTransfer;
 use Generated\Shared\Transfer\CalculableObjectTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
-use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
-use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\TaxTotalTransfer;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 use Spryker\Shared\Log\LoggerTrait;
@@ -67,27 +67,27 @@ class VertexCalculator implements VertexCalculatorInterface
             return;
         }
 
-        $taxCalculationResponseTransfer = $this->getCachedVertexResponseTransfer($calculableObjectTransfer, $vertexSaleTransfer);
+        $vertexCalculationResponseTransfer = $this->getCachedVertexResponseTransfer($calculableObjectTransfer, $vertexSaleTransfer);
 
-        if (!$taxCalculationResponseTransfer) {
-            $taxCalculationResponseTransfer = $this->getTaxCalculationResponse($vertexSaleTransfer, $vertexConfigTransfer);
+        if (!$vertexCalculationResponseTransfer) {
+            $vertexCalculationResponseTransfer = $this->getVertexCalculationResponse($vertexSaleTransfer, $vertexConfigTransfer);
 
-            if (!$taxCalculationResponseTransfer->getIsSuccessful()) {
+            if (!$vertexCalculationResponseTransfer->getIsSuccessful()) {
                 $apiErrorMessages = array_map(function (ApiErrorMessageTransfer $apiErrorMessageTransfer) {
                     return $apiErrorMessageTransfer->toArray();
-                }, $taxCalculationResponseTransfer->getApiErrorMessages()->getArrayCopy());
+                }, $vertexCalculationResponseTransfer->getApiErrorMessages()->getArrayCopy());
                 $this->getLogger()->error('Tax calculation failed.', ['apiErrorMessages' => $apiErrorMessages]);
 
                 $vertexSaleTransfer = $this->resetVertexSaleTaxTotals($vertexSaleTransfer);
-                $taxCalculationResponseTransfer->setSale($vertexSaleTransfer);
+                $vertexCalculationResponseTransfer->setSale($vertexSaleTransfer);
             }
         }
 
-        $calculableObjectTransfer = $this->priceAggregator->calculatePriceAggregation($taxCalculationResponseTransfer->getSaleOrFail(), $calculableObjectTransfer);
+        $calculableObjectTransfer = $this->priceAggregator->calculatePriceAggregation($vertexCalculationResponseTransfer->getSaleOrFail(), $calculableObjectTransfer);
 
-        if ($taxCalculationResponseTransfer->getIsSuccessful()) {
+        if ($vertexCalculationResponseTransfer->getIsSuccessful()) {
             $calculableObjectTransfer->setVertexSaleHash($this->getVertexSaleHash($vertexSaleTransfer));
-            $calculableObjectTransfer->setTaxCalculationResponse($taxCalculationResponseTransfer);
+            $calculableObjectTransfer->setVertexCalculationResponse($vertexCalculationResponseTransfer);
         }
     }
 
@@ -109,17 +109,17 @@ class VertexCalculator implements VertexCalculatorInterface
      * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
      * @param \Generated\Shared\Transfer\StoreTransfer $storeTransfer
      *
-     * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
-    protected function getTaxCalculationResponse(
+    protected function getVertexCalculationResponse(
         VertexSaleTransfer $vertexSaleTransfer,
         VertexConfigTransfer $vertexConfigTransfer
-    ): TaxCalculationResponseTransfer {
+    ): VertexCalculationResponseTransfer {
         $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 
         //TODO: Add an early return if the access token is not available
         return $this->vertexClient->calculateTax(
-            (new TaxCalculationRequestTransfer())
+            (new VertexCalculationRequestTransfer())
                 ->setSale($vertexSaleTransfer)
                 ->setAuthorization($vertexApiAccessTokenTransfer->getAccessToken()), // TODO: refactor ???
             $vertexConfigTransfer
@@ -134,7 +134,7 @@ class VertexCalculator implements VertexCalculatorInterface
     protected function getCachedVertexResponseTransfer(
         CalculableObjectTransfer $calculableObjectTransfer,
         VertexSaleTransfer $vertexSaleTransfer
-    ): ?TaxCalculationResponseTransfer {
+    ): ?VertexCalculationResponseTransfer {
         $currentTaxRequestHash = null;
 
         if ($calculableObjectTransfer->getVertexSaleHash()) {
@@ -142,8 +142,8 @@ class VertexCalculator implements VertexCalculatorInterface
         }
 
         // Quote was not changed since last tax calculation request. Tax calculation is skipped.
-        if ($currentTaxRequestHash === $calculableObjectTransfer->getVertexSaleHash() && $calculableObjectTransfer->getTaxCalculationResponse()) {
-            return $calculableObjectTransfer->getTaxCalculationResponse();
+        if ($currentTaxRequestHash === $calculableObjectTransfer->getVertexSaleHash() && $calculableObjectTransfer->getVertexCalculationResponse()) {
+            return $calculableObjectTransfer->getVertexCalculationResponse();
         }
 
         return null;

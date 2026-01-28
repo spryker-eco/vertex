@@ -11,7 +11,7 @@ use Codeception\Module;
 use Generated\Shared\Transfer\CalculableObjectTransfer;
 use Generated\Shared\Transfer\TaxAppApiUrlsTransfer;
 use Generated\Shared\Transfer\TaxAppConfigTransfer;
-use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfigQuery;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
@@ -41,10 +41,10 @@ class VertexBusinessAssertionHelper extends Module
 
         $taxAppClientMock->expects(new InvokedCountMatcher(1))
             ->method('requestTaxQuotation')
-            ->with(new Callback(function (TaxCalculationRequestTransfer $taxCalculationRequestTransfer) use ($expectation) {
+            ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($expectation) {
                 $index = 0;
 
-                foreach ($taxCalculationRequestTransfer->getSale()->getItems() as $saleItem) {
+                foreach ($vertexCalculationRequestTransfer->getSale()->getItems() as $saleItem) {
                     foreach ($saleItem->getShippingWarehouses() as $quantityWarehouseMap) {
                         $saleItemExpectation = $expectation[$index++];
 
@@ -102,14 +102,14 @@ class VertexBusinessAssertionHelper extends Module
 
         $taxAppClientMock->expects(new InvokedCountMatcher(1))
             ->method('requestTaxQuotation')
-            ->with(new Callback(function (TaxCalculationRequestTransfer $taxCalculationRequestTransfer) use ($mockedCalculableObjectTransfer) {
+            ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($mockedCalculableObjectTransfer) {
                 self::assertEquals(
                     $mockedCalculableObjectTransfer->getItems()->count(),
-                    $taxCalculationRequestTransfer->getSale()->getItems()->count(),
+                    $vertexCalculationRequestTransfer->getSale()->getItems()->count(),
                     'Sale items count must match with Calculated Object',
                 );
 
-                foreach ($taxCalculationRequestTransfer->getSale()->getItems() as $index => $saleItem) {
+                foreach ($vertexCalculationRequestTransfer->getSale()->getItems() as $index => $saleItem) {
                     /** @var \SprykerEcoTest\Zed\Vertex\Helper\ItemTransfer $calculableObjectItem */
                     $calculableObjectItem = $mockedCalculableObjectTransfer->getItems()->offsetGet($index);
 

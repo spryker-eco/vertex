@@ -80,9 +80,9 @@ class RefundProcessor implements RefundProcessorInterface
         $vertexSaleTransfer = $this->vertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
 
         if (!$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsInvoicingEnabled()) {
-            $taxCalculationResponseTransfer = new TaxCalculationResponseTransfer();
-            $taxCalculationResponseTransfer->setIsSuccessful(false);
-            $taxCalculationResponseTransfer->setErrorMessage('App is Inactive or configured to not submit void invoice');
+            $vertexCalculationResponseTransfer = new VertexCalculationResponseTransfer();
+            $vertexCalculationResponseTransfer->setIsSuccessful(false);
+            $vertexCalculationResponseTransfer->setErrorMessage('App is Inactive or configured to not submit void invoice');
 
             return;
         }
@@ -91,7 +91,7 @@ class RefundProcessor implements RefundProcessorInterface
 
         //TODO: Add an early return if the access token is not available
         $this->vertexClient->calculateTax(
-            (new TaxCalculationRequestTransfer())
+            (new VertexCalculationRequestTransfer())
                 ->setSale($vertexSaleTransfer)
                 ->setReportingDate((new DateTime())->format('Y-m-d'))
                 ->setAuthorization($vertexApiAccessTokenTransfer->getAccessToken()), // TODO: refactor ???

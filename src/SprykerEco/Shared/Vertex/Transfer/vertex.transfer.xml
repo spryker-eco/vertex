@@ -11,7 +11,7 @@
         <property name="expenses" type="Expense[]" singular="expense"/>
         <property name="originalOrder" type="Order"/>
         <property name="vertexSaleHash" type="string" strict="true"/>
-        <property name="taxCalculationResponse" type="TaxCalculationResponse" strict="true"/>
+        <property name="vertexCalculationResponse" type="VertexCalculationResponse" strict="true"/>
     </transfer>
 
     <transfer name="Order">
@@ -116,13 +116,13 @@
         <property name="billingAddress" type="VertexAddress"/>
     </transfer>
 
-    <transfer name="TaxCalculationRequest" strict="true">
+    <transfer name="VertexCalculationRequest" strict="true">
         <!-- <property name="sale" type="VertexSale"/> -->
         <property name="vertexApiAccessToken" type="VertexApiAccessToken"/>
         <property name="reportingDate" type="string"/>
     </transfer>
 
-    <transfer name="TaxCalculationResponse" strict="true">
+    <transfer name="VertexCalculationResponse" strict="true">
         <!-- <property name="sale" type="VertexSale"/> -->
         <property name="isSuccessful" type="bool"/>
         <property name="errorMessage" type="string"/>
@@ -174,7 +174,7 @@
         <property name="billingAddress" type="Address"/>
         <property name="hideTaxInCart" type="bool" strict="true"/>
         <property name="vertexSaleHash" type="string" strict="true"/>
-        <property name="taxCalculationResponse" type="TaxCalculationResponse" strict="true"/>
+        <property name="vertexCalculationResponse" type="VertexCalculationResponse" strict="true"/>
         <property name="taxVendor" type="string" strict="true"/>
     </transfer>
 

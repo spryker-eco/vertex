@@ -10,7 +10,7 @@ namespace SprykerEco\Zed\Vertex\Business\Payment;
 use Generated\Shared\Transfer\MessageAttributesTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer;
-use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Spryker\Shared\Log\LoggerTrait;
 use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface;
@@ -22,7 +22,7 @@ use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
-use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 
 class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerInterface
 {
@@ -75,28 +75,28 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
 
         $vertexApiAccessTokenTransfer = $this->accessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 
-        $taxCalculationRequestTransfer = (new TaxCalculationRequestTransfer())
+        $vertexCalculationRequestTransfer = (new VertexCalculationRequestTransfer())
             ->setSale($vertexSaleTransfer)
             ->setVertexApiAccessToken($vertexApiAccessTokenTransfer);
 
         $this->getLogger()->info(
             'Starting tax calculation request for invoicing process',
             [
-                'transactionId' => $taxCalculationRequestTransfer->getSale()->getTransactionId(),
-                'requestTransfer' => $taxCalculationRequestTransfer->modifiedToArray(),
+                'transactionId' => $vertexCalculationRequestTransfer->getSale()->getTransactionId(),
+                'requestTransfer' => $vertexCalculationRequestTransfer->modifiedToArray(),
             ],
         );
 
-//        $taxCalculationResponseTransfer = (new TaxCalculationResponseTransfer())->setSale(
+//        $vertexCalculationResponseTransfer = (new VertexCalculationResponseTransfer())->setSale(
 //            (new VertexSaleTransfer())->setTaxTotal(100000)
 //        ); // TODO: remove
-        $taxCalculationResponseTransfer = $this->vertexClient->calculateTax($taxCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexCalculationResponseTransfer = $this->vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
 
         $this->getLogger()->info(
             'Finished tax calculation request for invoicing process',
             [
-                'transactionId' => $taxCalculationRequestTransfer->getSale()->getTransactionId(),
-                'responseTransfer' => $taxCalculationResponseTransfer->modifiedToArray(),
+                'transactionId' => $vertexCalculationRequestTransfer->getSale()->getTransactionId(),
+                'responseTransfer' => $vertexCalculationResponseTransfer->modifiedToArray(),
             ],
         );
     }

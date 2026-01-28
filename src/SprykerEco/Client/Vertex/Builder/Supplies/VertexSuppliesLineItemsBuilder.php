@@ -10,7 +10,7 @@ namespace SprykerEco\Client\Vertex\Builder\Supplies;
 use Generated\Shared\Transfer\SaleItemTransfer;
 use Generated\Shared\Transfer\SaleTransfer;
 use Generated\Shared\Transfer\ShippingWarehouseTransfer;
-use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCustomerTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
 use Generated\Shared\Transfer\VertexLocationTransfer;
@@ -43,16 +43,16 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
     }
 
     /**
-     * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
      * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
      *
      * @return \Generated\Shared\Transfer\VertexSuppliesTransfer
      */
     public function build(
-        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexSuppliesTransfer $vertexSuppliesTransfer
     ): VertexSuppliesTransfer {
-        $saleTransfer = $taxCalculationRequestTransfer->getSaleOrFail();
+        $saleTransfer = $vertexCalculationRequestTransfer->getSaleOrFail();
         foreach ($saleTransfer->getItems() as $item) {
             if (!$this->hasItemMultipleWarehouses($item)) {
                 $vertexSuppliesTransfer = $this->buildWithSingleWarehouse($saleTransfer, $item, $vertexSuppliesTransfer);

@@ -7,24 +7,24 @@
 
 namespace SprykerEco\Client\Vertex\Builder\Supplies;
 
-use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
 use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
 
 class VertexSuppliesTransactionIdBuilder implements VertexSuppliesRequestBuilderInterface
 {
     /**
-     * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
      * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
      *
      * @return \Generated\Shared\Transfer\VertexSuppliesTransfer
      */
     public function build(
-        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexSuppliesTransfer $vertexSuppliesTransfer
     ): VertexSuppliesTransfer {
         return $vertexSuppliesTransfer->setTransactionId(
-            $taxCalculationRequestTransfer->getSaleOrFail()->getTransactionIdOrFail(),
+            $vertexCalculationRequestTransfer->getSaleOrFail()->getTransactionIdOrFail(),
         );
     }
 }
