@@ -10,8 +10,8 @@ namespace SprykerEco\Client\Vertex;
 use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceResponseTransfer;
 use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer;
 use Generated\Shared\Transfer\TaxamoApiRequestTransfer;
-use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
-use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
 use Generated\Shared\Transfer\TaxIdValidationResponseTransfer;
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
@@ -45,15 +45,15 @@ interface VertexClientInterface
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
      * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
      *
-     * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
     public function calculateTax(
-        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexConfigTransfer $vertexConfigTransfer
-    ): TaxCalculationResponseTransfer;
+    ): VertexCalculationResponseTransfer;
 
     /**
      * Specification:

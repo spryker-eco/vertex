@@ -7,7 +7,7 @@
 
 namespace SprykerEco\Client\Vertex\Builder\Supplies;
 
-use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
 use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
@@ -28,16 +28,16 @@ class VertexSuppliesShipmentBuilder implements VertexSuppliesRequestBuilderInter
     }
 
     /**
-     * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
      * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
      *
      * @return \Generated\Shared\Transfer\VertexSuppliesTransfer
      */
     public function build(
-        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexSuppliesTransfer $vertexSuppliesTransfer
     ): VertexSuppliesTransfer {
-        foreach ($taxCalculationRequestTransfer->getSaleOrFail()->getShipments() as $shipment) {
+        foreach ($vertexCalculationRequestTransfer->getSaleOrFail()->getShipments() as $shipment) {
             $vertexLineItemTransfer = new VertexLineItemTransfer();
             foreach ($this->vertexLineItemBuilders as $builder) {
                 $vertexLineItemTransfer = $builder->build($shipment, $vertexLineItemTransfer);

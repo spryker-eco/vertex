@@ -7,8 +7,8 @@
 
 namespace SprykerEco\Client\Vertex\ResponseBuilder;
 
-use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
-use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
 use SprykerEco\Client\Vertex\Builder\PriceConverter;
 
@@ -26,21 +26,21 @@ class VertexSuppliesResponseBuilder implements VertexSuppliesResponseBuilderInte
 
     /**
      * @param \Generated\Shared\Transfer\VertexApiResponseTransfer $vertexApiResponseTransfer
-     * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
      * @param array<string, string> $lineItemIdToInitialIdentifierMapping
      *
-     * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
     public function buildResponse(
         VertexApiResponseTransfer $vertexApiResponseTransfer,
-        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         array $lineItemIdToInitialIdentifierMapping
-    ): TaxCalculationResponseTransfer {
+    ): VertexCalculationResponseTransfer {
         $vertexResponse = $vertexApiResponseTransfer->getVertexResponse();
 
         $lineItemTaxes = $this->getLineItemTaxesIndexedByLineItemId($vertexResponse, $lineItemIdToInitialIdentifierMapping);
 
-        $saleTransfer = $taxCalculationRequestTransfer->getSale();
+        $saleTransfer = $vertexCalculationRequestTransfer->getSale();
 
         // Total tax calculated for the order
         $totalTax = $vertexResponse['data']['totalTax'];
@@ -90,7 +90,7 @@ class VertexSuppliesResponseBuilder implements VertexSuppliesResponseBuilderInte
         $saleTransfer->setTaxTotal($this->priceConverter->convertPriceForSpryker($taxTotal));
         $saleTransfer->setRefundedTaxTotal($this->priceConverter->convertPriceForSpryker($refundedTaxTotal));
 
-        return (new TaxCalculationResponseTransfer())
+        return (new VertexCalculationResponseTransfer())
             ->setSale($saleTransfer)
             ->setIsSuccessful(true);
     }
@@ -122,17 +122,17 @@ class VertexSuppliesResponseBuilder implements VertexSuppliesResponseBuilderInte
     }
 
     /**
-     * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
      * @param string $errorMessage
      *
-     * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
     public function buildErrorResponse(
-        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         string $errorMessage
-    ): TaxCalculationResponseTransfer {
-        return (new TaxCalculationResponseTransfer())
-            ->setSale($taxCalculationRequestTransfer->getSale())
+    ): VertexCalculationResponseTransfer {
+        return (new VertexCalculationResponseTransfer())
+            ->setSale($vertexCalculationRequestTransfer->getSale())
             ->setIsSuccessful(false)
             ->setErrorMessage($errorMessage);
     }

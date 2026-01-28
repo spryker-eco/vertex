@@ -20,8 +20,8 @@ use Generated\Shared\DataBuilder\TaxAppConfigConditionsBuilder;
 use Generated\Shared\DataBuilder\TaxAppConfigCriteriaBuilder;
 use Generated\Shared\DataBuilder\TaxAppSaleBuilder;
 use Generated\Shared\DataBuilder\TaxAppValidationRequestBuilder;
-use Generated\Shared\DataBuilder\TaxCalculationRequestBuilder;
-use Generated\Shared\DataBuilder\TaxCalculationResponseBuilder;
+use Generated\Shared\DataBuilder\VertexCalculationRequestBuilder;
+use Generated\Shared\DataBuilder\VertexCalculationResponseBuilder;
 use Generated\Shared\DataBuilder\TaxRefundRequestBuilder;
 use Generated\Shared\Transfer\CalculableObjectTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
@@ -32,8 +32,8 @@ use Generated\Shared\Transfer\TaxAppConfigCriteriaTransfer;
 use Generated\Shared\Transfer\TaxAppConfigTransfer;
 use Generated\Shared\Transfer\TaxAppSaleTransfer;
 use Generated\Shared\Transfer\TaxAppValidationRequestTransfer;
-use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
-use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\TaxRefundRequestTransfer;
 use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfig;
 use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfigQuery;
@@ -407,11 +407,11 @@ class VertexDataHelper extends Module
     /**
      * @param array $seed
      *
-     * @return \Generated\Shared\Transfer\TaxCalculationRequestTransfer
+     * @return \Generated\Shared\Transfer\VertexCalculationRequestTransfer
      */
-    public function haveTaxCalculationRequestTransfer(array $seed = []): TaxCalculationRequestTransfer
+    public function haveVertexCalculationRequestTransfer(array $seed = []): VertexCalculationRequestTransfer
     {
-        return (new TaxCalculationRequestBuilder())->seed($seed)->withSale($this->haveTaxAppSaleTransfer()->toArray())->build();
+        return (new VertexCalculationRequestBuilder())->seed($seed)->withSale($this->haveTaxAppSaleTransfer()->toArray())->build();
     }
 
     /**
@@ -428,14 +428,14 @@ class VertexDataHelper extends Module
      * @param array $seed
      * @param array<\Generated\Shared\Transfer\ItemTransfer> $items
      *
-     * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
-    public function haveTaxCalculationResponseTransfer(array $seed = [], array $items = []): TaxCalculationResponseTransfer
+    public function haveVertexCalculationResponseTransfer(array $seed = [], array $items = []): VertexCalculationResponseTransfer
     {
         $saleTransfer = $this->haveTaxAppSaleTransfer($seed, $items);
         $saleTransfer->setTaxTotal($this->getTaxAppItemsTaxTotals($saleTransfer->getItems()));
 
-        return (new TaxCalculationResponseBuilder())->seed($seed)->withSale($saleTransfer->toArray())->build();
+        return (new VertexCalculationResponseBuilder())->seed($seed)->withSale($saleTransfer->toArray())->build();
     }
 
     /**

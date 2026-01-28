@@ -83,7 +83,7 @@
         <property name="zipCode" dataBuilderRule="lexify('??????????')"/>
     </transfer>
 
-    <transfer name="TaxCalculationRequest" strict="true">
+    <transfer name="VertexCalculationRequest" strict="true">
         <property name="sale" dataBuilderRule="VertexSale"/>
     </transfer>
 

@@ -33,7 +33,8 @@ use Generated\Shared\Transfer\QuoteTransfer;
 use Generated\Shared\Transfer\StockAddressTransfer;
 use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\TaxAppConfigTransfer;
-use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
+use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfig;
 use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfigQuery;
 use Orm\Zed\TaxApp\Persistence\SpyTaxIdValidationHistoryQuery;
@@ -420,18 +421,23 @@ class VertexBusinessTester extends Actor
             'getAccessToken' => $accessTokenResponseTransfer,
         ]);
 
-        $this->mockFactoryMethod('getOauthClientFacade', $oauthClientFacadeBridgeMock);
+//        $this->mockFactoryMethod('getOauthClientFacade', $oauthClientFacadeBridgeMock);
     }
 
     /**
-     * @param \Generated\Shared\Transfer\TaxCalculationResponseTransfer $taxCalculationResponseTransfer
+     * @param \Generated\Shared\Transfer\VertexCalculationResponseTransfer $vertexCalculationResponseTransfer
      *
      * @return void
      */
-    public function mockVertexClientWithTaxCalculationResponse(TaxCalculationResponseTransfer $taxCalculationResponseTransfer): void
+    public function mockVertexClientWithVertexCalculationResponse(VertexCalculationResponseTransfer $vertexCalculationResponseTransfer): void
     {
         $vertexClientMock = Stub::makeEmpty(VertexClient::class);
-        $vertexClientMock->expects(Expected::once()->getMatcher())->method('calculateTax')->willReturn($taxCalculationResponseTransfer);
+        $vertexClientMock->expects(Expected::once()->getMatcher())->method('calculateTax')->willReturn($vertexCalculationResponseTransfer);
+        $vertexClientMock->expects(Expected::once()->getMatcher())->method('authenticate')->willReturn(
+            (new VertexAuthResponseTransfer())
+                ->setAccessToken('some-access-token')
+                ->setExpiresIn(100000)
+        );
         $this->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
         $this->mockOauthClient();

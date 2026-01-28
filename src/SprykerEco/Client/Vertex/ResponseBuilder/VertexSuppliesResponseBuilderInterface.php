@@ -7,33 +7,33 @@
 
 namespace SprykerEco\Client\Vertex\ResponseBuilder;
 
-use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
-use Generated\Shared\Transfer\TaxCalculationResponseTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
 
 interface VertexSuppliesResponseBuilderInterface
 {
     /**
      * @param \Generated\Shared\Transfer\VertexApiResponseTransfer $vertexApiResponseTransfer
-     * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
      * @param array<string, string> $lineItemIdToInitialIdentifierMapping
      *
-     * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
     public function buildResponse(
         VertexApiResponseTransfer $vertexApiResponseTransfer,
-        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         array $lineItemIdToInitialIdentifierMapping
-    ): TaxCalculationResponseTransfer;
+    ): VertexCalculationResponseTransfer;
 
     /**
-     * @param \Generated\Shared\Transfer\TaxCalculationRequestTransfer $taxCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
      * @param string $errorMessage
      *
-     * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
     public function buildErrorResponse(
-        TaxCalculationRequestTransfer $taxCalculationRequestTransfer,
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         string $errorMessage
-    ): TaxCalculationResponseTransfer;
+    ): VertexCalculationResponseTransfer;
 }
