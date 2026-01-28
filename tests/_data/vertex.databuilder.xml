@@ -11,17 +11,23 @@
     </transfer>
 
     <transfer name="VertexConfig" strict="true">
-        <property name="applicationId" dataBuilderRule="lexify('??????????')"/>
-        <property name="apiUrls" dataBuilderRule="VertexApiUrls"/>
+        <property name="clientId" dataBuilderRule="lexify('??????????')"/>
+        <property name="clientSecret" dataBuilderRule="lexify('??????????')"/>
+        <property name="securityUri" dataBuilderRule="lexify('??????????')"/>
+        <property name="idVertexConfig" dataBuilderRule="lexify('????')"/>
+        <property name="storeReference" dataBuilderRule="lexify('??????????')"/>
+        <property name="credentialHash" dataBuilderRule="lexify('???????????????')"/>
+        <property name="taxamoToken" dataBuilderRule="lexify('??????????')"/>
+        <property name="taxamoApiUrl" dataBuilderRule="lexify('??????????')"/>
+        <property name="isTaxIdValidatorEnabled" type="bool"/>
+        <property name="transactionCallsUri" dataBuilderRule="lexify('??????????')"/>
+        <property name="isActive" type="bool"/>
+        <property name="isInvoicingEnabled" type="bool"/>
+        <property name="isTaxAssistEnabled" type="bool"/>
+        <property name="defaultTaxpayerCompanyCode" dataBuilderRule="lexify('??????????')"/>
+        <property name="createdAt" type="string"/>
+        <property name="updatedAt" type="string"/>
         <property name="vendorCode" dataBuilderRule="lexify('??????????')"/>
-        <property name="storeReference" dataBuilderRule="=de-DE"/>
-        <property name="tenantIdentifier" dataBuilderRule="lexify('??????????')"/>
-    </transfer>
-
-    <transfer name="VertexApiUrls" strict="true">
-        <property name="quotationUrl" dataBuilderRule="lexify('??????????')"/>
-        <property name="refundsUrl" dataBuilderRule="lexify('??????????')"/>
-        <property name="taxIdValidationUrl" dataBuilderRule="lexify('??????????')"/>
     </transfer>
 
     <transfer name="VertexConfigCriteria" strict="true">
@@ -64,7 +70,7 @@
 
     <transfer name="ShippingWarehouse" strict="true">
         <property name="quantity" dataBuilderRule="numberBetween(1, 9)"/>
-        <property name="warehouseAddress" dataBuilderRule="VertexAddress"/>
+        <!-- <property name="warehouseAddress" dataBuilderRule="VertexAddress"/> -->
     </transfer>
 
     <transfer name="VertexShipment" strict="true">
@@ -84,11 +90,11 @@
     </transfer>
 
     <transfer name="TaxCalculationRequest" strict="true">
-        <property name="sale" dataBuilderRule="VertexSale"/>
+        <!-- <property name="sale" dataBuilderRule="VertexSale"/> -->
     </transfer>
 
     <transfer name="TaxRefundRequest" strict="true">
-        <property name="sale" dataBuilderRule="VertexSale"/>
+        <!-- <property name="sale" dataBuilderRule="VertexSale"/> -->
     </transfer>
 
 </transfers>

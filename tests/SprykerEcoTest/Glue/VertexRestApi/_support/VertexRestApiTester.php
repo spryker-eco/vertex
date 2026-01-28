@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerEcoTest\Glue\VertexRestApi;
 
 use Codeception\Actor;
+use Generated\Shared\DataBuilder\RestVertexValidationAttributesBuilder;
 use Generated\Shared\Transfer\RestVertexValidationAttributesTransfer;
 
 /**

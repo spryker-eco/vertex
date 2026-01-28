@@ -5,21 +5,21 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerTest\Glue\TaxAppRestApi\Controller;
+namespace SprykerTest\Glue\VertexRestApi\Controller;
 
 use Codeception\Stub;
 use Codeception\Test\Unit;
-use Generated\Shared\Transfer\RestTaxAppValidationAttributesTransfer;
-use Generated\Shared\Transfer\TaxAppValidationRequestTransfer;
-use Generated\Shared\Transfer\TaxAppValidationResponseTransfer;
+use Generated\Shared\Transfer\RestVertexValidationAttributesTransfer;
+use Generated\Shared\Transfer\VertexValidationRequestTransfer;
+use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceBuilder;
 use Spryker\Glue\GlueApplication\Rest\Request\Data\MetadataInterface;
 use Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface;
-use Spryker\Glue\TaxAppRestApi\Controller\TaxIdValidationController;
-use Spryker\Glue\TaxAppRestApi\Dependency\TaxAppRestApiToGlossaryStorageClientInterface;
-use Spryker\Glue\TaxAppRestApi\Dependency\TaxAppRestApiToTaxAppClientInterface;
-use Spryker\Glue\TaxAppRestApi\TaxAppRestApiDependencyProvider;
-use SprykerTest\Glue\TaxAppRestApi\TaxAppRestApiTester;
+use SprykerEco\Glue\VertexRestApi\Controller\TaxIdValidationController;
+use SprykerEco\Glue\VertexRestApi\Dependency\VertexRestApiToGlossaryStorageClientInterface;
+use SprykerEco\Glue\VertexRestApi\Dependency\VertexRestApiToVertexClientInterface;
+use SprykerEco\Glue\VertexRestApi\VertexRestApiDependencyProvider;
+use SprykerEcoTest\Glue\VertexRestApi\VertexRestApiTester;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @group SprykerEcoTest
  * @group Glue
- * @group TaxAppRestApi
+ * @group VertexRestApi
  * @group Controller
  * @group TaxIdValidationControllerTest
  * Add your own group annotations below this line
@@ -47,17 +47,17 @@ class TaxIdValidationControllerTest extends Unit
     /**
      * @var string
      */
-    protected const GLOSSARY_KEY_TAX_ID_FORMAT_INVALID = 'tax_app.vertex.validation.error.tax_id_format_invalid';
+    protected const GLOSSARY_KEY_TAX_ID_FORMAT_INVALID = 'vertex.validation.error.tax_id_format_invalid';
 
     /**
      * @var string
      */
-    protected const GLOSSARY_SUFFIX_VERTEX = 'tax_app.vertex';
+    protected const GLOSSARY_SUFFIX_VERTEX = 'vertex';
 
     /**
-     * @var \SprykerTest\Glue\TaxAppRestApi\TaxAppRestApiTester
+     * @var \SprykerEcoTest\Glue\VertexRestApi\VertexRestApiTester
      */
-    protected TaxAppRestApiTester $tester;
+    protected VertexRestApiTester $tester;
 
     /**
      * @return void
@@ -72,30 +72,30 @@ class TaxIdValidationControllerTest extends Unit
     /**
      * @return void
      */
-    public function testPostValidateTaxIdWhenRequestIsValidReturnsSuccessfulResponse(): void
+    public function testPostrequestTaxIdValidationWhenRequestIsValidReturnsSuccessfulResponse(): void
     {
         // Arrange
-        $restTaxAppValidationAttributesTransfer = $this->tester->createRestTaxAppValidationAttributesTransfer();
+        $restVertexValidationAttributesTransfer = $this->tester->createRestVertexValidationAttributesTransfer();
 
-        $taxAppClientMock = $this->getMockBuilder(TaxAppRestApiToTaxAppClientInterface::class)->getMock();
+        $vertexClientMock = $this->getMockBuilder(VertexRestApiToVertexClientInterface::class)->getMock();
         $restRequestMock = Stub::makeEmpty(RestRequestInterface::class);
-        $taxAppClientMock
-            ->method('validateTaxId')
-            ->with($this->callback(function (TaxAppValidationRequestTransfer $taxAppValidationRequestTransfer) use ($restTaxAppValidationAttributesTransfer) {
-                $this->assertSame($taxAppValidationRequestTransfer->getTaxId(), $restTaxAppValidationAttributesTransfer->getTaxId());
-                $this->assertSame($taxAppValidationRequestTransfer->getCountryCode(), $taxAppValidationRequestTransfer->getCountryCode());
+        $vertexClientMock
+            ->method('requestTaxIdValidation')
+            ->with($this->callback(function (VertexValidationRequestTransfer $vertexValidationRequestTransfer) use ($restVertexValidationAttributesTransfer) {
+                $this->assertSame($vertexValidationRequestTransfer->getTaxId(), $restVertexValidationAttributesTransfer->getTaxId());
+                $this->assertSame($vertexValidationRequestTransfer->getCountryCode(), $restVertexValidationAttributesTransfer->getCountryCode());
 
                 return true;
             }))
             ->willReturn(
-                (new TaxAppValidationResponseTransfer())
+                (new VertexValidationResponseTransfer())
                 ->setIsValid(true),
             );
 
-        $this->tester->setDependency(TaxAppRestApiDependencyProvider::CLIENT_TAX_APP, $taxAppClientMock);
+        $this->tester->setDependency(VertexRestApiDependencyProvider::CLIENT_VERTEX, $vertexClientMock);
 
         // Act
-        $restResponse = (new TaxIdValidationController())->postAction($restRequestMock, $restTaxAppValidationAttributesTransfer);
+        $restResponse = (new TaxIdValidationController())->postAction($restRequestMock, $restVertexValidationAttributesTransfer);
 
         //Assert
         $this->assertCount(0, $restResponse->getErrors());
@@ -108,22 +108,22 @@ class TaxIdValidationControllerTest extends Unit
     public function testGivenAMalformedRequestWhenTheTaxIdValidationApiIsCalledThenTheErrorMessageIsReturnedInTheResponse(): void
     {
         // Arrange
-        $restTaxAppValidationAttributesTransfer = (new RestTaxAppValidationAttributesTransfer())->setTaxId('test')->setCountryCode('DE');
+        $restVertexValidationAttributesTransfer = (new RestVertexValidationAttributesTransfer())->setTaxId('test')->setCountryCode('DE');
 
-        $taxAppClientMock = $this->getMockBuilder(TaxAppRestApiToTaxAppClientInterface::class)->getMock();
+        $vertexClientMock = $this->getMockBuilder(VertexRestApiToVertexClientInterface::class)->getMock();
         $restRequestMock = Stub::makeEmpty(RestRequestInterface::class);
-        $taxAppClientMock
-            ->method('validateTaxId')
+        $vertexClientMock
+            ->method('requestTaxIdValidation')
             ->willReturn(
-                (new TaxAppValidationResponseTransfer())
+                (new VertexValidationResponseTransfer())
                     ->setIsValid(false)
                     ->setMessage('error'),
             );
 
-        $this->tester->setDependency(TaxAppRestApiDependencyProvider::CLIENT_TAX_APP, $taxAppClientMock);
+        $this->tester->setDependency(VertexRestApiDependencyProvider::CLIENT_VERTEX, $vertexClientMock);
 
         // Act
-        $restResponse = (new TaxIdValidationController())->postAction($restRequestMock, $restTaxAppValidationAttributesTransfer);
+        $restResponse = (new TaxIdValidationController())->postAction($restRequestMock, $restVertexValidationAttributesTransfer);
 
         //Assert
         $this->assertCount(1, $restResponse->getErrors());
@@ -135,23 +135,23 @@ class TaxIdValidationControllerTest extends Unit
      * @dataProvider glossaryMessageDataProvider
      *
      * @param string $acceptLanguage
-     * @param \Generated\Shared\Transfer\RestTaxAppValidationAttributesTransfer $restTaxAppValidationAttributesTransfer
-     * @param \Generated\Shared\Transfer\TaxAppValidationResponseTransfer $taxAppValidationResponseTransfer
+     * @param \Generated\Shared\Transfer\RestVertexValidationAttributesTransfer $restVertexValidationAttributesTransfer
+     * @param \Generated\Shared\Transfer\VertexValidationResponseTransfer $VertexValidationResponseTransfer
      * @param array<string, string> $glossaryTranslations
      * @param string $expectedMessage
      *
      * @return void
      */
-    public function testPostValidateTaxIdWithDifferentLocalesAndGlossaryKeys(
+    public function testPostrequestTaxIdValidationWithDifferentLocalesAndGlossaryKeys(
         string $acceptLanguage,
-        RestTaxAppValidationAttributesTransfer $restTaxAppValidationAttributesTransfer,
-        TaxAppValidationResponseTransfer $taxAppValidationResponseTransfer,
+        RestVertexValidationAttributesTransfer $restVertexValidationAttributesTransfer,
+        VertexValidationResponseTransfer $VertexValidationResponseTransfer,
         array $glossaryTranslations,
         string $expectedMessage
     ): void {
         // Arrange
-        $taxAppClientMock = $this->getMockBuilder(TaxAppRestApiToTaxAppClientInterface::class)->getMock();
-        $glossaryStorageClientMock = $this->getMockBuilder(TaxAppRestApiToGlossaryStorageClientInterface::class)->getMock();
+        $vertexClientMock = $this->getMockBuilder(VertexRestApiToVertexClientInterface::class)->getMock();
+        $glossaryStorageClientMock = $this->getMockBuilder(VertexRestApiToGlossaryStorageClientInterface::class)->getMock();
 
         // Create metadata mock with the accept language
         $metadataMock = $this->getMockBuilder(MetadataInterface::class)->getMock();
@@ -161,9 +161,9 @@ class TaxIdValidationControllerTest extends Unit
         $restRequestMock = $this->getMockBuilder(RestRequestInterface::class)->getMock();
         $restRequestMock->method('getMetadata')->willReturn($metadataMock);
 
-        $taxAppClientMock
-            ->method('validateTaxId')
-            ->willReturn($taxAppValidationResponseTransfer);
+        $vertexClientMock
+            ->method('requestTaxIdValidation')
+            ->willReturn($VertexValidationResponseTransfer);
 
         $glossaryStorageClientMock
             ->method('translate')
@@ -173,11 +173,11 @@ class TaxIdValidationControllerTest extends Unit
                 return $glossaryTranslations[$lookupKey] ?? $key;
             });
 
-        $this->tester->setDependency(TaxAppRestApiDependencyProvider::CLIENT_TAX_APP, $taxAppClientMock);
-        $this->tester->setDependency(TaxAppRestApiDependencyProvider::CLIENT_GLOSSARY_STORAGE, $glossaryStorageClientMock);
+        $this->tester->setDependency(VertexRestApiDependencyProvider::CLIENT_VERTEX, $vertexClientMock);
+        $this->tester->setDependency(VertexRestApiDependencyProvider::CLIENT_GLOSSARY_STORAGE, $glossaryStorageClientMock);
 
         // Act
-        $restResponse = (new TaxIdValidationController())->postAction($restRequestMock, $restTaxAppValidationAttributesTransfer);
+        $restResponse = (new TaxIdValidationController())->postAction($restRequestMock, $restVertexValidationAttributesTransfer);
 
         // Assert
         $this->assertCount(1, $restResponse->getErrors());
@@ -193,10 +193,10 @@ class TaxIdValidationControllerTest extends Unit
         return [
             'with English locale and valid translation' => [
                 'en_US',
-                (new RestTaxAppValidationAttributesTransfer())
+                (new RestVertexValidationAttributesTransfer())
                     ->setTaxId('DE123456789')
                     ->setCountryCode('DE'),
-                (new TaxAppValidationResponseTransfer())
+                (new VertexValidationResponseTransfer())
                     ->setIsValid(false)
                     ->setMessage('Default error message')
                     ->setMessageKey(static::GLOSSARY_KEY_TAX_ID_INVALID),
@@ -207,10 +207,10 @@ class TaxIdValidationControllerTest extends Unit
             ],
             'with German locale and valid translation' => [
                 'de_DE',
-                (new RestTaxAppValidationAttributesTransfer())
+                (new RestVertexValidationAttributesTransfer())
                     ->setTaxId('DE123456789')
                     ->setCountryCode('DE'),
-                (new TaxAppValidationResponseTransfer())
+                (new VertexValidationResponseTransfer())
                     ->setIsValid(false)
                     ->setMessage('Default error message')
                     ->setMessageKey(static::GLOSSARY_KEY_TAX_ID_INVALID),
@@ -221,10 +221,10 @@ class TaxIdValidationControllerTest extends Unit
             ],
             'with locale but no translation should use default message' => [
                 'en_US',
-                (new RestTaxAppValidationAttributesTransfer())
+                (new RestVertexValidationAttributesTransfer())
                     ->setTaxId('DE123456789')
                     ->setCountryCode('DE'),
-                (new TaxAppValidationResponseTransfer())
+                (new VertexValidationResponseTransfer())
                     ->setIsValid(false)
                     ->setMessage('Default error message')
                     ->setMessageKey(static::GLOSSARY_KEY_TAX_ID_INVALID),
@@ -235,10 +235,10 @@ class TaxIdValidationControllerTest extends Unit
             ],
             'with locale but no code should use default message' => [
                 'en_US',
-                (new RestTaxAppValidationAttributesTransfer())
+                (new RestVertexValidationAttributesTransfer())
                     ->setTaxId('DE123456789')
                     ->setCountryCode('DE'),
-                (new TaxAppValidationResponseTransfer())
+                (new VertexValidationResponseTransfer())
                     ->setIsValid(false)
                     ->setMessage('Default error message')
                     ->setMessageKey(null),
@@ -247,10 +247,10 @@ class TaxIdValidationControllerTest extends Unit
             ],
             'with different glossary key' => [
                 'en_US',
-                (new RestTaxAppValidationAttributesTransfer())
+                (new RestVertexValidationAttributesTransfer())
                     ->setTaxId('DE123456789')
                     ->setCountryCode('DE'),
-                (new TaxAppValidationResponseTransfer())
+                (new VertexValidationResponseTransfer())
                     ->setIsValid(false)
                     ->setMessage('Format is invalid')
                     ->setMessageKey(static::GLOSSARY_KEY_TAX_ID_FORMAT_INVALID),
