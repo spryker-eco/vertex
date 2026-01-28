@@ -47,11 +47,13 @@ use Spryker\Zed\Calculation\CalculationDependencyProvider;
 use Spryker\Zed\Calculation\Dependency\Service\CalculationToUtilTextBridge;
 use Spryker\Zed\Kernel\Container;
 use Spryker\Zed\KernelApp\Business\KernelAppFacadeInterface;
-use Spryker\Zed\MerchantProfile\Communication\Plugin\TaxApp\MerchantProfileAddressCalculableObjectTaxAppExpanderPlugin;
+use Spryker\Zed\MerchantProfile\Communication\Plugin\Vertex\MerchantProfileAddressCalculableObjectVertexExpanderPlugin;
 use Spryker\Zed\Oms\Business\OrderStateMachine\PersistenceManager;
 use Spryker\Zed\TaxApp\Dependency\Facade\TaxAppToKernelAppFacadeBridge;
 use Spryker\Zed\TaxApp\Dependency\Facade\TaxAppToOauthClientFacadeBridge;
 use Spryker\Zed\TaxApp\TaxAppDependencyProvider;
+use SprykerEco\Client\Vertex\VertexClient;
+use SprykerEco\Zed\Vertex\VertexDependencyProvider;
 use SprykerEcoTest\Shared\Vertex\Plugins\CalculableObjectVertexExpanderPlugin;
 
 /**
@@ -67,39 +69,14 @@ use SprykerEcoTest\Shared\Vertex\Plugins\CalculableObjectVertexExpanderPlugin;
  * @method void lookForwardTo($achieveValue)
  * @method void comment($description)
  * @method void pause($vars = [])
- * @method \Spryker\Zed\TaxApp\Business\TaxAppBusinessFactory getFactory(?string $moduleName = NULL)
- * @method \Spryker\Zed\TaxApp\Business\TaxAppFacadeInterface getFacade
+ * @method \SprykerEco\Zed\Vertex\Business\VertexBusinessFactory getFactory(?string $moduleName = NULL)
+ * @method \SprykerEco\Zed\Vertex\Business\VertexFacade getFacade()
  *
  * @SuppressWarnings(\SprykerEcoTest\Zed\Vertex\PHPMD)
  */
 class VertexBusinessTester extends Actor
 {
-    use _generated\TaxAppBusinessTesterActions;
-
-    /**
-     * @param \Generated\Shared\Transfer\AcpHttpResponseTransfer $acpHttpResponseTransfer
-     * @param \PHPUnit\Framework\Constraint\Callback|null $with
-     *
-     * @return void
-     */
-    public function mockKernelAppFacade(AcpHttpResponseTransfer $acpHttpResponseTransfer, ?Callback $with = null): void
-    {
-        $mockKernelAppFacade = Stub::makeEmpty(KernelAppFacadeInterface::class);
-        $mockKernelAppFacade
-            ->method('makeRequest')
-            ->willReturn($acpHttpResponseTransfer);
-
-        if ($with !== null) {
-            $mockKernelAppFacade
-                ->method('makeRequest')
-                ->with($with);
-        }
-
-        $this->setDependency(
-            TaxAppDependencyProvider::FACADE_KERNEL_APP,
-            new TaxAppToKernelAppFacadeBridge($mockKernelAppFacade),
-        );
-    }
+    use _generated\VertexBusinessTesterActions;
 
     /**
      * @param string $taxId
@@ -125,10 +102,10 @@ class VertexBusinessTester extends Actor
     public function setQuoteTaxMetadataExpanderPlugins(): void
     {
         $this->setDependency(
-            TaxAppDependencyProvider::PLUGINS_CALCULABLE_OBJECT_TAX_APP_EXPANDER,
+            VertexDependencyProvider::PLUGINS_CALCULABLE_OBJECT_VERTEX_EXPANDER,
             [
-                new CalculableObjectTaxAppExpanderPlugin(),
-                new MerchantProfileAddressCalculableObjectTaxAppExpanderPlugin(),
+//                new CalculableObjectVertexExpanderPlugin(),
+//                new MerchantProfileAddressCalculableObjectVertexExpanderPlugin(),
             ],
         );
     }
@@ -249,7 +226,7 @@ class VertexBusinessTester extends Actor
     /**
      * @return void
      */
-    public function ensureTaxAppConfigTableIsEmpty(): void
+    public function ensureVertexConfigTableIsEmpty(): void
     {
         $this->ensureDatabaseTableIsEmpty($this->getTaxAppConfigQuery());
     }
@@ -451,11 +428,11 @@ class VertexBusinessTester extends Actor
      *
      * @return void
      */
-    public function mockTaxAppClientWithTaxCalculationResponse(TaxCalculationResponseTransfer $taxCalculationResponseTransfer): void
+    public function mockVertexClientWithTaxCalculationResponse(TaxCalculationResponseTransfer $taxCalculationResponseTransfer): void
     {
-        $taxAppClientMock = Stub::makeEmpty(TaxAppClient::class);
-        $taxAppClientMock->expects(Expected::once()->getMatcher())->method('requestTaxQuotation')->willReturn($taxCalculationResponseTransfer);
-        $this->mockFactoryMethod('getTaxAppClient', $taxAppClientMock);
+        $vertexClientMock = Stub::makeEmpty(VertexClient::class);
+        $vertexClientMock->expects(Expected::once()->getMatcher())->method('calculateTax')->willReturn($taxCalculationResponseTransfer);
+        $this->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
         $this->mockOauthClient();
     }
