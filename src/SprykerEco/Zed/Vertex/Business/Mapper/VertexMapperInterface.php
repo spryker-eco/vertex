@@ -13,7 +13,7 @@ use Generated\Shared\Transfer\ExpenseTransfer;
 use Generated\Shared\Transfer\ItemTransfer;
 use Generated\Shared\Transfer\MerchantStockAddressTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
-use Generated\Shared\Transfer\ShippingWarehouseTransfer;
+use Generated\Shared\Transfer\VertexShippingWarehouseTransfer;
 use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\VertexShipmentTransfer;
@@ -49,15 +49,15 @@ interface VertexMapperInterface
     /**
      * @param \Generated\Shared\Transfer\VertexItemTransfer $VertexItemTransfer
      * @param \Generated\Shared\Transfer\MerchantStockAddressTransfer $merchantStockAddressTransfer
-     * @param \Generated\Shared\Transfer\ShippingWarehouseTransfer $shippingWarehouseTransfer
+     * @param \Generated\Shared\Transfer\VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer
      *
-     * @return \Generated\Shared\Transfer\ShippingWarehouseTransfer
+     * @return \Generated\Shared\Transfer\VertexShippingWarehouseTransfer
      */
-    public function mapMerchantStockAddressTransferToShippingWarehouse(
+    public function mapMerchantStockAddressTransferToVertexShippingWarehouse(
         VertexItemTransfer $VertexItemTransfer,
         MerchantStockAddressTransfer $merchantStockAddressTransfer,
-        ShippingWarehouseTransfer $shippingWarehouseTransfer
-    ): ShippingWarehouseTransfer;
+        VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer
+    ): VertexShippingWarehouseTransfer;
 
     /**
      * @param \Generated\Shared\Transfer\ExpenseTransfer $expenseTransfer

@@ -45,7 +45,7 @@ class VertexBusinessAssertionHelper extends Module
                 $index = 0;
 
                 foreach ($vertexCalculationRequestTransfer->getSale()->getItems() as $saleItem) {
-                    foreach ($saleItem->getShippingWarehouses() as $quantityWarehouseMap) {
+                    foreach ($saleItem->getVertexShippingWarehouses() as $quantityWarehouseMap) {
                         $saleItemExpectation = $expectation[$index++];
 
                         self::assertEquals(

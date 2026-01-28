@@ -65,12 +65,12 @@
         <property name="shippingAddress" dataBuilderRule="VertexAddress"/>
         <property name="billingAddress" dataBuilderRule="VertexAddress"/>
         <property name="sellerAddress" dataBuilderRule="VertexAddress"/>
-        <property name="shippingWarehouses" dataBuilderRule="ShippingWarehouse"/>
+        <property name="vertexShippingWarehouses" dataBuilderRule="VertexShippingWarehouse"/>
     </transfer>
 
-    <transfer name="ShippingWarehouse" strict="true">
+    <transfer name="VertexShippingWarehouse" strict="true">
         <property name="quantity" dataBuilderRule="numberBetween(1, 9)"/>
-        <!-- <property name="warehouseAddress" dataBuilderRule="VertexAddress"/> -->
+         <property name="vertexWarehouseAddress" dataBuilderRule="VertexAddress"/>
     </transfer>
 
     <transfer name="VertexShipment" strict="true">

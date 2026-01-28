@@ -18,7 +18,7 @@ use Generated\Shared\Transfer\MerchantStockAddressTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Generated\Shared\Transfer\SaleTaxMetadataTransfer;
-use Generated\Shared\Transfer\ShippingWarehouseTransfer;
+use Generated\Shared\Transfer\VertexShippingWarehouseTransfer;
 use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\VertexAddressTransfer;
 use Generated\Shared\Transfer\VertexItemTransfer;
@@ -198,13 +198,13 @@ class VertexMapper implements VertexMapperInterface
 
         if ($itemTransfer->getMerchantStockAddresses()->count()) {
             foreach ($itemTransfer->getMerchantStockAddresses() as $merchantStockAddress) {
-                $shippingWarehouseTransfer = $this->mapMerchantStockAddressTransferToShippingWarehouse(
+                $vertexShippingWarehouseTransfer = $this->mapMerchantStockAddressTransferToVertexShippingWarehouse(
                     $VertexItemTransfer,
                     $merchantStockAddress,
-                    new ShippingWarehouseTransfer(),
+                    new VertexShippingWarehouseTransfer(),
                 );
 
-                $VertexItemTransfer->addShippingWarehouse($shippingWarehouseTransfer);
+                $VertexItemTransfer->addVertexShippingWarehouse($vertexShippingWarehouseTransfer);
             }
         }
 
@@ -214,28 +214,28 @@ class VertexMapper implements VertexMapperInterface
     /**
      * @param \Generated\Shared\Transfer\VertexItemTransfer $VertexItemTransfer
      * @param \Generated\Shared\Transfer\MerchantStockAddressTransfer $merchantStockAddressTransfer
-     * @param \Generated\Shared\Transfer\ShippingWarehouseTransfer $shippingWarehouseTransfer
+     * @param \Generated\Shared\Transfer\VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer
      *
-     * @return \Generated\Shared\Transfer\ShippingWarehouseTransfer
+     * @return \Generated\Shared\Transfer\VertexShippingWarehouseTransfer
      */
-    public function mapMerchantStockAddressTransferToShippingWarehouse(
+    public function mapMerchantStockAddressTransferToVertexShippingWarehouse(
         VertexItemTransfer $VertexItemTransfer,
         MerchantStockAddressTransfer $merchantStockAddressTransfer,
-        ShippingWarehouseTransfer $shippingWarehouseTransfer
-    ): ShippingWarehouseTransfer {
+        VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer
+    ): VertexShippingWarehouseTransfer {
         $quantityToShip = 0;
         if ($merchantStockAddressTransfer->getQuantityToShip()) {
             $quantityToShip = $merchantStockAddressTransfer->getQuantityToShip()->toInt();
         }
 
-        $shippingWarehouseTransfer->setQuantity($quantityToShip);
+        $vertexShippingWarehouseTransfer->setQuantity($quantityToShip);
 
         if ($merchantStockAddressTransfer->getStockAddress()) {
             $warehouseAddress = $this->addressMapper->mapStockAddressTransferToVertexAddressTransfer($merchantStockAddressTransfer->getStockAddress(), new VertexAddressTransfer());
-            $shippingWarehouseTransfer->setWarehouseAddress($warehouseAddress);
+            $vertexShippingWarehouseTransfer->setWarehouseAddress($warehouseAddress);
         }
 
-        return $shippingWarehouseTransfer;
+        return $vertexShippingWarehouseTransfer;
     }
 
     /**
