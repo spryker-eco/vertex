@@ -231,7 +231,7 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     }
 
     /**
-     * @return array<\Spryker\Zed\VertexExtension\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface>
+     * @return array<\SprykerEco\Zed\Vertex\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface>
      */
     protected function getCalculableObjectVertexExpanderPlugins(): array
     {
@@ -239,7 +239,7 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     }
 
     /**
-     * @return array<\SprykerEco\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface>
+     * @return array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface>
      */
     protected function getOrderVertexExpanderPlugins(): array
     {

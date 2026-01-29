@@ -8,6 +8,11 @@
 namespace SprykerEco\Zed\Vertex\Communication;
 
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
+use SprykerEco\Zed\Vertex\Communication\Expander\CustomerWithVertexSpecificFieldsExpander;
+use SprykerEco\Zed\Vertex\Communication\Expander\ExpensesWithVertexCodeExpander;
+use SprykerEco\Zed\Vertex\Communication\Expander\ItemWithVertexSpecificFieldsExpander;
+use SprykerEco\Zed\Vertex\Communication\Expander\ProductOptionWithVertexCodeExpander;
+use SprykerEco\Zed\Vertex\Communication\Mapper\VertexCodeMapper;
 
 /**
  * @method \Spryker\Zed\Vertex\VertexConfig getConfig()
@@ -17,4 +22,51 @@ use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
  */
 class VertexCommunicationFactory extends AbstractCommunicationFactory
 {
+    /**
+     * @return \SprykerEco\Zed\Vertex\Communication\Expander\CustomerWithVertexSpecificFieldsExpander
+     */
+    public function createCustomerWithVertexSpecificFieldsMapper(): CustomerWithVertexSpecificFieldsExpander
+    {
+        return new CustomerWithVertexSpecificFieldsExpander(
+            $this->createVertexCodeMapper(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\Vertex\Communication\Expander\ExpensesWithVertexCodeExpander
+     */
+    public function createExpensesWithVertexCodeExpander(): ExpensesWithVertexCodeExpander
+    {
+        return new ExpensesWithVertexCodeExpander(
+            $this->createVertexCodeMapper(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\Vertex\Communication\Expander\ItemWithVertexSpecificFieldsExpander
+     */
+    public function createItemWithVertexTaxCodeExpander(): ItemWithVertexSpecificFieldsExpander
+    {
+        return new ItemWithVertexSpecificFieldsExpander(
+            $this->createVertexCodeMapper(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\Vertex\Communication\Expander\ProductOptionWithVertexCodeExpander
+     */
+    public function createProductOptionWithVertexCodeExpander(): ProductOptionWithVertexCodeExpander
+    {
+        return new ProductOptionWithVertexCodeExpander(
+            $this->createVertexCodeMapper(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\Vertex\Communication\Mapper\VertexCodeMapper
+     */
+    public function createVertexCodeMapper(): VertexCodeMapper
+    {
+        return new VertexCodeMapper();
+    }
 }

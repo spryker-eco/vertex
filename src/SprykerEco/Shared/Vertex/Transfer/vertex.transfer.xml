@@ -63,10 +63,14 @@
     </transfer>
 
     <transfer name="SaleTaxMetadata" strict="true">
+        <property name="seller" type="array" associative="true" singular="sellerValue"/>
+        <property name="customer" type="array" associative="true" singular="customerValue"/>
         <!--- the contents provided on a project level -->
     </transfer>
 
     <transfer name="ItemTaxMetadata" strict="true">
+        <property name="product" type="array" associative="true" singular="productValue"/>
+        <property name="flexibleFields" type="array" associative="true" singular="flexibleField"/>
         <!--- the contents provided on a project level -->
     </transfer>
 
