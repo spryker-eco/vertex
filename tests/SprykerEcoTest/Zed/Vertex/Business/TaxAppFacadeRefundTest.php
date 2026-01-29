@@ -39,13 +39,7 @@ class TaxAppFacadeRefundTest extends Unit
         $this->tester->configureTestStateMachine([static::DEFAULT_OMS_PROCESS_NAME]);
     }
 
-    /**
-     * This test will fail if Vertex is configured but disabled locally due to the way it is constructed.
-     * Store logic cannot be stubbed due to the way order saving happens (`getCurrentStore` method is used).
-     *
-     * @return void
-     */
-    public function testVertexClientWasCalledWhenRefundWasRequestedForAnOrder(): void
+    public function testVertexClientWasCalledWhenRefundWasRequestedForAnOrderAndInvoicingIsEnabled(): void
     {
         // Arrange
         $storeTransfer = $this->tester->haveStore();
@@ -75,11 +69,32 @@ class TaxAppFacadeRefundTest extends Unit
         $this->tester->getFacade()->processOrderRefund($orderItemsIds, $orderTransfer->getIdSalesOrder());
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\StoreTransfer $storeTransfer
-     *
-     * @return \Generated\Shared\Transfer\OrderTransfer
-     */
+    public function testVertexClientWasCalledWhenRefundWasRequestedForAnOrderAndInvoicingIsDisabled(): void
+    {
+        // Arrange
+        $storeTransfer = $this->tester->haveStore();
+
+        $orderTransfer = $this->getOrderTransferForRefund($storeTransfer);
+
+        $orderItemsIds = array_map(function ($item) {
+            return $item->getIdSalesOrderItem();
+        }, $orderTransfer->getItems()->getArrayCopy());
+
+        $this->tester->setConfig(
+            VertexConstants::IS_INVOICING_ENABLED, false
+        );
+
+        $vertexClientMock = $this->createMock(VertexClient::class);
+
+        // Assert
+        $vertexClientMock->expects($this->never())->method('calculateTax');
+        $vertexClientMock->expects($this->never())->method('authenticate');
+        $this->tester->setDependency('CLIENT_VERTEX', $vertexClientMock);
+
+        // Act
+        $this->tester->getFacade()->processOrderRefund($orderItemsIds, $orderTransfer->getIdSalesOrder());
+    }
+
     protected function getOrderTransferForRefund(StoreTransfer $storeTransfer): OrderTransfer
     {
         $orderTransfer = $this->tester->createOrderByStateMachineProcessName(

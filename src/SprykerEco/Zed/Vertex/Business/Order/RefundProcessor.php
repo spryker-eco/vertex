@@ -81,9 +81,7 @@ class RefundProcessor implements RefundProcessorInterface
         $vertexSaleTransfer = $this->vertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
 
         if (!$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsInvoicingEnabled()) {
-            $vertexCalculationResponseTransfer = new VertexCalculationResponseTransfer();
-            $vertexCalculationResponseTransfer->setIsSuccessful(false);
-            $vertexCalculationResponseTransfer->setErrorMessage('App is Inactive or configured to not submit void invoice');
+            $this->getLogger()->warning('App is Inactive or configured to not submit void invoice');
 
             return;
         }
