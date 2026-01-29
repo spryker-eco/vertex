@@ -12,6 +12,7 @@ use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use SprykerEco\Client\Vertex\VertexClient;
+use SprykerEco\Shared\Vertex\VertexConstants;
 use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
 
 /**
@@ -54,6 +55,10 @@ class TaxAppFacadeRefundTest extends Unit
         $orderItemsIds = array_map(function ($item) {
             return $item->getIdSalesOrderItem();
         }, $orderTransfer->getItems()->getArrayCopy());
+
+        $this->tester->setConfig(
+            VertexConstants::IS_INVOICING_ENABLED, true
+        );
 
         $vertexClientMock = $this->createMock(VertexClient::class);
 

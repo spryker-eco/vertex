@@ -121,4 +121,9 @@ class VertexConfig extends AbstractBundleConfig
     {
         return '';
     }
+
+    public function isInvoicingEnabled(): bool
+    {
+        return $this->get(VertexConstants::IS_INVOICING_ENABLED, false);
+    }
 }

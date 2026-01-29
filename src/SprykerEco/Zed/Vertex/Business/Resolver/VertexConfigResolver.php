@@ -32,7 +32,8 @@ class VertexConfigResolver implements VertexConfigResolverInterface
             ->setIsTaxIdValidatorEnabled($this->vertexConfig->isTaxIdValidatorEnabled())
             ->setTaxamoToken($this->vertexConfig->getTaxamoToken())
             ->setTaxamoApiUrl($this->vertexConfig->getTaxamoApiUrl())
-            ->setCredentialHash($this->getCredentialHash($clientId, $clientSecret));
+            ->setCredentialHash($this->getCredentialHash($clientId, $clientSecret))
+            ->setIsInvoicingEnabled($this->vertexConfig->isInvoicingEnabled());
     }
 
     public function getCredentialHash(string $clientId, string $clientSecret): string

@@ -10,6 +10,7 @@ namespace SprykerEco\Zed\Vertex\Business\Order;
 use ArrayObject;
 use DateTime;
 use Generated\Shared\Transfer\OrderTransfer;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Spryker\Shared\Log\LoggerTrait;
 use SprykerEco\Client\Vertex\VertexClientInterface;
