@@ -167,9 +167,9 @@ class VertexBusinessFactory extends AbstractBusinessFactory
             $this->getStoreFacade(),
             $this->getSalesFacade(),
             $this->createVertexMapper(),
-            $this->createAccessTokenProvider(),
-            $this->createConfigReader(),
             $this->getOrderVertexExpanderPlugins(),
+            $this->createVertexAccessTokenProvider(),
+            $this->createVertexConfigResolver(),
         );
     }
 
