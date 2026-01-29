@@ -453,4 +453,18 @@ class VertexDataHelper extends Module
 
         return $itemsTaxTotal;
     }
+
+    /**
+     * @param array $seed
+     * @param array<\Generated\Shared\Transfer\ItemTransfer> $items
+     *
+     * @return \Generated\Shared\Transfer\TaxCalculationResponseTransfer
+     */
+    public function haveTaxCalculationResponseTransfer(array $seed = [], array $items = []): VertexCalculationResponseTransfer
+    {
+        $saleTransfer = $this->haveTaxAppSaleTransfer($seed, $items);
+        $saleTransfer->setTaxTotal($this->getTaxAppItemsTaxTotals($saleTransfer->getItems()));
+
+        return (new VertexCalculationResponseBuilder())->seed($seed)->withSale($saleTransfer->toArray())->build();
+    }
 }
