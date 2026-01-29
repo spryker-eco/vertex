@@ -10,6 +10,7 @@ namespace SprykerEco\Zed\Vertex\Business\Order;
 use ArrayObject;
 use DateTime;
 use Generated\Shared\Transfer\OrderTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Spryker\Shared\Log\LoggerTrait;
@@ -94,7 +95,7 @@ class RefundProcessor implements RefundProcessorInterface
             (new VertexCalculationRequestTransfer())
                 ->setSale($vertexSaleTransfer)
                 ->setReportingDate((new DateTime())->format('Y-m-d'))
-                ->setAuthorization($vertexApiAccessTokenTransfer->getAccessToken()), // TODO: refactor ???
+                ->setVertexApiAccessToken($vertexApiAccessTokenTransfer),
             $vertexConfigTransfer
         );
     }
