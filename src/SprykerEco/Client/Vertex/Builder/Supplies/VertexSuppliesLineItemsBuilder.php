@@ -9,7 +9,7 @@ namespace SprykerEco\Client\Vertex\Builder\Supplies;
 
 use Generated\Shared\Transfer\SaleItemTransfer;
 use Generated\Shared\Transfer\SaleTransfer;
-use Generated\Shared\Transfer\ShippingWarehouseTransfer;
+use Generated\Shared\Transfer\VertexShippingWarehouseTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCustomerTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
@@ -80,9 +80,9 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
     ): VertexSuppliesTransfer {
         $vertexLineItemTransfer = new VertexLineItemTransfer();
 
-        if ($saleItemTransfer->getShippingWarehouses()->count()) {
+        if ($saleItemTransfer->getVertexShippingWarehouses()->count()) {
             $saleItemTransfer->setWarehouseAddressOrFail(
-                $saleItemTransfer->getShippingWarehouses()[0]->getWarehouseAddressOrFail(),
+                $saleItemTransfer->getVertexShippingWarehouses()[0]->getWarehouseAddressOrFail(),
             );
         }
 
@@ -107,10 +107,10 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
         VertexSuppliesTransfer $vertexSuppliesTransfer
     ): VertexSuppliesTransfer {
         $idIndex = 0;
-        foreach ($saleItemTransfer->getShippingWarehouses() as $shippingWarehouse) {
-            $clonedSaleItemTransfer = $this->cloneSaleItemTransferWithShippingWarehouseData(
+        foreach ($saleItemTransfer->getVertexShippingWarehouses() as $vertexShippingWarehouse) {
+            $clonedSaleItemTransfer = $this->cloneSaleItemTransferWithVertexShippingWarehouseData(
                 $saleItemTransfer,
-                $shippingWarehouse,
+                $vertexShippingWarehouse,
                 $idIndex,
             );
 
@@ -131,14 +131,14 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
 
     /**
      * @param \Generated\Shared\Transfer\SaleItemTransfer $saleItemTransfer
-     * @param \Generated\Shared\Transfer\ShippingWarehouseTransfer $shippingWarehouseTransfer
+     * @param \Generated\Shared\Transfer\VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer
      * @param int $idIndex
      *
      * @return \Generated\Shared\Transfer\SaleItemTransfer
      */
-    protected function cloneSaleItemTransferWithShippingWarehouseData(
+    protected function cloneSaleItemTransferWithVertexShippingWarehouseData(
         SaleItemTransfer $saleItemTransfer,
-        ShippingWarehouseTransfer $shippingWarehouseTransfer,
+        VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer,
         int &$idIndex
     ): SaleItemTransfer {
         $clonedItemTransfer = clone $saleItemTransfer;
@@ -147,10 +147,10 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
             $saleItemTransfer->getId() . '_' . $idIndex++,
         );
 
-        $clonedItemTransfer->setQuantity((string)$shippingWarehouseTransfer->getQuantityOrFail());
+        $clonedItemTransfer->setQuantity((string)$vertexShippingWarehouseTransfer->getQuantityOrFail());
 
         $clonedItemTransfer->setWarehouseAddressOrFail(
-            $shippingWarehouseTransfer->getWarehouseAddressOrFail(),
+            $vertexShippingWarehouseTransfer->getWarehouseAddressOrFail(),
         );
 
         return $clonedItemTransfer;
@@ -180,7 +180,7 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
      */
     protected function hasItemMultipleWarehouses(SaleItemTransfer $saleItemTransfer): bool
     {
-        return $saleItemTransfer->getShippingWarehouses()->count() > 1;
+        return $saleItemTransfer->getVertexShippingWarehouses()->count() > 1;
     }
 
     /**

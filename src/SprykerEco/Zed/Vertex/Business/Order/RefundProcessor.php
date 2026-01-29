@@ -31,14 +31,13 @@ class RefundProcessor implements RefundProcessorInterface
      * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface $salesFacade
      * @param \SprykerEco\Zed\Vertex\Business\Mapper\vertexMapperInterface $vertexMapper
      * @param \SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface $configReader
-     * @param array<\SprykerEco\Zed\VertexExtension\Dependency\Plugin\OrderVertexExpanderPluginInterface> $orderVertexExpanderPlugins // TODO
+     * @param array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface> $orderVertexExpanderPlugins // TODO
      */
     public function __construct(
         protected VertexClientInterface $vertexClient,
         protected VertexToStoreFacadeInterface $storeFacade,
         protected VertexToSalesFacadeInterface $salesFacade,
         protected vertexMapperInterface $vertexMapper,
-        protected ConfigReaderInterface $configReader,
         protected array $orderVertexExpanderPlugins,
         protected VertexAccessTokenProviderInterface $vertexAccessTokenProvider,
         protected VertexConfigResolverInterface $configResolver,

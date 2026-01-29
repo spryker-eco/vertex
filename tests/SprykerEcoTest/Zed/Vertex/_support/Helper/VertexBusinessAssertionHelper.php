@@ -15,7 +15,7 @@ use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfigQuery;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
-use Spryker\Client\TaxApp\TaxAppClientInterface;
+use SprykerEco\Client\Vertex\VertexClient;
 
 class VertexBusinessAssertionHelper extends Module
 {
@@ -30,22 +30,17 @@ class VertexBusinessAssertionHelper extends Module
         $this->assertNotNull($calculableObjectTransfer->getItems()[0]->getTaxMetadata());
     }
 
-    /**
-     * @param \Spryker\Client\TaxApp\TaxAppClientInterface $taxAppClientMock
-     *
-     * @return void
-     */
-    public function assertRequestTaxQuotationReceivesSalesItemMappedWithMerchantStockAddress(TaxAppClientInterface $taxAppClientMock): void
+    public function assertRequestTaxQuotationReceivesSalesItemMappedWithMerchantStockAddress(VertexClient $vertexClientMock): void
     {
         $expectation = $this->haveExpectedTaxQuotationRequestSaleItems();
 
-        $taxAppClientMock->expects(new InvokedCountMatcher(1))
-            ->method('requestTaxQuotation')
+        $vertexClientMock->expects(new InvokedCountMatcher(1))
+            ->method('calculateTax')
             ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($expectation) {
                 $index = 0;
 
                 foreach ($vertexCalculationRequestTransfer->getSale()->getItems() as $saleItem) {
-                    foreach ($saleItem->getShippingWarehouses() as $quantityWarehouseMap) {
+                    foreach ($saleItem->getVertexShippingWarehouses() as $quantityWarehouseMap) {
                         $saleItemExpectation = $expectation[$index++];
 
                         self::assertEquals(
@@ -88,20 +83,14 @@ class VertexBusinessAssertionHelper extends Module
             }));
     }
 
-    /**
-     * @param \Spryker\Client\TaxApp\TaxAppClientInterface $taxAppClientMock
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $mockedCalculableObjectTransfer
-     *
-     * @return void
-     */
     public function assertRequestTaxQuotationReceivesSalesItemWithCorrectItemsAndWithoutWarehouseAddress(
-        TaxAppClientInterface $taxAppClientMock,
+        VertexClient $vertexClientMock,
         CalculableObjectTransfer $mockedCalculableObjectTransfer
     ): void {
         $expectation = $this->haveExpectedTaxQuotationRequestSaleItems();
 
-        $taxAppClientMock->expects(new InvokedCountMatcher(1))
-            ->method('requestTaxQuotation')
+        $vertexClientMock->expects(new InvokedCountMatcher(1))
+            ->method('calculateTax')
             ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($mockedCalculableObjectTransfer) {
                 self::assertEquals(
                     $mockedCalculableObjectTransfer->getItems()->count(),

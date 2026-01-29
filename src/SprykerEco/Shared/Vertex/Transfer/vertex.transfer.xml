@@ -103,7 +103,7 @@
         <property name="shippingAddress" type="VertexAddress"/>
         <property name="billingAddress" type="VertexAddress"/>
         <property name="sellerAddress" type="VertexAddress"/>
-        <property name="shippingWarehouses" type="ShippingWarehouse[]" singular="shippingWarehouse"/>
+        <property name="vertexShippingWarehouses" type="VertexShippingWarehouse[]" singular="vertexShippingWarehouse"/>
         <property name="taxMetadata" type="array" associative="true" singular="taxMetadataEntry"/>
         <property name="sku" type="string"/>
     </transfer>
@@ -121,13 +121,13 @@
     </transfer>
 
     <transfer name="VertexCalculationRequest" strict="true">
-        <!-- <property name="sale" type="VertexSale"/> -->
+        <property name="sale" type="VertexSale"/>
         <property name="vertexApiAccessToken" type="VertexApiAccessToken"/>
         <property name="reportingDate" type="string"/>
     </transfer>
 
     <transfer name="VertexCalculationResponse" strict="true">
-        <!-- <property name="sale" type="VertexSale"/> -->
+        <property name="sale" type="VertexSale"/>
         <property name="isSuccessful" type="bool"/>
         <property name="errorMessage" type="string"/>
     </transfer>
@@ -309,7 +309,7 @@
         <property name="billingAddress" type="Address"/>
         <property name="sellerAddress" type="Address"/>
         <!-- <property name="warehouseAddress" type="Address"/> -->
-        <property name="shippingWarehouses" type="ShippingWarehouse[]" singular="shippingWarehouse"/>
+        <property name="vertexShippingWarehouses" type="VertexShippingWarehouse[]" singular="vertexShippingWarehouse"/>
         <property name="taxMetadata" type="array" associative="true" singular="taxMetadataEntry"/>
         <property name="sku" type="string"/>
     </transfer>
@@ -317,9 +317,9 @@
     <transfer name="Address">
     </transfer>
 
-    <transfer name="ShippingWarehouse" strict="true">
+    <transfer name="VertexShippingWarehouse" strict="true">
         <property name="quantity" type="int"/>
-        <!-- <property name="warehouseAddress" type="Address"/> -->
+        <property name="warehouseAddress" type="VertexAddress"/>
     </transfer>
 
     <transfer name="VertexAddress" strict="true">

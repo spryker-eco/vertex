@@ -94,12 +94,12 @@ class PriceAggregator implements PriceAggregatorInterface
      */
     protected function getItemQuantity(VertexItemTransfer $VertexItemTransfer): int
     {
-        if (!$VertexItemTransfer->getShippingWarehouses()->count()) {
+        if (!$VertexItemTransfer->getVertexShippingWarehouses()->count()) {
             return $VertexItemTransfer->getQuantityOrFail();
         }
 
         $quantity = 0;
-        foreach ($VertexItemTransfer->getShippingWarehouses() as $warehouseMapping) {
+        foreach ($VertexItemTransfer->getVertexShippingWarehouses() as $warehouseMapping) {
             $quantity = $quantity + $warehouseMapping->getQuantity();
         }
 
