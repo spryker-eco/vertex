@@ -8,7 +8,7 @@
 namespace SprykerEco\Client\Vertex\Builder\Supplies\LineItem;
 
 use Generated\Shared\Transfer\VertexItemTransfer;
-use Generated\Shared\Transfer\ShipmentTransfer;
+use Generated\Shared\Transfer\VertexShipmentTransfer;
 use Generated\Shared\Transfer\VertexDiscountTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
 use SprykerEco\Client\Vertex\Builder\PriceConverter;
@@ -22,25 +22,19 @@ class VertexLineItemDiscountBuilder implements VertexLineItemBuilderInterface
     protected const DISCOUNT_TYPE = 'DiscountAmount';
 
     /**
-     * @var \SprykerEco\Client\Vertex\Builder\PriceConverter
-     */
-    protected $priceConverter;
-
-    /**
      * @param \SprykerEco\Client\Vertex\Builder\PriceConverter $priceConverter
      */
-    public function __construct(PriceConverter $priceConverter)
+    public function __construct(protected PriceConverter $priceConverter)
     {
-        $this->priceConverter = $priceConverter;
     }
 
     /**
-     * @param \Generated\Shared\Transfer\VertexItemTransfer|\Generated\Shared\Transfer\ShipmentTransfer $itemTransfer
+     * @param \Generated\Shared\Transfer\VertexItemTransfer|\Generated\Shared\Transfer\VertexShipmentTransfer $itemTransfer
      * @param \Generated\Shared\Transfer\VertexLineItemTransfer $vertexLineItemTransfer
      *
      * @return \Generated\Shared\Transfer\VertexLineItemTransfer
      */
-    public function build(VertexItemTransfer|ShipmentTransfer $itemTransfer, VertexLineItemTransfer $vertexLineItemTransfer): VertexLineItemTransfer
+    public function build(VertexItemTransfer|VertexShipmentTransfer $itemTransfer, VertexLineItemTransfer $vertexLineItemTransfer): VertexLineItemTransfer
     {
         if ($itemTransfer->getDiscountAmount()) {
             $vertexDiscountTransfer = (new VertexDiscountTransfer())

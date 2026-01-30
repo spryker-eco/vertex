@@ -15,16 +15,10 @@ use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
 class VertexSuppliesShipmentBuilder implements VertexSuppliesRequestBuilderInterface
 {
     /**
-     * @var array<\SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface>
-     */
-    protected array $vertexLineItemBuilders;
-
-    /**
      * @param array<\SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface> $vertexLineItemBuilders
      */
-    public function __construct(array $vertexLineItemBuilders)
+    public function __construct(protected array $vertexLineItemBuilders)
     {
-        $this->vertexLineItemBuilders = $vertexLineItemBuilders;
     }
 
     /**

@@ -30,16 +30,10 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
     protected const PRICE_MODE_NET = 'NET_MODE';
 
     /**
-     * @var array<\SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface>
-     */
-    protected array $vertexLineItemBuilders;
-
-    /**
      * @param array<\SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface> $vertexLineItemBuilders
      */
-    public function __construct(array $vertexLineItemBuilders)
+    public function __construct(protected array $vertexLineItemBuilders)
     {
-        $this->vertexLineItemBuilders = $vertexLineItemBuilders;
     }
 
     /**

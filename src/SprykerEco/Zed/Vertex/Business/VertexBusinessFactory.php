@@ -7,7 +7,6 @@
 
 namespace SprykerEco\Zed\Vertex\Business;
 
-use Spryker\Client\SecretsManager\SecretsManagerClientInterface;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use SprykerEco\Client\Vertex\VertexClientInterface as VertexVertexClientInterface;
 use SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface;
@@ -21,14 +20,6 @@ use SprykerEco\Zed\Vertex\Business\Calculator\FallbackCalculator;
 use SprykerEco\Zed\Vertex\Business\Calculator\FallbackCalculatorInterface;
 use SprykerEco\Zed\Vertex\Business\Calculator\VertexCalculator;
 use SprykerEco\Zed\Vertex\Business\Calculator\VertexCalculatorInterface;
-use SprykerEco\Zed\Vertex\Business\Config\ConfigDeleter;
-use SprykerEco\Zed\Vertex\Business\Config\ConfigDeleterInterface;
-use SprykerEco\Zed\Vertex\Business\Config\ConfigReader;
-use SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface;
-use SprykerEco\Zed\Vertex\Business\Config\ConfigWriter;
-use SprykerEco\Zed\Vertex\Business\Config\ConfigWriterInterface;
-use SprykerEco\Zed\Vertex\Business\EncryptionConfigurator\TenantPropelEncryptionConfigurator;
-use SprykerEco\Zed\Vertex\Business\EncryptionConfigurator\TenantPropelEncryptionConfiguratorInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapper;
 use SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetriever;
@@ -39,15 +30,10 @@ use SprykerEco\Zed\Vertex\Business\Order\RefundProcessor;
 use SprykerEco\Zed\Vertex\Business\Order\RefundProcessorInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolver;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
-use SprykerEco\Zed\Vertex\Business\SecretsManager\SecretsManager;
-use SprykerEco\Zed\Vertex\Business\SecretsManager\SecretsManagerInterface;
 use SprykerEco\Zed\Vertex\Business\Payment\PaymentSubmitTaxInvoiceHandler;
 use SprykerEco\Zed\Vertex\Business\Payment\PaymentSubmitTaxInvoiceHandlerInterface;
 use SprykerEco\Zed\Vertex\Business\Validator\TaxIdValidator;
 use SprykerEco\Zed\Vertex\Business\Validator\TaxIdValidatorInterface;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeInterface;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeInterface;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToOauthClientFacadeInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 use SprykerEco\Zed\Vertex\VertexDependencyProvider;
@@ -69,7 +55,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return array<\SprykerEco\Zed\VertexExtension\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface>
+     * @return array<\SprykerEco\Zed\Vertex\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface>
      */
     public function getCalculableObjectVertexExpanderPlugins(): array
     {

@@ -45,41 +45,17 @@ class VertexMapper implements VertexMapperInterface
     protected const ORIGINAL_TRANSFER_MISSING_EXCEPTION = 'Could not get original transfer from CalculableObjectTransfer';
 
     /**
-     * @var \Spryker\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface
-     */
-    protected AddressMapperInterface $addressMapper;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetrieverInterface
-     */
-    protected ItemExpensePriceRetrieverInterface $priceFormatter;
-
-    /**
-     * @var \Spryker\Zed\Vertex\VertexConfig
-     */
-    protected VertexConfig $VertexConfig;
-
-    /**
-     * @var \Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface
-     */
-    protected VertexToStoreFacadeInterface $storeFacade;
-
-    /**
-     * @param \Spryker\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface $addressMapper
-     * @param \Spryker\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetrieverInterface $priceFormatter
-     * @param \Spryker\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
-     * @param \Spryker\Zed\Vertex\VertexConfig $VertexConfig
+     * @param \SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface $addressMapper
+     * @param \SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetrieverInterface $priceFormatter
+     * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
+     * @param \SprykerEco\Zed\Vertex\VertexConfig $vertexConfig
      */
     public function __construct(
-        AddressMapperInterface $addressMapper,
-        ItemExpensePriceRetrieverInterface $priceFormatter,
-        VertexToStoreFacadeInterface $storeFacade,
-        VertexConfig $VertexConfig
+        protected AddressMapperInterface $addressMapper,
+        protected ItemExpensePriceRetrieverInterface $priceFormatter,
+        protected VertexToStoreFacadeInterface $storeFacade,
+        protected VertexConfig $vertexConfig
     ) {
-        $this->addressMapper = $addressMapper;
-        $this->priceFormatter = $priceFormatter;
-        $this->storeFacade = $storeFacade;
-        $this->VertexConfig = $VertexConfig;
     }
 
     /**
@@ -94,7 +70,7 @@ class VertexMapper implements VertexMapperInterface
     ): VertexSaleTransfer {
         $vertexSaleTransfer = $vertexSaleTransfer->fromArray($calculableObjectTransfer->toArray(), true);
         $saleItemTransfers = new ArrayObject();
-        $saleShipmentTransfers = new ArrayObject();
+        $vertexShipmentTransfers = new ArrayObject();
 
         if (!$calculableObjectTransfer->getTaxMetadata()) {
             $vertexSaleTransfer->setTaxMetadata([]);
@@ -131,18 +107,18 @@ class VertexMapper implements VertexMapperInterface
                 continue;
             }
 
-            $vertexShipmentTransfer = $this->mapExpenseTransferToSaleShipmentTransfer(
+            $vertexShipmentTransfer = $this->mapExpenseTransferToVertexShipmentTransfer(
                 $expenseTransfer,
                 $calculableObjectTransfer->getPriceModeOrFail(),
                 $originalTransfer->getBillingAddress(),
             );
 
             $vertexShipmentTransfer->setId($hash);
-            $saleShipmentTransfers->append($vertexShipmentTransfer);
+            $vertexShipmentTransfers->append($vertexShipmentTransfer);
         }
 
         $vertexSaleTransfer->setItems($saleItemTransfers);
-        $vertexSaleTransfer->setShipments($saleShipmentTransfers);
+        $vertexSaleTransfer->setShipments($vertexShipmentTransfers);
 
         $vertexSaleTransfer = $this->setTaxSaleCountryCode($calculableObjectTransfer, $vertexSaleTransfer, $originalTransfer);
 
@@ -245,7 +221,7 @@ class VertexMapper implements VertexMapperInterface
      *
      * @return \Generated\Shared\Transfer\VertexShipmentTransfer
      */
-    public function mapExpenseTransferToSaleShipmentTransfer(
+    public function mapExpenseTransferToVertexShipmentTransfer(
         ExpenseTransfer $expenseTransfer,
         string $priceMode,
         ?AddressTransfer $billingAddressTransfer
@@ -356,12 +332,12 @@ class VertexMapper implements VertexMapperInterface
     ): VertexSaleTransfer {
         $sellerCountryCode = $customerCountryCode = $this->findStoreCountryCode($calculableObjectTransfer);
 
-        if ($this->VertexConfig->getSellerCountryCode()) {
-            $sellerCountryCode = $this->VertexConfig->getSellerCountryCode();
+        if ($this->vertexConfig->getSellerCountryCode()) {
+            $sellerCountryCode = $this->vertexConfig->getSellerCountryCode();
         }
 
-        if ($this->VertexConfig->getCustomerCountryCode()) {
-            $customerCountryCode = $this->VertexConfig->getCustomerCountryCode();
+        if ($this->vertexConfig->getCustomerCountryCode()) {
+            $customerCountryCode = $this->vertexConfig->getCustomerCountryCode();
         }
 
         if ($originalTransfer->getBillingAddress() && $originalTransfer->getBillingAddress()->getIso2Code()) {

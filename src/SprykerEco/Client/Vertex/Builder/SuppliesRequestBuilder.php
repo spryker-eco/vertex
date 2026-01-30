@@ -13,16 +13,10 @@ use Generated\Shared\Transfer\VertexSuppliesTransfer;
 class SuppliesRequestBuilder
 {
     /**
-     * @var array<\Pyz\Zed\VertexApi\Business\Builder\VertexSuppliesRequestBuilderInterface>
+     * @param array<\SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface> $vertexRequestBuilders
      */
-    protected $vertexRequestBuilders;
-
-    /**
-     * @param array<\Pyz\Zed\VertexApi\Business\Builder\VertexSuppliesRequestBuilderInterface> $vertexRequestBuilders
-     */
-    public function __construct(array $vertexRequestBuilders)
+    public function __construct(protected array $vertexRequestBuilders)
     {
-        $this->vertexRequestBuilders = $vertexRequestBuilders;
     }
 
     /**

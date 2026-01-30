@@ -7,25 +7,25 @@
 
 namespace SprykerEco\Client\Vertex\Builder;
 
-use Generated\Shared\Transfer\AddressTransfer;
+use Generated\Shared\Transfer\VertexAddressTransfer;
 use Generated\Shared\Transfer\VertexLocationTransfer;
 
 class LocationMapper
 {
     /**
-     * @param \Generated\Shared\Transfer\AddressTransfer $addressTransfer
+     * @param \Generated\Shared\Transfer\VertexAddressTransfer $vertexAddressTransfer
      *
      * @return \Generated\Shared\Transfer\VertexLocationTransfer
      */
-    public function mapAddressTransferToVertexLocationTransfer(AddressTransfer $addressTransfer): VertexLocationTransfer
+    public function mapVertexAddressTransferToVertexLocationTransfer(VertexAddressTransfer $vertexAddressTransfer): VertexLocationTransfer
     {
         $vertexLocationTransfer = (new VertexLocationTransfer())
-            ->setStreetAddress1($addressTransfer->getAddress1OrFail())
-            ->setStreetAddress2($addressTransfer->getAddress2())
-            ->setCity($addressTransfer->getCityOrFail())
-            ->setMainDivision($addressTransfer->getState())
-            ->setPostalCode($addressTransfer->getZipCodeOrFail())
-            ->setCountry($addressTransfer->getCountryOrFail()?->getName());
+            ->setStreetAddress1($vertexAddressTransfer->getAddress1OrFail())
+            ->setStreetAddress2($vertexAddressTransfer->getAddress2())
+            ->setCity($vertexAddressTransfer->getCityOrFail())
+            ->setMainDivision($vertexAddressTransfer->getState())
+            ->setPostalCode($vertexAddressTransfer->getZipCodeOrFail())
+            ->setCountry($vertexAddressTransfer->getCountryOrFail());
 
         if (empty($vertexLocationTransfer->getStreetAddress2())) {
             $vertexLocationTransfer->setStreetAddress2(null);

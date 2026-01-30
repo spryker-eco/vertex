@@ -119,6 +119,7 @@
         <property name="refundedTaxTotal" type="int"/>
         <property name="shippingAddress" type="VertexAddress"/>
         <property name="billingAddress" type="VertexAddress"/>
+        <property name="method" type="ShipmentMethod"/>
     </transfer>
 
     <transfer name="VertexCalculationRequest" strict="true">
@@ -284,7 +285,7 @@
         <property name="credentialHash" type="string"/>
     </transfer>
 
-    <transfer name="Sale" strict="true">
+    <!-- <transfer name="Sale" strict="true">
         <property name="transactionId" type="string"/>
         <property name="documentNumber" type="string"/>
         <property name="documentDate" type="string"/>
@@ -310,11 +311,11 @@
         <property name="shippingAddress" type="Address"/>
         <property name="billingAddress" type="Address"/>
         <property name="sellerAddress" type="Address"/>
-        <!-- <property name="warehouseAddress" type="Address"/> -->
+        <property name="warehouseAddress" type="Address"/>
         <property name="vertexShippingWarehouses" type="VertexShippingWarehouse[]" singular="vertexShippingWarehouse"/>
         <property name="taxMetadata" type="array" associative="true" singular="taxMetadataEntry"/>
         <property name="sku" type="string"/>
-    </transfer>
+    </transfer> -->
 
     <transfer name="Address">
     </transfer>

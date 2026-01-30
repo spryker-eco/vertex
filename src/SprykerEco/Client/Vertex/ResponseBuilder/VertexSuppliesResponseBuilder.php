@@ -14,14 +14,11 @@ use SprykerEco\Client\Vertex\Builder\PriceConverter;
 
 class VertexSuppliesResponseBuilder implements VertexSuppliesResponseBuilderInterface
 {
-    protected PriceConverter $priceConverter;
-
     /**
-     * @param \Pyz\Zed\VertexApi\Business\Builder\PriceConverter $priceConverter
+     * @param \SprykerEco\Client\Vertex\Builder\PriceConverter $priceConverter
      */
-    public function __construct(PriceConverter $priceConverter)
+    public function __construct(protected PriceConverter $priceConverter)
     {
-        $this->priceConverter = $priceConverter;
     }
 
     /**

@@ -66,7 +66,7 @@ interface VertexMapperInterface
      *
      * @return \Generated\Shared\Transfer\VertexShipmentTransfer
      */
-    public function mapExpenseTransferToSaleShipmentTransfer(
+    public function mapExpenseTransferToVertexShipmentTransfer(
         ExpenseTransfer $expenseTransfer,
         string $priceMode,
         ?AddressTransfer $billingAddressTransfer
