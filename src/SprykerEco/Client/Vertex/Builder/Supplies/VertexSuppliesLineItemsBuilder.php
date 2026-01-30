@@ -7,13 +7,13 @@
 
 namespace SprykerEco\Client\Vertex\Builder\Supplies;
 
-use Generated\Shared\Transfer\SaleItemTransfer;
-use Generated\Shared\Transfer\SaleTransfer;
 use Generated\Shared\Transfer\VertexShippingWarehouseTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCustomerTransfer;
+use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
 use Generated\Shared\Transfer\VertexLocationTransfer;
+use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
 use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
 
@@ -52,64 +52,64 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexSuppliesTransfer $vertexSuppliesTransfer
     ): VertexSuppliesTransfer {
-        $saleTransfer = $vertexCalculationRequestTransfer->getSaleOrFail();
-        foreach ($saleTransfer->getItems() as $item) {
-            if (!$this->hasItemMultipleWarehouses($item)) {
-                $vertexSuppliesTransfer = $this->buildWithSingleWarehouse($saleTransfer, $item, $vertexSuppliesTransfer);
+        $vertexSaleTransfer = $vertexCalculationRequestTransfer->getSaleOrFail();
+        foreach ($vertexSaleTransfer->getItems() as $vertexItemTransfer) {
+            if (!$this->hasItemMultipleWarehouses($vertexItemTransfer)) {
+                $vertexSuppliesTransfer = $this->buildWithSingleWarehouse($vertexSaleTransfer, $vertexItemTransfer, $vertexSuppliesTransfer);
 
                 continue;
             }
 
-            $vertexSuppliesTransfer = $this->buildWithMultipleWarehouses($saleTransfer, $item, $vertexSuppliesTransfer);
+            $vertexSuppliesTransfer = $this->buildWithMultipleWarehouses($vertexSaleTransfer, $vertexItemTransfer, $vertexSuppliesTransfer);
         }
 
         return $vertexSuppliesTransfer;
     }
 
     /**
-     * @param \Generated\Shared\Transfer\SaleTransfer $saleTransfer
-     * @param \Generated\Shared\Transfer\SaleItemTransfer $saleItemTransfer
+     * @param \Generated\Shared\Transfer\VertexSaleTransfer $vertexSaleTransfer,
+     * @param \Generated\Shared\Transfer\VertexItemTransfer $vertexItemTransfer
      * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
      *
      * @return \Generated\Shared\Transfer\VertexSuppliesTransfer
      */
     protected function buildWithSingleWarehouse(
-        SaleTransfer $saleTransfer,
-        SaleItemTransfer $saleItemTransfer,
+        VertexSaleTransfer $vertexSaleTransfer,
+        VertexItemTransfer $vertexItemTransfer,
         VertexSuppliesTransfer $vertexSuppliesTransfer
     ): VertexSuppliesTransfer {
         $vertexLineItemTransfer = new VertexLineItemTransfer();
 
-        if ($saleItemTransfer->getVertexShippingWarehouses()->count()) {
-            $saleItemTransfer->setWarehouseAddressOrFail(
-                $saleItemTransfer->getVertexShippingWarehouses()[0]->getWarehouseAddressOrFail(),
+        if ($vertexItemTransfer->getVertexShippingWarehouses()->count()) {
+            $vertexItemTransfer->setWarehouseAddressOrFail(
+                $vertexItemTransfer->getVertexShippingWarehouses()[0]->getWarehouseAddressOrFail(),
             );
         }
 
-        $vertexLineItemTransfer->setTaxIncludedIndicator($saleTransfer->getPriceMode() === static::PRICE_MODE_GROSS);
-        $this->setDefaultCustomerDestination($vertexLineItemTransfer, $saleTransfer);
+        $vertexLineItemTransfer->setTaxIncludedIndicator($vertexSaleTransfer->getPriceMode() === static::PRICE_MODE_GROSS);
+        $this->setDefaultCustomerDestination($vertexLineItemTransfer, $vertexSaleTransfer);
 
-        $this->runVertexSuppliesLineItemsBuilders($saleItemTransfer, $vertexLineItemTransfer);
+        $this->runVertexSuppliesLineItemsBuilders($vertexItemTransfer, $vertexLineItemTransfer);
 
         return $vertexSuppliesTransfer->addLineItem($vertexLineItemTransfer);
     }
 
     /**
-     * @param \Generated\Shared\Transfer\SaleTransfer $saleTransfer
-     * @param \Generated\Shared\Transfer\SaleItemTransfer $saleItemTransfer
+     * @param \Generated\Shared\Transfer\VertexSaleTransfer $vertexSaleTransfer
+     * @param \Generated\Shared\Transfer\VertexItemTransfer $vertexItemTransfer
      * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
      *
      * @return \Generated\Shared\Transfer\VertexSuppliesTransfer
      */
     protected function buildWithMultipleWarehouses(
-        SaleTransfer $saleTransfer,
-        SaleItemTransfer $saleItemTransfer,
+        VertexSaleTransfer $vertexSaleTransfer,
+        VertexItemTransfer $vertexItemTransfer,
         VertexSuppliesTransfer $vertexSuppliesTransfer
     ): VertexSuppliesTransfer {
         $idIndex = 0;
-        foreach ($saleItemTransfer->getVertexShippingWarehouses() as $vertexShippingWarehouse) {
-            $clonedSaleItemTransfer = $this->cloneSaleItemTransferWithVertexShippingWarehouseData(
-                $saleItemTransfer,
+        foreach ($vertexItemTransfer->getVertexShippingWarehouses() as $vertexShippingWarehouse) {
+            $clonedVertexItemTransfer = $this->cloneVertexItemTransferWithVertexShippingWarehouseData(
+                $vertexItemTransfer,
                 $vertexShippingWarehouse,
                 $idIndex,
             );
@@ -117,11 +117,11 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
             $vertexLineItemTransfer = new VertexLineItemTransfer();
 
             $vertexLineItemTransfer->setShouldBeGrouped(true);
-            $vertexLineItemTransfer->setInitialIdentifier($saleItemTransfer->getIdOrFail());
-            $vertexLineItemTransfer->setTaxIncludedIndicator($saleTransfer->getPriceMode() === static::PRICE_MODE_GROSS);
-            $this->setDefaultCustomerDestination($vertexLineItemTransfer, $saleTransfer);
+            $vertexLineItemTransfer->setInitialIdentifier($vertexItemTransfer->getIdOrFail());
+            $vertexLineItemTransfer->setTaxIncludedIndicator($vertexSaleTransfer->getPriceMode() === static::PRICE_MODE_GROSS);
+            $this->setDefaultCustomerDestination($vertexLineItemTransfer, $vertexSaleTransfer);
 
-            $this->runVertexSuppliesLineItemsBuilders($clonedSaleItemTransfer, $vertexLineItemTransfer);
+            $this->runVertexSuppliesLineItemsBuilders($clonedVertexItemTransfer, $vertexLineItemTransfer);
 
             $vertexSuppliesTransfer->addLineItem($vertexLineItemTransfer);
         }
@@ -130,21 +130,21 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
     }
 
     /**
-     * @param \Generated\Shared\Transfer\SaleItemTransfer $saleItemTransfer
+     * @param \Generated\Shared\Transfer\VertexItemTransfer $vertexItemTransfer
      * @param \Generated\Shared\Transfer\VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer
      * @param int $idIndex
      *
-     * @return \Generated\Shared\Transfer\SaleItemTransfer
+     * @return \Generated\Shared\Transfer\VertexItemTransfer
      */
-    protected function cloneSaleItemTransferWithVertexShippingWarehouseData(
-        SaleItemTransfer $saleItemTransfer,
+    protected function cloneVertexItemTransferWithVertexShippingWarehouseData(
+        VertexItemTransfer $vertexItemTransfer,
         VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer,
         int &$idIndex
-    ): SaleItemTransfer {
-        $clonedItemTransfer = clone $saleItemTransfer;
+    ): VertexItemTransfer {
+        $clonedItemTransfer = clone $vertexItemTransfer;
 
         $clonedItemTransfer->setId(
-            $saleItemTransfer->getId() . '_' . $idIndex++,
+            $vertexItemTransfer->getId() . '_' . $idIndex++,
         );
 
         $clonedItemTransfer->setQuantity((string)$vertexShippingWarehouseTransfer->getQuantityOrFail());
@@ -157,47 +157,47 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
     }
 
     /**
-     * @param \Generated\Shared\Transfer\SaleItemTransfer $saleItemTransfer
+     * @param \Generated\Shared\Transfer\VertexItemTransfer $vertexItemTransfer
      * @param \Generated\Shared\Transfer\VertexLineItemTransfer $vertexLineItemTransfer
      *
      * @return \Generated\Shared\Transfer\VertexLineItemTransfer
      */
     protected function runVertexSuppliesLineItemsBuilders(
-        SaleItemTransfer $saleItemTransfer,
+        VertexItemTransfer $vertexItemTransfer,
         VertexLineItemTransfer $vertexLineItemTransfer
     ): VertexLineItemTransfer {
         foreach ($this->vertexLineItemBuilders as $builder) {
-            $vertexLineItemTransfer = $builder->build($saleItemTransfer, $vertexLineItemTransfer);
+            $vertexLineItemTransfer = $builder->build($vertexItemTransfer, $vertexLineItemTransfer);
         }
 
         return $vertexLineItemTransfer;
     }
 
     /**
-     * @param \Generated\Shared\Transfer\SaleItemTransfer $saleItemTransfer
+     * @param \Generated\Shared\Transfer\VertexItemTransfer $vertexItemTransfer
      *
      * @return bool
      */
-    protected function hasItemMultipleWarehouses(SaleItemTransfer $saleItemTransfer): bool
+    protected function hasItemMultipleWarehouses(VertexItemTransfer $vertexItemTransfer): bool
     {
-        return $saleItemTransfer->getVertexShippingWarehouses()->count() > 1;
+        return $vertexItemTransfer->getVertexShippingWarehouses()->count() > 1;
     }
 
     /**
      * @param \Generated\Shared\Transfer\VertexLineItemTransfer $vertexLineItemTransfer
-     * @param \Generated\Shared\Transfer\SaleTransfer $saleTransfer
+     * @param \Generated\Shared\Transfer\VertexSaleTransfer $vertexSaleTransfer
      *
      * @return void
      */
-    protected function setDefaultCustomerDestination(VertexLineItemTransfer $vertexLineItemTransfer, SaleTransfer $saleTransfer): void
+    protected function setDefaultCustomerDestination(VertexLineItemTransfer $vertexLineItemTransfer, VertexSaleTransfer $vertexSaleTransfer): void
     {
-        if (!$saleTransfer->getCustomerCountryCode()) {
+        if (!$vertexSaleTransfer->getCustomerCountryCode()) {
             return;
         }
 
         $vertexCustomerTransfer = $vertexLineItemTransfer->getCustomer() ?? new VertexCustomerTransfer();
-        $vertexCustomerTransfer->setAdministrativeDestination((new VertexLocationTransfer())->setCountry($saleTransfer->getCustomerCountryCode()));
-        $vertexCustomerTransfer->setDestination((new VertexLocationTransfer())->setCountry($saleTransfer->getCustomerCountryCode()));
+        $vertexCustomerTransfer->setAdministrativeDestination((new VertexLocationTransfer())->setCountry($vertexSaleTransfer->getCustomerCountryCode()));
+        $vertexCustomerTransfer->setDestination((new VertexLocationTransfer())->setCountry($vertexSaleTransfer->getCustomerCountryCode()));
         $vertexLineItemTransfer->setCustomer($vertexCustomerTransfer);
     }
 }

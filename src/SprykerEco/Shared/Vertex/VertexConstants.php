@@ -123,5 +123,15 @@ interface VertexConstants
      * @var string
      */
     public const IS_TAX_ID_VALIDATOR_ENABLED = 'VERTEX:IS_TAX_ID_VALIDATOR_ENABLED';
+
+    /**
+     * Specification:
+     * - Determines whether the tax assist is enabled or not.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const IS_TAX_ASSIST_ENABLED = 'VERTEX:IS_TAX_ASSIST_ENABLED';
 }
 

@@ -9,7 +9,6 @@ namespace SprykerEco\Client\Vertex\TaxCalculator;
 
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
-use Generated\Shared\Transfer\VertexConfigCriteriaTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use SprykerEco\Client\Vertex\Api\V2\Client\SuppliesApiInterface;
@@ -67,11 +66,11 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
         }
 
         $vertexApiAccessTokenTransfer = $vertexCalculationRequestTransfer->getVertexApiAccessToken();
-
         if (!$vertexApiAccessTokenTransfer?->getAccessToken()) {
             return $this->responseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, static::ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN);
         }
 
+        $vertexCalculationRequestTransfer->setVertexConfiguration($vertexConfigTransfer);
         $vertexSuppliesRequestTransfer = $this->vertexSuppliesRequestBuilder->build(
             $vertexCalculationRequestTransfer,
             (new VertexSuppliesTransfer()),

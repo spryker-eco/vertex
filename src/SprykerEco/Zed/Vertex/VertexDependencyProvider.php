@@ -10,9 +10,6 @@ namespace SprykerEco\Zed\Vertex;
 use SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceBridge;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeBridge;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToKernelAppFacadeInterface;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeBridge;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeBridge;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeBridge;
 

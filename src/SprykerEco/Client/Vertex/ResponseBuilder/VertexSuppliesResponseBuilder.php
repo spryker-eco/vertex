@@ -40,7 +40,7 @@ class VertexSuppliesResponseBuilder implements VertexSuppliesResponseBuilderInte
 
         $lineItemTaxes = $this->getLineItemTaxesIndexedByLineItemId($vertexResponse, $lineItemIdToInitialIdentifierMapping);
 
-        $saleTransfer = $vertexCalculationRequestTransfer->getSale();
+        $vertexSaleTransfer = $vertexCalculationRequestTransfer->getSale();
 
         // Total tax calculated for the order
         $totalTax = $vertexResponse['data']['totalTax'];
@@ -48,7 +48,7 @@ class VertexSuppliesResponseBuilder implements VertexSuppliesResponseBuilderInte
         // "Refunded" tax amount - this is the amount which will be subtracted from tax invoice after refund. Negative value.
         $refundedTaxTotal = 0;
 
-        foreach ($saleTransfer->getItems() as $item) {
+        foreach ($vertexSaleTransfer->getItems() as $item) {
             $itemId = $item->getIdOrFail();
             if (!isset($lineItemTaxes[$itemId])) {
                 continue;
@@ -66,7 +66,7 @@ class VertexSuppliesResponseBuilder implements VertexSuppliesResponseBuilderInte
             $item->setTaxTotal($this->priceConverter->convertPriceForSpryker($lineItemTaxes[$itemId]));
         }
 
-        foreach ($saleTransfer->getShipments() as $shipment) {
+        foreach ($vertexSaleTransfer->getShipments() as $shipment) {
             $shipmentId = $shipment->getIdOrFail();
             if (!isset($lineItemTaxes[$shipmentId])) {
                 continue;
@@ -87,11 +87,11 @@ class VertexSuppliesResponseBuilder implements VertexSuppliesResponseBuilderInte
         // It is still necessary to return the correct total tax amount for the order including the refunded tax amount.
         $taxTotal = $totalTax - $refundedTaxTotal;
 
-        $saleTransfer->setTaxTotal($this->priceConverter->convertPriceForSpryker($taxTotal));
-        $saleTransfer->setRefundedTaxTotal($this->priceConverter->convertPriceForSpryker($refundedTaxTotal));
+        $vertexSaleTransfer->setTaxTotal($this->priceConverter->convertPriceForSpryker($taxTotal));
+        $vertexSaleTransfer->setRefundedTaxTotal($this->priceConverter->convertPriceForSpryker($refundedTaxTotal));
 
         return (new VertexCalculationResponseTransfer())
-            ->setSale($saleTransfer)
+            ->setSale($vertexSaleTransfer)
             ->setIsSuccessful(true);
     }
 

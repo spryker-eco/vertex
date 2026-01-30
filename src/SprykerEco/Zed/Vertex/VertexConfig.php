@@ -63,6 +63,11 @@ class VertexConfig extends AbstractBundleConfig
         return $this->get(VertexConstants::IS_TAX_ID_VALIDATOR_ENABLED, false);
     }
 
+    public function isTaxAssistEnabled(): bool
+    {
+        return $this->get(VertexConstants::IS_TAX_ASSIST_ENABLED, false);
+    }
+
     /**
      * @api
      *

@@ -84,20 +84,20 @@ class VertexMapper implements VertexMapperInterface
 
     /**
      * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $VertexSaleTransfer
+     * @param \Generated\Shared\Transfer\VertexSaleTransfer $vertexSaleTransfer
      *
      * @return \Generated\Shared\Transfer\VertexSaleTransfer
      */
     public function mapCalculableObjectToVertexSaleTransfer(
         CalculableObjectTransfer $calculableObjectTransfer,
-        VertexSaleTransfer $VertexSaleTransfer
+        VertexSaleTransfer $vertexSaleTransfer
     ): VertexSaleTransfer {
-        $VertexSaleTransfer = $VertexSaleTransfer->fromArray($calculableObjectTransfer->toArray(), true);
+        $vertexSaleTransfer = $vertexSaleTransfer->fromArray($calculableObjectTransfer->toArray(), true);
         $saleItemTransfers = new ArrayObject();
         $saleShipmentTransfers = new ArrayObject();
 
         if (!$calculableObjectTransfer->getTaxMetadata()) {
-            $VertexSaleTransfer->setTaxMetadata([]);
+            $vertexSaleTransfer->setTaxMetadata([]);
         }
 
         $originalTransfer = $this->getOriginalTransfer($calculableObjectTransfer);
@@ -109,21 +109,21 @@ class VertexMapper implements VertexMapperInterface
             $documentDate = $createdAt ? $createdAt->format('Y-m-d') : $documentDate;
         }
 
-        $VertexSaleTransfer
+        $vertexSaleTransfer
             ->setTransactionId($transferIdentifier)
             ->setDocumentNumber($transferIdentifier)
             ->setDocumentDate($documentDate)
             ->setPriceMode($calculableObjectTransfer->getPriceModeOrFail());
 
         foreach ($calculableObjectTransfer->getItems() as $itemIndex => $itemTransfer) {
-            $VertexItemTransfer = $this->mapItemTransfersToSaleItemTransfers(
+            $vertexItemTransfer = $this->mapItemTransfersToSaleItemTransfers(
                 $itemTransfer,
                 $calculableObjectTransfer->getPriceModeOrFail(),
                 $originalTransfer->getBillingAddress(),
                 $itemIndex,
             );
 
-            $saleItemTransfers->append($VertexItemTransfer);
+            $saleItemTransfers->append($vertexItemTransfer);
         }
 
         foreach ($calculableObjectTransfer->getExpenses() as $hash => $expenseTransfer) {
@@ -131,22 +131,22 @@ class VertexMapper implements VertexMapperInterface
                 continue;
             }
 
-            $VertexShipmentTransfer = $this->mapExpenseTransferToSaleShipmentTransfer(
+            $vertexShipmentTransfer = $this->mapExpenseTransferToSaleShipmentTransfer(
                 $expenseTransfer,
                 $calculableObjectTransfer->getPriceModeOrFail(),
                 $originalTransfer->getBillingAddress(),
             );
 
-            $VertexShipmentTransfer->setId($hash);
-            $saleShipmentTransfers->append($VertexShipmentTransfer);
+            $vertexShipmentTransfer->setId($hash);
+            $saleShipmentTransfers->append($vertexShipmentTransfer);
         }
 
-        $VertexSaleTransfer->setItems($saleItemTransfers);
-        $VertexSaleTransfer->setShipments($saleShipmentTransfers);
+        $vertexSaleTransfer->setItems($saleItemTransfers);
+        $vertexSaleTransfer->setShipments($saleShipmentTransfers);
 
-        $VertexSaleTransfer = $this->setTaxSaleCountryCode($calculableObjectTransfer, $VertexSaleTransfer, $originalTransfer);
+        $vertexSaleTransfer = $this->setTaxSaleCountryCode($calculableObjectTransfer, $vertexSaleTransfer, $originalTransfer);
 
-        return $VertexSaleTransfer;
+        return $vertexSaleTransfer;
     }
 
     /**
@@ -163,63 +163,63 @@ class VertexMapper implements VertexMapperInterface
         ?AddressTransfer $billingAddressTransfer,
         int $itemIndex
     ): VertexItemTransfer {
-        $VertexItemTransfer = new VertexItemTransfer();
+        $vertexItemTransfer = new VertexItemTransfer();
 
-        $VertexItemTransfer->setId(sprintf('%s_%s', $itemTransfer->getSku(), $itemIndex));
-        $VertexItemTransfer->setSku($itemTransfer->getSku());
-        $VertexItemTransfer->setQuantity($itemTransfer->getQuantity());
+        $vertexItemTransfer->setId(sprintf('%s_%s', $itemTransfer->getSku(), $itemIndex));
+        $vertexItemTransfer->setSku($itemTransfer->getSku());
+        $vertexItemTransfer->setQuantity($itemTransfer->getQuantity());
 
-        $VertexItemTransfer->setPriceAmount($this->priceFormatter->getUnitPriceWithoutDiscount($itemTransfer, $priceMode));
+        $vertexItemTransfer->setPriceAmount($this->priceFormatter->getUnitPriceWithoutDiscount($itemTransfer, $priceMode));
 
         if ($itemTransfer->getCanceledAmount()) {
-            $VertexItemTransfer->setRefundableAmount($this->priceFormatter->getUnitPriceWithoutDiscount($itemTransfer, $priceMode));
+            $vertexItemTransfer->setRefundableAmount($this->priceFormatter->getUnitPriceWithoutDiscount($itemTransfer, $priceMode));
         }
 
-        $VertexItemTransfer->setDiscountAmount($itemTransfer->getUnitDiscountAmountFullAggregation());
+        $vertexItemTransfer->setDiscountAmount($itemTransfer->getUnitDiscountAmountFullAggregation());
 
         if ($itemTransfer->getShipment() && $itemTransfer->getShipment()->getShippingAddress()) {
             $shippingVertexAddressTransfer = $this->addressMapper->mapAddressTransferToVertexAddressTransfer($itemTransfer->getShipment()->getShippingAddress(), new VertexAddressTransfer());
-            $VertexItemTransfer->setShippingAddress($shippingVertexAddressTransfer);
+            $vertexItemTransfer->setShippingAddress($shippingVertexAddressTransfer);
         }
 
         if ($billingAddressTransfer && $billingAddressTransfer->getCountry()) {
             $billingVertexAddressTransfer = $this->addressMapper->mapAddressTransferToVertexAddressTransfer($billingAddressTransfer, new VertexAddressTransfer());
-            $VertexItemTransfer->setBillingAddress($billingVertexAddressTransfer);
+            $vertexItemTransfer->setBillingAddress($billingVertexAddressTransfer);
         }
 
         if ($itemTransfer->getMerchantProfileAddress()) {
             $sellerAddress = $this->addressMapper->mapMerchantProfileAddressTransferToVertexAddressTransfer($itemTransfer->getMerchantProfileAddress(), new VertexAddressTransfer());
-            $VertexItemTransfer->setSellerAddress($sellerAddress);
+            $vertexItemTransfer->setSellerAddress($sellerAddress);
         }
 
         if (!$itemTransfer->getTaxMetadata()) {
-            $VertexItemTransfer->setTaxMetadata([]);
+            $vertexItemTransfer->setTaxMetadata([]);
         }
 
         if ($itemTransfer->getMerchantStockAddresses()->count()) {
             foreach ($itemTransfer->getMerchantStockAddresses() as $merchantStockAddress) {
                 $vertexShippingWarehouseTransfer = $this->mapMerchantStockAddressTransferToVertexShippingWarehouse(
-                    $VertexItemTransfer,
+                    $vertexItemTransfer,
                     $merchantStockAddress,
                     new VertexShippingWarehouseTransfer(),
                 );
 
-                $VertexItemTransfer->addVertexShippingWarehouse($vertexShippingWarehouseTransfer);
+                $vertexItemTransfer->addVertexShippingWarehouse($vertexShippingWarehouseTransfer);
             }
         }
 
-        return $VertexItemTransfer;
+        return $vertexItemTransfer;
     }
 
     /**
-     * @param \Generated\Shared\Transfer\VertexItemTransfer $VertexItemTransfer
+     * @param \Generated\Shared\Transfer\VertexItemTransfer $vertexItemTransfer
      * @param \Generated\Shared\Transfer\MerchantStockAddressTransfer $merchantStockAddressTransfer
      * @param \Generated\Shared\Transfer\VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer
      *
      * @return \Generated\Shared\Transfer\VertexShippingWarehouseTransfer
      */
     public function mapMerchantStockAddressTransferToVertexShippingWarehouse(
-        VertexItemTransfer $VertexItemTransfer,
+        VertexItemTransfer $vertexItemTransfer,
         MerchantStockAddressTransfer $merchantStockAddressTransfer,
         VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer
     ): VertexShippingWarehouseTransfer {
@@ -250,30 +250,30 @@ class VertexMapper implements VertexMapperInterface
         string $priceMode,
         ?AddressTransfer $billingAddressTransfer
     ): VertexShipmentTransfer {
-        $VertexShipmentTransfer = new VertexShipmentTransfer();
+        $vertexShipmentTransfer = new VertexShipmentTransfer();
 
         if ($expenseTransfer->getShipment() && $expenseTransfer->getShipment()->getMethod()) {
-            $VertexShipmentTransfer->setShipmentMethodKey($expenseTransfer->getShipment()->getMethod()->getShipmentMethodKey());
+            $vertexShipmentTransfer->setShipmentMethodKey($expenseTransfer->getShipment()->getMethod()->getShipmentMethodKey());
         }
         if ($expenseTransfer->getShipment() && $expenseTransfer->getShipment()->getShippingAddress()) {
             $shippingVertexAddressTransfer = $this->addressMapper->mapAddressTransferToVertexAddressTransfer($expenseTransfer->getShipment()->getShippingAddress(), new VertexAddressTransfer());
 
-            $VertexShipmentTransfer->setShippingAddress($shippingVertexAddressTransfer);
+            $vertexShipmentTransfer->setShippingAddress($shippingVertexAddressTransfer);
         }
 
         if ($billingAddressTransfer) {
             $billingVertexAddressTransfer = $this->addressMapper->mapAddressTransferToVertexAddressTransfer($billingAddressTransfer, new VertexAddressTransfer());
-            $VertexShipmentTransfer->setBillingAddress($billingVertexAddressTransfer);
+            $vertexShipmentTransfer->setBillingAddress($billingVertexAddressTransfer);
         }
 
-        $VertexShipmentTransfer->setPriceAmount($this->priceFormatter->getSumPriceWithoutDiscount($expenseTransfer, $priceMode));
+        $vertexShipmentTransfer->setPriceAmount($this->priceFormatter->getSumPriceWithoutDiscount($expenseTransfer, $priceMode));
 
         if ($expenseTransfer->getCanceledAmount()) {
-            $VertexShipmentTransfer->setRefundableAmount($this->priceFormatter->getSumPriceWithoutDiscount($expenseTransfer, $priceMode));
+            $vertexShipmentTransfer->setRefundableAmount($this->priceFormatter->getSumPriceWithoutDiscount($expenseTransfer, $priceMode));
         }
-        $VertexShipmentTransfer->setDiscountAmount($expenseTransfer->getSumDiscountAmountAggregation());
+        $vertexShipmentTransfer->setDiscountAmount($expenseTransfer->getSumDiscountAmountAggregation());
 
-        return $VertexShipmentTransfer;
+        return $vertexShipmentTransfer;
     }
 
     /**
@@ -324,11 +324,11 @@ class VertexMapper implements VertexMapperInterface
 
     /**
      * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $VertexSaleTransfer
+     * @param \Generated\Shared\Transfer\VertexSaleTransfer $vertexSaleTransfer
      *
      * @return \Generated\Shared\Transfer\VertexSaleTransfer
      */
-    public function mapOrderTransferToVertexSaleTransfer(OrderTransfer $orderTransfer, VertexSaleTransfer $VertexSaleTransfer): VertexSaleTransfer
+    public function mapOrderTransferToVertexSaleTransfer(OrderTransfer $orderTransfer, VertexSaleTransfer $vertexSaleTransfer): VertexSaleTransfer
     {
         $calculableObjectTransfer = new CalculableObjectTransfer();
         $calculableObjectTransfer->fromArray($orderTransfer->toArray(), true);
@@ -339,19 +339,19 @@ class VertexMapper implements VertexMapperInterface
         $calculableObjectTransfer->setStore((new StoreTransfer())->setName($orderTransfer->getStore()));
         $calculableObjectTransfer->setOriginalOrder($orderTransfer);
 
-        return $this->mapCalculableObjectToVertexSaleTransfer($calculableObjectTransfer, $VertexSaleTransfer);
+        return $this->mapCalculableObjectToVertexSaleTransfer($calculableObjectTransfer, $vertexSaleTransfer);
     }
 
     /**
      * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $VertexSaleTransfer
+     * @param \Generated\Shared\Transfer\VertexSaleTransfer $vertexSaleTransfer
      * @param \Generated\Shared\Transfer\OrderTransfer|\Generated\Shared\Transfer\QuoteTransfer $originalTransfer
      *
      * @return \Generated\Shared\Transfer\VertexSaleTransfer
      */
     public function setTaxSaleCountryCode(
         CalculableObjectTransfer $calculableObjectTransfer,
-        VertexSaleTransfer $VertexSaleTransfer,
+        VertexSaleTransfer $vertexSaleTransfer,
         OrderTransfer|QuoteTransfer $originalTransfer
     ): VertexSaleTransfer {
         $sellerCountryCode = $customerCountryCode = $this->findStoreCountryCode($calculableObjectTransfer);
@@ -368,10 +368,10 @@ class VertexMapper implements VertexMapperInterface
             $customerCountryCode = $originalTransfer->getBillingAddress()->getIso2Code();
         }
 
-        $VertexSaleTransfer->setSellerCountryCode($sellerCountryCode ?: null);
-        $VertexSaleTransfer->setCustomerCountryCode($customerCountryCode ?: null);
+        $vertexSaleTransfer->setSellerCountryCode($sellerCountryCode ?: null);
+        $vertexSaleTransfer->setCustomerCountryCode($customerCountryCode ?: null);
 
-        return $VertexSaleTransfer;
+        return $vertexSaleTransfer;
     }
 
     /**

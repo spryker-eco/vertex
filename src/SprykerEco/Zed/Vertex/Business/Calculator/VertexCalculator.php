@@ -25,6 +25,11 @@ class VertexCalculator implements VertexCalculatorInterface
     use LoggerTrait;
 
     /**
+     * @var string
+     */
+    protected const ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN = 'Unable to connect to Vertex API: access token is invalid';
+
+    /**
      * @uses \Spryker\Shared\Shipment\ShipmentConfig::SHIPMENT_EXPENSE_TYPE
      *
      * @var string
@@ -73,10 +78,7 @@ class VertexCalculator implements VertexCalculatorInterface
             $vertexCalculationResponseTransfer = $this->getVertexCalculationResponse($vertexSaleTransfer, $vertexConfigTransfer);
 
             if (!$vertexCalculationResponseTransfer->getIsSuccessful()) {
-                $apiErrorMessages = array_map(function (ApiErrorMessageTransfer $apiErrorMessageTransfer) {
-                    return $apiErrorMessageTransfer->toArray();
-                }, $vertexCalculationResponseTransfer->getApiErrorMessages()->getArrayCopy());
-                $this->getLogger()->error('Tax calculation failed.', ['apiErrorMessages' => $apiErrorMessages]);
+                $this->getLogger()->error('Tax calculation failed.', ['apiErrorMessages' => $vertexCalculationResponseTransfer->getErrorMessage()]);
 
                 $vertexSaleTransfer = $this->resetVertexSaleTaxTotals($vertexSaleTransfer);
                 $vertexCalculationResponseTransfer->setSale($vertexSaleTransfer);
@@ -117,7 +119,13 @@ class VertexCalculator implements VertexCalculatorInterface
     ): VertexCalculationResponseTransfer {
         $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 
-        //TODO: Add an early return if the access token is not available
+        if (!$vertexApiAccessTokenTransfer->getAccessToken()) {
+            return (new VertexCalculationResponseTransfer())
+                ->setSale($vertexSaleTransfer)
+                ->setIsSuccessful(false)
+                ->setErrorMessage(static::ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN);
+        }
+        
         return $this->vertexClient->calculateTax(
             (new VertexCalculationRequestTransfer())
                 ->setSale($vertexSaleTransfer)

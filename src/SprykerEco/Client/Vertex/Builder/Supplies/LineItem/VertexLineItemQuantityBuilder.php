@@ -7,7 +7,7 @@
 
 namespace SprykerEco\Client\Vertex\Builder\Supplies\LineItem;
 
-use Generated\Shared\Transfer\SaleItemTransfer;
+use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\ShipmentTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
 use Generated\Shared\Transfer\VertexQuantityTransfer;
@@ -21,12 +21,12 @@ class VertexLineItemQuantityBuilder implements VertexLineItemBuilderInterface
     protected const UNIT_OF_MEASURE_EACH = 'EA';
 
     /**
-     * @param \Generated\Shared\Transfer\SaleItemTransfer|\Generated\Shared\Transfer\ShipmentTransfer $itemTransfer
+     * @param \Generated\Shared\Transfer\VertexItemTransfer|\Generated\Shared\Transfer\ShipmentTransfer $itemTransfer
      * @param \Generated\Shared\Transfer\VertexLineItemTransfer $vertexLineItemTransfer
      *
      * @return \Generated\Shared\Transfer\VertexLineItemTransfer
      */
-    public function build(SaleItemTransfer|ShipmentTransfer $itemTransfer, VertexLineItemTransfer $vertexLineItemTransfer): VertexLineItemTransfer
+    public function build(VertexItemTransfer|ShipmentTransfer $itemTransfer, VertexLineItemTransfer $vertexLineItemTransfer): VertexLineItemTransfer
     {
         $vertexQuantityTransfer = (new VertexQuantityTransfer())
             ->setUnitOfMeasure(static::UNIT_OF_MEASURE_EACH)

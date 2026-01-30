@@ -7,7 +7,7 @@
 
 namespace SprykerEco\Client\Vertex\Builder\Supplies\LineItem;
 
-use Generated\Shared\Transfer\SaleItemTransfer;
+use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\ShipmentTransfer;
 use Generated\Shared\Transfer\VertexCustomerTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
@@ -30,12 +30,12 @@ class VertexLineItemCustomerBuilder implements VertexLineItemBuilderInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\SaleItemTransfer|\Generated\Shared\Transfer\ShipmentTransfer $itemTransfer
+     * @param \Generated\Shared\Transfer\VertexItemTransfer|\Generated\Shared\Transfer\ShipmentTransfer $itemTransfer
      * @param \Generated\Shared\Transfer\VertexLineItemTransfer $vertexLineItemTransfer
      *
      * @return \Generated\Shared\Transfer\VertexLineItemTransfer
      */
-    public function build(SaleItemTransfer|ShipmentTransfer $itemTransfer, VertexLineItemTransfer $vertexLineItemTransfer): VertexLineItemTransfer
+    public function build(VertexItemTransfer|ShipmentTransfer $itemTransfer, VertexLineItemTransfer $vertexLineItemTransfer): VertexLineItemTransfer
     {
         $vertexCustomerTransfer = $vertexLineItemTransfer->getCustomer() ?? new VertexCustomerTransfer();
 

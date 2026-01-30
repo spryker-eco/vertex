@@ -106,6 +106,7 @@
         <property name="vertexShippingWarehouses" type="VertexShippingWarehouse[]" singular="vertexShippingWarehouse"/>
         <property name="taxMetadata" type="array" associative="true" singular="taxMetadataEntry"/>
         <property name="sku" type="string"/>
+        <property name="warehouseAddress" type="VertexAddress"/>
     </transfer>
 
     <transfer name="VertexShipment" strict="true">
@@ -124,6 +125,7 @@
         <property name="sale" type="VertexSale"/>
         <property name="vertexApiAccessToken" type="VertexApiAccessToken"/>
         <property name="reportingDate" type="string"/>
+        <property name="vertexConfiguration" type="VertexConfig"/>
     </transfer>
 
     <transfer name="VertexCalculationResponse" strict="true">

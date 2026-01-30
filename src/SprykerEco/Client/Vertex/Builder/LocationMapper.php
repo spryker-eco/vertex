@@ -25,7 +25,7 @@ class LocationMapper
             ->setCity($addressTransfer->getCityOrFail())
             ->setMainDivision($addressTransfer->getState())
             ->setPostalCode($addressTransfer->getZipCodeOrFail())
-            ->setCountry($addressTransfer->getCountryOrFail());
+            ->setCountry($addressTransfer->getCountryOrFail()?->getName());
 
         if (empty($vertexLocationTransfer->getStreetAddress2())) {
             $vertexLocationTransfer->setStreetAddress2(null);
