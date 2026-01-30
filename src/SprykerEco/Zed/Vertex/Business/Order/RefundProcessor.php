@@ -10,6 +10,8 @@ namespace SprykerEco\Zed\Vertex\Business\Order;
 use ArrayObject;
 use DateTime;
 use Generated\Shared\Transfer\OrderTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Spryker\Shared\Log\LoggerTrait;
 use SprykerEco\Client\Vertex\VertexClientInterface;
@@ -79,9 +81,7 @@ class RefundProcessor implements RefundProcessorInterface
         $vertexSaleTransfer = $this->vertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
 
         if (!$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsInvoicingEnabled()) {
-            $vertexCalculationResponseTransfer = new VertexCalculationResponseTransfer();
-            $vertexCalculationResponseTransfer->setIsSuccessful(false);
-            $vertexCalculationResponseTransfer->setErrorMessage('App is Inactive or configured to not submit void invoice');
+            $this->getLogger()->warning('App is Inactive or configured to not submit void invoice');
 
             return;
         }
@@ -93,7 +93,7 @@ class RefundProcessor implements RefundProcessorInterface
             (new VertexCalculationRequestTransfer())
                 ->setSale($vertexSaleTransfer)
                 ->setReportingDate((new DateTime())->format('Y-m-d'))
-                ->setAuthorization($vertexApiAccessTokenTransfer->getAccessToken()), // TODO: refactor ???
+                ->setVertexApiAccessToken($vertexApiAccessTokenTransfer),
             $vertexConfigTransfer
         );
     }
