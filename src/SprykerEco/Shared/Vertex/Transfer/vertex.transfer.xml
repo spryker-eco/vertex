@@ -148,8 +148,8 @@
         <property name="countries" type="array" singular="country"/>
     </transfer>
 
-    <transfer name="SubmitPaymentTaxInvoice" strict="true">
-        <!-- <property name="sale" type="VertexSale"/> -->
+    <transfer name="VertexSubmitPaymentTaxInvoice" strict="true">
+         <property name="sale" type="VertexSale"/>
         <property name="messageAttributes" type="MessageAttributes"/>
     </transfer>
 

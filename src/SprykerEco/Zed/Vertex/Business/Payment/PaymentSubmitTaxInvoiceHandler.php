@@ -9,7 +9,7 @@ namespace SprykerEco\Zed\Vertex\Business\Payment;
 
 use Generated\Shared\Transfer\MessageAttributesTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
-use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer;
+use Generated\Shared\Transfer\VertexSubmitPaymentTaxInvoiceTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Spryker\Shared\Log\LoggerTrait;
@@ -64,7 +64,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
 
         $vertexSaleTransfer = $this->vertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
 
-        $submitPaymentTaxInvoiceTransfer = new SubmitPaymentTaxInvoiceTransfer();
+        $submitPaymentTaxInvoiceTransfer = new VertexSubmitPaymentTaxInvoiceTransfer();
         $submitPaymentTaxInvoiceTransfer->setSale($vertexSaleTransfer);
 
         $this->setMessageAttributesTransfer($submitPaymentTaxInvoiceTransfer, $orderTransfer);
@@ -108,7 +108,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
      * @return void
      */
     protected function setMessageAttributesTransfer(
-        SubmitPaymentTaxInvoiceTransfer $submitPaymentTaxInvoiceTransfer,
+        VertexSubmitPaymentTaxInvoiceTransfer $submitPaymentTaxInvoiceTransfer,
         OrderTransfer $orderTransfer
     ): void {
         $storeTransfer = $this->storeFacade->getStoreByName($orderTransfer->getStoreOrFail());

@@ -8,7 +8,7 @@
 namespace SprykerEco\Client\Vertex;
 
 use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceResponseTransfer;
-use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer;
+use Generated\Shared\Transfer\VertexSubmitPaymentTaxInvoiceTransfer;
 use Generated\Shared\Transfer\TaxamoApiRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
