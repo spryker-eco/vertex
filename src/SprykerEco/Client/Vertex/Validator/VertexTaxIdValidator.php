@@ -9,7 +9,7 @@ namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\TaxamoApiRequestTransfer;
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
-use Generated\Shared\Transfer\TaxIdValidationResponseTransfer;
+use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use SprykerEco\Client\Vertex\Api\V2\Client\TaxamoApi;
@@ -25,27 +25,16 @@ class VertexTaxIdValidator implements VertexTaxIdValidatorInterface
     protected const ERROR_MESSAGE_INACTIVE_VERTEX_APP = 'Unable to connect to Vertex Validator API: Vertex App or Tax ID Validator is inactive.';
 
     /**
-     * @var string
-     */
-    protected const ERROR_MESSAGE_KEY_INACTIVE_VERTEX_APP = 'validator-api-inactive';
-
-    /**
      * @param \SprykerEco\Client\Vertex\Api\V2\Client\TaxamoApi $taxamoApi
      */
     public function __construct(protected TaxamoApi $taxamoApi)
     {
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\TaxIdValidationRequestTransfer $taxIdValidationRequest
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return \Generated\Shared\Transfer\TaxIdValidationResponseTransfer
-     */
-    public function validate(TaxIdValidationRequestTransfer $taxIdValidationRequest, VertexConfigTransfer $vertexConfigTransfer): TaxIdValidationResponseTransfer
+    public function validate(TaxIdValidationRequestTransfer $taxIdValidationRequest, VertexConfigTransfer $vertexConfigTransfer): VertexValidationResponseTransfer
     {
         if (!$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsTaxIdValidatorEnabled()) {
-            return $this->createTaxIdValidationResponseTransfer(false, static::ERROR_MESSAGE_INACTIVE_VERTEX_APP);
+            return $this->createVertexValidationResponseTransfer(false, static::ERROR_MESSAGE_INACTIVE_VERTEX_APP);
         }
 
         $vertexApiResponse = $this->taxamoApi->validateTaxId(
@@ -56,8 +45,8 @@ class VertexTaxIdValidator implements VertexTaxIdValidatorInterface
         );
         $errorMessage = $this->getValidationMessage($vertexApiResponse);
         $errorCode = $this->getErrorCode($vertexApiResponse);
-        
-        return $this->createTaxIdValidationResponseTransfer(
+
+        return $this->createVertexValidationResponseTransfer(
             $errorMessage ? false : $vertexApiResponse->getIsSuccessful(),
             $errorMessage,
             json_encode($vertexApiResponse->getVertexResponse()),
@@ -65,11 +54,6 @@ class VertexTaxIdValidator implements VertexTaxIdValidatorInterface
         );
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiResponseTransfer $vertexApiResponse
-     *
-     * @return string|null
-     */
     protected function getValidationMessage(VertexApiResponseTransfer $vertexApiResponse): ?string
     {
         if ($vertexApiResponse->getIsSuccessful()) {
@@ -86,41 +70,29 @@ class VertexTaxIdValidator implements VertexTaxIdValidatorInterface
         return $vertexApiResponse->getErrorMessage();
     }
 
-    /**
-     * @param bool $isValid
-     * @param string|null $message
-     * @param string|null $additionalInfo
-     *
-     * @return \Generated\Shared\Transfer\TaxIdValidationResponseTransfer
-     */
-    protected function createTaxIdValidationResponseTransfer(
+    protected function createVertexValidationResponseTransfer(
         bool $isValid = true,
         ?string $message = null,
         ?string $additionalInfo = null,
         ?string $errorCode = null
-    ): TaxIdValidationResponseTransfer {
-        $taxIdValidationResponseTransfer = (new TaxIdValidationResponseTransfer())->setIsValid($isValid);
+    ): VertexValidationResponseTransfer {
+        $vertexValidationResponseTransfer = (new VertexValidationResponseTransfer())->setIsValid($isValid);
 
         if ($message !== null) {
-            $taxIdValidationResponseTransfer->setMessage($message);
+            $vertexValidationResponseTransfer->setMessage($message);
         }
 
         if ($additionalInfo !== null) {
-            $taxIdValidationResponseTransfer->setAdditionalInfo($additionalInfo);
+            $vertexValidationResponseTransfer->setAdditionalInfo($additionalInfo);
         }
 
         if ($errorCode !== null) {
-            $taxIdValidationResponseTransfer->setErrorCode($errorCode);
+            $vertexValidationResponseTransfer->setErrorCode($errorCode);
         }
 
-        return $taxIdValidationResponseTransfer;
+        return $vertexValidationResponseTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiResponseTransfer $vertexApiResponse
-     *
-     * @return string|null
-     */
     protected function getErrorCode(VertexApiResponseTransfer $vertexApiResponse): ?string
     {
         if (!$vertexApiResponse->getIsSuccessful()) {

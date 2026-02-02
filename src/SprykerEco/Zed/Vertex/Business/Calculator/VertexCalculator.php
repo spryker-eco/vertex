@@ -19,6 +19,7 @@ use Spryker\Shared\Log\LoggerTrait;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
+use SprykerEco\Zed\Vertex\Business\Validator\QuotationValidator;
 
 class VertexCalculator implements VertexCalculatorInterface
 {
@@ -56,6 +57,7 @@ class VertexCalculator implements VertexCalculatorInterface
         protected array $calculableObjectVertexExpanderPlugins,
         protected PriceAggregatorInterface $priceAggregator,
         protected VertexAccessTokenProviderInterface $vertexAccessTokenProvider,
+        protected QuotationValidator $quotationValidator,
     ) {}
 
     public function recalculate(CalculableObjectTransfer $calculableObjectTransfer, VertexConfigTransfer $vertexConfigTransfer): void
@@ -75,6 +77,7 @@ class VertexCalculator implements VertexCalculatorInterface
         $vertexCalculationResponseTransfer = $this->getCachedVertexResponseTransfer($calculableObjectTransfer, $vertexSaleTransfer);
 
         if (!$vertexCalculationResponseTransfer) {
+            $this->quotationValidator->validate($vertexSaleTransfer);
             $vertexCalculationResponseTransfer = $this->getVertexCalculationResponse($vertexSaleTransfer, $vertexConfigTransfer);
 
             if (!$vertexCalculationResponseTransfer->getIsSuccessful()) {
@@ -125,7 +128,7 @@ class VertexCalculator implements VertexCalculatorInterface
                 ->setIsSuccessful(false)
                 ->setErrorMessage(static::ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN);
         }
-        
+
         return $this->vertexClient->calculateTax(
             (new VertexCalculationRequestTransfer())
                 ->setSale($vertexSaleTransfer)

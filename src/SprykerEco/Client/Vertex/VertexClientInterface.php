@@ -13,7 +13,7 @@ use Generated\Shared\Transfer\TaxamoApiRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
-use Generated\Shared\Transfer\TaxIdValidationResponseTransfer;
+use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
@@ -65,12 +65,12 @@ interface VertexClientInterface
      * @param \Generated\Shared\Transfer\TaxIdValidationRequestTransfer $taxIdValidationRequest
      * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
      *
-     * @return \Generated\Shared\Transfer\TaxIdValidationResponseTransfer
+     * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
      */
     public function validateTaxId(
         TaxIdValidationRequestTransfer $taxIdValidationRequest,
         VertexConfigTransfer $vertexConfigTransfer
-    ): TaxIdValidationResponseTransfer;
+    ): VertexValidationResponseTransfer;
 
     /**
      * Specification:

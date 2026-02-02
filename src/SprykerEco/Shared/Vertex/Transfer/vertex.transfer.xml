@@ -231,7 +231,7 @@
 
     <transfer name="VertexValidationResponse" strict="true">
         <property name="isValid" type="bool"/>
-        <property name="message" type="string"/>
+        <property name="messages" type="string[]" singular="message"/>
         <property name="additionalInfo" type="string"/>
         <property name="messageKey" type="string"/>
     </transfer>
@@ -283,20 +283,6 @@
 
     <transfer name="VertexApiAccessTokenCriteria" strict="true">
         <property name="credentialHash" type="string"/>
-    </transfer>
-
-    <!-- <transfer name="Sale" strict="true">
-        <property name="transactionId" type="string"/>
-        <property name="documentNumber" type="string"/>
-        <property name="documentDate" type="string"/>
-        <property name="items"  type="SaleItem[]" singular="item"/>
-        <property name="shipments"  type="Shipment[]" singular="shipment"/>
-        <property name="taxMetadata" type="array" associative="true" singular="taxMetadataEntry"/>
-        <property name="taxTotal" type="string"/>
-        <property name="refundedTaxTotal" type="string"/>
-        <property name="priceMode" type="string"/>
-        <property name="sellerCountryCode" type="string"/>
-        <property name="customerCountryCode" type="string"/>
     </transfer>
 
     <transfer name="SaleItem" strict="true">
@@ -421,7 +407,7 @@
         <property name="tenantIdentifier" type="string"/>
     </transfer>
 
-    <transfer name="TaxIdValidationResponse" strict="true">
+    <transfer name="VertexValidationResponse" strict="true">
         <property name="isValid" type="bool"/>
         <property name="message" type="string"/>
         <property name="additionalInfo" type="string"/>
