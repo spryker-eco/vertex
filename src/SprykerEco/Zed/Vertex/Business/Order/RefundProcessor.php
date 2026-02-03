@@ -67,10 +67,9 @@ class RefundProcessor implements RefundProcessorInterface
             return;
         }
 
-        $storeTransfer = $this->storeFacade->getStoreByName($orderTransfer->getStoreOrFail());
-        $vertexConfigTransfer = $this->configResolver->resolve($storeTransfer->getIdStoreOrFail());
+        $vertexConfigTransfer = $this->configResolver->resolve();
 
-        if ($vertexConfigTransfer === null || !$vertexConfigTransfer->getIsActive()) {
+        if (!$vertexConfigTransfer || !$vertexConfigTransfer->getIsActive()) {
             $this->getLogger()->warning('App is not configured or is not active.');
 
             return;
@@ -89,7 +88,7 @@ class RefundProcessor implements RefundProcessorInterface
         $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 
         //TODO: Add an early return if the access token is not available
-        $this->vertexClient->calculateTax(
+        $this->vertexClient->calculateOrderTax(
             (new VertexCalculationRequestTransfer())
                 ->setSale($vertexSaleTransfer)
                 ->setReportingDate((new DateTime())->format('Y-m-d'))

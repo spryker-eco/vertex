@@ -8,14 +8,7 @@
 namespace PyzTest\Zed\VertexApi\Business;
 
 use Codeception\Test\Unit;
-use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Psr7\Response;
-use PyzTest\Zed\VertexApi\VertexApiBusinessTester;
-use SprykerEco\Client\Vertex\VertexClient;
-use SprykerEco\Client\Vertex\VertexDependencyProvider;
-use SprykerEco\Client\Vertex\VertexFactory;
 use SprykerEcoTest\Client\Vertex\VertexClientTester;
 
 /**
@@ -48,9 +41,7 @@ class VertexApiFacadeValidateTaxIdErrorCodeTest extends Unit
         $mockClient = $this->tester->mockVertexHttpClient('taxamo-invalid-response-with-error-code');
         $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
        
-        $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer([
-            TaxIdValidationRequestTransfer::TENANT_IDENTIFIER => $vertexConfigTransfer->getStoreReference(),
-        ]);
+        $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer();
 
         // Act
         $taxIdValidationResponse = $vertexClient->validateTaxId($taxIdValidationRequestTransfer, $vertexConfigTransfer);
@@ -68,7 +59,7 @@ class VertexApiFacadeValidateTaxIdErrorCodeTest extends Unit
         );
         $this->assertFalse($taxIdValidationResponse->getIsValid());
         $this->assertSame('Wrong format of the tax number.', $taxIdValidationResponse->getMessage());
-        $this->assertSame('INVALID_FORMAT', $taxIdValidationResponse->getErrorCode());
+        $this->assertSame('INVALID_FORMAT', $taxIdValidationResponse->getMessageKey());
     }
 
     /**
@@ -85,9 +76,7 @@ class VertexApiFacadeValidateTaxIdErrorCodeTest extends Unit
 
         $mockClient = $this->tester->mockVertexHttpClient('taxamo-invalid-response-with-validation-error-code');
         $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
-        $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer([
-            TaxIdValidationRequestTransfer::TENANT_IDENTIFIER => $vertexConfigTransfer->getStoreReference(),
-        ]);
+        $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer();
 
         // Act
         $taxIdValidationResponse = $vertexClient->validateTaxId($taxIdValidationRequestTransfer, $vertexConfigTransfer);
@@ -105,7 +94,7 @@ class VertexApiFacadeValidateTaxIdErrorCodeTest extends Unit
         );
         $this->assertFalse($taxIdValidationResponse->getIsValid());
         $this->assertSame('Tax number mismatched or non-existent.', $taxIdValidationResponse->getMessage());
-        $this->assertSame('NOT_REGISTERED', $taxIdValidationResponse->getErrorCode());
+        $this->assertSame('NOT_REGISTERED', $taxIdValidationResponse->getMessageKey());
     }
 
     /**
@@ -133,9 +122,7 @@ class VertexApiFacadeValidateTaxIdErrorCodeTest extends Unit
 
         $mockClient = $this->tester->mockVertexHttpClient($fixtureName, $statusCode);
         $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
-        $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer([
-            TaxIdValidationRequestTransfer::TENANT_IDENTIFIER => $vertexConfigTransfer->getStoreReference(),
-        ]);
+        $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer();
 
         // Act
         $taxIdValidationResponse = $vertexClient->validateTaxId($taxIdValidationRequestTransfer, $vertexConfigTransfer);
@@ -153,7 +140,7 @@ class VertexApiFacadeValidateTaxIdErrorCodeTest extends Unit
         );
         $this->assertFalse($taxIdValidationResponse->getIsValid());
         $this->assertSame($errorMessage, $taxIdValidationResponse->getMessage());
-        $this->assertSame($expectedErrorCode, $taxIdValidationResponse->getErrorCode());
+        $this->assertSame($expectedErrorCode, $taxIdValidationResponse->getMessageKey());
     }
 
     /**
@@ -168,16 +155,14 @@ class VertexApiFacadeValidateTaxIdErrorCodeTest extends Unit
             VertexConfigTransfer::TAXAMO_TOKEN => 'test',
         ]);
 
-        $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer([
-            TaxIdValidationRequestTransfer::TENANT_IDENTIFIER => $vertexConfigTransfer->getStoreReference(),
-        ]);
+        $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer();
 
         // Act
         $taxIdValidationResponse = $this->tester->getClient()->validateTaxId($taxIdValidationRequestTransfer, $vertexConfigTransfer);
 
         // Assert
         $this->assertFalse($taxIdValidationResponse->getIsValid());
-        $this->assertNull($taxIdValidationResponse->getErrorCode());
+        $this->assertNull($taxIdValidationResponse->getMessageKey());
     }
 
     /**

@@ -3,42 +3,49 @@
 namespace SprykerEco\Zed\Vertex\Business\Resolver;
 
 use Generated\Shared\Transfer\VertexConfigTransfer;
+use Generated\Shared\Transfer\VertexValidationResponseTransfer;
+use SprykerEco\Zed\Vertex\Business\Validator\VertexConfigValidator;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 use SprykerEco\Zed\Vertex\VertexConfig;
 
 class VertexConfigResolver implements VertexConfigResolverInterface
 {
-    public function __construct(protected VertexConfig $vertexConfig, protected VertexToStoreFacadeInterface $storeFacade)
-    {
+    public function __construct(
+        protected VertexConfig $vertexConfig,
+        protected VertexToStoreFacadeInterface $storeFacade,
+        protected VertexConfigValidator $vertexConfigValidator
+    ) {
     }
 
-    public function resolve(?int $idStore = null): VertexConfigTransfer
+    public function resolve(): ?VertexConfigTransfer
     {
-        $clientId = $this->vertexConfig->getClientId();
-        $clientSecret = $this->vertexConfig->getClientSecret();
-        $securityUri = $this->vertexConfig->getSecurityUri();
-        $transactionCallsUri = $this->vertexConfig->getTransactionCallsUri();
+        // $vertexValidationResponseTransfer = $this->vertexConfigValidator->validate();
 
-        if (!$idStore) {
-            $idStore = (int)$this->storeFacade->getCurrentStore()->getIdStore();
-        }
+        // if (!$vertexValidationResponseTransfer->getIsSuccess()) {
+        //     return null;
+        // }
 
         return (new VertexConfigTransfer())
-            ->setClientId($clientId)
-            ->setClientSecret($clientSecret)
-            ->setSecurityUri($securityUri)
-            ->setTransactionCallsUri($transactionCallsUri)
+            ->setClientId($this->vertexConfig->getClientId())
+            ->setClientSecret($this->vertexConfig->getClientSecret())
+            ->setSecurityUri($this->vertexConfig->getSecurityUri())
+            ->setTransactionCallsUri($this->vertexConfig->getTransactionCallsUri())
             ->setIsActive($this->vertexConfig->isActive())
             ->setIsTaxIdValidatorEnabled($this->vertexConfig->isTaxIdValidatorEnabled())
             ->setIsTaxAssistEnabled($this->vertexConfig->isTaxIdValidatorEnabled())
             ->setTaxamoToken($this->vertexConfig->getTaxamoToken())
             ->setTaxamoApiUrl($this->vertexConfig->getTaxamoApiUrl())
-            ->setCredentialHash($this->getCredentialHash($clientId, $clientSecret))
+            ->setCredentialHash($this->getCredentialHash($this->vertexConfig->getClientId(), $this->vertexConfig->getClientSecret()))
             ->setIsInvoicingEnabled($this->vertexConfig->isInvoicingEnabled());
     }
 
-    public function getCredentialHash(string $clientId, string $clientSecret): string
+    protected function getCredentialHash(string $clientId, string $clientSecret): string
     {
         return md5(hash('sha512', $clientId . $clientSecret));
+    }
+
+    protected function validate(VertexConfigTransfer $vertexConfigTransfer): VertexValidationResponseTransfer
+    {
+        return $this->vertexConfigValidator->validate($vertexConfigTransfer);
     }
 }

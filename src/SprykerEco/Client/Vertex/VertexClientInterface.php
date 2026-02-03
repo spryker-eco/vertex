@@ -8,17 +8,16 @@
 namespace SprykerEco\Client\Vertex;
 
 use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceResponseTransfer;
-use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer;
+use Generated\Shared\Transfer\VertexSubmitPaymentTaxInvoiceTransfer;
 use Generated\Shared\Transfer\TaxamoApiRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
-use Generated\Shared\Transfer\TaxIdValidationResponseTransfer;
+use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
-use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
 interface VertexClientInterface
 {
@@ -39,9 +38,6 @@ interface VertexClientInterface
 
     /**
      * Specification:
-     * - Performs tax `quotation` request to Vertex API.
-     * - If VertexConfigTransfer.defaultTaxpayerCompanyCode is set for the requesting tenant, and no other value is defined, it will be used for tax quotation request.
-     * - Requires VertexConfigTransfer.vertexAuthResponse.
      *
      * @api
      *
@@ -50,7 +46,22 @@ interface VertexClientInterface
      *
      * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
-    public function calculateTax(
+    public function calculateQuoteTax(
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
+        VertexConfigTransfer $vertexConfigTransfer
+    ): VertexCalculationResponseTransfer;
+
+    /**
+     * Specification:
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
+     *
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
+     */
+    public function calculateOrderTax(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexConfigTransfer $vertexConfigTransfer
     ): VertexCalculationResponseTransfer;
@@ -65,12 +76,12 @@ interface VertexClientInterface
      * @param \Generated\Shared\Transfer\TaxIdValidationRequestTransfer $taxIdValidationRequest
      * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
      *
-     * @return \Generated\Shared\Transfer\TaxIdValidationResponseTransfer
+     * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
      */
     public function validateTaxId(
         TaxIdValidationRequestTransfer $taxIdValidationRequest,
         VertexConfigTransfer $vertexConfigTransfer
-    ): TaxIdValidationResponseTransfer;
+    ): VertexValidationResponseTransfer;
 
     /**
      * Specification:

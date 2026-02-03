@@ -23,10 +23,10 @@ use SprykerEco\Client\Vertex\VertexFactory;
  * @group SprykerTest
  * @group Client
  * @group Vertex
- * @group VertexApiFacadeCalculateTaxMethodTest
+ * @group VertexApiFacadecalculateQuoteTaxMethodTest
  * Add your own group annotations below this line
  */
-class VertexApiFacadeCalculateTaxMethodTest extends Unit
+class VertexApiFacadecalculateQuoteTaxMethodTest extends Unit
 {
     // protected MockHandler $mockHttpClient;
 
@@ -35,7 +35,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
     /**
      * @return void
      */
-    public function testCalculateTaxMethodReturnsCalculatedTaxDataWhenVertexAPIRequestIsSuccessful(): void
+    public function testcalculateQuoteTaxMethodReturnsCalculatedTaxDataWhenVertexAPIRequestIsSuccessful(): void
     {
         // Arrange
         $vertexConfigTransfer = $this->tester->haveVertexConfig();
@@ -47,7 +47,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $vertexCalculationRequestTransfer->getSale()->fromArray($preparedSale, true);
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexCalculationResponseTransfer = $vertexClient->calculateQuoteTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
 
         // Assert
         $this->assertTrue($vertexCalculationResponseTransfer->getIsSuccessful());
@@ -56,7 +56,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
     /**
      * @return void
      */
-    public function testCalculateTaxMethodReturnsErrorWhenMissingVertexApiAccessToken(): void
+    public function testcalculateQuoteTaxMethodReturnsErrorWhenMissingVertexApiAccessToken(): void
     {
         // Arrange
         $vertexConfigTransfer = $this->tester->haveVertexConfig();
@@ -66,7 +66,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $vertexCalculationRequestTransfer->setVertexApiAccessToken(null);
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexCalculationResponseTransfer = $vertexClient->calculateQuoteTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
 
         // Assert
         $this->assertFalse($vertexCalculationResponseTransfer->getIsSuccessful());
@@ -75,7 +75,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
     /**
      * @return void
      */
-    public function testCalculateTaxMethodReturnsErrorWhenMissingAccessToken(): void
+    public function testcalculateQuoteTaxMethodReturnsErrorWhenMissingAccessToken(): void
     {
         // Arrange
         $vertexConfigTransfer = $this->tester->haveVertexConfig();
@@ -85,7 +85,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $vertexCalculationRequestTransfer->setVertexApiAccessToken($this->tester->haveVertexApiAccessToken()->setAccessToken(null));
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexCalculationResponseTransfer = $vertexClient->calculateQuoteTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
 
         // Assert
         $this->assertFalse($vertexCalculationResponseTransfer->getIsSuccessful());
@@ -94,7 +94,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
     /**
      * @return void
      */
-    public function testCalculateTaxMethodReturnsErrorWhenVertexAppHasNotBeenConfigured(): void
+    public function testcalculateQuoteTaxMethodReturnsErrorWhenVertexAppHasNotBeenConfigured(): void
     {
         // Arrange
         $vertexConfigTransfer = new VertexConfigTransfer();
@@ -103,7 +103,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $vertexCalculationRequestTransfer = $this->tester->haveVertexCalculationRequestTransfer();
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexCalculationResponseTransfer = $vertexClient->calculateQuoteTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
 
         // Assert
         $this->assertFalse($vertexCalculationResponseTransfer->getIsSuccessful());
@@ -112,7 +112,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
     /**
      * @return void
      */
-    public function testCalculateTaxMethodReturnsErrorWhenVertexAppIsInactive(): void
+    public function testcalculateQuoteTaxMethodReturnsErrorWhenVertexAppIsInactive(): void
     {
         // Arrange
         $vertexConfigTransfer = $this->tester->haveVertexConfig()->setIsActive(false);
@@ -122,7 +122,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $vertexCalculationRequestTransfer->setVertexApiAccessToken($this->tester->haveVertexApiAccessToken()->setAccessToken(null));
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexCalculationResponseTransfer = $vertexClient->calculateQuoteTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
 
         // Assert
         $this->assertFalse($vertexCalculationResponseTransfer->getIsSuccessful());
@@ -131,7 +131,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
     /**
      * @return void
      */
-    public function testCalculateTaxMethodReturnsErrorWhenVertexAPIRequestIsFailingDueToInvalidCredentials(): void
+    public function testcalculateQuoteTaxMethodReturnsErrorWhenVertexAPIRequestIsFailingDueToInvalidCredentials(): void
     {
         // Arrange
         $vertexConfigTransfer = $this->tester->haveVertexConfig();
@@ -140,7 +140,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $vertexCalculationRequestTransfer = $this->tester->haveVertexCalculationRequestTransfer();
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexCalculationResponseTransfer = $vertexClient->calculateQuoteTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
 
         // Assert
         $this->assertFalse($vertexCalculationResponseTransfer->getIsSuccessful());
@@ -150,7 +150,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
     /**
      * @return void
      */
-    public function testCalculateTaxMethodReturnsErrorWhenVertexAPIRequestIsFailingDueToInvalidRequest(): void
+    public function testcalculateQuoteTaxMethodReturnsErrorWhenVertexAPIRequestIsFailingDueToInvalidRequest(): void
     {
         // Arrange
         $vertexConfigTransfer = $this->tester->haveVertexConfig();
@@ -159,7 +159,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $vertexCalculationRequestTransfer = $this->tester->haveVertexCalculationRequestTransfer();
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexCalculationResponseTransfer = $vertexClient->calculateQuoteTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
 
         // Assert
         $this->assertFalse($vertexCalculationResponseTransfer->getIsSuccessful());
@@ -169,7 +169,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
     /**
      * @return void
      */
-    public function testCalculateTaxMethodReturnsErrorWhenVertexAPIRequestIsFailingDueToException(): void
+    public function testcalculateQuoteTaxMethodReturnsErrorWhenVertexAPIRequestIsFailingDueToException(): void
     {
         // Arrange
         $vertexConfigTransfer = $this->tester->haveVertexConfig();
@@ -181,13 +181,13 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $this->expectException(Exception::class);
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexCalculationResponseTransfer = $vertexClient->calculateQuoteTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
     }
 
     /**
      * @return void
      */
-    public function testCalculateTaxMethodUsesTheRightTransactionCallsUriToCallSuppliesEndpoint(): void
+    public function testcalculateQuoteTaxMethodUsesTheRightTransactionCallsUriToCallSuppliesEndpoint(): void
     {
         // Arrange
         $vertexConfigTransfer = $this->tester->haveVertexConfig();
@@ -202,13 +202,13 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexCalculationResponseTransfer = $vertexClient->calculateQuoteTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
     }
 
     /**
      * @return void
      */
-    public function testCalculateTaxUsesDefaultTaxpayerCompanyCode(): void
+    public function testcalculateQuoteTaxUsesDefaultTaxpayerCompanyCode(): void
     {
         // Arrange
         $vertexConfigTransfer = $this->tester->haveVertexConfig();
@@ -216,10 +216,9 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $mockClient = $this->tester->mockVertexHttpClient('vertex-tax-quotation-valid-response');
         $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
         $vertexCalculationRequestTransfer = $this->tester->haveVertexCalculationRequestTransfer();
-        $vertexCalculationRequestTransfer->getVertexConfiguration()->setStoreReference($vertexConfigTransfer->getStoreReference());
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexCalculationResponseTransfer = $vertexClient->calculateQuoteTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
 
         // Assert
         $request = $this->tester->getLastSentVertexRequest();
@@ -233,19 +232,18 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
     /**
      * @return void
      */
-    public function testCalculateTaxDoesNotOverrideSpecifiedCompanyCodeWithDefaultTaxpayerCompanyCode(): void
+    public function testcalculateQuoteTaxDoesNotOverrideSpecifiedCompanyCodeWithDefaultTaxpayerCompanyCode(): void
     {
         // Arrange
         $vertexConfigTransfer = $this->tester->haveVertexConfig();
         $vertexConfigTransfer->setDefaultTaxpayerCompanyCode('default-company-code');
         $vertexCalculationRequestTransfer = $this->tester->haveVertexCalculationRequestTransfer();
-        $vertexCalculationRequestTransfer->getVertexConfiguration()->setStoreReference($vertexConfigTransfer->getStoreReference());
         $vertexCalculationRequestTransfer->getSale()->addTaxMetadataEntry('seller', ['company' => 'my-custom-company']);
         $mockClient = $this->tester->mockVertexHttpClient('vertex-tax-quotation-valid-response');
         $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
 
         // Act
-        $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexClient->calculateQuoteTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
 
         // Assert
         $request = $this->tester->getLastSentVertexRequest();
@@ -307,37 +305,5 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
             ->willReturn($response);
         
         return $mockClient;
-    }
-    
-    /**
-     * @param \GuzzleHttp\ClientInterface $mockClient
-     * 
-     * @return \SprykerEco\Client\Vertex\VertexClientInterface
-     */
-    private function getVertexClientWithMockedFactory(ClientInterface $mockClient): VertexClient
-    {
-        $factoryMock = new class($mockClient) extends VertexFactory {
-            private $httpClient;
-
-            public function __construct($httpClient)
-            {
-                $this->httpClient = $httpClient;
-            }
-
-            public function createHttpClient(): ClientInterface
-            {
-                return $this->httpClient;
-            }
-
-            protected function getDependencyProvider()
-            {
-                return new VertexDependencyProvider();
-            }
-        };
-
-        $client = $this->tester->getClient();
-        $client->setFactory($factoryMock);
-
-        return $client;
     }
 }

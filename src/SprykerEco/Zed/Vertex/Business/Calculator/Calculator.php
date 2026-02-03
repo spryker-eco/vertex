@@ -33,9 +33,9 @@ class Calculator implements CalculatorInterface
      */
     public function recalculate(CalculableObjectTransfer $calculableObjectTransfer): void
     {
-        $vertexConfigTransfer = $this->getVertexConfigTransfer($calculableObjectTransfer);
+        $vertexConfigTransfer = $this->vertexConfigResolver->resolve();
 
-        if (!$vertexConfigTransfer->getIsActive()) {
+        if (!$vertexConfigTransfer || !$vertexConfigTransfer->getIsActive()) {
             $this->setHideTaxInCartFlagToFalse($calculableObjectTransfer);
 
             $this->recalculateUsingFallbackCalculator($calculableObjectTransfer);
@@ -49,23 +49,6 @@ class Calculator implements CalculatorInterface
         $this->setHideTaxInCartFlagToTrue($calculableObjectTransfer);
 
         $this->vertexCalculator->recalculate($calculableObjectTransfer, $vertexConfigTransfer);
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexConfigTransfer|null
-     */
-    protected function getVertexConfigTransfer(CalculableObjectTransfer $calculableObjectTransfer): VertexConfigTransfer
-    {
-        $storeTransfer = $calculableObjectTransfer->getStoreOrFail(); // TODO: remove ???
-        $idStore = $storeTransfer->getIdStore();
-
-        if (!$idStore) {
-            $idStore = $this->storeFacade->getStoreByName($storeTransfer->getNameOrFail())->getIdStoreOrFail();
-        }
-
-        return $this->vertexConfigResolver->resolve($idStore);
     }
 
     /**

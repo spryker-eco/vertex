@@ -148,8 +148,8 @@
         <property name="countries" type="array" singular="country"/>
     </transfer>
 
-    <transfer name="SubmitPaymentTaxInvoice" strict="true">
-        <!-- <property name="sale" type="VertexSale"/> -->
+    <transfer name="VertexSubmitPaymentTaxInvoice" strict="true">
+         <property name="sale" type="VertexSale"/>
         <property name="messageAttributes" type="MessageAttributes"/>
     </transfer>
 
@@ -231,7 +231,7 @@
 
     <transfer name="VertexValidationResponse" strict="true">
         <property name="isValid" type="bool"/>
-        <property name="message" type="string"/>
+        <property name="messages" type="string[]" singular="message"/>
         <property name="additionalInfo" type="string"/>
         <property name="messageKey" type="string"/>
     </transfer>
@@ -248,7 +248,6 @@
         <property name="clientSecret" type="string"/>
         <property name="securityUri" type="string"/>
         <property name="idVertexConfig" type="int"/>
-        <property name="storeReference" type="string"/>
         <property name="credentialHash" type="string"/>
         <property name="taxamoToken" type="string"/>
         <property name="taxamoApiUrl" type="string"/>
@@ -258,8 +257,6 @@
         <property name="isInvoicingEnabled" type="bool"/>
         <property name="isTaxAssistEnabled" type="bool"/>
         <property name="defaultTaxpayerCompanyCode" type="string"/>
-        <property name="createdAt" type="string"/>
-        <property name="updatedAt" type="string"/>
         <property name="vendorCode" type="string"/>
     </transfer>
 
@@ -283,20 +280,6 @@
 
     <transfer name="VertexApiAccessTokenCriteria" strict="true">
         <property name="credentialHash" type="string"/>
-    </transfer>
-
-    <!-- <transfer name="Sale" strict="true">
-        <property name="transactionId" type="string"/>
-        <property name="documentNumber" type="string"/>
-        <property name="documentDate" type="string"/>
-        <property name="items"  type="SaleItem[]" singular="item"/>
-        <property name="shipments"  type="Shipment[]" singular="shipment"/>
-        <property name="taxMetadata" type="array" associative="true" singular="taxMetadataEntry"/>
-        <property name="taxTotal" type="string"/>
-        <property name="refundedTaxTotal" type="string"/>
-        <property name="priceMode" type="string"/>
-        <property name="sellerCountryCode" type="string"/>
-        <property name="customerCountryCode" type="string"/>
     </transfer>
 
     <transfer name="SaleItem" strict="true">
@@ -421,7 +404,7 @@
         <property name="tenantIdentifier" type="string"/>
     </transfer>
 
-    <transfer name="TaxIdValidationResponse" strict="true">
+    <transfer name="VertexValidationResponse" strict="true">
         <property name="isValid" type="bool"/>
         <property name="message" type="string"/>
         <property name="additionalInfo" type="string"/>
@@ -443,13 +426,6 @@
     <transfer name="VertexValidationRequest" strict="true">
         <property name="countryCode" type="string" description="The code for a country."/>
         <property name="taxId" type="string" description="A tax identification number provided by a customer or company."/>
-    </transfer>
-
-    <transfer name="VertexValidationResponse" strict="true">
-        <property name="isValid" type="bool" description="A boolean flag indicating if a token or request is valid."/>
-        <property name="message" type="string" description="A message providing information, success, or error details."/>
-        <property name="additionalInfo" type="string" description="JSON string containing additional info to be displayed"/>
-        <property name="messageKey" type="string" description="A key for a message."/>
     </transfer>
 
     <transfer name="RestErrorMessage">

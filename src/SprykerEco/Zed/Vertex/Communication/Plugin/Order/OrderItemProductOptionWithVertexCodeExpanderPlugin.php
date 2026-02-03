@@ -9,7 +9,7 @@ namespace SprykerEco\Zed\Vertex\Communication\Plugin\Order;
 
 use Generated\Shared\Transfer\OrderTransfer;
 use Spryker\Zed\Kernel\Communication\AbstractPlugin;
-use Spryker\Zed\TaxAppExtension\Dependency\Plugin\OrderTaxAppExpanderPluginInterface;
+use Spryker\Zed\TaxAppExtension\Dependency\Plugin\OrderTaxAppExpanderPluginInterface; // TODO
 
 /**
  * @method \SprykerEco\Zed\Vertex\Communication\VertexCommunicationFactory getFactory()

@@ -42,9 +42,7 @@ class VertexApiFacadeValidateTaxIdTest extends Unit
 
         $mockClient = $this->tester->mockVertexHttpClient('taxamo-valid-response');
         $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
-        $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer([
-            TaxIdValidationRequestTransfer::TENANT_IDENTIFIER => $vertexConfigTransfer->getStoreReference(),
-        ]);
+        $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer();
 
         // Act
         $taxIdValidationRequest = $vertexClient->validateTaxId($taxIdValidationRequestTransfer, $vertexConfigTransfer);
@@ -87,9 +85,7 @@ class VertexApiFacadeValidateTaxIdTest extends Unit
 
         $mockClient = $this->tester->mockVertexHttpClient($fixtureName, $statusCode);
         $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
-        $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer([
-            TaxIdValidationRequestTransfer::TENANT_IDENTIFIER => $vertexConfigTransfer->getStoreReference(),
-        ]);
+        $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer();
 
         // Act
         $taxIdValidationRequest = $vertexClient->validateTaxId($taxIdValidationRequestTransfer, $vertexConfigTransfer);
@@ -121,9 +117,7 @@ class VertexApiFacadeValidateTaxIdTest extends Unit
             VertexConfigTransfer::TAXAMO_TOKEN => 'test',
         ]);
 
-        $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer([
-            TaxIdValidationRequestTransfer::TENANT_IDENTIFIER => $vertexConfigTransfer->getStoreReference(),
-        ]);
+        $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer();
 
         // Act
         $taxIdValidationRequest = $this->tester->getClient()->validateTaxId($taxIdValidationRequestTransfer, $vertexConfigTransfer);

@@ -20,15 +20,13 @@ use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterf
  */
 class VertexTaxCalculator implements VertexTaxCalculatorInterface
 {
-    /**
-     * @var string
-     */
     protected const ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN = 'Unable to connect to Vertex API: access token is invalid';
 
-    /**
-     * @var string
-     */
     protected const ERROR_MESSAGE_INACTIVE_VERTEX_APP = 'Unable to connect to Vertex API: Vertex App is inactive';
+
+    protected const ERROR_MESSAGE_TRANSACTION_CALL_URI = 'Unable to connect to Vertex API: TransactionCallsUri config is not set';
+
+    protected const ERROR_MESSAGE_SALE_IS_MISSED = 'Sale is missed';
 
     /**
      * @param \SprykerEco\Client\Vertex\Builder\SuppliesRequestBuilder $vertexSuppliesRequestBuilder
@@ -56,9 +54,17 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
             return $this->vertexSuppliesResponseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, static::ERROR_MESSAGE_INACTIVE_VERTEX_APP);
         }
 
+        if (!$vertexConfigTransfer->getTransactionCallsUri()) {
+            return $this->vertexSuppliesResponseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, static::ERROR_MESSAGE_TRANSACTION_CALL_URI);
+        }
+
         $vertexApiAccessTokenTransfer = $vertexCalculationRequestTransfer->getVertexApiAccessToken();
         if (!$vertexApiAccessTokenTransfer?->getAccessToken()) {
             return $this->vertexSuppliesResponseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, static::ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN);
+        }
+
+        if (!$vertexCalculationRequestTransfer->getSale()) {
+            return $this->vertexSuppliesResponseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, static::ERROR_MESSAGE_SALE_IS_MISSED);
         }
 
         $vertexCalculationRequestTransfer->setVertexConfiguration($vertexConfigTransfer);
