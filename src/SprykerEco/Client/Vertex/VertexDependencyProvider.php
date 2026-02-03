@@ -7,7 +7,6 @@
 
 namespace SprykerEco\Client\Vertex;
 
-use Pyz\Zed\VertexConfig\VertexConfigDependencyProvider;
 use Spryker\Client\Kernel\AbstractDependencyProvider;
 use Spryker\Client\Kernel\Container;
 use SprykerEco\Client\Vertex\Dependency\Client\VertexToZedRequestClientBridge;

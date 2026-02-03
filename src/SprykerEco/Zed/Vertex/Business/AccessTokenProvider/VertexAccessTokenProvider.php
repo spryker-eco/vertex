@@ -14,7 +14,6 @@ use Generated\Shared\Transfer\VertexApiAccessTokenTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Spryker\Shared\Log\LoggerTrait;
 use SprykerEco\Client\Vertex\VertexClientInterface;
-use SprykerEco\Zed\Vertex\Business\EncryptionConfigurator\TenantPropelEncryptionConfiguratorInterface;
 use SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface;
 use SprykerEco\Zed\Vertex\Persistence\VertexRepositoryInterface;
 

@@ -1,0 +1,128 @@
+{
+    "transaction_id": "id5928",
+    "document_number": "id1895",
+    "document_date": "1993-05-20",
+    "tax_metadata": [],
+    "tax_total": null,
+    "refunded_tax_total": null,
+    "items": [
+        {
+            "id": "123",
+            "sku": "123",
+            "price_amount": "10000",
+            "refundable_amount": "10100",
+            "discount_amount": "100",
+            "quantity": "1",
+            "tax_metadata": [],
+            "shipping_address": {
+                "address1": "id",
+                "address2": "quo",
+                "city": "doloribus",
+                "state": "perspiciatis",
+                "country": "ut",
+                "zip_code": "67069"
+            },
+            "billing_address": {
+                "address1": "id",
+                "address2": "quo",
+                "city": "doloribus",
+                "state": "perspiciatis",
+                "country": "ut",
+                "zip_code": "67069"
+            },
+            "seller_address": {
+                "address1": "id",
+                "address2": "quo",
+                "city": "doloribus",
+                "state": "perspiciatis",
+                "country": "ut",
+                "zip_code": "67069"
+            },
+            "warehouse_address": null,
+            "shipping_warehouses": []
+        },
+        {
+            "id": "789",
+            "sku": "789",
+            "price_amount": "30000",
+            "refundable_amount": "30000",
+            "discount_amount": "0",
+            "quantity": "2",
+            "tax_metadata": [],
+            "shipping_address": {
+                "address1": "id",
+                "address2": "quo",
+                "city": "doloribus",
+                "state": "perspiciatis",
+                "country": "ut",
+                "zip_code": "67069"
+            },
+            "billing_address": {
+                "address1": "id",
+                "address2": "quo",
+                "city": "doloribus",
+                "state": "perspiciatis",
+                "country": "ut",
+                "zip_code": "67069"
+            },
+            "seller_address": {
+                "address1": "id",
+                "address2": "quo",
+                "city": "doloribus",
+                "state": "perspiciatis",
+                "country": "ut",
+                "zip_code": "67069"
+            },
+            "warehouse_address": null,
+            "shipping_warehouses": []
+        }
+    ],
+    "shipments": [
+        {
+            "id": "shipment-123",
+            "price_amount": "2000",
+            "refundable_amount": "2100",
+            "discount_amount": "100",
+            "shipping_address": {
+                "address1": "id",
+                "address2": "quo",
+                "city": "doloribus",
+                "state": "perspiciatis",
+                "country": "ut",
+                "zip_code": "67069"
+            },
+            "billing_address": {
+                "address1": "id",
+                "address2": "quo",
+                "city": "doloribus",
+                "state": "perspiciatis",
+                "country": "ut",
+                "zip_code": "67069"
+            }
+        },
+        {
+            "id": "shipment-789",
+            "price_amount": "4500",
+            "refundable_amount": "4500",
+            "discount_amount": "0",
+            "tax_total": null,
+            "refunded_tax_total": null,
+            "shipping_address": {
+                "address1": "id",
+                "address2": "quo",
+                "city": "doloribus",
+                "state": "perspiciatis",
+                "country": "ut",
+                "zip_code": "67069"
+            },
+            "billing_address": {
+                "address1": "id",
+                "address2": "quo",
+                "city": "doloribus",
+                "state": "perspiciatis",
+                "country": "ut",
+                "zip_code": "67069"
+            }
+        }
+    ]
+}

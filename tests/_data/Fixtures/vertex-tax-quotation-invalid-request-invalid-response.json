@@ -1,0 +1,14 @@
+{
+    "errors": [
+        {
+            "code": "Bad Request",
+            "message": "Location(s) assigned to lineitem identified by (0) is insufficient. A destination location is required for a tax calculation. Please provide valid locations for this lineitem or for the transaction and retry.",
+            "target": "/vertex-ws/v2/supplies"
+        }
+    ],
+    "meta": {
+        "app": "vertex-ws.war v9.0.14.0.50",
+        "timeElapsed(ms)": 1027,
+        "timeReceived": "2023-08-09T08:21:49.615Z"
+    }
+}

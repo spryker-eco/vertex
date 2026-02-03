@@ -1,0 +1,368 @@
+{
+    "data": {
+        "customer": {
+            "customerCode": {
+                "classCode": "customerCodeFoo",
+                "isBusinessIndicator": false
+            },
+            "isTaxExempt": false,
+            "taxRegistrations": []
+        },
+        "documentDate": "2023-08-02",
+        "lineItems": [
+            {
+                "customer": {
+                    "customerCode": {
+                        "classCode": "customerCodeFoo",
+                        "isBusinessIndicator": false
+                    },
+                    "destination": {
+                        "city": "East Hanover",
+                        "country": "US",
+                        "mainDivision": "New Jersey",
+                        "postalCode": "07936",
+                        "streetAddress1": "27 Merry Lane",
+                        "taxAreaId": "310276576"
+                    },
+                    "isTaxExempt": false,
+                    "taxRegistrations": []
+                },
+                "discount": {
+                    "discountType": "DiscountAmount",
+                    "discountValue": -1.0
+                },
+                "extendedPrice": -100.0,
+                "fairMarketValue": -101.0,
+                "lineItemId": "123",
+                "product": {
+                    "value": "123"
+                },
+                "quantity": {
+                    "unitOfMeasure": "EA",
+                    "value": 1.0
+                },
+                "seller": {
+                    "company": "testCompany",
+                    "taxRegistrations": []
+                },
+                "taxIncludedIndicator": false,
+                "taxes": [
+                    {
+                        "basisRuleId": {
+                            "salesTaxHolidayIndicator": false,
+                            "userDefined": false,
+                            "value": "v301728806"
+                        },
+                        "calculatedTax": -6.62,
+                        "calculationRuleId": {
+                            "salesTaxHolidayIndicator": false,
+                            "userDefined": false,
+                            "value": "v301283404"
+                        },
+                        "effectiveRate": 0.06625,
+                        "exempt": 0.0,
+                        "imposition": {
+                            "impositionId": "v1j23018",
+                            "userDefined": false,
+                            "value": "Sales and Use Tax"
+                        },
+                        "impositionType": {
+                            "impositionTypeId": "v1",
+                            "userDefined": false,
+                            "value": "General Sales and Use Tax"
+                        },
+                        "inclusionRuleId": {
+                            "salesTaxHolidayIndicator": false,
+                            "userDefined": false,
+                            "value": "v309955653"
+                        },
+                        "isService": false,
+                        "jurisdiction": {
+                            "effectiveDate": "1900-01-01",
+                            "expirationDate": "9999-12-31",
+                            "jurisdictionId": "23018",
+                            "jurisdictionType": "STATE",
+                            "value": "NEW JERSEY"
+                        },
+                        "maxTaxIndicator": false,
+                        "nominalRate": 0.06625,
+                        "nonTaxable": 0.0,
+                        "notRegisteredIndicator": false,
+                        "situs": "DESTINATION",
+                        "taxCollectedFromParty": "BUYER",
+                        "taxResult": "TAXABLE",
+                        "taxStructure": "SINGLE_RATE",
+                        "taxType": "SALES",
+                        "taxable": 100.0
+                    }
+                ],
+                "totalTax": -6.62,
+                "transactionType": "SALE"
+            },
+            {
+                "customer": {
+                    "customerCode": {
+                        "classCode": "customerCodeFoo",
+                        "isBusinessIndicator": false
+                    },
+                    "destination": {
+                        "city": "East Hanover",
+                        "country": "US",
+                        "mainDivision": "New Jersey",
+                        "postalCode": "07936",
+                        "streetAddress1": "27 Merry Lane",
+                        "taxAreaId": "310276576"
+                    },
+                    "isTaxExempt": false,
+                    "taxRegistrations": []
+                },
+                "extendedPrice": 300.0,
+                "fairMarketValue": 300.0,
+                "lineItemId": "789",
+                "product": {
+                    "value": "789"
+                },
+                "quantity": {
+                    "unitOfMeasure": "EA",
+                    "value": 2.0
+                },
+                "seller": {
+                    "company": "testCompany",
+                    "taxRegistrations": []
+                },
+                "taxIncludedIndicator": false,
+                "taxes": [
+                    {
+                        "calculatedTax": 19.88,
+                        "calculationRuleId": {
+                            "salesTaxHolidayIndicator": false,
+                            "userDefined": false,
+                            "value": "v301283404"
+                        },
+                        "effectiveRate": 0.06625,
+                        "exempt": 0.0,
+                        "imposition": {
+                            "impositionId": "v1j23018",
+                            "userDefined": false,
+                            "value": "Sales and Use Tax"
+                        },
+                        "impositionType": {
+                            "impositionTypeId": "v1",
+                            "userDefined": false,
+                            "value": "General Sales and Use Tax"
+                        },
+                        "inclusionRuleId": {
+                            "salesTaxHolidayIndicator": false,
+                            "userDefined": false,
+                            "value": "v309955653"
+                        },
+                        "isService": false,
+                        "jurisdiction": {
+                            "effectiveDate": "1900-01-01",
+                            "expirationDate": "9999-12-31",
+                            "jurisdictionId": "23018",
+                            "jurisdictionType": "STATE",
+                            "value": "NEW JERSEY"
+                        },
+                        "maxTaxIndicator": false,
+                        "nominalRate": 0.06625,
+                        "nonTaxable": 0.0,
+                        "notRegisteredIndicator": false,
+                        "situs": "DESTINATION",
+                        "taxCollectedFromParty": "BUYER",
+                        "taxResult": "TAXABLE",
+                        "taxStructure": "SINGLE_RATE",
+                        "taxType": "SALES",
+                        "taxable": 300.0
+                    }
+                ],
+                "totalTax": 19.88,
+                "transactionType": "SALE"
+            },
+            {
+                "customer": {
+                    "customerCode": {
+                        "classCode": "customerCodeFoo",
+                        "isBusinessIndicator": false
+                    },
+                    "destination": {
+                        "city": "East Hanover",
+                        "country": "US",
+                        "mainDivision": "New Jersey",
+                        "postalCode": "07936",
+                        "streetAddress1": "27 Merry Lane",
+                        "taxAreaId": "310276576"
+                    },
+                    "isTaxExempt": false,
+                    "taxRegistrations": []
+                },
+                "discount": {
+                    "discountType": "DiscountAmount",
+                    "discountValue": -1.0
+                },
+                "extendedPrice": -20.0,
+                "fairMarketValue": -21.0,
+                "lineItemId": "shipment-123",
+                "product": {
+                    "value": "shipment-123"
+                },
+                "quantity": {
+                    "value": 1.0
+                },
+                "seller": {
+                    "company": "testCompany",
+                    "taxRegistrations": []
+                },
+                "taxIncludedIndicator": false,
+                "taxes": [
+                    {
+                        "basisRuleId": {
+                            "salesTaxHolidayIndicator": false,
+                            "userDefined": false,
+                            "value": "v301728806"
+                        },
+                        "calculatedTax": -1.33,
+                        "calculationRuleId": {
+                            "salesTaxHolidayIndicator": false,
+                            "userDefined": false,
+                            "value": "v301283404"
+                        },
+                        "effectiveRate": 0.06625,
+                        "exempt": 0.0,
+                        "imposition": {
+                            "impositionId": "v1j23018",
+                            "userDefined": false,
+                            "value": "Sales and Use Tax"
+                        },
+                        "impositionType": {
+                            "impositionTypeId": "v1",
+                            "userDefined": false,
+                            "value": "General Sales and Use Tax"
+                        },
+                        "inclusionRuleId": {
+                            "salesTaxHolidayIndicator": false,
+                            "userDefined": false,
+                            "value": "v309955653"
+                        },
+                        "isService": false,
+                        "jurisdiction": {
+                            "effectiveDate": "1900-01-01",
+                            "expirationDate": "9999-12-31",
+                            "jurisdictionId": "23018",
+                            "jurisdictionType": "STATE",
+                            "value": "NEW JERSEY"
+                        },
+                        "maxTaxIndicator": false,
+                        "nominalRate": 0.06625,
+                        "nonTaxable": 0.0,
+                        "notRegisteredIndicator": false,
+                        "situs": "DESTINATION",
+                        "taxCollectedFromParty": "BUYER",
+                        "taxResult": "TAXABLE",
+                        "taxStructure": "SINGLE_RATE",
+                        "taxType": "SALES",
+                        "taxable": 20.0
+                    }
+                ],
+                "totalTax": -1.33,
+                "transactionType": "SALE"
+            },
+            {
+                "customer": {
+                    "customerCode": {
+                        "classCode": "customerCodeFoo",
+                        "isBusinessIndicator": false
+                    },
+                    "destination": {
+                        "city": "East Hanover",
+                        "country": "US",
+                        "mainDivision": "New Jersey",
+                        "postalCode": "07936",
+                        "streetAddress1": "27 Merry Lane",
+                        "taxAreaId": "310276576"
+                    },
+                    "isTaxExempt": false,
+                    "taxRegistrations": []
+                },
+                "extendedPrice": 45.0,
+                "fairMarketValue": 45.0,
+                "lineItemId": "shipment-789",
+                "product": {
+                    "value": "shipment-789"
+                },
+                "quantity": {
+                    "value": 1.0
+                },
+                "seller": {
+                    "company": "testCompany",
+                    "taxRegistrations": []
+                },
+                "taxIncludedIndicator": false,
+                "taxes": [
+                    {
+                        "calculatedTax": 2.98,
+                        "calculationRuleId": {
+                            "salesTaxHolidayIndicator": false,
+                            "userDefined": false,
+                            "value": "v301283404"
+                        },
+                        "effectiveRate": 0.06625,
+                        "exempt": 0.0,
+                        "imposition": {
+                            "impositionId": "v1j23018",
+                            "userDefined": false,
+                            "value": "Sales and Use Tax"
+                        },
+                        "impositionType": {
+                            "impositionTypeId": "v1",
+                            "userDefined": false,
+                            "value": "General Sales and Use Tax"
+                        },
+                        "inclusionRuleId": {
+                            "salesTaxHolidayIndicator": false,
+                            "userDefined": false,
+                            "value": "v309955653"
+                        },
+                        "isService": false,
+                        "jurisdiction": {
+                            "effectiveDate": "1900-01-01",
+                            "expirationDate": "9999-12-31",
+                            "jurisdictionId": "23018",
+                            "jurisdictionType": "STATE",
+                            "value": "NEW JERSEY"
+                        },
+                        "maxTaxIndicator": false,
+                        "nominalRate": 0.06625,
+                        "nonTaxable": 0.0,
+                        "notRegisteredIndicator": false,
+                        "situs": "DESTINATION",
+                        "taxCollectedFromParty": "BUYER",
+                        "taxResult": "TAXABLE",
+                        "taxStructure": "SINGLE_RATE",
+                        "taxType": "SALES",
+                        "taxable": 45.0
+                    }
+                ],
+                "totalTax": 2.98,
+                "transactionType": "SALE"
+            }
+        ],
+        "returnAssistedParametersIndicator": true,
+        "roundAtLineLevel": false,
+        "saleMessageType": "QUOTATION",
+        "seller": {
+            "company": "testCompany",
+            "taxRegistrations": []
+        },
+        "subTotal": 265.0,
+        "total": 282.57,
+        "totalTax": 17.57,
+        "transactionId": "testTransaction",
+        "transactionType": "SALE"
+    },
+    "meta": {
+        "app": "vertex-ws.war v9.0.14.0.50",
+        "timeElapsed(ms)": 15,
+        "timeReceived": "2023-08-02T12:03:32.481Z"
+    }
+}

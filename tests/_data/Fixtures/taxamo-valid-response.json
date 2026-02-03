@@ -1,0 +1,12 @@
+{
+    "invoice_address": {
+        "country": "IE",
+        "freeform_address": "3RD FLOOR ,FAKE STREET ,DUBLIN 78"
+    },
+    "buyer_name": "ACME HAMMERS  LIMITED",
+    "tax_deducted": true,
+    "buyer_tax_number_valid": true,
+    "buyer_tax_number_format_valid" : true,
+    "buyer_tax_number": "IE123112348V",
+    "billing_country_code": "IE"
+}

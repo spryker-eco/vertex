@@ -19,11 +19,11 @@
         <property name="credentialHash" dataBuilderRule="lexify('???????????????')"/>
         <property name="taxamoToken" dataBuilderRule="lexify('??????????')"/>
         <property name="taxamoApiUrl" dataBuilderRule="lexify('??????????')"/>
-        <property name="isTaxIdValidatorEnabled" type="bool"/>
+        <property name="isTaxIdValidatorEnabled" type="bool" dataBuilderRule="boolean(true)"/>
         <property name="transactionCallsUri" dataBuilderRule="lexify('??????????')"/>
-        <property name="isActive" type="bool"/>
-        <property name="isInvoicingEnabled" type="bool"/>
-        <property name="isTaxAssistEnabled" type="bool"/>
+        <property name="isActive" type="bool" dataBuilderRule="boolean(true)"/>
+        <property name="isInvoicingEnabled" type="bool" dataBuilderRule="boolean(true)"/>
+        <property name="isTaxAssistEnabled" type="bool" dataBuilderRule="boolean(true)"/>
         <property name="defaultTaxpayerCompanyCode" dataBuilderRule="lexify('??????????')"/>
         <property name="createdAt" type="string"/>
         <property name="updatedAt" type="string"/>
