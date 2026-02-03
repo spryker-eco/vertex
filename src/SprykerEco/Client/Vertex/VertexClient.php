@@ -18,7 +18,6 @@ use Generated\Shared\Transfer\VertexApiResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
-use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Spryker\Client\Kernel\AbstractClient;
 
 /**
@@ -53,12 +52,31 @@ class VertexClient extends AbstractClient implements VertexClientInterface
      *
      * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
-    public function calculateTax(
+    public function calculateQuoteTax(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexConfigTransfer $vertexConfigTransfer
     ): VertexCalculationResponseTransfer {
         return $this->getFactory()
             ->createVertexTaxCalculator()
+            ->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
+     *
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
+     */
+    public function calculateOrderTax(
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
+        VertexConfigTransfer $vertexConfigTransfer
+    ): VertexCalculationResponseTransfer {
+        return $this->getFactory()
+            ->createInvoiceVertexTaxCalculator()
             ->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
     }
 

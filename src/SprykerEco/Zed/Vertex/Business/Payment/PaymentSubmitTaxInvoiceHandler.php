@@ -71,7 +71,17 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
 
         $vertexConfigTransfer = $this->configResolver->resolve();
 
-        // TODO: add check if ( $vertexConfigTransfer->getIsActive() && $vertexConfigTransfer->getIsInvoicingEnabled())
+        if (!$vertexConfigTransfer) {
+            // TODO
+
+            return;
+        }
+
+        if (!$vertexConfigTransfer || !$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsInvoicingEnabled()) {
+            // TODO
+
+            return;
+        }
 
         $vertexApiAccessTokenTransfer = $this->accessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 
@@ -87,7 +97,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
             ],
         );
 
-        $vertexCalculationResponseTransfer = $this->vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexCalculationResponseTransfer = $this->vertexClient->calculateOrderTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
 
         $this->getLogger()->info(
             'Finished tax calculation request for invoicing process',

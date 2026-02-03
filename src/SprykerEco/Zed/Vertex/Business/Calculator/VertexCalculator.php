@@ -9,17 +9,17 @@ namespace SprykerEco\Zed\Vertex\Business\Calculator;
 
 use Generated\Shared\Transfer\ApiErrorMessageTransfer;
 use Generated\Shared\Transfer\CalculableObjectTransfer;
-use Generated\Shared\Transfer\VertexConfigTransfer;
-use Generated\Shared\Transfer\VertexSaleTransfer;
+use Generated\Shared\Transfer\TaxTotalTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
-use Generated\Shared\Transfer\TaxTotalTransfer;
-use SprykerEco\Client\Vertex\VertexClientInterface;
+use Generated\Shared\Transfer\VertexConfigTransfer;
+use Generated\Shared\Transfer\VertexSaleTransfer;
 use Spryker\Shared\Log\LoggerTrait;
+use SprykerEco\Client\Vertex\Validator\QuotationValidator;
+use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
-use SprykerEco\Zed\Vertex\Business\Validator\QuotationValidator;
 
 class VertexCalculator implements VertexCalculatorInterface
 {
@@ -77,7 +77,7 @@ class VertexCalculator implements VertexCalculatorInterface
         $vertexCalculationResponseTransfer = $this->getCachedVertexResponseTransfer($calculableObjectTransfer, $vertexSaleTransfer);
 
         if (!$vertexCalculationResponseTransfer) {
-            $this->quotationValidator->validate($vertexSaleTransfer);
+            $this->quotationValidator->validateSale($vertexSaleTransfer);
             $vertexCalculationResponseTransfer = $this->getVertexCalculationResponse($vertexSaleTransfer, $vertexConfigTransfer);
 
             if (!$vertexCalculationResponseTransfer->getIsSuccessful()) {
@@ -129,7 +129,7 @@ class VertexCalculator implements VertexCalculatorInterface
                 ->setErrorMessage(static::ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN);
         }
 
-        return $this->vertexClient->calculateTax(
+        return $this->vertexClient->calculateQuoteTax(
             (new VertexCalculationRequestTransfer())
                 ->setSale($vertexSaleTransfer)
                 ->setVertexApiAccessToken($vertexApiAccessTokenTransfer),

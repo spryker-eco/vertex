@@ -8,6 +8,13 @@
 namespace SprykerEco\Zed\Vertex\Business;
 
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
+use SprykerEco\Client\Vertex\Validator\AddressValidator;
+use SprykerEco\Client\Vertex\Validator\ItemValidator;
+use SprykerEco\Client\Vertex\Validator\QuotationValidator;
+use SprykerEco\Client\Vertex\Validator\RefundsValidator;
+use SprykerEco\Client\Vertex\Validator\SaleValidator;
+use SprykerEco\Client\Vertex\Validator\ShipmentValidator;
+use SprykerEco\Client\Vertex\Validator\ShippingWarehouseValidator;
 use SprykerEco\Client\Vertex\VertexClientInterface as VertexVertexClientInterface;
 use SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProvider;
@@ -28,12 +35,13 @@ use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapper;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Order\RefundProcessor;
 use SprykerEco\Zed\Vertex\Business\Order\RefundProcessorInterface;
-use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolver;
-use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use SprykerEco\Zed\Vertex\Business\Payment\PaymentSubmitTaxInvoiceHandler;
 use SprykerEco\Zed\Vertex\Business\Payment\PaymentSubmitTaxInvoiceHandlerInterface;
+use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolver;
+use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use SprykerEco\Zed\Vertex\Business\Validator\TaxIdValidator;
 use SprykerEco\Zed\Vertex\Business\Validator\TaxIdValidatorInterface;
+use SprykerEco\Zed\Vertex\Business\Validator\VertexConfigValidator;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 use SprykerEco\Zed\Vertex\VertexDependencyProvider;
@@ -140,6 +148,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
             $this->getCalculableObjectVertexExpanderPlugins(),
             $this->createPriceAggregator(),
             $this->createVertexAccessTokenProvider(),
+            $this->createQuotationValidator(),
         );
     }
 
@@ -210,6 +219,68 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
+     * @return \SprykerEco\Client\Vertex\Validator\AddressValidator
+     */
+    public function createAddressValidator(): AddressValidator
+    {
+        return new AddressValidator();
+    }
+
+    /**
+     * @return \SprykerEco\Client\Vertex\Validator\ShippingWarehouseValidator
+     */
+    public function createShippingWarehouseValidator(): ShippingWarehouseValidator
+    {
+        return new ShippingWarehouseValidator($this->createAddressValidator());
+    }
+
+    /**
+     * @return \SprykerEco\Client\Vertex\Validator\ItemValidator
+     */
+    public function createItemValidator(): ItemValidator
+    {
+        return new ItemValidator(
+            $this->createAddressValidator(),
+            $this->createShippingWarehouseValidator()
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Client\Vertex\Validator\ShipmentValidator
+     */
+    public function createShipmentValidator(): ShipmentValidator
+    {
+        return new ShipmentValidator($this->createAddressValidator());
+    }
+
+    /**
+     * @return \SprykerEco\Client\Vertex\Validator\SaleValidator
+     */
+    public function createSaleValidator(): SaleValidator
+    {
+        return new SaleValidator(
+            $this->createItemValidator(),
+            $this->createShipmentValidator()
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Client\Vertex\Validator\QuotationValidator
+     */
+    public function createQuotationValidator(): QuotationValidator
+    {
+        return new QuotationValidator($this->createSaleValidator());
+    }
+
+    /**
+     * @return \SprykerEco\Client\Vertex\Validator\RefundsValidator
+     */
+    public function createRefundsValidator(): RefundsValidator
+    {
+        return new RefundsValidator($this->createSaleValidator());
+    }
+
+    /**
      * @return \SprykerEco\Client\Vertex\VertexClientInterface
      */
     public function getVertexClient(): VertexVertexClientInterface
@@ -227,7 +298,19 @@ class VertexBusinessFactory extends AbstractBusinessFactory
 
     public function createVertexConfigResolver(): VertexConfigResolverInterface
     {
-        return new VertexConfigResolver($this->getConfig(), $this->getStoreFacade());
+        return new VertexConfigResolver(
+            $this->getConfig(),
+            $this->getStoreFacade(),
+            $this->createVertexConfigValidator()
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\Vertex\Business\Validator\VertexConfigValidator
+     */
+    public function createVertexConfigValidator(): VertexConfigValidator
+    {
+        return new VertexConfigValidator($this->getVertexClient());
     }
 
     /**

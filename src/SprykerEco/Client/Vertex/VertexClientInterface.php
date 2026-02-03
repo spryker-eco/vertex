@@ -39,9 +39,6 @@ interface VertexClientInterface
 
     /**
      * Specification:
-     * - Performs tax `quotation` request to Vertex API.
-     * - If VertexConfigTransfer.defaultTaxpayerCompanyCode is set for the requesting tenant, and no other value is defined, it will be used for tax quotation request.
-     * - Requires VertexConfigTransfer.vertexAuthResponse.
      *
      * @api
      *
@@ -50,7 +47,22 @@ interface VertexClientInterface
      *
      * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
-    public function calculateTax(
+    public function calculateQuoteTax(
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
+        VertexConfigTransfer $vertexConfigTransfer
+    ): VertexCalculationResponseTransfer;
+
+    /**
+     * Specification:
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
+     *
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
+     */
+    public function calculateOrderTax(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexConfigTransfer $vertexConfigTransfer
     ): VertexCalculationResponseTransfer;
