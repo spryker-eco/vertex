@@ -77,7 +77,7 @@ class TaxIdValidator implements TaxIdValidatorInterface
 
         $vertexValidationResponseTransfer = (new VertexValidationResponseTransfer())
             ->fromArray($vertexValidationResponseTransfer->toArray(), true)
-            ->setMessageKey($vertexValidationResponseTransfer->getErrorCode() ?? null);
+            ->setMessageKey($vertexValidationResponseTransfer->getMessageKey() ?? null);
 
         if ($vertexValidationResponseTransfer->getIsValid() === true) {
             $this->entityManager->saveTaxIdValidationHistory(
