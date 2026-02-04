@@ -63,7 +63,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return array<\SprykerEco\Zed\Vertex\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface>
+     * @return array<\SprykerEco\Zed\Vertex\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface|\Spryker\Zed\TaxAppExtension\Dependency\Plugin\CalculableObjectTaxAppExpanderPluginInterface>
      */
     public function getCalculableObjectVertexExpanderPlugins(): array
     {
@@ -71,7 +71,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface>
+     * @return array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface|\Spryker\Zed\TaxAppExtension\Dependency\Plugin\OrderTaxAppExpanderPluginInterface>
      */
     public function getOrderVertexExpanderPlugins(): array
     {
@@ -148,7 +148,6 @@ class VertexBusinessFactory extends AbstractBusinessFactory
             $this->getCalculableObjectVertexExpanderPlugins(),
             $this->createPriceAggregator(),
             $this->createVertexAccessTokenProvider(),
-            $this->createQuotationValidator(),
         );
     }
 

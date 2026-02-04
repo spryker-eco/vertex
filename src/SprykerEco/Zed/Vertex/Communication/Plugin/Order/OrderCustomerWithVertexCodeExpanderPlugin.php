@@ -9,12 +9,12 @@ namespace SprykerEco\Zed\Vertex\Communication\Plugin\Order;
 
 use Generated\Shared\Transfer\OrderTransfer;
 use Spryker\Zed\Kernel\Communication\AbstractPlugin;
-use Spryker\Zed\TaxAppExtension\Dependency\Plugin\OrderTaxAppExpanderPluginInterface;
+use SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface;
 
 /**
  * @method \SprykerEco\Zed\Vertex\Communication\VertexCommunicationFactory getFactory()
  */
-class OrderCustomerWithVertexCodeExpanderPlugin extends AbstractPlugin implements OrderTaxAppExpanderPluginInterface
+class OrderCustomerWithVertexCodeExpanderPlugin extends AbstractPlugin implements OrderVertexExpanderPluginInterface
 {
     /**
      * {@inheritDoc}

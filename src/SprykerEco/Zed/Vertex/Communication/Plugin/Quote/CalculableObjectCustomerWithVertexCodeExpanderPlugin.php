@@ -9,12 +9,12 @@ namespace SprykerEco\Zed\Vertex\Communication\Plugin\Quote;
 
 use Generated\Shared\Transfer\CalculableObjectTransfer;
 use Spryker\Zed\Kernel\Communication\AbstractPlugin;
-use Spryker\Zed\TaxAppExtension\Dependency\Plugin\CalculableObjectTaxAppExpanderPluginInterface;
+use SprykerEco\Zed\Vertex\Dependency\Plugin\CalculableObjectVertexExpanderPluginInterface;
 
 /**
  * @method \SprykerEco\Zed\Vertex\Communication\VertexCommunicationFactory getFactory()
  */
-class CalculableObjectCustomerWithVertexCodeExpanderPlugin extends AbstractPlugin implements CalculableObjectTaxAppExpanderPluginInterface
+class CalculableObjectCustomerWithVertexCodeExpanderPlugin extends AbstractPlugin implements CalculableObjectVertexExpanderPluginInterface
 {
     /**
      * {@inheritDoc}

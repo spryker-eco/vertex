@@ -11,13 +11,10 @@ use ArrayObject;
 use DateTime;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
-use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Spryker\Shared\Log\LoggerTrait;
 use SprykerEco\Client\Vertex\VertexClientInterface;
-use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\AccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
-use SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\vertexMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
@@ -32,8 +29,9 @@ class RefundProcessor implements RefundProcessorInterface
      * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
      * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface $salesFacade
      * @param \SprykerEco\Zed\Vertex\Business\Mapper\vertexMapperInterface $vertexMapper
-     * @param \SprykerEco\Zed\Vertex\Business\Config\ConfigReaderInterface $configReader
-     * @param array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface> $orderVertexExpanderPlugins // TODO
+     * @param array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface|\Spryker\Zed\TaxAppExtension\Dependency\Plugin\OrderTaxAppExpanderPluginInterface> $orderVertexExpanderPlugins
+     * @param \SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface $vertexAccessTokenProvider
+     * @param \SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface $configResolver
      */
     public function __construct(
         protected VertexClientInterface $vertexClient,

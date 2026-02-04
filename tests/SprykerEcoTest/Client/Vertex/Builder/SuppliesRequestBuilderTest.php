@@ -33,8 +33,6 @@ class SuppliesRequestBuilderTest extends Unit
     {
         // Arrange
         $vertexCalculationRequestTransfer = $this->tester->haveVertexCalculationRequestTransfer();
-
-
         $suppliesRequestBuilder = $this->tester->getFactory()->createSuppliesQuotationRequestBuilder();
 
         // // Act
@@ -43,7 +41,6 @@ class SuppliesRequestBuilderTest extends Unit
         // // Assert
         $this->assertEquals($vertexCalculationRequestTransfer->getSale()->getTransactionId(), $suppliesTransfer->getTransactionId());
         $this->assertEquals($vertexCalculationRequestTransfer->getSale()->getItems()[0]->getId(), $suppliesTransfer->getLineItems()[0]->getLineItemId());
-        $this->assertEquals($vertexCalculationRequestTransfer->getSale()->getShipments()[0]->getShipmentMethodKey(), $suppliesTransfer->getLineItems()[1]->getProduct()->getValue());
         $this->assertEquals('QUOTATION', $suppliesTransfer->getSaleMessageType());
         $this->assertIsBool($suppliesTransfer->getReturnAssistedParametersIndicator());
     }

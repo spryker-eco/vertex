@@ -298,7 +298,7 @@
         <property name="vertexShippingWarehouses" type="VertexShippingWarehouse[]" singular="vertexShippingWarehouse"/>
         <property name="taxMetadata" type="array" associative="true" singular="taxMetadataEntry"/>
         <property name="sku" type="string"/>
-    </transfer> -->
+    </transfer>
 
     <transfer name="Address">
     </transfer>

@@ -56,7 +56,7 @@ class VertexItemValidator implements VertexItemValidatorInterface
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ITEM_FIELD_IS_REQUIRED, VertexItemTransfer::PRICE_AMOUNT, $vertexItemTransfer->getSku()));
         }
 
-        if (!$vertexItemTransfer->getDiscountAmount()) {
+        if ($vertexItemTransfer->getDiscountAmount() === null) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ITEM_FIELD_IS_REQUIRED, VertexItemTransfer::DISCOUNT_AMOUNT, $vertexItemTransfer->getSku()));
         }
 

@@ -29,7 +29,7 @@
                 },
                 "discount": {
                     "discountType": "DiscountAmount",
-                    "discountValue": -1.0
+                    "discountValue": 1.0
                 },
                 "extendedPrice": -100.0,
                 "fairMarketValue": -101.0,

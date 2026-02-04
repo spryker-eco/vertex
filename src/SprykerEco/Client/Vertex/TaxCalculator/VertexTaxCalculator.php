@@ -63,7 +63,7 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
 
         $vertexValidationResponseTransfer = $this->quotationValidator->validate($vertexCalculationRequestTransfer);
 
-        if (!$vertexValidationResponseTransfer->getIsValid()) {
+        if ($vertexValidationResponseTransfer->getIsValid() === false) {
             return $this->vertexSuppliesResponseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, implode(', ', $vertexValidationResponseTransfer->getMessages()));
         }
 

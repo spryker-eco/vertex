@@ -42,9 +42,13 @@ class VertexApiFacadecalculateQuoteTaxMethodTest extends Unit
         $mockClient = $this->mockClientForVertexTaxQuotationRequest('vertex-tax-quotation-valid-response', 200);
         $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
         $vertexCalculationRequestTransfer = $this->tester->haveVertexCalculationRequestTransfer();
-
+        $vertexShipmentTransfer = $vertexCalculationRequestTransfer->getSale()->getShipments()->offsetGet(0);
         $preparedSale = json_decode($this->tester->getVertexResponseFromFixture('vertex-tax-quotation-valid-request'), true);
         $vertexCalculationRequestTransfer->getSale()->fromArray($preparedSale, true);
+        foreach ($vertexCalculationRequestTransfer->getSale()->getShipments() as $shipment) {
+            $shipment->setShipmentMethodKey($vertexShipmentTransfer->getShipmentMethodKey());
+            $shipment->setDiscountAmount($vertexShipmentTransfer->getDiscountAmount());
+        }
 
         // Act
         $vertexCalculationResponseTransfer = $vertexClient->calculateQuoteTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);

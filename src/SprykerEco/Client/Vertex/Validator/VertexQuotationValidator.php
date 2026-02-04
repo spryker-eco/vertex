@@ -4,6 +4,7 @@ namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
+use Generated\Shared\Transfer\VertexShipmentTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
 class VertexQuotationValidator implements VertexValidatorInterface

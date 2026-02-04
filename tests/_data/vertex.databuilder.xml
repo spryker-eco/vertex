@@ -15,18 +15,15 @@
         <property name="clientSecret" dataBuilderRule="lexify('??????????')"/>
         <property name="securityUri" dataBuilderRule="lexify('??????????')"/>
         <property name="idVertexConfig" dataBuilderRule="lexify('????')"/>
-        <property name="storeReference" dataBuilderRule="lexify('??????????')"/>
         <property name="credentialHash" dataBuilderRule="lexify('???????????????')"/>
         <property name="taxamoToken" dataBuilderRule="lexify('??????????')"/>
         <property name="taxamoApiUrl" dataBuilderRule="lexify('??????????')"/>
-        <property name="isTaxIdValidatorEnabled" type="bool" dataBuilderRule="boolean(true)"/>
+        <property name="isTaxIdValidatorEnabled" dataBuilderRule="boolean(true)"/>
         <property name="transactionCallsUri" dataBuilderRule="lexify('??????????')"/>
-        <property name="isActive" type="bool" dataBuilderRule="boolean(true)"/>
-        <property name="isInvoicingEnabled" type="bool" dataBuilderRule="boolean(true)"/>
-        <property name="isTaxAssistEnabled" type="bool" dataBuilderRule="boolean(true)"/>
+        <property name="isActive" dataBuilderRule="boolean(true)"/>
+        <property name="isInvoicingEnabled" dataBuilderRule="boolean(true)"/>
+        <property name="isTaxAssistEnabled" dataBuilderRule="boolean(true)"/>
         <property name="defaultTaxpayerCompanyCode" dataBuilderRule="lexify('??????????')"/>
-        <property name="createdAt" type="string"/>
-        <property name="updatedAt" type="string"/>
         <property name="vendorCode" dataBuilderRule="lexify('??????????')"/>
     </transfer>
 
@@ -74,6 +71,7 @@
 
     <transfer name="VertexShipment" strict="true">
         <property name="id" dataBuilderRule="lexify('??????????')"/>
+        <property name="shipmentMethodKey" dataBuilderRule="lexify('??????????')"/>
         <property name="priceAmount" dataBuilderRule="numberBetween(100, 1000)"/>
         <property name="discountAmount" dataBuilderRule="numberBetween(100, 1000)"/>
         <property name="taxTotal" dataBuilderRule="numberBetween(100, 1000)"/>

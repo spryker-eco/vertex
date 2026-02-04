@@ -10,16 +10,12 @@ namespace SprykerEco\Zed\Vertex\Business\Payment;
 use Generated\Shared\Transfer\MessageAttributesTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\VertexSubmitPaymentTaxInvoiceTransfer;
-use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Spryker\Shared\Log\LoggerTrait;
-use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface;
-use SprykerEco\Client\Vertex\VertexClient;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToMessageBrokerFacadeInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
@@ -32,7 +28,9 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
      * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
      * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface $salesFacade
      * @param \SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface $vertexMapper
-     * @param array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface> $orderVertexExpanderPlugins
+     * @param array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface|\Spryker\Zed\TaxAppExtension\Dependency\Plugin\OrderTaxAppExpanderPluginInterface> $orderVertexExpanderPlugins
+     * @param \SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface $vertexAccessTokenProvider
+     * @param \SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface $configResolver
      */
     public function __construct(
         protected VertexToStoreFacadeInterface $storeFacade,
