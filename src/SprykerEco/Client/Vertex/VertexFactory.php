@@ -56,6 +56,20 @@ use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilder;
 use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterface;
 use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculator;
 use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface;
+use SprykerEco\Client\Vertex\Validator\VertexInvoiceValidator;
+use SprykerEco\Client\Vertex\Validator\VertexInvoiceValidatorInterface;
+use SprykerEco\Client\Vertex\Validator\VertexQuotationValidator;
+use SprykerEco\Client\Vertex\Validator\VertexAddressValidator;
+use SprykerEco\Client\Vertex\Validator\VertexAddressValidatorInterface;
+use SprykerEco\Client\Vertex\Validator\VertexItemValidator;
+use SprykerEco\Client\Vertex\Validator\VertexItemValidatorInterface;
+use SprykerEco\Client\Vertex\Validator\VertexSaleValidator;
+use SprykerEco\Client\Vertex\Validator\VertexSaleValidatorInterface;
+use SprykerEco\Client\Vertex\Validator\VertexShipmentValidator;
+use SprykerEco\Client\Vertex\Validator\VertexShipmentValidatorInterface;
+use SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidator;
+use SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidatorInterface;
+use SprykerEco\Client\Vertex\Validator\VertexValidatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexTaxIdValidator;
 use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
 use Spryker\Shared\Log\LoggerTrait;
@@ -91,24 +105,61 @@ class VertexFactory extends AbstractFactory
             $this->createSuppliesQuotationRequestBuilder(),
             $this->createSuppliesApi(),
             $this->createVertexSuppliesResponseBuilder(),
+            $this->createVertexQuotationValidator(),
         );
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface
-     */
+    public function createVertexQuotationValidator(): VertexValidatorInterface
+    {
+        return new VertexQuotationValidator($this->createVertexSaleValidator());
+    }
+
+    public function createVertexSaleValidator(): VertexSaleValidatorInterface
+    {
+        return new VertexSaleValidator(
+            $this->createVertexItemValidator(),
+            $this->createVertexShipmentValidator(),
+        );
+    }
+
+    public function createVertexItemValidator(): VertexItemValidatorInterface
+    {
+        return new VertexItemValidator(
+            $this->createVertexAddressValidator(),
+            $this->createVertexShippingWarehouseValidator(),
+        );
+    }
+
+    public function createVertexShipmentValidator(): VertexShipmentValidatorInterface
+    {
+        return new VertexShipmentValidator($this->createVertexAddressValidator());
+    }
+
+    public function createVertexAddressValidator(): VertexAddressValidatorInterface
+    {
+        return new VertexAddressValidator();
+    }
+
+    public function createVertexShippingWarehouseValidator(): VertexShippingWarehouseValidatorInterface
+    {
+        return new VertexShippingWarehouseValidator($this->createVertexAddressValidator());
+    }
+
     public function createInvoiceVertexTaxCalculator(): VertexTaxCalculatorInterface
     {
         return new VertexTaxCalculator(
             $this->createSuppliesInvoiceRequestBuilder(),
             $this->createSuppliesApi(),
             $this->createVertexSuppliesResponseBuilder(),
+            $this->createVertexInvoiceValidator(),
         );
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Validator\VertexTaxIdValidatorInterface
-     */
+    public function createVertexInvoiceValidator(): VertexInvoiceValidatorInterface
+    {
+        return new VertexInvoiceValidator($this->createVertexSaleValidator());
+    }
+
     public function createVertexTaxIdValidator(): VertexTaxIdValidatorInterface
     {
         return new VertexTaxIdValidator(
@@ -116,9 +167,6 @@ class VertexFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Api\V2\Client\TaxamoApi
-     */
     public function createTaxamoApi(): TaxamoApi
     {
         return new TaxamoApi(
@@ -127,17 +175,11 @@ class VertexFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterface
-     */
     public function createVertexSuppliesResponseBuilder(): VertexSuppliesResponseBuilderInterface
     {
         return new VertexSuppliesResponseBuilder($this->createPriceConverter());
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Api\V2\Client\SecurityApiInterface
-     */
     public function createSecurityApi(): SecurityApiInterface
     {
         return new SecurityApi(
@@ -145,9 +187,6 @@ class VertexFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Api\V2\Client\SuppliesApiInterface
-     */
     public function createSuppliesApi(): SuppliesApiInterface
     {
         return new SuppliesApi(
@@ -157,17 +196,11 @@ class VertexFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Api\V2\Builder\VertexSuppliesApiRequestBuilder
-     */
     protected function createVertexSuppliesApiRequestBuilder(): VertexSuppliesApiRequestBuilder
     {
         return new VertexSuppliesApiRequestBuilder();
     }
 
-    /**
-     * @return \Spryker\Service\UtilEncoding\UtilEncodingServiceInterface
-     */
     protected function getUtilEncodingService(): UtilEncodingServiceInterface
     {
         return $this->getProvidedDependency(VertexDependencyProvider::SERVICE_UTIL_ENCODING);
@@ -195,33 +228,21 @@ class VertexFactory extends AbstractFactory
         ]);
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\HttpClient\MessageFormatterInterface
-     */
     public function createFilteringMessageFormatter(): MessageFormatterInterface
     {
         return new FilteringMessageFormatter();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\LocationMapper
-     */
     protected function createLocationMapper(): LocationMapper
     {
         return new LocationMapper();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\PriceConverter
-     */
     protected function createPriceConverter(): PriceConverter
     {
         return new PriceConverter();
     }
 
-    /**
-     * Quotation Request Builder, SaleMessageType = "QUOTATION"
-     */
     public function createSuppliesQuotationRequestBuilder(): SuppliesRequestBuilder
     {
         return new SuppliesRequestBuilder([
@@ -235,9 +256,6 @@ class VertexFactory extends AbstractFactory
         ]);
     }
 
-    /**
-     * Invoice Request Builder, SaleMessageType = "INVOICE"
-     */
     public function createSuppliesInvoiceRequestBuilder(): SuppliesRequestBuilder
     {
         return new SuppliesRequestBuilder([
@@ -254,81 +272,51 @@ class VertexFactory extends AbstractFactory
         ]);
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface
-     */
     protected function createVertexSuppliesDefaultsBuilder(): VertexSuppliesRequestBuilderInterface
     {
         return new VertexSuppliesDefaultsBuilder();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface
-     */
     protected function createVertexSuppliesTransactionTypeBuilder(): VertexSuppliesRequestBuilderInterface
     {
         return new VertexSuppliesTransactionTypeBuilder();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface
-     */
     protected function createVertexSuppliesTransactionIdBuilder(): VertexSuppliesRequestBuilderInterface
     {
         return new VertexSuppliesTransactionIdBuilder();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface
-     */
     protected function createVertexSuppliesDocumentNumberBuilder(): VertexSuppliesRequestBuilderInterface
     {
         return new VertexSuppliesDocumentNumberBuilder();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface
-     */
     protected function createVertexSuppliesDocumentDateBuilder(): VertexSuppliesRequestBuilderInterface
     {
         return new VertexSuppliesDocumentDateBuilder();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface
-     */
     protected function createVertexSuppliesPostingDateBuilder(): VertexSuppliesRequestBuilderInterface
     {
         return new VertexSuppliesPostingDateBuilder();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface
-     */
     protected function createVertexSuppliesQuotationSaleMessageTypeBuilder(): VertexSuppliesRequestBuilderInterface
     {
         return new VertexSuppliesQuotationSaleMessageTypeBuilder();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface
-     */
     protected function createVertexSuppliesInvoiceSaleMessageTypeBuilder(): VertexSuppliesRequestBuilderInterface
     {
         return new VertexSuppliesInvoiceSaleMessageTypeBuilder();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface
-     */
     protected function createVertexSuppliesMetadataBuilder(): VertexSuppliesRequestBuilderInterface
     {
         return new VertexSuppliesMetadataBuilder();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface
-     */
     protected function createVertexSuppliesItemsBuilder(): VertexSuppliesRequestBuilderInterface
     {
         return new VertexSuppliesLineItemsBuilder([
@@ -344,9 +332,6 @@ class VertexFactory extends AbstractFactory
         ]);
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface
-     */
     protected function createVertexSuppliesShipmentBuilder(): VertexSuppliesRequestBuilderInterface
     {
         return new VertexSuppliesShipmentBuilder([
@@ -358,17 +343,11 @@ class VertexFactory extends AbstractFactory
         ]);
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface
-     */
     protected function createVertexLineItemIdBuilder(): VertexLineItemBuilderInterface
     {
         return new VertexLineItemIdBuilder();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface
-     */
     protected function createVertexLineItemVendorSkuBuilder(): VertexLineItemBuilderInterface
     {
         return new VertexLineItemVendorSkuBuilder();
@@ -430,7 +409,7 @@ class VertexFactory extends AbstractFactory
         return new VertexLineItemMetadataBuilder();
     }
 
-    
+
     /**
      * @codeCoverageIgnore We can't use the real client for any of the tests.
      *

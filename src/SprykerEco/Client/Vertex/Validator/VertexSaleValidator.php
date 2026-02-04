@@ -12,45 +12,22 @@ use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\VertexShipmentTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
-class SaleValidator
+class VertexSaleValidator implements VertexSaleValidatorInterface
 {
     protected const ERROR_FIELD_IS_REQUIRED = 'Field %s is required';
 
-    /**
-     * @var \SprykerEco\Client\Vertex\Validator\ItemValidator
-     */
     protected $itemValidator;
 
-    /**
-     * @var \SprykerEco\Client\Vertex\Validator\ShipmentValidator
-     */
     protected $shipmentValidator;
 
-    /**
-     * @param \SprykerEco\Client\Vertex\Validator\ItemValidator $itemValidator
-     * @param \SprykerEco\Client\Vertex\Validator\ShipmentValidator $shipmentValidator
-     */
     public function __construct(
-        ItemValidator $itemValidator,
-        ShipmentValidator $shipmentValidator
-    ) {
-        $this->itemValidator = $itemValidator;
-        $this->shipmentValidator = $shipmentValidator;
-    }
+        VertexItemValidator $itemValidator,
+        VertexShipmentValidator $shipmentValidator
+    ) {}
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $vertexSaleTransfer
-     * @param \Generated\Shared\Transfer\VertexValidationResponseTransfer $vertexValidationResponseTransfer
-     * @param bool $requireRefundableAmountForItems
-     * @param bool $requireDiscountAmountForShipments
-     *
-     * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
-     */
     public function validate(
         VertexSaleTransfer $vertexSaleTransfer,
         VertexValidationResponseTransfer $vertexValidationResponseTransfer,
-        bool $requireRefundableAmountForItems = false,
-        bool $requireDiscountAmountForShipments = true
     ): VertexValidationResponseTransfer {
         if (!$vertexSaleTransfer->getTransactionId()) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexSaleTransfer::TRANSACTION_ID));
@@ -64,7 +41,7 @@ class SaleValidator
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexSaleTransfer::DOCUMENT_DATE));
         }
 
-        if (!$vertexSaleTransfer->getTaxMetadata()) {
+        if ($vertexSaleTransfer->getTaxMetadata() === null) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexSaleTransfer::TAX_METADATA));
         }
 
@@ -76,21 +53,17 @@ class SaleValidator
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexSaleTransfer::SHIPMENTS));
         }
 
-        foreach ($vertexSaleTransfer->getItems() as $index => $vertexItemTransfer) {
+        foreach ($vertexSaleTransfer->getItems() as $vertexItemTransfer) {
             $this->itemValidator->validate(
                 $vertexItemTransfer,
-                VertexSaleTransfer::ITEMS . '[' . $index . ']',
                 $vertexValidationResponseTransfer,
-                $requireRefundableAmountForItems
             );
         }
 
-        foreach ($vertexSaleTransfer->getShipments() as $index => $vertexShipmentTransfer) {
+        foreach ($vertexSaleTransfer->getShipments() as $vertexShipmentTransfer) {
             $this->shipmentValidator->validate(
                 $vertexShipmentTransfer,
-                VertexSaleTransfer::SHIPMENTS . '[' . $index . ']',
                 $vertexValidationResponseTransfer,
-                $requireDiscountAmountForShipments
             );
         }
 

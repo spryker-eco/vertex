@@ -11,9 +11,11 @@ use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
+use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use SprykerEco\Client\Vertex\Api\V2\Client\SuppliesApiInterface;
 use SprykerEco\Client\Vertex\Builder\SuppliesRequestBuilder;
 use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterface;
+use SprykerEco\Client\Vertex\Validator\VertexValidatorInterface;
 
 /**
  * This class is used for tax calculation (`quotation`) AND for `invoice` request sending, depending on SuppliesRequestBuilder builders list.
@@ -37,6 +39,7 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
         protected SuppliesRequestBuilder $vertexSuppliesRequestBuilder,
         protected SuppliesApiInterface $suppliesApi,
         protected VertexSuppliesResponseBuilderInterface $vertexSuppliesResponseBuilder,
+        protected VertexValidatorInterface $quotationValidator,
     ) {
     }
 
@@ -58,13 +61,15 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
             return $this->vertexSuppliesResponseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, static::ERROR_MESSAGE_TRANSACTION_CALL_URI);
         }
 
+        $vertexValidationResponseTransfer = $this->quotationValidator->validate($vertexCalculationRequestTransfer);
+
+        if (!$vertexValidationResponseTransfer->getIsValid()) {
+            return $this->vertexSuppliesResponseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, implode(', ', $vertexValidationResponseTransfer->getMessages()));
+        }
+
         $vertexApiAccessTokenTransfer = $vertexCalculationRequestTransfer->getVertexApiAccessToken();
         if (!$vertexApiAccessTokenTransfer?->getAccessToken()) {
             return $this->vertexSuppliesResponseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, static::ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN);
-        }
-
-        if (!$vertexCalculationRequestTransfer->getSale()) {
-            return $this->vertexSuppliesResponseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, static::ERROR_MESSAGE_SALE_IS_MISSED);
         }
 
         $vertexCalculationRequestTransfer->setVertexConfiguration($vertexConfigTransfer);

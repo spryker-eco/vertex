@@ -56,7 +56,7 @@ class VertexConfigValidator
             $this->validateTaxamoToken($vertexConfigTransfer, $vertexValidationResponseTransfer);
         }
 
-        $isValid = $vertexValidationResponseTransfer->getMessages()->count() === 0;
+        $isValid = count($vertexValidationResponseTransfer->getMessages()) === 0;
         $vertexValidationResponseTransfer->setIsValid($isValid);
 
         return $vertexValidationResponseTransfer;
@@ -142,11 +142,6 @@ class VertexConfigValidator
     ): void {
         if (!$vertexConfigTransfer->getTaxamoApiUrl()) {
             $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_TAXAMO_API_URL_FIELD);
-            return;
-        }
-
-        if (!filter_var($vertexConfigTransfer->getTaxamoApiUrl(), FILTER_VALIDATE_URL)) {
-            $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_NOT_VALID_URL_TAXAMO_API_URL_FIELD);
         }
     }
 
@@ -156,25 +151,6 @@ class VertexConfigValidator
     ): void {
         if (!$vertexConfigTransfer->getTaxamoToken()) {
             $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_BLANK_TAXAMO_TOKEN_FIELD);
-            return;
-        }
-
-        if (!$vertexConfigTransfer->getTaxamoApiUrl() || !filter_var($vertexConfigTransfer->getTaxamoApiUrl(), FILTER_VALIDATE_URL)) {
-            // Skip token validation if API URL is invalid (already validated or invalid format)
-            return;
-        }
-
-        // Validate token by making a test API call
-        $vertexApiResponseTransfer = $this->vertexClient->sendValidationApiRequestTaxId(
-            (new TaxamoApiRequestTransfer())
-                ->setTaxamoToken($vertexConfigTransfer->getTaxamoToken())
-                ->setTaxamoApiUrl($vertexConfigTransfer->getTaxamoApiUrl())
-                ->setCountryCode('DE')
-                ->setTaxId('fake'),
-        );
-
-        if (!$vertexApiResponseTransfer->getIsSuccessful()) {
-            $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_NOT_VALID_CREDENTIAL);
         }
     }
 }

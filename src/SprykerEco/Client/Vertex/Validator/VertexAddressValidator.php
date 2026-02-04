@@ -10,7 +10,7 @@ namespace SprykerEco\Client\Vertex\Validator;
 use Generated\Shared\Transfer\VertexAddressTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
-class AddressValidator
+class VertexAddressValidator implements VertexAddressValidatorInterface
 {
     protected const ERROR_ADDRESS_FIELD_IS_REQUIRED = 'Address field %s is required';
 

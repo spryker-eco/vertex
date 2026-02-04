@@ -6,28 +6,14 @@ use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
-class RefundsValidator
+class VertexInvoiceValidator implements VertexInvoiceValidatorInterface
 {
     protected const ERROR_FIELD_IS_REQUIRED = 'Field %s is required';
 
-    /**
-     * @var \SprykerEco\Client\Vertex\Validator\SaleValidator
-     */
-    protected $saleValidator;
-
-    /**
-     * @param \SprykerEco\Client\Vertex\Validator\SaleValidator $saleValidator
-     */
-    public function __construct(SaleValidator $saleValidator)
+    public function __construct(protected VertexSaleValidator $saleValidator)
     {
-        $this->saleValidator = $saleValidator;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
-     */
     public function validate(VertexCalculationRequestTransfer $vertexCalculationRequestTransfer): VertexValidationResponseTransfer
     {
         $vertexValidationResponseTransfer = (new VertexValidationResponseTransfer());
@@ -43,13 +29,22 @@ class RefundsValidator
             return $vertexValidationResponseTransfer;
         }
 
-        // For refunds: refundableAmount is required for items, discountAmount is optional for shipments
-        return $this->saleValidator->validate(
+        $vertexValidationResponseTransfer = $this->saleValidator->validate(
             $vertexSaleTransfer,
             $vertexValidationResponseTransfer,
-            true,  // requireRefundableAmountForItems
-            false  // requireDiscountAmountForShipments
         );
+
+        foreach ($vertexSaleTransfer->getItems() as $vertexSaleItemTransfer) {
+            if (!$vertexSaleItemTransfer->getRefundableAmount()) {
+                $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexSaleItemTransfer::REFUNDABLE_AMOUNT));
+            }
+        }
+
+        if ($vertexValidationResponseTransfer->getMessages()) {
+            $vertexValidationResponseTransfer->setIsSuccess(false);
+        }
+
+        return $vertexValidationResponseTransfer;
     }
 }
 

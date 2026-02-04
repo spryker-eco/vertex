@@ -8,13 +8,13 @@
 namespace SprykerEco\Zed\Vertex\Business;
 
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
-use SprykerEco\Client\Vertex\Validator\AddressValidator;
-use SprykerEco\Client\Vertex\Validator\ItemValidator;
-use SprykerEco\Client\Vertex\Validator\QuotationValidator;
-use SprykerEco\Client\Vertex\Validator\RefundsValidator;
-use SprykerEco\Client\Vertex\Validator\SaleValidator;
-use SprykerEco\Client\Vertex\Validator\ShipmentValidator;
-use SprykerEco\Client\Vertex\Validator\ShippingWarehouseValidator;
+use SprykerEco\Client\Vertex\Validator\VertexAddressValidator;
+use SprykerEco\Client\Vertex\Validator\VertexItemValidator;
+use SprykerEco\Client\Vertex\Validator\VertexQuotationValidator;
+use SprykerEco\Client\Vertex\Validator\VertexInvoiceValidator;
+use SprykerEco\Client\Vertex\Validator\VertexSaleValidator;
+use SprykerEco\Client\Vertex\Validator\VertexShipmentValidator;
+use SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidator;
 use SprykerEco\Client\Vertex\VertexClientInterface as VertexVertexClientInterface;
 use SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProvider;
@@ -219,65 +219,65 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \SprykerEco\Client\Vertex\Validator\AddressValidator
+     * @return \SprykerEco\Client\Vertex\Validator\VertexAddressValidator
      */
-    public function createAddressValidator(): AddressValidator
+    public function createAddressValidator(): VertexAddressValidator
     {
-        return new AddressValidator();
+        return new VertexAddressValidator();
     }
 
     /**
-     * @return \SprykerEco\Client\Vertex\Validator\ShippingWarehouseValidator
+     * @return \SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidator
      */
-    public function createShippingWarehouseValidator(): ShippingWarehouseValidator
+    public function createShippingWarehouseValidator(): VertexShippingWarehouseValidator
     {
-        return new ShippingWarehouseValidator($this->createAddressValidator());
+        return new VertexShippingWarehouseValidator($this->createAddressValidator());
     }
 
     /**
-     * @return \SprykerEco\Client\Vertex\Validator\ItemValidator
+     * @return \SprykerEco\Client\Vertex\Validator\VertexItemValidator
      */
-    public function createItemValidator(): ItemValidator
+    public function createItemValidator(): VertexItemValidator
     {
-        return new ItemValidator(
+        return new VertexItemValidator(
             $this->createAddressValidator(),
             $this->createShippingWarehouseValidator()
         );
     }
 
     /**
-     * @return \SprykerEco\Client\Vertex\Validator\ShipmentValidator
+     * @return \SprykerEco\Client\Vertex\Validator\VertexShipmentValidator
      */
-    public function createShipmentValidator(): ShipmentValidator
+    public function createShipmentValidator(): VertexShipmentValidator
     {
-        return new ShipmentValidator($this->createAddressValidator());
+        return new VertexShipmentValidator($this->createAddressValidator());
     }
 
     /**
-     * @return \SprykerEco\Client\Vertex\Validator\SaleValidator
+     * @return \SprykerEco\Client\Vertex\Validator\VertexSaleValidator
      */
-    public function createSaleValidator(): SaleValidator
+    public function createSaleValidator(): VertexSaleValidator
     {
-        return new SaleValidator(
+        return new VertexSaleValidator(
             $this->createItemValidator(),
             $this->createShipmentValidator()
         );
     }
 
     /**
-     * @return \SprykerEco\Client\Vertex\Validator\QuotationValidator
+     * @return \SprykerEco\Client\Vertex\Validator\VertexQuotationValidator
      */
-    public function createQuotationValidator(): QuotationValidator
+    public function createQuotationValidator(): VertexQuotationValidator
     {
-        return new QuotationValidator($this->createSaleValidator());
+        return new VertexQuotationValidator($this->createSaleValidator());
     }
 
     /**
-     * @return \SprykerEco\Client\Vertex\Validator\RefundsValidator
+     * @return \SprykerEco\Client\Vertex\Validator\VertexInvoiceValidator
      */
-    public function createRefundsValidator(): RefundsValidator
+    public function createRefundsValidator(): VertexInvoiceValidator
     {
-        return new RefundsValidator($this->createSaleValidator());
+        return new VertexInvoiceValidator($this->createSaleValidator());
     }
 
     /**
