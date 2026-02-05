@@ -17,12 +17,6 @@ class VertexConfig extends AbstractBundleConfig
      */
     public const MESSAGE_VERTEX_IS_DISABLED = 'Tax service is disabled.';
 
-    /**
-     * @var string
-     */
-    public const MESSAGE_TAX_VALIDATOR_IS_UNAVAILABLE = 'Tax Validator API is unavailable.';
-
-
     public function getClientId(): string
     {
         return $this->get(VertexConstants::CLIENT_ID, null);
@@ -127,8 +121,23 @@ class VertexConfig extends AbstractBundleConfig
         return '';
     }
 
+    /**
+     * Specification:
+     *
+     * @return bool
+     */
     public function isInvoicingEnabled(): bool
     {
         return $this->get(VertexConstants::IS_INVOICING_ENABLED, false);
+    }
+
+    /**
+     * Specification:
+     *
+     * @return string
+     */
+    public function getVendorCode(): string
+    {
+        return $this->get(VertexConstants::VENDOR_CODE, '');
     }
 }

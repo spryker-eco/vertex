@@ -139,5 +139,15 @@ interface VertexConstants
      * @var string
      */
     public const IS_TAX_ASSIST_ENABLED = 'VERTEX:IS_TAX_ASSIST_ENABLED';
+
+    /**
+     * Specification:
+     * - Determines vendor code.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const VENDOR_CODE = 'VERTEX:VENDOR_CODE';
 }
 

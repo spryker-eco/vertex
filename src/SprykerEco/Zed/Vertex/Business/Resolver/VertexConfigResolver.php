@@ -33,7 +33,8 @@ class VertexConfigResolver implements VertexConfigResolverInterface
             ->setTaxamoToken($this->vertexConfig->getTaxamoToken())
             ->setTaxamoApiUrl($this->vertexConfig->getTaxamoApiUrl())
             ->setCredentialHash($this->getCredentialHash($this->vertexConfig->getClientId(), $this->vertexConfig->getClientSecret()))
-            ->setIsInvoicingEnabled($this->vertexConfig->isInvoicingEnabled());
+            ->setIsInvoicingEnabled($this->vertexConfig->isInvoicingEnabled())
+            ->setVendorCode($this->vertexConfig->getVendorCode());
 
         $vertexValidationResponseTransfer = $this->vertexConfigValidator->validate($vertexConfigTransfer);
 
