@@ -38,6 +38,7 @@ use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfig;
 use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfigQuery;
 use Orm\Zed\TaxApp\Persistence\SpyTaxIdValidationHistoryQuery;
+use Orm\Zed\Vertex\Persistence\SpyVertexTaxIdValidationHistoryQuery;
 use PHPUnit\Framework\Constraint\Callback;
 use ReflectionProperty;
 use Spryker\Client\TaxApp\TaxAppClient;
@@ -88,7 +89,7 @@ class VertexBusinessTester extends Actor
      */
     public function assertTaxIdValidationHistoryEntryDoesNotExist(string $taxId, string $countryCode, string $responseData): void
     {
-        $taxIdValidationHistoryEntity = $this->getTaxIdValidationHistoryQuery()
+        $taxIdValidationHistoryEntity = $this->getVertexTaxIdValidationHistoryQuery()
             ->filterByTaxId($taxId)
             ->filterByCountryCode($countryCode)
             ->findOne();
@@ -105,8 +106,8 @@ class VertexBusinessTester extends Actor
         $this->setDependency(
             VertexDependencyProvider::PLUGINS_CALCULABLE_OBJECT_VERTEX_EXPANDER,
             [
-//                new CalculableObjectVertexExpanderPlugin(),
-//                new MerchantProfileAddressCalculableObjectVertexExpanderPlugin(),
+                new CalculableObjectVertexExpanderPlugin(),
+                new MerchantProfileAddressCalculableObjectVertexExpanderPlugin(),
             ],
         );
     }
@@ -219,33 +220,14 @@ class VertexBusinessTester extends Actor
     /**
      * @return void
      */
-    public function ensureTaxIdValidationHistoryTableIsEmpty(): void
+    public function ensureVertexTaxIdValidationHistoryTableIsEmpty(): void
     {
-        $this->ensureDatabaseTableIsEmpty($this->getTaxIdValidationHistoryQuery());
+        $this->ensureDatabaseTableIsEmpty($this->getVertexTaxIdValidationHistoryQuery());
     }
 
-    /**
-     * @return void
-     */
-    public function ensureVertexConfigTableIsEmpty(): void
+    protected function getVertexTaxIdValidationHistoryQuery(): SpyVertexTaxIdValidationHistoryQuery
     {
-        $this->ensureDatabaseTableIsEmpty($this->getTaxAppConfigQuery());
-    }
-
-    /**
-     * @return \Orm\Zed\TaxApp\Persistence\SpyTaxAppConfigQuery
-     */
-    protected function getTaxAppConfigQuery(): SpyTaxAppConfigQuery
-    {
-        return SpyTaxAppConfigQuery::create();
-    }
-
-    /**
-     * @return \Spryker\Zed\TaxApp\Persistence\Propel\SpyTaxIdValidationHistoryQuery
-     */
-    protected function getTaxIdValidationHistoryQuery(): SpyTaxIdValidationHistoryQuery
-    {
-        return SpyTaxIdValidationHistoryQuery::create();
+        return SpyVertexTaxIdValidationHistoryQuery::create();
     }
 
     /**
@@ -432,7 +414,7 @@ class VertexBusinessTester extends Actor
     public function mockVertexClientWithVertexCalculationResponse(VertexCalculationResponseTransfer $vertexCalculationResponseTransfer): void
     {
         $vertexClientMock = Stub::makeEmpty(VertexClient::class);
-        $vertexClientMock->expects(Expected::once()->getMatcher())->method('calculateTax')->willReturn($vertexCalculationResponseTransfer);
+        $vertexClientMock->expects(Expected::once()->getMatcher())->method('calculateQuoteTax')->willReturn($vertexCalculationResponseTransfer);
         $vertexClientMock->expects(Expected::once()->getMatcher())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('some-access-token')

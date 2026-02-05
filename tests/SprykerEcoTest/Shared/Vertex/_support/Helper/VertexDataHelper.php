@@ -23,6 +23,7 @@ use Generated\Shared\DataBuilder\TaxAppValidationRequestBuilder;
 use Generated\Shared\DataBuilder\VertexCalculationRequestBuilder;
 use Generated\Shared\DataBuilder\VertexCalculationResponseBuilder;
 use Generated\Shared\DataBuilder\TaxRefundRequestBuilder;
+use Generated\Shared\DataBuilder\VertexValidationRequestBuilder;
 use Generated\Shared\Transfer\CalculableObjectTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
@@ -35,6 +36,7 @@ use Generated\Shared\Transfer\TaxAppValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\TaxRefundRequestTransfer;
+use Generated\Shared\Transfer\VertexValidationRequestTransfer;
 use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfig;
 use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfigQuery;
 use Spryker\Zed\Store\Business\StoreFacadeInterface;
@@ -65,9 +67,9 @@ class VertexDataHelper extends Module
      *
      * @return \Generated\Shared\Transfer\TaxAppValidationRequestTransfer
      */
-    public function createTaxAppValidationRequestTransfer(array $seed = []): TaxAppValidationRequestTransfer
+    public function createVertexValidationRequestTransfer(array $seed = []): VertexValidationRequestTransfer
     {
-        return (new TaxAppValidationRequestBuilder())->seed($seed)->build();
+        return (new VertexValidationRequestBuilder())->seed($seed)->build();
     }
 
     /**

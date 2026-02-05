@@ -35,7 +35,7 @@ class VertexBusinessAssertionHelper extends Module
         $expectation = $this->haveExpectedTaxQuotationRequestSaleItems();
 
         $vertexClientMock->expects(new InvokedCountMatcher(1))
-            ->method('calculateTax')
+            ->method('calculateQuoteTax')
             ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($expectation) {
                 $index = 0;
 
@@ -90,7 +90,7 @@ class VertexBusinessAssertionHelper extends Module
         $expectation = $this->haveExpectedTaxQuotationRequestSaleItems();
 
         $vertexClientMock->expects(new InvokedCountMatcher(1))
-            ->method('calculateTax')
+            ->method('calculateQuoteTax')
             ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($mockedCalculableObjectTransfer) {
                 self::assertEquals(
                     $mockedCalculableObjectTransfer->getItems()->count(),

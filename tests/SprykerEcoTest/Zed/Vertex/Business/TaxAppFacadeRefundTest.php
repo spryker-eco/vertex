@@ -57,7 +57,7 @@ class TaxAppFacadeRefundTest extends Unit
         $vertexClientMock = $this->createMock(VertexClient::class);
 
         // Assert
-        $vertexClientMock->expects($this->once())->method('calculateTax')->willReturn($this->tester->haveTaxCalculationResponseTransfer(['isSuccessful' => true]));
+        $vertexClientMock->expects($this->once())->method('calculateQuoteTax')->willReturn($this->tester->haveTaxCalculationResponseTransfer(['isSuccessful' => true]));
         $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('test-token')
@@ -87,7 +87,7 @@ class TaxAppFacadeRefundTest extends Unit
         $vertexClientMock = $this->createMock(VertexClient::class);
 
         // Assert
-        $vertexClientMock->expects($this->never())->method('calculateTax');
+        $vertexClientMock->expects($this->never())->method('calculateQuoteTax');
         $vertexClientMock->expects($this->never())->method('authenticate');
         $this->tester->setDependency('CLIENT_VERTEX', $vertexClientMock);
 

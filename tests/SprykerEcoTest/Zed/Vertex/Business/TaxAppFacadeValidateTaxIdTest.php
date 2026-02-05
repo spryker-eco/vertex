@@ -13,9 +13,12 @@ use Generated\Shared\Transfer\AcpHttpRequestTransfer;
 use Generated\Shared\Transfer\AcpHttpResponseTransfer;
 use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\TaxAppValidationResponseTransfer;
+use Generated\Shared\Transfer\VertexConfigTransfer;
+use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Spryker\Zed\TaxApp\Dependency\Facade\TaxAppToStoreFacadeInterface;
+use SprykerEco\Client\Vertex\VertexClient;
+use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
 use SprykerTest\Zed\TaxApp\TaxAppBusinessTester;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Auto-generated group annotations
@@ -25,20 +28,12 @@ use Symfony\Component\HttpFoundation\Response;
  * @group TaxApp
  * @group Business
  * @group Facade
- * @group TaxAppFacadeValidateTaxIdTest
+ * @group VertexFacadeValidateTaxIdTest
  * Add your own group annotations below this line
  */
 class TaxAppFacadeValidateTaxIdTest extends Unit
 {
-    /**
-     * @var \SprykerTest\Zed\TaxApp\TaxAppBusinessTester
-     */
-    protected TaxAppBusinessTester $tester;
-
-    /**
-     * @var \Generated\Shared\Transfer\StoreTransfer
-     */
-    protected StoreTransfer $storeTransfer;
+    protected VertexBusinessTester $tester;
 
     /**
      * @return void
@@ -48,50 +43,34 @@ class TaxAppFacadeValidateTaxIdTest extends Unit
         parent::setUp();
 
         $this->tester->ensureTaxIdValidationHistoryTableIsEmpty();
-        $this->storeTransfer = $this->tester->haveStore([StoreTransfer::COUNTRIES => ['US']], false);
-        $this->tester->mockOauthClient();
-
-        $storeFacadeMock = Stub::makeEmpty(TaxAppToStoreFacadeInterface::class, [
-            'getCurrentStore' => $this->storeTransfer,
-        ]);
-        $this->tester->mockFactoryMethod('getStoreFacade', $storeFacadeMock);
     }
 
-    /**
-     * @return void
-     */
-    public function testGivenAValidTaxIdWhenTheApiReturnsASuccessfulResponseThenATaxIdValidationHistoryEntryIsCreated(): void
+    public function testGivenValidTaxIdWhenApiReturnsSuccessfulResponseThenTaxIdValidationHistoryEntryIsCreated(): void
     {
         // Arrange
-        $taxAppValidationRequestTransfer = $this->tester->createTaxAppValidationRequestTransfer();
-        $taxAppConfigTransfer = $this->tester->haveTaxAppConfig(['vendor_code' => 'vendorCode', 'fk_store' => $this->storeTransfer->getIdStore(), 'is_active' => true]);
-        $taxAppValidationResponseTransfer = (new TaxAppValidationResponseTransfer())
+        $vertexValidationRequestTransfer = $this->tester->createVertexValidationRequestTransfer();
+        $taxAppConfigTransfer = (new VertexConfigTransfer())->setVendorCode('vendorCode')->setIsActive(true);
+        $vertexValidationResponseTransfer = (new VertexValidationResponseTransfer())
             ->setAdditionalInfo('test')
             ->setIsValid(true);
 
-        $this->tester->mockKernelAppFacade(
-            (new AcpHttpResponseTransfer())
-                ->setHttpStatusCode(Response::HTTP_OK)
-                ->setContent(json_encode($taxAppValidationResponseTransfer->toArray())),
-            $this->callback(function (AcpHttpRequestTransfer $incomingAcpHttpRequestTransfer) use ($taxAppValidationRequestTransfer, $taxAppConfigTransfer) {
-                $this->assertSame($taxAppConfigTransfer->getApiUrls()->getTaxIdValidationUrl(), $incomingAcpHttpRequestTransfer->getUri());
-                $this->assertSame('POST', $incomingAcpHttpRequestTransfer->getMethod());
-                $this->assertEqualsCanonicalizing(
-                    $taxAppValidationRequestTransfer->toArray(true, true),
-                    json_decode($incomingAcpHttpRequestTransfer->getBody(), true),
-                );
-                $this->assertArrayHasKey('Authorization', $incomingAcpHttpRequestTransfer->getHeaders());
-
-                return true;
-            }),
-        );
+        // Mock client
+        $vertexClientMock = $this->createMock(VertexClient::class);
+        $vertexClientMock->expects($this->once())
+            ->method('validateTaxId')
+            ->willReturn(
+                (new VertexValidationResponseTransfer())
+                    ->setIsValid(true)
+                    ->setAdditionalInfo('test')
+            );
+        $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
         // Act
-        $taxAppValidationResponseTransfer = $this->tester->getFacade()->validateTaxId($taxAppValidationRequestTransfer);
+        $vertexValidationResponseTransfer = $this->tester->getFacade()->validateTaxId($vertexValidationRequestTransfer);
 
         // Assert
-        $this->assertTrue($taxAppValidationResponseTransfer->getIsValid());
-        $this->tester->assertTaxIdValidationHistoryEntryDoesNotExist($taxAppValidationRequestTransfer->getTaxId(), $taxAppValidationRequestTransfer->getCountryCode(), $taxAppValidationResponseTransfer->getAdditionalInfo());
+        $this->assertTrue($vertexValidationResponseTransfer->getIsValid());
+        $this->tester->assertTaxIdValidationHistoryEntryDoesNotExist($vertexValidationRequestTransfer->getTaxId(), $vertexValidationRequestTransfer->getCountryCode(), $vertexValidationResponseTransfer->getAdditionalInfo());
     }
 
     /**
@@ -100,19 +79,26 @@ class TaxAppFacadeValidateTaxIdTest extends Unit
     public function testGivenAMalformedRequestWhenTheTaxIdValidationApiIsCalledThenTheResponseContainsAServiceUnavailableMessage(): void
     {
         // Arrange
-        $taxAppValidationRequestTransfer = $this->tester->createTaxAppValidationRequestTransfer();
+        $vertexValidationRequestTransfer = $this->tester->createTaxAppValidationRequestTransfer();
         $this->tester->haveTaxAppConfig(['vendor_code' => 'vendorCode', 'fk_store' => $this->storeTransfer->getIdStore(), 'is_active' => true]);
-        $this->tester->mockKernelAppFacade(
-            (new AcpHttpResponseTransfer())
-                ->setHttpStatusCode(Response::HTTP_BAD_REQUEST),
-        );
+
+        // Mock client
+        $vertexClientMock = $this->createMock(VertexClient::class);
+        $vertexClientMock->expects($this->once())
+            ->method('validateTaxId')
+            ->willReturn(
+                (new VertexValidationResponseTransfer())
+                    ->setIsValid(false)
+                    ->setMessage('Tax Validator API is unavailable.')
+            );
+        $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
         // Act
-        $taxAppValidationResponseTransfer = $this->tester->getFacade()->validateTaxId($taxAppValidationRequestTransfer);
+        $vertexValidationResponseTransfer = $this->tester->getFacade()->validateTaxId($vertexValidationRequestTransfer);
 
         // Assert
-        $this->assertFalse($taxAppValidationResponseTransfer->getIsValid());
-        $this->assertSame('Tax Validator API is unavailable.', $taxAppValidationResponseTransfer->getMessage());
+        $this->assertFalse($vertexValidationResponseTransfer->getIsValid());
+        $this->assertSame('Tax Validator API is unavailable.', $vertexValidationResponseTransfer->getMessage());
     }
 
     /**
@@ -121,25 +107,26 @@ class TaxAppFacadeValidateTaxIdTest extends Unit
     public function testGivenAMalformedRequestWhenTheTaxIdValidationApiIsCalledThenAFailedResponseIsReturned(): void
     {
         // Arrange
-        $taxAppValidationRequestTransfer = $this->tester->createTaxAppValidationRequestTransfer();
+        $vertexValidationRequestTransfer = $this->tester->createTaxAppValidationRequestTransfer();
         $this->tester->haveTaxAppConfig(['vendor_code' => 'vendorCode', 'fk_store' => $this->storeTransfer->getIdStore(), 'is_active' => true]);
-        $this->tester->mockKernelAppFacade(
-            (new AcpHttpResponseTransfer())
-                ->setHttpStatusCode(Response::HTTP_OK)
-                ->setContent(json_encode(
-                    (new TaxAppValidationResponseTransfer())
-                        ->setIsValid(false)
-                        ->setMessage('message')
-                        ->toArray(),
-                )),
-        );
+
+        // Mock client
+        $vertexClientMock = $this->createMock(VertexClient::class);
+        $vertexClientMock->expects($this->once())
+            ->method('validateTaxId')
+            ->willReturn(
+                (new VertexValidationResponseTransfer())
+                    ->setIsValid(false)
+                    ->setMessage('message')
+            );
+        $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
         // Act
-        $taxAppValidationResponseTransfer = $this->tester->getFacade()->validateTaxId($taxAppValidationRequestTransfer);
+        $vertexValidationResponseTransfer = $this->tester->getFacade()->validateTaxId($vertexValidationRequestTransfer);
 
         // Assert
-        $this->assertFalse($taxAppValidationResponseTransfer->getIsValid());
-        $this->assertSame('message', $taxAppValidationResponseTransfer->getMessage());
+        $this->assertFalse($vertexValidationResponseTransfer->getIsValid());
+        $this->assertSame('message', $vertexValidationResponseTransfer->getMessage());
     }
 
     /**
@@ -148,14 +135,14 @@ class TaxAppFacadeValidateTaxIdTest extends Unit
     public function testValidateTaxIdWhenServiceIsDisabledThenTheErrorMessageIsReturnedInTheResponse(): void
     {
         // Arrange
-        $taxAppValidationRequestTransfer = $this->tester->createTaxAppValidationRequestTransfer();
+        $vertexValidationRequestTransfer = $this->tester->createTaxAppValidationRequestTransfer();
         $this->tester->haveTaxAppConfig(['vendor_code' => 'vendorCode', 'fk_store' => $this->storeTransfer->getIdStore(), 'is_active' => false]);
 
         // Act
-        $taxAppValidationResponseTransfer = $this->tester->getFacade()->validateTaxId($taxAppValidationRequestTransfer);
+        $vertexValidationResponseTransfer = $this->tester->getFacade()->validateTaxId($vertexValidationRequestTransfer);
 
         // Assert
-        $this->assertFalse($taxAppValidationResponseTransfer->getIsValid());
-        $this->assertSame('Tax service is disabled.', $taxAppValidationResponseTransfer->getMessage());
+        $this->assertFalse($vertexValidationResponseTransfer->getIsValid());
+        $this->assertSame('Tax service is disabled.', $vertexValidationResponseTransfer->getMessage());
     }
 }
