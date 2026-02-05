@@ -20,6 +20,7 @@ use Spryker\Zed\Calculation\Communication\Plugin\Calculator\GrandTotalCalculator
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemDiscountAmountFullAggregatorPlugin;
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemSubtotalAggregatorPlugin;
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\PriceCalculatorPlugin;
+use SprykerEco\Shared\Vertex\VertexConstants;
 use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 use SprykerEco\Client\Vertex\VertexClient;
 use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
@@ -32,29 +33,17 @@ use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
  * @group Vertex
  * @group Business
  * @group Facade
- * @group TaxAppFacadeCalculationTest
+ * @group VertexFacadeCalculationTest
  * Add your own group annotations below this line
  */
-class TaxAppFacadeCalculationTest extends Unit
+class VertexFacadeCalculationTest extends Unit
 {
-    /**
-     * @var string
-     */
     protected const PRICE_MODE_GROSS = 'GROSS_MODE';
 
-    /**
-     * @var \SprykerEcoTest\Zed\Vertex\VertexBusinessTester
-     */
     protected VertexBusinessTester $tester;
 
-    /**
-     * @var \Generated\Shared\Transfer\StoreTransfer
-     */
-    protected $storeTransfer;
+    protected StoreTransfer $storeTransfer;
 
-    /**
-     * @return void
-     */
     public function setUp(): void
     {
         parent::setUp();
@@ -63,9 +52,6 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->tester->setQuoteTaxMetadataExpanderPlugins();
     }
 
-    /**
-     * @return void
-     */
     public function testCalculableObjectHasTaxTotalWhenRecalculateRequestsTaxFromExternalApiSuccessfully(): void
     {
         // Arrange
@@ -85,9 +71,6 @@ class TaxAppFacadeCalculationTest extends Unit
         }
     }
 
-    /**
-     * @return void
-     */
     public function testCalculableObjectHasTheSameTaxRequestHashWhenRecalculateWasCalledTwiceWithoutChanges(): void
     {
         // Arrange
@@ -116,10 +99,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->assertSame($firstCalculationHash, $secondCalculationHash);
     }
 
-    /**
-     * @return void
-     */
-    public function testCalculableObjectHasTheDifferentTaxRequestHashWhenWasRecalculateCalledTwiceWithChanges(): void
+    public function testCalculableObjectHasDifferentTaxRequestHashWhenWasRecalculateCalledTwiceWithChanges(): void
     {
         // Arrange
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
@@ -137,20 +117,17 @@ class TaxAppFacadeCalculationTest extends Unit
         // Act
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
 
-        $firstCalculationHash = $calculableObjectTransfer->getTaxAppSaleHash();
+        $firstCalculationHash = $calculableObjectTransfer->getVertexSaleHash();
 
         $calculableObjectTransfer->getOriginalQuote()->setUuid(Uuid::uuid4()->toString());
 
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
 
-        $secondCalculationHash = $calculableObjectTransfer->getTaxAppSaleHash();
+        $secondCalculationHash = $calculableObjectTransfer->getVertexSaleHash();
 
         $this->assertNotEquals($firstCalculationHash, $secondCalculationHash);
     }
 
-    /**
-     * @return void
-     */
     public function testCalculableObjectHasZeroTaxTotalWhenShipmentIsMissingAndPriceModeIsNet(): void
     {
         // Arrange
@@ -158,7 +135,7 @@ class TaxAppFacadeCalculationTest extends Unit
 
         $clientMock = $this->createMock(VertexClient::class);
         $clientMock->expects($this->never())->method('calculateQuoteTax');
-        $clientMock->expects($this->once())->method('authenticate')->willReturn(
+        $clientMock->expects($this->never())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('test-token')
                 ->setExpiresIn(1000)
@@ -187,28 +164,6 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->assertSame(0, $calculableObjectTransfer->getTotals()->getTaxTotal()->getAmount());
     }
 
-    /**
-     * @group test
-     *
-     * @return void
-     */
-    public function testCalculableObjectIsExpandedWithTaxMetadataWhenRecalculateMethodIsCalled(): void
-    {
-        // Arrange
-        $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
-        $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
-        $this->tester->mockVertexClientWithVertexCalculationResponse($vertexCalculationResponseTransfer);
-
-        // Act
-        $this->tester->getFacade()->recalculate($calculableObjectTransfer);
-
-        // Assert
-        $this->tester->assertCalculableObjectTransferExtendedWithTaxMetadata($calculableObjectTransfer);
-    }
-
-    /**
-     * @return void
-     */
     public function testCalculableObjectHasSaleTransferExpandedWithMerchantStockAddressWhenRecalculateMethodIsCalled(): void
     {
         // Arrange
@@ -231,9 +186,6 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
     }
 
-    /**
-     * @return void
-     */
     public function testCalculableObjectHasSaleTransferWithItemsWhenMerchantStockAddressIsEmpty(): void
     {
         // Arrange
@@ -260,9 +212,6 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
     }
 
-    /**
-     * @return void
-     */
     public function testQuoteHasCorrectGrandTotalWhenPriceModeIsNetAndRecalculateRequestsTaxFromExternalApiSuccessfully(): void
     {
         // Arrange
@@ -287,9 +236,6 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->tester->assertQuoteHasCorrectGrandTotal($calculableObjectTransfer);
     }
 
-    /**
-     * @return void
-     */
     public function testQuoteHasZeroTaxTotalWhenRecalculateExternalApiRequestFails(): void
     {
         // Arrange
@@ -314,9 +260,6 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->tester->assertQuoteHasZeroTaxTotal($calculableObjectTransfer);
     }
 
-    /**
-     * @return void
-     */
     public function testQuoteHasCorrectGrandTotalWhenPriceModeIsGrossAndRecalculateRequestsTaxFromExternalApiSuccessfully(): void
     {
         // Arrange
@@ -342,10 +285,7 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->tester->assertQuoteHasCorrectGrandTotal($calculableObjectTransfer);
     }
 
-    /**
-     * @return void
-     */
-    public function testQuoteHasHideTaxInCartFlagWhenTaxAppIsActive(): void
+    public function testQuoteHasHideTaxInCartFlagWhenVertexIsActive(): void
     {
         // Arrange
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
@@ -359,16 +299,14 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->assertTrue($calculableObjectTransfer->getOriginalQuote()->getHideTaxInCart());
     }
 
-    /**
-     * @return void
-     */
-    public function testQuoteDoesNotHaveHideTaxInCartFlagWhenTaxAppIsNotActive(): void
+    public function testQuoteDoesNotHaveHideTaxInCartFlagWhenVertexIsNotActive(): void
     {
         // Arrange
         $storeTransfer = $this->tester->haveStore([StoreTransfer::NAME => 'Foo'], false);
-        $this->tester->haveTaxAppConfig(['fk_store' => $storeTransfer->getIdStore(), 'is_active' => false]);
 
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($storeTransfer);
+
+        $this->tester->setConfig(VertexConstants::IS_ACTIVE, false);
 
         // Act
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
@@ -377,9 +315,6 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->assertFalse($calculableObjectTransfer->getOriginalQuote()->getHideTaxInCart());
     }
 
-    /**
-     * @return void
-     */
     public function testCalculateObjectItemsHaveSumTaxAmountWhenStoreIdIsNotProvidedInCalculableObject(): void
     {
         // Arrange
@@ -403,9 +338,6 @@ class TaxAppFacadeCalculationTest extends Unit
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRecalculateWithPriceInGrossModeAppliesExternalResultsCorrectly(): void
     {
         // Arrange
@@ -427,9 +359,6 @@ class TaxAppFacadeCalculationTest extends Unit
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRecalculateWithPriceInGrossModeDoesNotHaveHideTaxInCartFlag(): void
     {
         // Arrange
@@ -444,9 +373,6 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->assertEmpty($calculableObjectTransfer->getOriginalQuote()->getHideTaxInCart());
     }
 
-    /**
-     * @return void
-     */
     public function testRecalculateWithNonConfiguredSellerCountryCodeIsTakenFromDefaultStoreCountry(): void
     {
         // Arrange
@@ -478,9 +404,6 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
     }
 
-    /**
-     * @return void
-     */
     public function testRecalculateWithConfiguredSellerCountryCodeIsAppliedToTaxResponse(): void
     {
         // Arrange
@@ -511,9 +434,6 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
     }
 
-    /**
-     * @return void
-     */
     public function testRecalculateWithNonConfiguredCustomerCountryCodeIsTakenFromDefaultStoreCountry(): void
     {
         // Arrange
@@ -545,9 +465,6 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
     }
 
-    /**
-     * @return void
-     */
     public function testRecalculateWithConfiguredCustomerCountryCodeIsAppliedToTaxResponse(): void
     {
         // Arrange
@@ -578,9 +495,6 @@ class TaxAppFacadeCalculationTest extends Unit
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
     }
 
-    /**
-     * @return void
-     */
     public function testRecalculateWithProvidedBillingCountryIsSetToCustomerCountryCodeAppliedToTaxResponse(): void
     {
         // Arrange

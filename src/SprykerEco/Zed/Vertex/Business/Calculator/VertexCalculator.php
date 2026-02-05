@@ -66,7 +66,7 @@ class VertexCalculator implements VertexCalculatorInterface
         $vertexSaleTransfer = $this->vertexMapper->mapCalculableObjectToVertexSaleTransfer($calculableObjectTransfer, new VertexSaleTransfer());
 
         // for correct tax calculation in NET price mode, at least one shipment must be selected, otherwise tax calculation is skipped.
-        if ($calculableObjectTransfer->getPriceModeOrFail() === static::PRICE_MODE_NET && $this->getShipmentExpenses($calculableObjectTransfer) === 0) {
+        if ($calculableObjectTransfer->getPriceModeOrFail() === static::PRICE_MODE_NET && $vertexSaleTransfer->getShipments()->count() === 0) {
             $calculableObjectTransfer->getTotalsOrFail()->setTaxTotal((new TaxTotalTransfer())->setAmount(0));
             $this->priceAggregator->calculatePriceAggregation($vertexSaleTransfer, $calculableObjectTransfer);
 
@@ -94,26 +94,6 @@ class VertexCalculator implements VertexCalculatorInterface
         }
     }
 
-    protected function getShipmentExpenses(CalculableObjectTransfer $calculableObjectTransfer): \ArrayObject
-    {
-        $shipmentExpenses = new \ArrayObject();
-
-        foreach ($calculableObjectTransfer->getExpenses() as $hash => $expenseTransfer) {
-            if ($expenseTransfer->getType() !== static::SHIPMENT_EXPENSE_TYPE) {
-                $shipmentExpenses->append($expenseTransfer);
-            }
-        }
-
-        return $shipmentExpenses;
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $vertexSaleTransfer
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     * @param \Generated\Shared\Transfer\StoreTransfer $storeTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
-     */
     protected function getVertexCalculationResponse(
         VertexSaleTransfer $vertexSaleTransfer,
         VertexConfigTransfer $vertexConfigTransfer

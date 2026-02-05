@@ -49,6 +49,7 @@ use Spryker\Zed\Calculation\CalculationDependencyProvider;
 use Spryker\Zed\Calculation\Dependency\Service\CalculationToUtilTextBridge;
 use Spryker\Zed\Kernel\Container;
 use Spryker\Zed\KernelApp\Business\KernelAppFacadeInterface;
+use Spryker\Zed\MerchantProfile\Communication\Plugin\TaxApp\MerchantProfileAddressCalculableObjectTaxAppExpanderPlugin;
 use Spryker\Zed\MerchantProfile\Communication\Plugin\Vertex\MerchantProfileAddressCalculableObjectVertexExpanderPlugin;
 use Spryker\Zed\Oms\Business\OrderStateMachine\PersistenceManager;
 use Spryker\Zed\TaxApp\Dependency\Facade\TaxAppToKernelAppFacadeBridge;
@@ -106,8 +107,7 @@ class VertexBusinessTester extends Actor
         $this->setDependency(
             VertexDependencyProvider::PLUGINS_CALCULABLE_OBJECT_VERTEX_EXPANDER,
             [
-                new CalculableObjectVertexExpanderPlugin(),
-                new MerchantProfileAddressCalculableObjectVertexExpanderPlugin(),
+                new MerchantProfileAddressCalculableObjectTaxAppExpanderPlugin(),
             ],
         );
     }
@@ -402,8 +402,6 @@ class VertexBusinessTester extends Actor
         $oauthClientFacadeBridgeMock = Stub::makeEmpty(TaxAppToOauthClientFacadeBridge::class, [
             'getAccessToken' => $accessTokenResponseTransfer,
         ]);
-
-//        $this->mockFactoryMethod('getOauthClientFacade', $oauthClientFacadeBridgeMock);
     }
 
     /**
@@ -420,9 +418,7 @@ class VertexBusinessTester extends Actor
                 ->setAccessToken('some-access-token')
                 ->setExpiresIn(100000)
         );
-        $this->mockFactoryMethod('getVertexClient', $vertexClientMock);
-
-        $this->mockOauthClient();
+        $this->setDependency('CLIENT_VERTEX', $vertexClientMock);
     }
 
     /**

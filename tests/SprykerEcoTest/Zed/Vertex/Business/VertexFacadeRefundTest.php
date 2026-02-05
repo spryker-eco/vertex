@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerTest\Zed\TaxApp\Business;
+namespace SprykerEcoTest\Zed\Vertex\Business;
 
 use Codeception\Test\Unit;
 use Generated\Shared\Transfer\OrderTransfer;
@@ -26,7 +26,7 @@ use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
  * @group VertexFacadeRefundTest
  * Add your own group annotations below this line
  */
-class TaxAppFacadeRefundTest extends Unit
+class VertexFacadeRefundTest extends Unit
 {
     public const DEFAULT_OMS_PROCESS_NAME = 'Test01';
 
@@ -57,7 +57,7 @@ class TaxAppFacadeRefundTest extends Unit
         $vertexClientMock = $this->createMock(VertexClient::class);
 
         // Assert
-        $vertexClientMock->expects($this->once())->method('calculateQuoteTax')->willReturn($this->tester->haveTaxCalculationResponseTransfer(['isSuccessful' => true]));
+        $vertexClientMock->expects($this->once())->method('calculateOrderTax')->willReturn($this->tester->haveTaxCalculationResponseTransfer(['isSuccessful' => true]));
         $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('test-token')
@@ -87,7 +87,7 @@ class TaxAppFacadeRefundTest extends Unit
         $vertexClientMock = $this->createMock(VertexClient::class);
 
         // Assert
-        $vertexClientMock->expects($this->never())->method('calculateQuoteTax');
+        $vertexClientMock->expects($this->never())->method('calculateOrderTax');
         $vertexClientMock->expects($this->never())->method('authenticate');
         $this->tester->setDependency('CLIENT_VERTEX', $vertexClientMock);
 
