@@ -5,13 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEco\Glue\VertexRestApi\Plugin;
+namespace SprykerEco\Glue\Vertex\Plugin;
 
 use Generated\Shared\Transfer\RestVertexValidationAttributesTransfer;
 use Spryker\Glue\GlueApplicationExtension\Dependency\Plugin\ResourceRouteCollectionInterface;
 use Spryker\Glue\GlueApplicationExtension\Dependency\Plugin\ResourceRoutePluginInterface;
 use Spryker\Glue\Kernel\AbstractPlugin;
-use SprykerEco\Glue\VertexRestApi\VertexRestApiConfig;
+use SprykerEco\Glue\Vertex\VertexConfig;
 
 /**
  * @method \Spryker\Glue\CatalogSearchRestApi\CatalogSearchRestApiFactory getFactory()
@@ -44,7 +44,7 @@ class VertexTaxValidateIdResourceRoutePlugin extends AbstractPlugin implements R
      */
     public function getResourceType(): string
     {
-        return VertexRestApiConfig::RESOURCE_TAX_VALIATE_ID;
+        return VertexConfig::RESOURCE_TAX_VALIATE_ID;
     }
 
     /**
@@ -56,7 +56,7 @@ class VertexTaxValidateIdResourceRoutePlugin extends AbstractPlugin implements R
      */
     public function getController(): string
     {
-        return VertexRestApiConfig::CONTROLLER_TAX_VALIATE_ID;
+        return VertexConfig::CONTROLLER_TAX_VALIATE_ID;
     }
 
     /**

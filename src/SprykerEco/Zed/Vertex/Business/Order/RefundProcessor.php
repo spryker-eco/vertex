@@ -13,12 +13,12 @@ use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Spryker\Shared\Log\LoggerTrait;
+use Spryker\Zed\Sales\Business\SalesFacadeInterface;
+use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\vertexMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 
 class RefundProcessor implements RefundProcessorInterface
 {
@@ -26,8 +26,8 @@ class RefundProcessor implements RefundProcessorInterface
 
     /**
      * @param \SprykerEco\Client\Vertex\VertexClientInterface $VertexClient
-     * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
-     * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface $salesFacade
+     * @param \Spryker\Zed\Store\Business\StoreFacadeInterface $storeFacade
+     * @param \Spryker\Zed\Sales\Business\SalesFacadeInterface $salesFacade
      * @param \SprykerEco\Zed\Vertex\Business\Mapper\vertexMapperInterface $vertexMapper
      * @param array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface|\Spryker\Zed\TaxAppExtension\Dependency\Plugin\OrderTaxAppExpanderPluginInterface> $orderVertexExpanderPlugins
      * @param \SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface $vertexAccessTokenProvider
@@ -35,8 +35,8 @@ class RefundProcessor implements RefundProcessorInterface
      */
     public function __construct(
         protected VertexClientInterface $vertexClient,
-        protected VertexToStoreFacadeInterface $storeFacade,
-        protected VertexToSalesFacadeInterface $salesFacade,
+        protected StoreFacadeInterface $storeFacade,
+        protected SalesFacadeInterface $salesFacade,
         protected vertexMapperInterface $vertexMapper,
         protected array $orderVertexExpanderPlugins,
         protected VertexAccessTokenProviderInterface $vertexAccessTokenProvider,

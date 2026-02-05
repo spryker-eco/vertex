@@ -8,18 +8,17 @@
 namespace SprykerEco\Zed\Vertex\Business\Calculator;
 
 use Generated\Shared\Transfer\CalculableObjectTransfer;
-use Generated\Shared\Transfer\VertexConfigTransfer;
 use Spryker\Shared\Log\LoggerTrait;
+use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetriever;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 
 class Calculator implements CalculatorInterface
 {
     use LoggerTrait;
 
     public function __construct(
-        protected VertexToStoreFacadeInterface $storeFacade,
+        protected StoreFacadeInterface $storeFacade,
         protected VertexConfigResolverInterface $vertexConfigResolver,
         protected FallbackCalculatorInterface $fallbackQuoteCalculator,
         protected FallbackCalculatorInterface $fallbackOrderCalculator,

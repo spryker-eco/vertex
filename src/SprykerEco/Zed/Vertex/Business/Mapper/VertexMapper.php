@@ -25,9 +25,9 @@ use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\VertexShipmentTransfer;
 use Ramsey\Uuid\Uuid;
+use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetrieverInterface;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 use SprykerEco\Zed\Vertex\VertexConfig;
 
 class VertexMapper implements VertexMapperInterface
@@ -47,13 +47,13 @@ class VertexMapper implements VertexMapperInterface
     /**
      * @param \SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface $addressMapper
      * @param \SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetrieverInterface $priceFormatter
-     * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
+     * @param \Spryker\Zed\Store\Business\StoreFacadeInterface $storeFacade
      * @param \SprykerEco\Zed\Vertex\VertexConfig $vertexConfig
      */
     public function __construct(
         protected AddressMapperInterface $addressMapper,
         protected ItemExpensePriceRetrieverInterface $priceFormatter,
-        protected VertexToStoreFacadeInterface $storeFacade,
+        protected StoreFacadeInterface $storeFacade,
         protected VertexConfig $vertexConfig
     ) {
     }

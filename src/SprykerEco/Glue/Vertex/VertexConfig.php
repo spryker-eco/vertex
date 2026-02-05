@@ -5,11 +5,11 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEco\Glue\VertexRestApi;
+namespace SprykerEco\Glue\Vertex;
 
 use Spryker\Glue\Kernel\AbstractBundleConfig;
 
-class VertexRestApiConfig extends AbstractBundleConfig
+class VertexConfig extends AbstractBundleConfig
 {
     /**
      * @var string

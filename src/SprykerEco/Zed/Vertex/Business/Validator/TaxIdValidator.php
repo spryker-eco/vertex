@@ -11,8 +11,8 @@ use Generated\Shared\Transfer\VertexValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Generated\Shared\Transfer\TaxIdValidationHistoryTransfer;
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
+use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
 use SprykerEco\Client\Vertex\VertexClientInterface;
-use SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface;
 use SprykerEco\Zed\Vertex\VertexConfig;
@@ -42,13 +42,13 @@ class TaxIdValidator implements TaxIdValidatorInterface
     /**
      * @param \SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface $vertexConfigResolver
      * @param \SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface $entityManager
-     * @param \SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface $utilEncodingService
+     * @param \Spryker\Service\UtilEncoding\UtilEncodingServiceInterface $utilEncodingService
      * @param \SprykerEco\Client\Vertex\VertexClientInterface $vertexClient
      */
     public function __construct(
         protected VertexConfigResolverInterface $vertexConfigResolver,
         protected VertexEntityManagerInterface $entityManager,
-        protected VertexToUtilEncodingServiceInterface $utilEncodingService,
+        protected UtilEncodingServiceInterface $utilEncodingService,
         protected VertexClientInterface $vertexClient,
     ) {
     }

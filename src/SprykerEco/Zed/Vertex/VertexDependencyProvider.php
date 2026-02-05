@@ -7,11 +7,8 @@
 
 namespace SprykerEco\Zed\Vertex;
 
-use SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceBridge;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeBridge;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeBridge;
 
 /**
  * @method \Spryker\Zed\Vertex\VertexConfig getConfig()
@@ -123,7 +120,7 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     protected function addSalesFacade(Container $container): Container
     {
         $container->set(static::FACADE_SALES, function (Container $container) {
-            return new VertexToSalesFacadeBridge($container->getLocator()->sales()->facade());
+            return $container->getLocator()->sales()->facade();
         });
 
         return $container;
@@ -137,7 +134,7 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     protected function addStoreFacade(Container $container): Container
     {
         $container->set(static::FACADE_STORE, function (Container $container) {
-            return new VertexToStoreFacadeBridge($container->getLocator()->store()->facade());
+            return $container->getLocator()->store()->facade();
         });
 
         return $container;
@@ -165,7 +162,7 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     protected function addUtilEncodingService(Container $container): Container
     {
         $container->set(static::SERVICE_UTIL_ENCODING, function (Container $container) {
-            return new VertexToUtilEncodingServiceBridge($container->getLocator()->utilEncoding()->service());
+            return $container->getLocator()->utilEncoding()->service();
         });
 
         return $container;

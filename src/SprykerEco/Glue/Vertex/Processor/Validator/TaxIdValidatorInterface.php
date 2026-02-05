@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEco\Glue\VertexRestApi\Processor\Validator;
+namespace SprykerEco\Glue\Vertex\Processor\Validator;
 
 use Generated\Shared\Transfer\RestVertexValidationAttributesTransfer;
 use Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface;

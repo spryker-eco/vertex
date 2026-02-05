@@ -5,21 +5,21 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerTest\Glue\VertexRestApi\Controller;
+namespace SprykerTest\Glue\Vertex\Controller;
 
 use Codeception\Stub;
 use Codeception\Test\Unit;
 use Generated\Shared\Transfer\RestVertexValidationAttributesTransfer;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
+use Spryker\Client\GlossaryStorage\GlossaryStorageClientInterface;
 use Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceBuilder;
 use Spryker\Glue\GlueApplication\Rest\Request\Data\MetadataInterface;
 use Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface;
-use SprykerEco\Glue\VertexRestApi\Controller\TaxIdValidationController;
-use SprykerEco\Glue\VertexRestApi\Dependency\VertexRestApiToGlossaryStorageClientInterface;
-use SprykerEco\Glue\VertexRestApi\Dependency\VertexRestApiToVertexClientInterface;
-use SprykerEco\Glue\VertexRestApi\VertexRestApiDependencyProvider;
-use SprykerEcoTest\Glue\VertexRestApi\VertexRestApiTester;
+use SprykerEco\Client\Vertex\VertexClientInterface;
+use SprykerEco\Glue\Vertex\Controller\TaxIdValidationController;
+use SprykerEco\Glue\Vertex\VertexDependencyProvider;
+use SprykerEcoTest\Glue\Vertex\VertexTester;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @group SprykerEcoTest
  * @group Glue
- * @group VertexRestApi
+ * @group Vertex
  * @group Controller
  * @group TaxIdValidationControllerTest
  * Add your own group annotations below this line
@@ -55,9 +55,9 @@ class TaxIdValidationControllerTest extends Unit
     protected const GLOSSARY_SUFFIX_VERTEX = 'vertex';
 
     /**
-     * @var \SprykerEcoTest\Glue\VertexRestApi\VertexRestApiTester
+     * @var \SprykerEcoTest\Glue\Vertex\VertexTester
      */
-    protected VertexRestApiTester $tester;
+    protected VertexTester $tester;
 
     /**
      * @return void
@@ -77,7 +77,7 @@ class TaxIdValidationControllerTest extends Unit
         // Arrange
         $restVertexValidationAttributesTransfer = $this->tester->createRestVertexValidationAttributesTransfer();
 
-        $vertexClientMock = $this->getMockBuilder(VertexRestApiToVertexClientInterface::class)->getMock();
+        $vertexClientMock = $this->getMockBuilder(VertexClientInterface::class)->getMock();
         $restRequestMock = Stub::makeEmpty(RestRequestInterface::class);
         $vertexClientMock
             ->method('requestTaxIdValidation')
@@ -92,7 +92,7 @@ class TaxIdValidationControllerTest extends Unit
                 ->setIsValid(true),
             );
 
-        $this->tester->setDependency(VertexRestApiDependencyProvider::CLIENT_VERTEX, $vertexClientMock);
+        $this->tester->setDependency(VertexDependencyProvider::CLIENT_VERTEX, $vertexClientMock);
 
         // Act
         $restResponse = (new TaxIdValidationController())->postAction($restRequestMock, $restVertexValidationAttributesTransfer);
@@ -110,7 +110,7 @@ class TaxIdValidationControllerTest extends Unit
         // Arrange
         $restVertexValidationAttributesTransfer = (new RestVertexValidationAttributesTransfer())->setTaxId('test')->setCountryCode('DE');
 
-        $vertexClientMock = $this->getMockBuilder(VertexRestApiToVertexClientInterface::class)->getMock();
+        $vertexClientMock = $this->getMockBuilder(VertexClientInterface::class)->getMock();
         $restRequestMock = Stub::makeEmpty(RestRequestInterface::class);
         $vertexClientMock
             ->method('requestTaxIdValidation')
@@ -120,7 +120,7 @@ class TaxIdValidationControllerTest extends Unit
                     ->setMessage('error'),
             );
 
-        $this->tester->setDependency(VertexRestApiDependencyProvider::CLIENT_VERTEX, $vertexClientMock);
+        $this->tester->setDependency(VertexDependencyProvider::CLIENT_VERTEX, $vertexClientMock);
 
         // Act
         $restResponse = (new TaxIdValidationController())->postAction($restRequestMock, $restVertexValidationAttributesTransfer);
@@ -150,8 +150,8 @@ class TaxIdValidationControllerTest extends Unit
         string $expectedMessage
     ): void {
         // Arrange
-        $vertexClientMock = $this->getMockBuilder(VertexRestApiToVertexClientInterface::class)->getMock();
-        $glossaryStorageClientMock = $this->getMockBuilder(VertexRestApiToGlossaryStorageClientInterface::class)->getMock();
+        $vertexClientMock = $this->getMockBuilder(VertexClientInterface::class)->getMock();
+        $glossaryStorageClientMock = $this->getMockBuilder(GlossaryStorageClientInterface::class)->getMock();
 
         // Create metadata mock with the accept language
         $metadataMock = $this->getMockBuilder(MetadataInterface::class)->getMock();
@@ -173,8 +173,8 @@ class TaxIdValidationControllerTest extends Unit
                 return $glossaryTranslations[$lookupKey] ?? $key;
             });
 
-        $this->tester->setDependency(VertexRestApiDependencyProvider::CLIENT_VERTEX, $vertexClientMock);
-        $this->tester->setDependency(VertexRestApiDependencyProvider::CLIENT_GLOSSARY_STORAGE, $glossaryStorageClientMock);
+        $this->tester->setDependency(VertexDependencyProvider::CLIENT_VERTEX, $vertexClientMock);
+        $this->tester->setDependency(VertexDependencyProvider::CLIENT_GLOSSARY_STORAGE, $glossaryStorageClientMock);
 
         // Act
         $restResponse = (new TaxIdValidationController())->postAction($restRequestMock, $restVertexValidationAttributesTransfer);

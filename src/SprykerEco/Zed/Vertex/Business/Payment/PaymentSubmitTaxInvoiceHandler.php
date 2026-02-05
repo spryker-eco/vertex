@@ -16,25 +16,25 @@ use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
+use Spryker\Zed\Sales\Business\SalesFacadeInterface;
+use Spryker\Zed\Store\Business\StoreFacadeInterface;
 
 class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerInterface
 {
     use LoggerTrait;
 
     /**
-     * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface $storeFacade
-     * @param \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface $salesFacade
+     * @param \Spryker\Zed\Store\Business\StoreFacadeInterface $storeFacade
+     * @param \Spryker\Zed\Sales\Business\SalesFacadeInterface $salesFacade
      * @param \SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface $vertexMapper
      * @param array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface|\Spryker\Zed\TaxAppExtension\Dependency\Plugin\OrderTaxAppExpanderPluginInterface> $orderVertexExpanderPlugins
      * @param \SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface $vertexAccessTokenProvider
      * @param \SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface $configResolver
      */
     public function __construct(
-        protected VertexToStoreFacadeInterface $storeFacade,
-        protected VertexToSalesFacadeInterface $salesFacade,
+        protected StoreFacadeInterface $storeFacade,
+        protected SalesFacadeInterface $salesFacade,
         protected VertexMapperInterface $vertexMapper,
         protected array $orderVertexExpanderPlugins,
         protected VertexConfigResolverInterface $configResolver,

@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace SprykerEcoTest\Glue\VertexRestApi;
+namespace SprykerEcoTest\Glue\Vertex;
 
 use Codeception\Actor;
 use Generated\Shared\DataBuilder\RestVertexValidationAttributesBuilder;
@@ -29,9 +29,9 @@ use Generated\Shared\Transfer\RestVertexValidationAttributesTransfer;
  *
  * @SuppressWarnings(PHPMD)
  */
-class VertexRestApiTester extends Actor
+class VertexTester extends Actor
 {
-    use _generated\VertexRestApiTesterActions;
+    use _generated\VertexTesterActions;
 
     /**
      * @param array $seed

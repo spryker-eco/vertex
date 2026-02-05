@@ -9,16 +9,9 @@ namespace SprykerEco\Client\Vertex;
 
 use Spryker\Client\Kernel\AbstractDependencyProvider;
 use Spryker\Client\Kernel\Container;
-use SprykerEco\Client\Vertex\Dependency\Client\VertexToZedRequestClientBridge;
-use SprykerEco\Client\Vertex\Dependency\Client\VertexToZedRequestClientInterface;
 
 class VertexDependencyProvider extends AbstractDependencyProvider
 {
-    /**
-     * @var string
-     */
-    public const CLIENT_SECRETS_MANAGER = 'CLIENT_SECRETS_MANAGER';
-
     /**
      * @var string
      */
@@ -32,9 +25,7 @@ class VertexDependencyProvider extends AbstractDependencyProvider
     public function provideServiceLayerDependencies(Container $container): Container
     {
         $container = parent::provideServiceLayerDependencies($container);
-
         $container = $this->addUtilEncodingService($container);
-        $container = $this->addSecretsManagerClient($container);
         $container = $this->addZedRequestClient($container);
 
         return $container;
@@ -59,26 +50,10 @@ class VertexDependencyProvider extends AbstractDependencyProvider
      *
      * @return \Spryker\Client\Kernel\Container
      */
-    protected function addSecretsManagerClient(Container $container): Container
-    {
-        $container->set(static::CLIENT_SECRETS_MANAGER, function (Container $container) {
-            return $container->getLocator()->secretsManager()->client();
-        });
-
-        return $container;
-    }
-
-    /**
-     * @param \Spryker\Client\Kernel\Container $container
-     *
-     * @return \Spryker\Client\Kernel\Container
-     */
     protected function addZedRequestClient(Container $container): Container
     {
-        $container->set(static::CLIENT_ZED_REQUEST, function (Container $container): VertexToZedRequestClientInterface {
-            return new VertexToZedRequestClientBridge(
-                $container->getLocator()->zedRequest()->client(),
-            );
+        $container->set(static::CLIENT_ZED_REQUEST, function (Container $container) {
+            return $container->getLocator()->zedRequest()->client();
         });
 
         return $container;

@@ -1,4 +1,4 @@
-namespace: SprykerEcoTest\Glue\VertexRestApi
+namespace: SprykerEcoTest\Glue\Vertex
 paths:
     tests: .
     data: ../../../_data
@@ -14,7 +14,7 @@ coverage:
 suites:
     Communication:
         path: /
-        actor: VertexRestApiTester
+        actor: VertexTester
         modules:
             enabled:
                 - Asserts

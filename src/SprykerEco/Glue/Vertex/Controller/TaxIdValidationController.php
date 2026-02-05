@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEco\Glue\VertexRestApi\Controller;
+namespace SprykerEco\Glue\Vertex\Controller;
 
 use Generated\Shared\Transfer\RestVertexValidationAttributesTransfer;
 use Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface;
@@ -13,7 +13,7 @@ use Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface;
 use Spryker\Glue\Kernel\Controller\AbstractController;
 
 /**
- * @method \SprykerEco\Glue\VertexRestApi\VertexRestApiFactory getFactory()
+ * @method \SprykerEco\Glue\Vertex\VertexFactory getFactory()
  */
 class TaxIdValidationController extends AbstractController
 {

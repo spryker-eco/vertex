@@ -74,7 +74,7 @@ use SprykerEco\Client\Vertex\Validator\VertexTaxIdValidator;
 use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
 use Spryker\Shared\Log\LoggerTrait;
 use Spryker\Client\Kernel\AbstractFactory;
-use SprykerEco\Client\Vertex\Dependency\Client\VertexToZedRequestClientInterface;
+use Spryker\Client\ZedRequest\ZedRequestClientInterface;
 use SprykerEco\Client\Vertex\Validator\VertexTaxIdValidatorInterface;
 use SprykerEco\Client\Vertex\Zed\VertexStub;
 use SprykerEco\Client\Vertex\Zed\VertexStubInterface;
@@ -445,9 +445,9 @@ class VertexFactory extends AbstractFactory
     }
 
     /**
-     * @return \SprykerEco\Client\Vertex\Dependency\Client\VertexToZedRequestClientInterface
+     * @return \Spryker\Client\ZedRequest\ZedRequestClientInterface
      */
-    public function getZedRequestClient(): VertexToZedRequestClientInterface
+    public function getZedRequestClient(): ZedRequestClientInterface
     {
         return $this->getProvidedDependency(VertexDependencyProvider::CLIENT_ZED_REQUEST);
     }

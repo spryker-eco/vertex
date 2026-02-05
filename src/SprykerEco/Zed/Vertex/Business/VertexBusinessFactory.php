@@ -7,7 +7,10 @@
 
 namespace SprykerEco\Zed\Vertex\Business;
 
+use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
+use Spryker\Zed\Sales\Business\SalesFacadeInterface;
+use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerEco\Client\Vertex\Validator\VertexAddressValidator;
 use SprykerEco\Client\Vertex\Validator\VertexItemValidator;
 use SprykerEco\Client\Vertex\Validator\VertexQuotationValidator;
@@ -16,7 +19,6 @@ use SprykerEco\Client\Vertex\Validator\VertexSaleValidator;
 use SprykerEco\Client\Vertex\Validator\VertexShipmentValidator;
 use SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidator;
 use SprykerEco\Client\Vertex\VertexClientInterface as VertexVertexClientInterface;
-use SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProvider;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Aggregator\PriceAggregator;
@@ -42,8 +44,6 @@ use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use SprykerEco\Zed\Vertex\Business\Validator\TaxIdValidator;
 use SprykerEco\Zed\Vertex\Business\Validator\TaxIdValidatorInterface;
 use SprykerEco\Zed\Vertex\Business\Validator\VertexConfigValidator;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 use SprykerEco\Zed\Vertex\VertexDependencyProvider;
 
 /**
@@ -55,9 +55,9 @@ class VertexBusinessFactory extends AbstractBusinessFactory
 {
 
     /**
-     * @return \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface
+     * @return \Spryker\Zed\Store\Business\StoreFacadeInterface
      */
-    public function getStoreFacade(): VertexToStoreFacadeInterface
+    public function getStoreFacade(): StoreFacadeInterface
     {
         return $this->getProvidedDependency(VertexDependencyProvider::FACADE_STORE);
     }
@@ -168,9 +168,9 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \SprykerEco\Zed\Vertex\Dependency\Facade\VertexToSalesFacadeInterface
+     * @return \Spryker\Zed\Sales\Business\SalesFacadeInterface
      */
-    public function getSalesFacade(): VertexToSalesFacadeInterface
+    public function getSalesFacade(): SalesFacadeInterface
     {
         return $this->getProvidedDependency(VertexDependencyProvider::FACADE_SALES);
     }
@@ -329,9 +329,9 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \SprykerEco\Shared\Vertex\Dependency\Service\VertexToUtilEncodingServiceInterface
+     * @return \Spryker\Service\UtilEncoding\UtilEncodingServiceInterface
      */
-    public function getUtilEncodingService(): VertexToUtilEncodingServiceInterface
+    public function getUtilEncodingService(): UtilEncodingServiceInterface
     {
         return $this->getProvidedDependency(VertexDependencyProvider::SERVICE_UTIL_ENCODING);
     }

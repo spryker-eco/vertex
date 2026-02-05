@@ -5,18 +5,15 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEco\Glue\VertexRestApi;
+namespace SprykerEco\Glue\Vertex;
 
 use Spryker\Glue\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Glue\Kernel\Container;
-use SprykerEco\Glue\VertexRestApi\Dependency\VertexRestApiToGlossaryStorageClientBridge;
-use SprykerEco\Glue\VertexRestApi\Dependency\VertexRestApiToGlossaryStorageClientInterface;
-use SprykerEco\Glue\VertexRestApi\Dependency\VertexRestApiToVertexClientBridge;
 
 /**
- * @method \SprykerEco\Glue\VertexRestApi\VertexRestApiConfig getConfig()
+ * @method \SprykerEco\Glue\Vertex\VertexConfig getConfig()
  */
-class VertexRestApiDependencyProvider extends AbstractBundleDependencyProvider
+class VertexDependencyProvider extends AbstractBundleDependencyProvider
 {
     /**
      * @var string
@@ -50,9 +47,7 @@ class VertexRestApiDependencyProvider extends AbstractBundleDependencyProvider
     protected function addVertexClient(Container $container): Container
     {
         $container->set(static::CLIENT_VERTEX, function (Container $container) {
-            return new VertexRestApiToVertexClientBridge(
-                $container->getLocator()->vertex()->client(),
-            );
+            return $container->getLocator()->vertex()->client();
         });
 
         return $container;
@@ -65,10 +60,8 @@ class VertexRestApiDependencyProvider extends AbstractBundleDependencyProvider
      */
     protected function addGlossaryStorageClient(Container $container): Container
     {
-        $container->set(static::CLIENT_GLOSSARY_STORAGE, function (Container $container): VertexRestApiToGlossaryStorageClientInterface {
-            return new VertexRestApiToGlossaryStorageClientBridge(
-                $container->getLocator()->glossaryStorage()->client(),
-            );
+        $container->set(static::CLIENT_GLOSSARY_STORAGE, function (Container $container) {
+            return $container->getLocator()->glossaryStorage()->client();
         });
 
         return $container;

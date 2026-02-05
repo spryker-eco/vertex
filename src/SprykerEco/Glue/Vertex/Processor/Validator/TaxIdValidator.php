@@ -5,16 +5,16 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEco\Glue\VertexRestApi\Processor\Validator;
+namespace SprykerEco\Glue\Vertex\Processor\Validator;
 
 use Generated\Shared\Transfer\RestErrorMessageTransfer;
 use Generated\Shared\Transfer\RestVertexValidationAttributesTransfer;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
+use Spryker\Client\GlossaryStorage\GlossaryStorageClientInterface;
 use Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceBuilderInterface;
 use Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface;
-use SprykerEco\Glue\VertexRestApi\Dependency\VertexRestApiToGlossaryStorageClientInterface;
-use SprykerEco\Glue\VertexRestApi\Dependency\VertexRestApiToVertexClientInterface;
-use SprykerEco\Glue\VertexRestApi\VertexRestApiConfig;
+use SprykerEco\Client\Vertex\VertexClientInterface;
+use SprykerEco\Glue\Vertex\VertexConfig;
 use Symfony\Component\HttpFoundation\Response;
 
 class TaxIdValidator implements TaxIdValidatorInterface
@@ -31,13 +31,13 @@ class TaxIdValidator implements TaxIdValidatorInterface
 
     /**
      * @param \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceBuilderInterface $restResourceBuilder
-     * @param \SprykerEco\Glue\VertexRestApi\Dependency\VertexRestApiToVertexClientInterface $vertexClient
-     * @param \SprykerEco\Glue\VertexRestApi\Dependency\VertexRestApiToGlossaryStorageClientInterface $glossaryStorageClient
+     * @param \SprykerEco\Client\Vertex\VertexClientInterface $vertexClient
+     * @param \Spryker\Client\GlossaryStorage\GlossaryStorageClientInterface $glossaryStorageClient
      */
     public function __construct(
         protected RestResourceBuilderInterface $restResourceBuilder,
-        protected VertexRestApiToVertexClientInterface $vertexClient,
-        protected VertexRestApiToGlossaryStorageClientInterface $glossaryStorageClient
+        protected VertexClientInterface $vertexClient,
+        protected GlossaryStorageClientInterface $glossaryStorageClient
     ) {
     }
 
@@ -50,7 +50,7 @@ class TaxIdValidator implements TaxIdValidatorInterface
     public function validate(RestVertexValidationAttributesTransfer $restVertexValidationAttributesTransfer, string $locale): RestResponseInterface
     {
         if (!$restVertexValidationAttributesTransfer->getTaxId() || !$restVertexValidationAttributesTransfer->getCountryCode()) {
-            $messageByLocale = $this->getGlossaryMessage(VertexRestApiConfig::RESPONSE_DETAIL_MESSAGE_INVALID_REQUEST_DATA, $locale, static::GLOSSARY_KEY_RESPONSE_DETAIL_INVALID_REQUEST_DATA);
+            $messageByLocale = $this->getGlossaryMessage(VertexConfig::RESPONSE_DETAIL_MESSAGE_INVALID_REQUEST_DATA, $locale, static::GLOSSARY_KEY_RESPONSE_DETAIL_INVALID_REQUEST_DATA);
 
             return $this->restResourceBuilder->createRestResponse()->addError(
                 (new RestErrorMessageTransfer())

@@ -9,15 +9,15 @@ namespace SprykerEco\Client\Vertex\Zed;
 
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
-use SprykerEco\Client\Vertex\Dependency\Client\VertexToZedRequestClientInterface;
+use Spryker\Client\ZedRequest\ZedRequestClientInterface;
 use SprykerEco\Client\Vertex\Zed\VertexStubInterface;
 
 class VertexStub implements VertexStubInterface
 {
     /**
-     * @param \SprykerEco\Client\Vertex\Dependency\Client\VertexToZedRequestClientInterface $zedRequestClient
+     * @param \Spryker\Client\ZedRequest\ZedRequestClientInterface $zedRequestClient
      */
-    public function __construct(protected VertexToZedRequestClientInterface $zedRequestClient)
+    public function __construct(protected ZedRequestClientInterface $zedRequestClient)
     {
     }
 

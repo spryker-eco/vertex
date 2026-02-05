@@ -5,8 +5,8 @@ namespace SprykerEco\Zed\Vertex\Business\Resolver;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Spryker\Shared\Log\LoggerTrait;
+use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerEco\Zed\Vertex\Business\Validator\VertexConfigValidator;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 use SprykerEco\Zed\Vertex\VertexConfig;
 
 class VertexConfigResolver implements VertexConfigResolverInterface
@@ -15,7 +15,7 @@ class VertexConfigResolver implements VertexConfigResolverInterface
 
     public function __construct(
         protected VertexConfig $vertexConfig,
-        protected VertexToStoreFacadeInterface $storeFacade,
+        protected StoreFacadeInterface $storeFacade,
         protected VertexConfigValidator $vertexConfigValidator
     ) {
     }
