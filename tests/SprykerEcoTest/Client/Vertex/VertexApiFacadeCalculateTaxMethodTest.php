@@ -26,7 +26,7 @@ use SprykerEco\Client\Vertex\VertexFactory;
  * @group VertexApiFacadecalculateQuoteTaxMethodTest
  * Add your own group annotations below this line
  */
-class VertexApiFacadecalculateQuoteTaxMethodTest extends Unit
+class VertexApiFacadeCalculateTaxMethodTest extends Unit
 {
     // protected MockHandler $mockHttpClient;
 
@@ -307,7 +307,7 @@ class VertexApiFacadecalculateQuoteTaxMethodTest extends Unit
         $mockClient->expects($this->any())
             ->method('request')
             ->willReturn($response);
-        
+
         return $mockClient;
     }
 }
