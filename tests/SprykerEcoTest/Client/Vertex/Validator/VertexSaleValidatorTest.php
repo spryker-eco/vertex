@@ -8,6 +8,7 @@
 namespace SprykerEcoTest\Client\Vertex\Validator;
 
 use Codeception\Test\Unit;
+use Generated\Shared\Transfer\SaleTaxMetadataTransfer;
 use Generated\Shared\Transfer\VertexAddressTransfer;
 use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
@@ -38,7 +39,7 @@ class VertexSaleValidatorTest extends Unit
             ->setTransactionId('transaction-1')
             ->setDocumentNumber('DOC-123')
             ->setDocumentDate('2024-01-01')
-            ->setTaxMetadata([])
+            ->setTaxMetadata([new SaleTaxMetadataTransfer()])
             ->addItem(
                 (new VertexItemTransfer())
                     ->setId('item-1')
@@ -63,6 +64,7 @@ class VertexSaleValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -90,7 +92,7 @@ class VertexSaleValidatorTest extends Unit
         $sale = (new VertexSaleTransfer())
             ->setDocumentNumber('DOC-123')
             ->setDocumentDate('2024-01-01')
-            ->setTaxMetadata([])
+            ->setTaxMetadata([new SaleTaxMetadataTransfer()])
             ->addItem(
                 (new VertexItemTransfer())
                     ->setId('item-1')
@@ -101,6 +103,7 @@ class VertexSaleValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -114,6 +117,7 @@ class VertexSaleValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -142,7 +146,7 @@ class VertexSaleValidatorTest extends Unit
         $sale = (new VertexSaleTransfer())
             ->setTransactionId('transaction-1')
             ->setDocumentDate('2024-01-01')
-            ->setTaxMetadata([])
+            ->setTaxMetadata([new SaleTaxMetadataTransfer()])
             ->addItem(
                 (new VertexItemTransfer())
                     ->setId('item-1')
@@ -153,6 +157,7 @@ class VertexSaleValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -166,6 +171,7 @@ class VertexSaleValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -194,7 +200,7 @@ class VertexSaleValidatorTest extends Unit
         $sale = (new VertexSaleTransfer())
             ->setTransactionId('transaction-1')
             ->setDocumentNumber('DOC-123')
-            ->setTaxMetadata([])
+            ->setTaxMetadata([new SaleTaxMetadataTransfer()])
             ->addItem(
                 (new VertexItemTransfer())
                     ->setId('item-1')
@@ -205,6 +211,7 @@ class VertexSaleValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -218,6 +225,7 @@ class VertexSaleValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -247,7 +255,6 @@ class VertexSaleValidatorTest extends Unit
             ->setTransactionId('transaction-1')
             ->setDocumentNumber('DOC-123')
             ->setDocumentDate('2024-01-01')
-            ->setTaxMetadata(null)
             ->addItem(
                 (new VertexItemTransfer())
                     ->setId('item-1')
@@ -258,6 +265,7 @@ class VertexSaleValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -271,6 +279,7 @@ class VertexSaleValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -300,7 +309,7 @@ class VertexSaleValidatorTest extends Unit
             ->setTransactionId('transaction-1')
             ->setDocumentNumber('DOC-123')
             ->setDocumentDate('2024-01-01')
-            ->setTaxMetadata([])
+            ->setTaxMetadata([new VertexItemTransfer()])
             ->addShipment(
                 (new VertexShipmentTransfer())
                     ->setId('shipment-1')
@@ -309,6 +318,7 @@ class VertexSaleValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -338,7 +348,7 @@ class VertexSaleValidatorTest extends Unit
             ->setTransactionId('transaction-1')
             ->setDocumentNumber('DOC-123')
             ->setDocumentDate('2024-01-01')
-            ->setTaxMetadata([])
+            ->setTaxMetadata([new VertexItemTransfer()])
             ->addItem(
                 (new VertexItemTransfer())
                     ->setId('item-1')
@@ -349,6 +359,7 @@ class VertexSaleValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')

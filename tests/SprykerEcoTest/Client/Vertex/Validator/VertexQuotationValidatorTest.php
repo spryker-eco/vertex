@@ -8,6 +8,7 @@
 namespace SprykerEcoTest\Client\Vertex\Validator;
 
 use Codeception\Test\Unit;
+use Generated\Shared\Transfer\SaleTaxMetadataTransfer;
 use Generated\Shared\Transfer\VertexAddressTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexItemTransfer;
@@ -39,7 +40,7 @@ class VertexQuotationValidatorTest extends Unit
             ->setTransactionId('transaction-1')
             ->setDocumentNumber('DOC-123')
             ->setDocumentDate('2024-01-01')
-            ->setTaxMetadata([])
+            ->setTaxMetadata([new SaleTaxMetadataTransfer()])
             ->addItem(
                 (new VertexItemTransfer())
                     ->setId('item-1')
@@ -65,6 +66,7 @@ class VertexQuotationValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -120,7 +122,7 @@ class VertexQuotationValidatorTest extends Unit
             ->setTransactionId('transaction-1')
             ->setDocumentNumber('DOC-123')
             ->setDocumentDate('2024-01-01')
-            ->setTaxMetadata([])
+            ->setTaxMetadata([new SaleTaxMetadataTransfer()])
             ->addItem(
                 (new VertexItemTransfer())
                     ->setId('item-1')
@@ -131,6 +133,7 @@ class VertexQuotationValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -144,6 +147,7 @@ class VertexQuotationValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -177,7 +181,7 @@ class VertexQuotationValidatorTest extends Unit
             ->setTransactionId('transaction-1')
             ->setDocumentNumber('DOC-123')
             ->setDocumentDate('2024-01-01')
-            ->setTaxMetadata([])
+            ->setTaxMetadata([new SaleTaxMetadataTransfer()])
             ->addItem(
                 (new VertexItemTransfer())
                     ->setId('item-1')

@@ -16,13 +16,13 @@ class VertexQuotationValidator implements VertexValidatorInterface
 
     public function validate(VertexCalculationRequestTransfer $vertexCalculationRequestTransfer): VertexValidationResponseTransfer
     {
-        $vertexValidationResponseTransfer = (new VertexValidationResponseTransfer());
+        $vertexValidationResponseTransfer = (new VertexValidationResponseTransfer())->setIsValid(true);
 
         $vertexSaleTransfer = $vertexCalculationRequestTransfer->getSale();
         if (!$vertexSaleTransfer) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexCalculationRequestTransfer::SALE));
 
-            return $vertexValidationResponseTransfer;
+            return $vertexValidationResponseTransfer->setIsValid(false);
         }
 
         $vertexValidationResponseTransfer = $this->saleValidator->validate(

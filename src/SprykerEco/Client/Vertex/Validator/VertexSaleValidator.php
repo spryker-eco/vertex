@@ -37,7 +37,7 @@ class VertexSaleValidator implements VertexSaleValidatorInterface
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexSaleTransfer::DOCUMENT_DATE));
         }
 
-        if ($vertexSaleTransfer->getTaxMetadata() === null) {
+        if (!$vertexSaleTransfer->getTaxMetadata()) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexSaleTransfer::TAX_METADATA));
         }
 

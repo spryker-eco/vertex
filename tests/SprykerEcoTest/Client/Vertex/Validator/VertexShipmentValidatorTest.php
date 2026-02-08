@@ -61,6 +61,7 @@ class VertexShipmentValidatorTest extends Unit
             ->setShippingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Main St')
+                    ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
                     ->setZipCode('10001')
@@ -86,6 +87,7 @@ class VertexShipmentValidatorTest extends Unit
             ->setShippingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Main St')
+                    ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
                     ->setZipCode('10001')
@@ -111,6 +113,7 @@ class VertexShipmentValidatorTest extends Unit
             ->setShippingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Main St')
+                    ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
                     ->setZipCode('10001')
@@ -156,7 +159,7 @@ class VertexShipmentValidatorTest extends Unit
             ->setShippingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Main St')
-                    // Missing city, country, zipCode
+            // Missing city, country, zipCode
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
@@ -180,6 +183,7 @@ class VertexShipmentValidatorTest extends Unit
             ->setShippingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Main St')
+                    ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
                     ->setZipCode('10001')
@@ -187,7 +191,7 @@ class VertexShipmentValidatorTest extends Unit
             ->setBillingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('456 Billing St')
-                    // Missing city, country, zipCode
+            // Missing city, country, zipCode
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
@@ -197,8 +201,15 @@ class VertexShipmentValidatorTest extends Unit
         $validator->validate($shipment, $responseTransfer);
 
         // Assert
-        $this->assertGreaterThan(0, count($responseTransfer->getMessages()));
-        $this->assertStringContainsString('billingAddress', $responseTransfer->getMessages()[0]);
+        $this->assertSame(4, count($responseTransfer->getMessages()));
+        $this->assertArrayIsIdenticalToArrayIgnoringListOfKeys(
+            [
+                'Address field billingAddress.address2 is required',
+                'Address field billingAddress.zipCode is required',
+                'Address field billingAddress.city is required',
+                'Address field billingAddress.country is required',
+            ], $responseTransfer->getMessages()
+        );
     }
 }
 

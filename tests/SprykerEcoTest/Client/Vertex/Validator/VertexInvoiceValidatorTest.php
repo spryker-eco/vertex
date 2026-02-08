@@ -8,6 +8,7 @@
 namespace SprykerEcoTest\Client\Vertex\Validator;
 
 use Codeception\Test\Unit;
+use Generated\Shared\Transfer\SaleTaxMetadataTransfer;
 use Generated\Shared\Transfer\VertexAddressTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexItemTransfer;
@@ -39,7 +40,7 @@ class VertexInvoiceValidatorTest extends Unit
             ->setTransactionId('transaction-1')
             ->setDocumentNumber('DOC-123')
             ->setDocumentDate('2024-01-01')
-            ->setTaxMetadata([])
+            ->setTaxMetadata([(new SaleTaxMetadataTransfer())])
             ->addItem(
                 (new VertexItemTransfer())
                     ->setId('item-1')
@@ -65,6 +66,7 @@ class VertexInvoiceValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -87,7 +89,7 @@ class VertexInvoiceValidatorTest extends Unit
         $result = $validator->validate($request);
 
         // Assert
-        $this->assertTrue($result->getIsSuccess() !== false);
+        $this->assertTrue($result->getIsValid());
         $this->assertEmpty($result->getMessages());
     }
 
@@ -98,7 +100,7 @@ class VertexInvoiceValidatorTest extends Unit
             ->setTransactionId('transaction-1')
             ->setDocumentNumber('DOC-123')
             ->setDocumentDate('2024-01-01')
-            ->setTaxMetadata([])
+            ->setTaxMetadata([new SaleTaxMetadataTransfer()])
             ->addItem(
                 (new VertexItemTransfer())
                     ->setId('item-1')
@@ -110,6 +112,7 @@ class VertexInvoiceValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -123,6 +126,7 @@ class VertexInvoiceValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -144,7 +148,7 @@ class VertexInvoiceValidatorTest extends Unit
         $result = $validator->validate($request);
 
         // Assert
-        $this->assertFalse($result->getIsSuccess());
+        $this->assertFalse($result->getIsValid());
         $this->assertCount(1, $result->getMessages());
         $this->assertStringContainsString('reportingDate', $result->getMessages()[0]);
     }
@@ -168,7 +172,7 @@ class VertexInvoiceValidatorTest extends Unit
         $result = $validator->validate($request);
 
         // Assert
-        $this->assertFalse($result->getIsSuccess());
+        $this->assertFalse($result->getIsValid());
         $this->assertCount(1, $result->getMessages());
         $this->assertStringContainsString('sale', $result->getMessages()[0]);
     }
@@ -180,7 +184,7 @@ class VertexInvoiceValidatorTest extends Unit
             ->setTransactionId('transaction-1')
             ->setDocumentNumber('DOC-123')
             ->setDocumentDate('2024-01-01')
-            ->setTaxMetadata([])
+            ->setTaxMetadata([new SaleTaxMetadataTransfer()])
             ->addItem(
                 (new VertexItemTransfer())
                     ->setId('item-1')
@@ -191,6 +195,7 @@ class VertexInvoiceValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -204,6 +209,7 @@ class VertexInvoiceValidatorTest extends Unit
                     ->setShippingAddress(
                         (new VertexAddressTransfer())
                             ->setAddress1('123 Main St')
+                            ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
                             ->setZipCode('10001')
@@ -226,7 +232,7 @@ class VertexInvoiceValidatorTest extends Unit
         $result = $validator->validate($request);
 
         // Assert
-        $this->assertFalse($result->getIsSuccess());
+        $this->assertFalse($result->getIsValid());
         $this->assertGreaterThan(0, count($result->getMessages()));
         $this->assertStringContainsString('refundableAmount', $result->getMessages()[0]);
     }
@@ -284,7 +290,7 @@ class VertexInvoiceValidatorTest extends Unit
         $result = $validator->validate($request);
 
         // Assert
-        $this->assertFalse($result->getIsSuccess());
+        $this->assertFalse($result->getIsValid());
     }
 
     public function testValidateValidatesSaleWhenPresent(): void
@@ -310,7 +316,7 @@ class VertexInvoiceValidatorTest extends Unit
         $result = $validator->validate($request);
 
         // Assert
-        $this->assertFalse($result->getIsSuccess());
+        $this->assertFalse($result->getIsValid());
         $this->assertGreaterThan(0, count($result->getMessages()));
     }
 }

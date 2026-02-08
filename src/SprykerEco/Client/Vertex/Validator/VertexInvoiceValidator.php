@@ -3,6 +3,7 @@
 namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
@@ -16,7 +17,7 @@ class VertexInvoiceValidator implements VertexInvoiceValidatorInterface
 
     public function validate(VertexCalculationRequestTransfer $vertexCalculationRequestTransfer): VertexValidationResponseTransfer
     {
-        $vertexValidationResponseTransfer = (new VertexValidationResponseTransfer());
+        $vertexValidationResponseTransfer = (new VertexValidationResponseTransfer())->setIsValid(true);
 
         if (!$vertexCalculationRequestTransfer->getReportingDate()) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexCalculationRequestTransfer::REPORTING_DATE));
@@ -26,7 +27,7 @@ class VertexInvoiceValidator implements VertexInvoiceValidatorInterface
         if (!$vertexSaleTransfer) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexCalculationRequestTransfer::SALE));
 
-            return $vertexValidationResponseTransfer;
+            return $vertexValidationResponseTransfer->setIsValid(false);
         }
 
         $vertexValidationResponseTransfer = $this->saleValidator->validate(
@@ -36,12 +37,12 @@ class VertexInvoiceValidator implements VertexInvoiceValidatorInterface
 
         foreach ($vertexSaleTransfer->getItems() as $vertexSaleItemTransfer) {
             if (!$vertexSaleItemTransfer->getRefundableAmount()) {
-                $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexSaleItemTransfer::REFUNDABLE_AMOUNT));
+                $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexItemTransfer::REFUNDABLE_AMOUNT));
             }
         }
 
         if ($vertexValidationResponseTransfer->getMessages()) {
-            $vertexValidationResponseTransfer->setIsSuccess(false);
+            $vertexValidationResponseTransfer->setIsValid(false);
         }
 
         return $vertexValidationResponseTransfer;

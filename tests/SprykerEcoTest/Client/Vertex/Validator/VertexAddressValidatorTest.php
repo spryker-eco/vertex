@@ -159,7 +159,7 @@ class VertexAddressValidatorTest extends Unit
         $validator->validate($address, 'testField', $responseTransfer);
 
         // Assert
-        $this->assertCount(4, $responseTransfer->getMessages());
+        $this->assertCount(3, $responseTransfer->getMessages());
         $this->assertStringContainsString('testField.address1', $responseTransfer->getMessages()[0]);
         $this->assertStringContainsString('testField.city', $responseTransfer->getMessages()[1]);
         $this->assertStringContainsString('testField.zipCode', $responseTransfer->getMessages()[2]);

@@ -70,6 +70,7 @@ class VertexItemValidatorTest extends Unit
             ->setShippingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Main St')
+                    ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
                     ->setZipCode('10001')
@@ -101,6 +102,7 @@ class VertexItemValidatorTest extends Unit
             ->setShippingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Main St')
+                    ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
                     ->setZipCode('10001')
@@ -132,6 +134,7 @@ class VertexItemValidatorTest extends Unit
             ->setShippingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Main St')
+                    ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
                     ->setZipCode('10001')
@@ -162,6 +165,7 @@ class VertexItemValidatorTest extends Unit
             ->setShippingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Main St')
+                    ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
                     ->setZipCode('10001')
@@ -192,6 +196,7 @@ class VertexItemValidatorTest extends Unit
             ->setShippingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Main St')
+                    ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
                     ->setZipCode('10001')
@@ -247,7 +252,7 @@ class VertexItemValidatorTest extends Unit
             ->setShippingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Main St')
-                    // Missing city, country, zipCode
+            // Missing city, country, zipCode
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
@@ -276,6 +281,7 @@ class VertexItemValidatorTest extends Unit
             ->setShippingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Main St')
+                    ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
                     ->setZipCode('10001')
@@ -283,7 +289,7 @@ class VertexItemValidatorTest extends Unit
             ->setSellerAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('456 Seller St')
-                    // Missing city, country, zipCode
+            // Missing city, country, zipCode
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
@@ -312,6 +318,7 @@ class VertexItemValidatorTest extends Unit
             ->setShippingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Main St')
+                    ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
                     ->setZipCode('10001')
@@ -319,7 +326,7 @@ class VertexItemValidatorTest extends Unit
             ->setBillingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('789 Billing St')
-                    // Missing city, country, zipCode
+            // Missing city, country, zipCode
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
@@ -348,6 +355,7 @@ class VertexItemValidatorTest extends Unit
             ->setShippingAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Main St')
+                    ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
                     ->setZipCode('10001')

@@ -57,6 +57,7 @@ class VertexShippingWarehouseValidatorTest extends Unit
             ->setWarehouseAddress(
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Warehouse St')
+                    ->setAddress2('Building A')
                     ->setCity('New York')
                     ->setCountry('US')
                     ->setZipCode('10001')
@@ -82,7 +83,7 @@ class VertexShippingWarehouseValidatorTest extends Unit
                 (new VertexAddressTransfer())
                     ->setAddress1('123 Warehouse St')
                     ->setCountry('US')
-                    // Missing city and zipCode
+            // Missing city and zipCode
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
