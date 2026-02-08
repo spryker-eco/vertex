@@ -22,7 +22,11 @@ class VertexSubmitPaymentTaxInvoicePlugin extends AbstractPlugin implements Comm
 {
     /**
      * {@inheritDoc}
-     * - Sends SubmitPaymentTaxInvoice message to the message broker `payment-tax-invoice-commands' channel.
+     * - OMS command plugin that triggers tax calculation for invoicing when order state changes.
+     * - Creates an OrderTransfer from the provided order entity with order ID and store name.
+     * - Delegates to {@link \SprykerEco\Zed\Vertex\Business\VertexFacadeInterface::handleSubmitPaymentTaxInvoice()} to calculate tax for invoicing.
+     * - The facade method makes a synchronous API call to Vertex API to calculate tax for the order.
+     * - Returns an empty array as required by the OMS command interface.
      *
      * @api
      *

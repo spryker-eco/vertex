@@ -15,63 +15,28 @@ use Spryker\Zed\Kernel\Container;
  */
 class VertexDependencyProvider extends AbstractBundleDependencyProvider
 {
-    /**
-     * @var string
-     */
     public const FACADE_SALES = 'FACADE_SALES';
 
-    /**
-     * @var string
-     */
     public const FACADE_STORE = 'FACADE_STORE';
 
-    /**
-     * @var string
-     */
     public const PLUGINS_CALCULABLE_OBJECT_VERTEX_EXPANDER = 'PLUGINS_CALCULABLE_OBJECT_VERTEX_EXPANDER';
 
-    /**
-     * @var string
-     */
     public const PLUGINS_ORDER_VERTEX_EXPANDER = 'PLUGINS_ORDER_VERTEX_EXPANDER';
 
-    /**
-     * string
-     *
-     * @var string
-     */
     public const PLUGINS_FALLBACK_QUOTE_CALCULATION = 'PLUGINS_FALLBACK_QUOTE_CALCULATION';
 
-    /**
-     * string
-     *
-     * @var string
-     */
     public const PLUGINS_FALLBACK_ORDER_CALCULATION = 'PLUGINS_FALLBACK_ORDER_CALCULATION';
 
-    /**
-     * @var string
-     */
     public const CLIENT_VERTEX = 'CLIENT_VERTEX';
 
-    /**
-     * @var string
-     */
     public const CLIENT_SECRETS_MANAGER = 'CLIENT_SECRETS_MANAGER';
 
-    /**
-     * @var string
-     */
     public const SERVICE_UTIL_ENCODING = 'SERVICE_UTIL_ENCODING';
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     public function provideBusinessLayerDependencies(Container $container): Container
     {
         $container = parent::provideBusinessLayerDependencies($container);
+
         $container = $this->addStoreFacade($container);
         $container = $this->addCalculableObjectVertexExpanderPlugins($container);
         $container = $this->addOrderVertexExpanderPlugins($container);
@@ -85,11 +50,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     public function providePersistenceLayerDependencies(Container $container): Container
     {
         $container = parent::providePersistenceLayerDependencies($container);
@@ -98,11 +58,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addVertexClient(Container $container): Container
     {
         $container->set(static::CLIENT_VERTEX, function (Container $container) {
@@ -112,11 +67,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addSalesFacade(Container $container): Container
     {
         $container->set(static::FACADE_SALES, function (Container $container) {
@@ -126,11 +76,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addStoreFacade(Container $container): Container
     {
         $container->set(static::FACADE_STORE, function (Container $container) {
@@ -140,11 +85,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addSecretsManagerClient(Container $container): Container
     {
         $container->set(static::CLIENT_SECRETS_MANAGER, function (Container $container) {
@@ -154,11 +94,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addUtilEncodingService(Container $container): Container
     {
         $container->set(static::SERVICE_UTIL_ENCODING, function (Container $container) {
@@ -168,11 +103,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addCalculableObjectVertexExpanderPlugins(Container $container): Container
     {
         $container->set(static::PLUGINS_CALCULABLE_OBJECT_VERTEX_EXPANDER, function () {
@@ -182,11 +112,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addOrderVertexExpanderPlugins(Container $container): Container
     {
         $container->set(static::PLUGINS_ORDER_VERTEX_EXPANDER, function () {
@@ -196,11 +121,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addFallbackQuoteCalculationPlugins(Container $container): Container
     {
         $container->set(static::PLUGINS_FALLBACK_QUOTE_CALCULATION, function () {
@@ -210,11 +130,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addFallbackOrderCalculationPlugins(Container $container): Container
     {
         $container->set(static::PLUGINS_FALLBACK_ORDER_CALCULATION, function () {

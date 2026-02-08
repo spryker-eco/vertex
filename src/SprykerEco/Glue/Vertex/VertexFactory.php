@@ -15,9 +15,6 @@ use SprykerEco\Glue\Vertex\Processor\Validator\TaxIdValidatorInterface;
 
 class VertexFactory extends AbstractFactory
 {
-    /**
-     * @return \SprykerEco\Glue\Vertex\Processor\Validator\TaxIdValidatorInterface
-     */
     public function createTaxIdValidator(): TaxIdValidatorInterface
     {
         return new TaxIdValidator(

@@ -12,30 +12,20 @@ use Spryker\Client\Kernel\Container;
 
 class VertexDependencyProvider extends AbstractDependencyProvider
 {
-    /**
-     * @var string
-     */
     public const SERVICE_UTIL_ENCODING = 'SERVICE_UTIL_ENCODING';
 
-    /**
-     * @var string
-     */
     public const CLIENT_ZED_REQUEST = 'CLIENT_ZED_REQUEST';
 
     public function provideServiceLayerDependencies(Container $container): Container
     {
         $container = parent::provideServiceLayerDependencies($container);
+
         $container = $this->addUtilEncodingService($container);
         $container = $this->addZedRequestClient($container);
 
         return $container;
     }
 
-    /**
-     * @param \Spryker\Client\Kernel\Container $container
-     *
-     * @return \Spryker\Client\Kernel\Container
-     */
     protected function addUtilEncodingService(Container $container): Container
     {
         $container->set(static::SERVICE_UTIL_ENCODING, function (Container $container) {
@@ -45,11 +35,6 @@ class VertexDependencyProvider extends AbstractDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Client\Kernel\Container $container
-     *
-     * @return \Spryker\Client\Kernel\Container
-     */
     protected function addZedRequestClient(Container $container): Container
     {
         $container->set(static::CLIENT_ZED_REQUEST, function (Container $container) {

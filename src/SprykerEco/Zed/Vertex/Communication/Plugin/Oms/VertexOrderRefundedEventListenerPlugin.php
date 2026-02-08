@@ -19,8 +19,10 @@ use Spryker\Zed\OmsExtension\Dependency\Plugin\OmsEventTriggeredListenerPluginIn
 class VertexOrderRefundedEventListenerPlugin extends AbstractPlugin implements OmsEventTriggeredListenerPluginInterface
 {
     /**
-     * {@inheritDoc}
-     * - Executed after OMS event with `refund` ID has been triggered.
+     * Specification:
+     * - Checks if this plugin is applicable for the given OMS event.
+     * - Returns true if the event ID is 'refund', false otherwise.
+     * - Used to determine if the plugin should handle the triggered event.
      *
      * @api
      *
@@ -35,7 +37,10 @@ class VertexOrderRefundedEventListenerPlugin extends AbstractPlugin implements O
 
     /**
      * {@inheritDoc}
-     * - Triggers order refund processing by sending a request to Tax App.
+     * - Delegates to {@link \SprykerEco\Zed\Vertex\Business\VertexFacadeInterface::processOrderRefund()} to process the refund.
+     * - Requires `OmsEventTriggeredTransfer.orderItemIds` to be set.
+     * - Requires `OmsEventTriggeredTransfer.idSalesOrder` to be set.
+     * - The facade method makes a synchronous API call to Vertex API to calculate tax for the refunded order items.
      *
      * @api
      *

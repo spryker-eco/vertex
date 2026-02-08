@@ -38,6 +38,12 @@ interface VertexClientInterface
 
     /**
      * Specification:
+     * - Calculates tax for a quotation using Vertex API.
+     * - Validates the calculation request using VertexQuotationValidator.
+     * - Requires VertexConfigTransfer.vertexAuthResponse with valid access token.
+     * - Requires VertexCalculationRequestTransfer.sale with valid sale data.
+     * - Sends request to Vertex API and returns tax calculation results.
+     * - Returns VertexCalculationResponseTransfer with calculated tax amounts.
      *
      * @api
      *
@@ -53,6 +59,13 @@ interface VertexClientInterface
 
     /**
      * Specification:
+     * - Calculates tax for an invoice using Vertex API.
+     * - Validates the calculation request using VertexInvoiceValidator.
+     * - Requires VertexConfigTransfer.vertexAuthResponse with valid access token.
+     * - Requires VertexCalculationRequestTransfer.reportingDate to be set.
+     * - Requires VertexCalculationRequestTransfer.sale with valid sale data.
+     * - Sends request to Vertex API and returns tax calculation results.
+     * - Returns VertexCalculationResponseTransfer with calculated tax amounts.
      *
      * @api
      *
@@ -68,8 +81,10 @@ interface VertexClientInterface
 
     /**
      * Specification:
-     * - Performs a request to validate a country's tax ID in the Vertex Validator API.
-     * - Requires VertexConfigTransfer.vertexAuthResponse.
+     * - Performs a request to validate a country's tax ID using the Vertex Validator API (Taxamo).
+     * - Requires VertexConfigTransfer.isActive to be true.
+     * - Requires VertexConfigTransfer.isTaxIdValidatorEnabled to be true.
+     * - Returns VertexValidationResponseTransfer with validation result, error messages, and additional info.
      *
      * @api
      *
@@ -85,8 +100,9 @@ interface VertexClientInterface
 
     /**
      * Specification:
-     * - Makes Zed request.
-     * - Validates Tax id for specific country.
+     * - Makes a Zed (server-side) request to validate a tax ID for a specific country.
+     * - Delegates to the Zed layer which handles the validation logic and configuration.
+     * - Returns VertexValidationResponseTransfer with validation result and error messages.
      *
      * @api
      *
@@ -99,8 +115,8 @@ interface VertexClientInterface
     ): VertexValidationResponseTransfer;
 
     /**
-     * Specification
-     * - Sends Api request to validate a country's tax ID in the Vertex Validator API.
+     * Specification:
+     * TODO: remove?
      *
      * @api
      *

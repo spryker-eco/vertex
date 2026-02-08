@@ -12,16 +12,31 @@ use Spryker\Glue\Kernel\AbstractBundleConfig;
 class VertexConfig extends AbstractBundleConfig
 {
     /**
+     * Specification:
+     * - Resource type identifier for the tax ID validation REST API endpoint.
+     *
+     * @api
+     *
      * @var string
      */
     public const RESOURCE_TAX_VALIATE_ID = 'tax-id-validate';
 
     /**
+     * Specification:
+     * - Controller identifier for handling tax ID validation requests.
+     *
+     * @api
+     *
      * @var string
      */
     public const CONTROLLER_TAX_VALIATE_ID = 'tax-id-validation';
 
     /**
+     * Specification:
+     * - Default error message returned when request data is invalid.
+     *
+     * @api
+     *
      * @var string
      */
     public const RESPONSE_DETAIL_MESSAGE_INVALID_REQUEST_DATA = 'Invalid request data.';

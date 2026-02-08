@@ -14,7 +14,7 @@ use SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface;
 /**
  * @method \SprykerEco\Zed\Vertex\Communication\VertexCommunicationFactory getFactory()
  */
-class OrderCustomerWithVertexCodeExpanderPlugin extends AbstractPlugin implements OrderVertexExpanderPluginInterface
+class OrderCustomerWithVertexCodeExpanderPlugin extends AbstractPlugin implements OrderVertexExpanderPluginInterface // TODO: plugin definition and implementation are in the same module
 {
     /**
      * {@inheritDoc}

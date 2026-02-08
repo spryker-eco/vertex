@@ -8,16 +8,27 @@
 namespace SprykerEco\Client\Vertex;
 
 use Spryker\Client\Kernel\AbstractBundleConfig;
-use Spryker\Client\Kernel\AbstractConfig;
 
 class VertexConfig extends AbstractBundleConfig
 {
     /**
+     * Specification:
+     * - OAuth grant type used for Vertex API authentication.
+     * - Uses 'client_credentials' grant type for server-to-server authentication.
+     *
+     * @api
+     *
      * @var string
      */
     public const CREDENTIALS_GRANT_TYPE = 'client_credentials';
 
     /**
+     * Specification:
+     * - The timeout in seconds for Vertex API access token requests.
+     * - Used when requesting OAuth access tokens from the security endpoint.
+     *
+     * @api
+     *
      * @var int
      */
     public const VERTEX_REQUEST_ACCESS_TOKEN_TIMEOUT = 2;

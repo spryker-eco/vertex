@@ -95,11 +95,6 @@ class RefundProcessor implements RefundProcessorInterface
         );
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer
-     *
-     * @return \Generated\Shared\Transfer\OrderTransfer
-     */
     protected function executeOrderVertexExpanderPlugins(OrderTransfer $orderTransfer): OrderTransfer
     {
         foreach ($this->orderVertexExpanderPlugins as $orderVertexExpanderPlugin) {
@@ -109,12 +104,6 @@ class RefundProcessor implements RefundProcessorInterface
         return $orderTransfer;
     }
 
-    /**
-     * @param array<int> $orderItemIds
-     * @param int $idSalesOrder
-     *
-     * @return \Generated\Shared\Transfer\OrderTransfer|null
-     */
     protected function createOrderWithItemsToBeRefunded(array $orderItemIds, int $idSalesOrder): ?OrderTransfer
     {
         $orderTransfer = $this->salesFacade->findOrderByIdSalesOrder($idSalesOrder);

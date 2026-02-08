@@ -368,41 +368,26 @@ class VertexFactory extends AbstractFactory
         return new VertexLineItemPriceBuilder($this->createPriceConverter());
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface
-     */
     protected function createVertexLineItemDiscountBuilder(): VertexLineItemBuilderInterface
     {
         return new VertexLineItemDiscountBuilder($this->createPriceConverter());
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface
-     */
     protected function createVertexLineItemQuantityBuilder(): VertexLineItemBuilderInterface
     {
         return new VertexLineItemQuantityBuilder();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface
-     */
     protected function createVertexLineItemCustomerBuilder(): VertexLineItemBuilderInterface
     {
         return new VertexLineItemCustomerBuilder($this->createLocationMapper());
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface
-     */
     protected function createVertexLineItemSellerBuilder(): VertexLineItemBuilderInterface
     {
         return new VertexLineItemSellerBuilder($this->createLocationMapper());
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface
-     */
     protected function createVertexLineItemMetadataBuilder(): VertexLineItemBuilderInterface
     {
         return new VertexLineItemMetadataBuilder();
@@ -443,17 +428,11 @@ class VertexFactory extends AbstractFactory
         };
     }
 
-    /**
-     * @return \Spryker\Client\ZedRequest\ZedRequestClientInterface
-     */
     public function getZedRequestClient(): ZedRequestClientInterface
     {
         return $this->getProvidedDependency(VertexDependencyProvider::CLIENT_ZED_REQUEST);
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Zed\VertexStubInterface
-     */
     public function createZedStub(): VertexStubInterface
     {
         return new VertexStub(
