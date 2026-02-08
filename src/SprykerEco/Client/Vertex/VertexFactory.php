@@ -57,7 +57,6 @@ use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterf
 use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculator;
 use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexInvoiceValidator;
-use SprykerEco\Client\Vertex\Validator\VertexInvoiceValidatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexQuotationValidator;
 use SprykerEco\Client\Vertex\Validator\VertexAddressValidator;
 use SprykerEco\Client\Vertex\Validator\VertexAddressValidatorInterface;
@@ -155,7 +154,7 @@ class VertexFactory extends AbstractFactory
         );
     }
 
-    public function createVertexInvoiceValidator(): VertexInvoiceValidatorInterface
+    public function createVertexInvoiceValidator(): VertexValidatorInterface
     {
         return new VertexInvoiceValidator($this->createVertexSaleValidator());
     }

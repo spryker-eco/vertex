@@ -7,7 +7,7 @@ use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
-class VertexInvoiceValidator implements VertexInvoiceValidatorInterface
+class VertexInvoiceValidator implements VertexValidatorInterface
 {
     protected const ERROR_FIELD_IS_REQUIRED = 'Field %s is required';
 
