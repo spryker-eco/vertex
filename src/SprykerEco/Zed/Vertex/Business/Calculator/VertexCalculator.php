@@ -23,9 +23,6 @@ class VertexCalculator implements VertexCalculatorInterface
 {
     use LoggerTrait;
 
-    /**
-     * @var string
-     */
     protected const ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN = 'Unable to connect to Vertex API: access token is invalid';
 
     /**

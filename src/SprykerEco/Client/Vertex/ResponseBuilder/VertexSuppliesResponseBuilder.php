@@ -14,9 +14,6 @@ use SprykerEco\Client\Vertex\Builder\PriceConverter;
 
 class VertexSuppliesResponseBuilder implements VertexSuppliesResponseBuilderInterface
 {
-    /**
-     * @param \SprykerEco\Client\Vertex\Builder\PriceConverter $priceConverter
-     */
     public function __construct(protected PriceConverter $priceConverter)
     {
     }
@@ -118,12 +115,6 @@ class VertexSuppliesResponseBuilder implements VertexSuppliesResponseBuilderInte
         return $lineItemTaxes;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
-     * @param string $errorMessage
-     *
-     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
-     */
     public function buildErrorResponse(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         string $errorMessage

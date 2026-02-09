@@ -19,32 +19,8 @@ use SprykerEco\Zed\Vertex\VertexConfig;
 
 class TaxIdValidator implements TaxIdValidatorInterface
 {
-    /**
-     * @var string
-     */
-    protected const HEADER_AUTHORIZATION = 'Authorization';
-
-    /**
-     * @var string
-     */
-    protected const CONTENT_KEY_CODE = 'code';
-
-    /**
-     * @var string
-     */
     protected const GLOSSARY_KEY_VERTEX_IS_DISABLED = 'vertex.tax-app-disabled';
 
-    /**
-     * @var string
-     */
-    protected const GLOSSARY_KEY_TAX_VALIDATOR_IS_UNAVAILABLE = 'vertex.tax-validator-unavailable';
-
-    /**
-     * @param \SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface $vertexConfigResolver
-     * @param \SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface $entityManager
-     * @param \Spryker\Service\UtilEncoding\UtilEncodingServiceInterface $utilEncodingService
-     * @param \SprykerEco\Client\Vertex\VertexClientInterface $vertexClient
-     */
     public function __construct(
         protected VertexConfigResolverInterface $vertexConfigResolver,
         protected VertexEntityManagerInterface $entityManager,
@@ -53,11 +29,6 @@ class TaxIdValidator implements TaxIdValidatorInterface
     ) {
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $vertexValidationRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
-     */
     public function validate(VertexValidationRequestTransfer $vertexValidationRequestTransfer): VertexValidationResponseTransfer
     {
         $vertexValidationRequestTransfer->requireTaxId();
@@ -92,13 +63,6 @@ class TaxIdValidator implements TaxIdValidatorInterface
         return $vertexValidationResponseTransfer;
     }
 
-    /**
-     * @param bool $isValid
-     * @param string $message
-     * @param string $messageKey
-     *
-     * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
-     */
     protected function createVertexValidationResponseTransfer(
         bool $isValid,
         string $message,

@@ -14,34 +14,16 @@ use Generated\Shared\Transfer\VertexAddressTransfer;
 
 interface AddressMapperInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\AddressTransfer $addressTransfer
-     * @param \Generated\Shared\Transfer\VertexAddressTransfer $VertexAddressTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexAddressTransfer
-     */
     public function mapAddressTransferToVertexAddressTransfer(
         AddressTransfer $addressTransfer,
         VertexAddressTransfer $VertexAddressTransfer
     ): VertexAddressTransfer;
 
-    /**
-     * @param \Generated\Shared\Transfer\MerchantProfileAddressTransfer $addressTransfer
-     * @param \Generated\Shared\Transfer\VertexAddressTransfer $VertexAddressTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexAddressTransfer
-     */
     public function mapMerchantProfileAddressTransferToVertexAddressTransfer(
         MerchantProfileAddressTransfer $addressTransfer,
         VertexAddressTransfer $VertexAddressTransfer
     ): VertexAddressTransfer;
 
-    /**
-     * @param \Generated\Shared\Transfer\StockAddressTransfer $addressTransfer
-     * @param \Generated\Shared\Transfer\VertexAddressTransfer $VertexAddressTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexAddressTransfer
-     */
     public function mapStockAddressTransferToVertexAddressTransfer(
         StockAddressTransfer $addressTransfer,
         VertexAddressTransfer $VertexAddressTransfer

@@ -15,16 +15,8 @@ class SuppliesRequestBuilder
     /**
      * @param array<\SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface> $vertexRequestBuilders
      */
-    public function __construct(protected array $vertexRequestBuilders)
-    {
-    }
+    public function __construct(protected array $vertexRequestBuilders) {}
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
-     * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexSuppliesTransfer
-     */
     public function build(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexSuppliesTransfer $vertexSuppliesTransfer

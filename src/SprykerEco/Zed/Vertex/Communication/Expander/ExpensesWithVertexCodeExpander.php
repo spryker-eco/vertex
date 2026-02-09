@@ -15,9 +15,6 @@ use SprykerEco\Zed\Vertex\Communication\Mapper\VertexCodeMapper;
 
 class ExpensesWithVertexCodeExpander
 {
-    /**
-     * @param \SprykerEco\Zed\Vertex\Communication\Mapper\VertexCodeMapper $vertexCodeMapper
-     */
     public function __construct(protected VertexCodeMapper $vertexCodeMapper)
     {
     }
@@ -45,11 +42,6 @@ class ExpensesWithVertexCodeExpander
         return $transfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ExpenseTransfer $expenseTransfer
-     *
-     * @return string
-     */
     protected function getExpenseKey(ExpenseTransfer $expenseTransfer): string
     {
         return implode(

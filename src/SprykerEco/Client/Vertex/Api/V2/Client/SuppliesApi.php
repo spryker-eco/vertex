@@ -23,36 +23,15 @@ class SuppliesApi implements SuppliesApiInterface
 {
     use LoggerTrait;
 
-    /**
-     * @var string
-     */
     protected const REQUEST_FAILED_ERROR_MESSAGE = 'Request to Vertex API failed.';
 
-    /**
-     * @var string
-     */
     protected const INVALID_CREDENTIALS_ERROR_MESSAGE = 'Invalid credentials.';
 
-    protected ClientInterface $client;
-
-    protected VertexSuppliesApiRequestBuilder $vertexSuppliesApiRequestBuilder;
-
-    protected UtilEncodingServiceInterface $utilEncodingService;
-
-    /**
-     * @param \GuzzleHttp\ClientInterface $client
-     * @param \SprykerEco\Client\Vertex\Api\V2\Builder\VertexSuppliesApiRequestBuilder $vertexSuppliesApiRequestBuilder
-     * @param \Spryker\Service\UtilEncoding\UtilEncodingServiceInterface $utilEncodingService
-     */
     public function __construct(
-        ClientInterface $client,
-        VertexSuppliesApiRequestBuilder $vertexSuppliesApiRequestBuilder,
-        UtilEncodingServiceInterface $utilEncodingService
-    ) {
-        $this->client = $client;
-        $this->vertexSuppliesApiRequestBuilder = $vertexSuppliesApiRequestBuilder;
-        $this->utilEncodingService = $utilEncodingService;
-    }
+        protected ClientInterface $client,
+        protected VertexSuppliesApiRequestBuilder $vertexSuppliesApiRequestBuilder,
+        protected UtilEncodingServiceInterface $utilEncodingService
+    ) {}
 
     /**
      * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer

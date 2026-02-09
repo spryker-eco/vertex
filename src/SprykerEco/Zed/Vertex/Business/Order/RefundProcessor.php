@@ -19,10 +19,13 @@ use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 
 class RefundProcessor implements RefundProcessorInterface
 {
     use LoggerTrait;
+
+    protected const ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN = 'Unable to connect to Vertex API: access token is invalid';
 
     /**
      * @param \SprykerEco\Client\Vertex\VertexClientInterface $vertexClient
@@ -50,7 +53,7 @@ class RefundProcessor implements RefundProcessorInterface
      *
      * @return void
      */
-    public function processOrderRefund(array $orderItemIds, int $idSalesOrder): void
+    public function processOrderRefund(array $orderItemIds, int $idSalesOrder): VertexCalculationResponseTransfer
     {
         $orderTransfer = $this->createOrderWithItemsToBeRefunded($orderItemIds, $idSalesOrder);
 
@@ -86,8 +89,16 @@ class RefundProcessor implements RefundProcessorInterface
 
         $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 
-        //TODO: Add an early return if the access token is not available
-        $this->vertexClient->sendTaxRefund(
+        if (!$vertexApiAccessTokenTransfer->getAccessToken()) {
+            $this->getLogger()->warning(static::ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN);
+
+            return (new VertexCalculationResponseTransfer())
+                ->setSale($vertexSaleTransfer)
+                ->setIsSuccessful(false)
+                ->setErrorMessage(static::ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN);
+        }
+
+        return $this->vertexClient->sendTaxRefund(
             (new VertexCalculationRequestTransfer())
                 ->setSale($vertexSaleTransfer)
                 ->setReportingDate((new DateTime())->format('Y-m-d'))

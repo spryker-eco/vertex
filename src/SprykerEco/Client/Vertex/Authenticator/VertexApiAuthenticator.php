@@ -14,21 +14,8 @@ use SprykerEco\Client\Vertex\Api\V2\Client\SecurityApiInterface;
 
 class VertexApiAuthenticator implements VertexApiAuthenticatorInterface
 {
-    protected SecurityApiInterface $securityApi;
+    public function __construct(protected SecurityApiInterface $securityApi) {}
 
-    /**
-     * @param \SprykerEco\Client\Vertex\Api\V2\Client\SecurityApiInterface $securityApi
-     */
-    public function __construct(SecurityApiInterface $securityApi)
-    {
-        $this->securityApi = $securityApi;
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexAuthResponseTransfer
-     */
     public function authenticate(VertexConfigTransfer $vertexConfigTransfer): VertexAuthResponseTransfer
     {
         $vertexApiCredentialTransfer = (new VertexApiCredentialTransfer())

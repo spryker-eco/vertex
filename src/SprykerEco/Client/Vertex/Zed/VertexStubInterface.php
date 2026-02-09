@@ -12,10 +12,5 @@ use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
 interface VertexStubInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $vertexValidationRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
-     */
     public function requestTaxIdValidation(VertexValidationRequestTransfer $vertexValidationRequestTransfer): VertexValidationResponseTransfer;
 }

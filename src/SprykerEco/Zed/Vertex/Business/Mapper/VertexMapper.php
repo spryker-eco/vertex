@@ -44,12 +44,7 @@ class VertexMapper implements VertexMapperInterface
      */
     protected const ORIGINAL_TRANSFER_MISSING_EXCEPTION = 'Could not get original transfer from CalculableObjectTransfer';
 
-    /**
-     * @param \SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface $addressMapper
-     * @param \SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetrieverInterface $priceFormatter
-     * @param \Spryker\Zed\Store\Business\StoreFacadeInterface $storeFacade
-     * @param \SprykerEco\Zed\Vertex\VertexConfig $vertexConfig
-     */
+
     public function __construct(
         protected AddressMapperInterface $addressMapper,
         protected ItemExpensePriceRetrieverInterface $priceFormatter,
@@ -58,12 +53,6 @@ class VertexMapper implements VertexMapperInterface
     ) {
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $vertexSaleTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexSaleTransfer
-     */
     public function mapCalculableObjectToVertexSaleTransfer(
         CalculableObjectTransfer $calculableObjectTransfer,
         VertexSaleTransfer $vertexSaleTransfer
@@ -125,14 +114,6 @@ class VertexMapper implements VertexMapperInterface
         return $vertexSaleTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ItemTransfer $itemTransfer
-     * @param string $priceMode
-     * @param \Generated\Shared\Transfer\AddressTransfer|null $billingAddressTransfer
-     * @param int $itemIndex
-     *
-     * @return \Generated\Shared\Transfer\VertexItemTransfer
-     */
     public function mapItemTransfersToSaleItemTransfers(
         ItemTransfer $itemTransfer,
         string $priceMode,
@@ -187,13 +168,6 @@ class VertexMapper implements VertexMapperInterface
         return $vertexItemTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexItemTransfer $vertexItemTransfer
-     * @param \Generated\Shared\Transfer\MerchantStockAddressTransfer $merchantStockAddressTransfer
-     * @param \Generated\Shared\Transfer\VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexShippingWarehouseTransfer
-     */
     public function mapMerchantStockAddressTransferToVertexShippingWarehouse(
         VertexItemTransfer $vertexItemTransfer,
         MerchantStockAddressTransfer $merchantStockAddressTransfer,
@@ -214,13 +188,6 @@ class VertexMapper implements VertexMapperInterface
         return $vertexShippingWarehouseTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ExpenseTransfer $expenseTransfer
-     * @param string $priceMode
-     * @param \Generated\Shared\Transfer\AddressTransfer|null $billingAddressTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexShipmentTransfer
-     */
     public function mapExpenseTransferToVertexShipmentTransfer(
         ExpenseTransfer $expenseTransfer,
         string $priceMode,
@@ -298,12 +265,6 @@ class VertexMapper implements VertexMapperInterface
         return $transferIdentifier;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $vertexSaleTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexSaleTransfer
-     */
     public function mapOrderTransferToVertexSaleTransfer(OrderTransfer $orderTransfer, VertexSaleTransfer $vertexSaleTransfer): VertexSaleTransfer
     {
         $calculableObjectTransfer = new CalculableObjectTransfer();
@@ -318,13 +279,6 @@ class VertexMapper implements VertexMapperInterface
         return $this->mapCalculableObjectToVertexSaleTransfer($calculableObjectTransfer, $vertexSaleTransfer);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $vertexSaleTransfer
-     * @param \Generated\Shared\Transfer\OrderTransfer|\Generated\Shared\Transfer\QuoteTransfer $originalTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexSaleTransfer
-     */
     public function setTaxSaleCountryCode(
         CalculableObjectTransfer $calculableObjectTransfer,
         VertexSaleTransfer $vertexSaleTransfer,

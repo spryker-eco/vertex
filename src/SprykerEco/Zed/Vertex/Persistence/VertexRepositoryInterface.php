@@ -12,10 +12,5 @@ use Generated\Shared\Transfer\VertexApiAccessTokenTransfer;
 
 interface VertexRepositoryInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiAccessTokenCriteriaTransfer $vertexApiAccessTokenCriteriaTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexApiAccessTokenTransfer
-     */
     public function findAccessToken(VertexApiAccessTokenCriteriaTransfer $vertexApiAccessTokenCriteriaTransfer): VertexApiAccessTokenTransfer;
 }

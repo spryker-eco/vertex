@@ -19,14 +19,8 @@ use SprykerEco\Client\Vertex\Api\V2\Client\TaxamoApi;
  */
 class VertexTaxIdValidator implements VertexTaxIdValidatorInterface
 {
-    /**
-     * @var string
-     */
     protected const ERROR_MESSAGE_INACTIVE_VERTEX_APP = 'Unable to connect to Vertex Validator API: Vertex App or Tax ID Validator is inactive.';
 
-    /**
-     * @param \SprykerEco\Client\Vertex\Api\V2\Client\TaxamoApi $taxamoApi
-     */
     public function __construct(protected TaxamoApi $taxamoApi)
     {
     }

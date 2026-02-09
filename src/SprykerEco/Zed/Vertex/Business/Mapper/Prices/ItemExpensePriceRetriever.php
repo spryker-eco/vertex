@@ -42,12 +42,6 @@ class ItemExpensePriceRetriever implements ItemExpensePriceRetrieverInterface
         return $transfer->getUnitGrossPriceOrFail();
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ExpenseTransfer|\Generated\Shared\Transfer\ItemTransfer $transfer
-     * @param string $priceMode
-     *
-     * @return int
-     */
     public function getUnitPriceWithoutDiscount(ExpenseTransfer|ItemTransfer $transfer, string $priceMode): int
     {
         if (!method_exists($transfer, 'getUnitNetPrice') && !method_exists($transfer, 'getUnitDiscountAmountAggregation')) {

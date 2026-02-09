@@ -19,6 +19,7 @@ use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 
 class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerInterface
 {
@@ -48,15 +49,17 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
      *
      * @return void
      */
-    public function handleSubmitPaymentTaxInvoice(OrderTransfer $orderTransfer): void
+    public function handleSubmitPaymentTaxInvoice(OrderTransfer $orderTransfer): VertexCalculationResponseTransfer
     {
         $idSalesOrder = $orderTransfer->getIdSalesOrderOrFail();
         $orderTransfer = $this->salesFacade->findOrderByIdSalesOrder($idSalesOrder);
 
+        $vertexCalculationResponseTransfer = (new VertexCalculationResponseTransfer())->setIsSuccessful(false);
+
         if (!$orderTransfer) {
             $this->getLogger()->warning(sprintf('Order with ID `%s` not found', $idSalesOrder));
 
-            return;
+            $vertexCalculationResponseTransfer;
         }
 
         $orderTransfer = $this->executeOrderVertexExpanderPlugins($orderTransfer);
@@ -71,18 +74,30 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
         $vertexConfigTransfer = $this->configResolver->resolve();
 
         if (!$vertexConfigTransfer) {
-            // TODO
+            $this->getLogger()->warning('Vertex configuration not found');
 
-            return;
+            return $vertexCalculationResponseTransfer;
         }
 
-        if (!$vertexConfigTransfer || !$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsInvoicingEnabled()) {
-            // TODO
+        if (!$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsInvoicingEnabled()) {
+            $this->getLogger()->warning('Vertex configuration not active');
 
-            return;
+            return $vertexCalculationResponseTransfer;
+        }
+
+        if (!$vertexConfigTransfer->getIsInvoicingEnabled()) {
+            $this->getLogger()->warning('Invoicing configuration not active');
+
+            return $vertexCalculationResponseTransfer;
         }
 
         $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
+
+        if (!$vertexApiAccessTokenTransfer) {
+            $this->getLogger()->warning('Vertex API access token not found');
+
+            return $vertexCalculationResponseTransfer;
+        }
 
         $vertexCalculationRequestTransfer = (new VertexCalculationRequestTransfer())
             ->setSale($vertexSaleTransfer)
@@ -105,14 +120,10 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
                 'responseTransfer' => $vertexCalculationResponseTransfer->modifiedToArray(),
             ],
         );
+
+        return $vertexCalculationResponseTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexSubmitPaymentTaxInvoiceTransfer $vertexSubmitPaymentTaxInvoiceTransfer
-     * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer
-     *
-     * @return void
-     */
     protected function setMessageAttributesTransfer(
         VertexSubmitPaymentTaxInvoiceTransfer $vertexSubmitPaymentTaxInvoiceTransfer,
         OrderTransfer $orderTransfer
@@ -125,11 +136,6 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
         $vertexSubmitPaymentTaxInvoiceTransfer->setMessageAttributes($messageAttributesTransfer);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer
-     *
-     * @return \Generated\Shared\Transfer\OrderTransfer
-     */
     protected function executeOrderVertexExpanderPlugins(OrderTransfer $orderTransfer): OrderTransfer
     {
         foreach ($this->orderVertexExpanderPlugins as $orderVertexExpanderPlugin) {

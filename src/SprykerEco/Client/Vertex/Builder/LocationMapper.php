@@ -12,11 +12,6 @@ use Generated\Shared\Transfer\VertexLocationTransfer;
 
 class LocationMapper
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexAddressTransfer $vertexAddressTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexLocationTransfer
-     */
     public function mapVertexAddressTransferToVertexLocationTransfer(VertexAddressTransfer $vertexAddressTransfer): VertexLocationTransfer
     {
         $vertexLocationTransfer = (new VertexLocationTransfer())

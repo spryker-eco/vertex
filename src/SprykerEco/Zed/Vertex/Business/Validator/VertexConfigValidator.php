@@ -39,15 +39,7 @@ class VertexConfigValidator
 
     protected const RESPONSE_MESSAGE_BLANK_TAXAMO_TOKEN_FIELD = 'Seller token is required.';
 
-    /**
-     * @var \SprykerEco\Client\Vertex\VertexClientInterface
-     */
-    protected $vertexClient;
-
-    public function __construct(VertexClientInterface $vertexClient)
-    {
-        $this->vertexClient = $vertexClient;
-    }
+    public function __construct(protected VertexClientInterface $vertexClient) {}
 
     public function validate(VertexConfigTransfer $vertexConfigTransfer): VertexValidationResponseTransfer
     {

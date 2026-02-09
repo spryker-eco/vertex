@@ -14,9 +14,6 @@ use SprykerEco\Zed\Vertex\Communication\Mapper\VertexCodeMapper;
 
 class CustomerWithVertexSpecificFieldsExpander
 {
-    /**
-     * @param \SprykerEco\Zed\Vertex\Communication\Mapper\VertexCodeMapper $vertexCodeMapper
-     */
     public function __construct(protected VertexCodeMapper $vertexCodeMapper)
     {
     }

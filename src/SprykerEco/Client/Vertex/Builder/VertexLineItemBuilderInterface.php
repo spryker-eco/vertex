@@ -13,11 +13,5 @@ use Generated\Shared\Transfer\VertexShipmentTransfer;
 
 interface VertexLineItemBuilderInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexItemTransfer|\Generated\Shared\Transfer\VertexShipmentTransfer $itemTransfer
-     * @param \Generated\Shared\Transfer\VertexLineItemTransfer $vertexLineItemTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexLineItemTransfer
-     */
     public function build(VertexItemTransfer|VertexShipmentTransfer $itemTransfer, VertexLineItemTransfer $vertexLineItemTransfer): VertexLineItemTransfer;
 }

@@ -14,13 +14,6 @@ class VertexAddressValidator implements VertexAddressValidatorInterface
 {
     protected const ERROR_ADDRESS_FIELD_IS_REQUIRED = 'Address field %s is required';
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexAddressTransfer $address
-     * @param string $fieldName
-     * @param \Generated\Shared\Transfer\VertexValidationResponseTransfer $vertexValidationResponseTransfer
-     *
-     * @return void
-     */
     public function validate(
         VertexAddressTransfer $address,
         string $fieldName,

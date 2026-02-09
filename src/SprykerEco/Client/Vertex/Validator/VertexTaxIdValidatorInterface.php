@@ -13,12 +13,6 @@ use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
 interface VertexTaxIdValidatorInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\TaxIdValidationRequestTransfer $taxIdValidationRequest
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
-     */
     public function validate(
         TaxIdValidationRequestTransfer $taxIdValidationRequest,
         VertexConfigTransfer $vertexConfigTransfer

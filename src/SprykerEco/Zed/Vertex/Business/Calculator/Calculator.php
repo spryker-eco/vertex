@@ -26,11 +26,6 @@ class Calculator implements CalculatorInterface
     ) {
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return void
-     */
     public function recalculate(CalculableObjectTransfer $calculableObjectTransfer): void
     {
         $vertexConfigTransfer = $this->vertexConfigResolver->resolve();
@@ -51,11 +46,6 @@ class Calculator implements CalculatorInterface
         $this->vertexCalculator->recalculate($calculableObjectTransfer, $vertexConfigTransfer);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return void
-     */
     protected function recalculateUsingFallbackCalculator(CalculableObjectTransfer $calculableObjectTransfer): void
     {
         if ($calculableObjectTransfer->getOriginalQuote()) {
@@ -69,11 +59,6 @@ class Calculator implements CalculatorInterface
         }
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return \Generated\Shared\Transfer\CalculableObjectTransfer
-     */
     protected function setHideTaxInCartFlagToTrue(CalculableObjectTransfer $calculableObjectTransfer): CalculableObjectTransfer
     {
         if ($calculableObjectTransfer->getOriginalQuote() !== null && $calculableObjectTransfer->getPriceMode() === ItemExpensePriceRetriever::PRICE_MODE_NET) {
@@ -83,11 +68,6 @@ class Calculator implements CalculatorInterface
         return $calculableObjectTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return void
-     */
     protected function setHideTaxInCartFlagToFalse(CalculableObjectTransfer $calculableObjectTransfer): void
     {
         if ($calculableObjectTransfer->getOriginalQuote() !== null) {

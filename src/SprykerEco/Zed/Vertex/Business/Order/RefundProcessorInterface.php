@@ -7,6 +7,8 @@
 
 namespace SprykerEco\Zed\Vertex\Business\Order;
 
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
+
 interface RefundProcessorInterface
 {
     /**
@@ -15,5 +17,5 @@ interface RefundProcessorInterface
      *
      * @return void
      */
-    public function processOrderRefund(array $orderItemIds, int $idSalesOrder): void;
+    public function processOrderRefund(array $orderItemIds, int $idSalesOrder): VertexCalculationResponseTransfer;
 }

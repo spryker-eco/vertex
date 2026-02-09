@@ -12,11 +12,5 @@ use Generated\Shared\Transfer\VertexConfigTransfer;
 
 interface VertexCalculatorInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return void
-     */
     public function recalculate(CalculableObjectTransfer $calculableObjectTransfer, VertexConfigTransfer $vertexConfigTransfer): void;
 }

@@ -16,11 +16,6 @@ use Spryker\Zed\Kernel\Persistence\AbstractRepository;
  */
 class VertexRepository extends AbstractRepository implements VertexRepositoryInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiAccessTokenCriteriaTransfer $vertexApiAccessTokenCriteriaTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexApiAccessTokenTransfer
-     */
     public function findAccessToken(VertexApiAccessTokenCriteriaTransfer $vertexApiAccessTokenCriteriaTransfer): VertexApiAccessTokenTransfer
     {
         $vertexAccessTokenEntity = $this->getFactory()

@@ -19,36 +19,16 @@ class SecurityApi implements SecurityApiInterface
 {
     use LoggerTrait;
 
-    /**
-     * @var string
-     */
     protected const INVALID_CREDENTIALS_ERROR_MESSAGE = 'Invalid credentials.';
 
-    /**
-     * @var string
-     */
     protected const REQUEST_FAILED_ERROR_MESSAGE = 'Request to Vertex API failed.';
 
-    /**
-     * @var string
-     */
     protected const INVALID_RESPONSE_MESSAGE = 'Invalid response from Vertex API.';
 
-    protected ClientInterface $client;
-
-    /**
-     * @param \GuzzleHttp\ClientInterface $client
-     */
-    public function __construct(ClientInterface $client)
+    public function __construct(protected ClientInterface $client)
     {
-        $this->client = $client;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiCredentialTransfer $vertexApiCredentialTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexAuthResponseTransfer
-     */
     public function requestAccessToken(
         VertexApiCredentialTransfer $vertexApiCredentialTransfer
     ): VertexAuthResponseTransfer {
@@ -77,11 +57,6 @@ class SecurityApi implements SecurityApiInterface
         }
     }
 
-    /**
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
-     * @return \Generated\Shared\Transfer\VertexAuthResponseTransfer
-     */
     protected function handleResponse(ResponseInterface $response): VertexAuthResponseTransfer
     {
         $vertexAuthResponseTransfer = new VertexAuthResponseTransfer();
@@ -107,12 +82,6 @@ class SecurityApi implements SecurityApiInterface
             ->setExpiresIn((int)$responseData['expires_in']);
     }
 
-    /**
-     * @param int $responseStatusCode
-     * @param string $responseContents
-     *
-     * @return \Generated\Shared\Transfer\VertexAuthResponseTransfer
-     */
     protected function getErrorResponse(int $responseStatusCode, string $responseContents): VertexAuthResponseTransfer
     {
         $vertexAuthResponseTransfer = new VertexAuthResponseTransfer();

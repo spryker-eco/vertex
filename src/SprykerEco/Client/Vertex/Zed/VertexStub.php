@@ -13,18 +13,10 @@ use Spryker\Client\ZedRequest\ZedRequestClientInterface;
 
 class VertexStub implements VertexStubInterface
 {
-    /**
-     * @param \Spryker\Client\ZedRequest\ZedRequestClientInterface $zedRequestClient
-     */
     public function __construct(protected ZedRequestClientInterface $zedRequestClient)
     {
     }
 
-   /**
-    * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $vertexValidationRequestTransfer
-    *
-    * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
-    */
     public function requestTaxIdValidation(VertexValidationRequestTransfer $vertexValidationRequestTransfer): VertexValidationResponseTransfer
     {
         /** @var \Generated\Shared\Transfer\VertexValidationResponseTransfer $vertexValidationResponseTransfer */

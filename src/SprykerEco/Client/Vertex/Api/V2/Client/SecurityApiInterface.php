@@ -12,11 +12,6 @@ use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 
 interface SecurityApiInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiCredentialTransfer $vertexApiCredentialTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexAuthResponseTransfer
-     */
     public function requestAccessToken(
         VertexApiCredentialTransfer $vertexApiCredentialTransfer
     ): VertexAuthResponseTransfer;

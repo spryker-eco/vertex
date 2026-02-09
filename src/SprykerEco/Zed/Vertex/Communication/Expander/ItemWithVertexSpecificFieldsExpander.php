@@ -15,9 +15,6 @@ use SprykerEco\Zed\Vertex\Communication\Mapper\VertexCodeMapper;
 
 class ItemWithVertexSpecificFieldsExpander
 {
-    /**
-     * @param \SprykerEco\Zed\Vertex\Communication\Mapper\VertexCodeMapper $vertexCodeMapper
-     */
     public function __construct(protected VertexCodeMapper $vertexCodeMapper)
     {
     }
@@ -51,7 +48,7 @@ class ItemWithVertexSpecificFieldsExpander
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getFlexibleCodeFields(): array
     {
@@ -64,7 +61,7 @@ class ItemWithVertexSpecificFieldsExpander
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getFlexibleNumericFields(): array
     {
@@ -77,7 +74,7 @@ class ItemWithVertexSpecificFieldsExpander
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getFlexibleDateFields(): array
     {

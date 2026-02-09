@@ -15,19 +15,10 @@ use Throwable;
 
 class FilteringMessageFormatter implements MessageFormatterInterface
 {
-    /**
-     * @var string
-     */
     protected const MESSAGE_FORMAT_REQUEST = 'Vertex API request sent.';
 
-    /**
-     * @var string
-     */
     protected const MESSAGE_FORMAT_RESPONSE = '%s Vertex API response received.';
 
-    /**
-     * @var string
-     */
     protected const MESSAGE_FORMAT_ERROR = '%s Error happened.';
 
     /**
@@ -35,18 +26,8 @@ class FilteringMessageFormatter implements MessageFormatterInterface
      */
     protected const FILTERED_KEYS = ['password', 'token', 'access_token', 'refresh_token', 'client_secret', 'Authorization'];
 
-    /**
-     * @var string
-     */
     protected const MASKED_VALUE = '*****';
 
-    /**
-     * @param \Psr\Http\Message\RequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface|null $response
-     * @param \Throwable|null $error
-     *
-     * @return string
-     */
     public function format(RequestInterface $request, ?ResponseInterface $response = null, ?Throwable $error = null): string
     {
         $message = static::MESSAGE_FORMAT_REQUEST;
@@ -74,10 +55,6 @@ class FilteringMessageFormatter implements MessageFormatterInterface
     {
         $request = clone $originalRequest;
 
-        // Full request Vertex API is huge and usually not needed in logs, so disabled.
-        //$request = $this->filterHeaders($request);
-        //$request = $this->filterMessage($request);
-
         $context = [
             'api_request' => $request->getMethod() . ' ' . $request->getUri() . ' (body is hidden in logs)',
         ];
@@ -85,8 +62,6 @@ class FilteringMessageFormatter implements MessageFormatterInterface
         if ($originalResponse) {
             $response = clone $originalResponse;
 
-            // headers are usually not needed in logs, so disabled.
-            //$response = $this->filterHeaders($response);
             $response = $this->filterMessage($response);
 
             $context = [
@@ -105,11 +80,6 @@ class FilteringMessageFormatter implements MessageFormatterInterface
         return $context;
     }
 
-    /**
-     * @param \Psr\Http\Message\MessageInterface $message
-     *
-     * @return \Psr\Http\Message\MessageInterface
-     */
     protected function filterMessage(MessageInterface $message): MessageInterface
     {
         $messageBody = $message->getBody()->__toString();
@@ -161,21 +131,5 @@ class FilteringMessageFormatter implements MessageFormatterInterface
         });
 
         return $contents;
-    }
-
-    /**
-     * @param \Psr\Http\Message\MessageInterface $message
-     *
-     * @return \Psr\Http\Message\MessageInterface
-     */
-    protected function filterHeaders(MessageInterface $message): MessageInterface
-    {
-        foreach (static::FILTERED_KEYS as $key) {
-            if ($message->hasHeader($key)) {
-                $message = $message->withHeader($key, static::MASKED_VALUE);
-            }
-        }
-
-        return $message;
     }
 }

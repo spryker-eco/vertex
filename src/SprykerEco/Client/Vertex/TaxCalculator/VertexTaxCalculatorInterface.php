@@ -13,12 +13,6 @@ use Generated\Shared\Transfer\VertexConfigTransfer;
 
 interface VertexTaxCalculatorInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
-     */
     public function calculateTax(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexConfigTransfer $vertexConfigTransfer

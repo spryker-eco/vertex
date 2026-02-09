@@ -353,17 +353,11 @@ class VertexFactory extends AbstractFactory
         return new VertexLineItemVendorSkuBuilder();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface
-     */
     protected function createVertexLineItemProductBuilder(): VertexLineItemBuilderInterface
     {
         return new VertexLineItemProductBuilder();
     }
 
-    /**
-     * @return \SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface
-     */
     protected function createVertexLineItemPriceBuilder(): VertexLineItemBuilderInterface
     {
         return new VertexLineItemPriceBuilder($this->createPriceConverter());

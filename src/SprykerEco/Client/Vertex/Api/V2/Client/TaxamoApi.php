@@ -22,41 +22,19 @@ class TaxamoApi
 {
     use LoggerTrait;
 
-    /**
-     * @var string
-     */
     protected const REQUEST_FAILED_ERROR_MESSAGE = 'Request to Vertex API failed.';
 
-    /**
-     * @var string
-     */
     protected const REQUEST_FAILED_ERROR_MESSAGE_KEY = 'request-failed';
 
-    /**
-     * @var string
-     */
     protected const INVALID_CREDENTIALS_ERROR_MESSAGE = 'Invalid credentials.';
 
-    /**
-     * @var string
-     */
     protected const INVALID_CREDENTIALS_ERROR_MESSAGE_KEY = 'invalid-credentials';
 
-    /**
-     * @param \GuzzleHttp\ClientInterface $client
-     * @param \Spryker\Service\UtilEncoding\UtilEncodingServiceInterface $utilEncodingService
-     */
     public function __construct(
         protected ClientInterface $client,
         protected UtilEncodingServiceInterface $utilEncodingService
-    ) {
-    }
+    ) {}
 
-    /**
-     * @param \Generated\Shared\Transfer\TaxamoApiRequestTransfer $taxamoApiRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexApiResponseTransfer
-     */
     public function validateTaxId(TaxamoApiRequestTransfer $taxamoApiRequestTransfer): VertexApiResponseTransfer
     {
         try {
@@ -93,11 +71,6 @@ class TaxamoApi
         ];
     }
 
-    /**
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
-     * @return \Generated\Shared\Transfer\VertexApiResponseTransfer
-     */
     protected function handleResponse(ResponseInterface $response): VertexApiResponseTransfer
     {
         $vertexApiResponseTransfer = (new VertexApiResponseTransfer())
@@ -116,12 +89,6 @@ class TaxamoApi
             ->setVertexResponse($responseData);
     }
 
-    /**
-     * @param int $responseStatusCode
-     * @param string $responseContents
-     *
-     * @return \Generated\Shared\Transfer\VertexApiResponseTransfer
-     */
     protected function getErrorResponse(int $responseStatusCode, string $responseContents): VertexApiResponseTransfer
     {
         $vertexApiResponseTransfer = new VertexApiResponseTransfer();

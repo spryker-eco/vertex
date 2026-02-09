@@ -12,10 +12,5 @@ use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
 interface TaxIdValidatorInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $vertexValidationRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
-     */
     public function validate(VertexValidationRequestTransfer $vertexValidationRequestTransfer): VertexValidationResponseTransfer;
 }

@@ -21,9 +21,6 @@ class VertexAccessTokenProvider implements VertexAccessTokenProviderInterface
 {
     use LoggerTrait;
 
-    /**
-     * @var string
-     */
     protected const ERROR_MESSAGE_CANNOT_RETRIEVE_ACCESS_TOKEN = 'Unable to retrieve new access token using Vertex credentials';
 
     protected VertexClientInterface $vertexClient;
@@ -32,11 +29,6 @@ class VertexAccessTokenProvider implements VertexAccessTokenProviderInterface
 
     protected VertexEntityManagerInterface $vertexEntityManager;
 
-    /**
-     * @param \SprykerEco\Client\Vertex\VertexClientInterface $vertexClient
-     * @param \SprykerEco\Zed\Vertex\Persistence\VertexRepositoryInterface $vertexRepository
-     * @param \SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface $vertexEntityManager
-     */
     public function __construct(
         VertexClientInterface $vertexClient,
         VertexRepositoryInterface $vertexRepository,
@@ -47,11 +39,6 @@ class VertexAccessTokenProvider implements VertexAccessTokenProviderInterface
         $this->vertexEntityManager = $vertexEntityManager;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexApiAccessTokenTransfer
-     */
     public function provideVertexAccessToken(VertexConfigTransfer $vertexConfigTransfer): VertexApiAccessTokenTransfer
     {
         $vertexApiAccessTokenTransfer = $this->getAccessTokenFromCache($vertexConfigTransfer);
@@ -63,11 +50,6 @@ class VertexAccessTokenProvider implements VertexAccessTokenProviderInterface
         return $vertexApiAccessTokenTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexApiAccessTokenTransfer|null
-     */
     protected function getAccessTokenFromCache(VertexConfigTransfer $vertexConfigTransfer): ?VertexApiAccessTokenTransfer
     {
         if (!$vertexConfigTransfer->getCredentialHash()) {
@@ -86,11 +68,6 @@ class VertexAccessTokenProvider implements VertexAccessTokenProviderInterface
         return null;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexApiAccessTokenTransfer
-     */
     protected function retrieveNewAccessToken(VertexConfigTransfer $vertexConfigTransfer): VertexApiAccessTokenTransfer
     {
         $vertexApiAccessTokenTransfer = (new VertexApiAccessTokenTransfer());
@@ -118,11 +95,6 @@ class VertexAccessTokenProvider implements VertexAccessTokenProviderInterface
             ->setAccessToken($vertexAuthResponseTransfer->getAccessToken());
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer
-     *
-     * @return bool
-     */
     protected function isAccessTokenExpired(VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer): bool
     {
         $dateTime = new DateTime($vertexApiAccessTokenTransfer->getExpirationDate());

@@ -31,7 +31,7 @@ class VertexClient extends AbstractClient implements VertexClientInterface
      *
      * @return \Generated\Shared\Transfer\VertexAuthResponseTransfer
      */
-    public function authenticate(VertexConfigTransfer $vertexConfigTransfer): VertexAuthResponseTransfer // TODO: add validation
+    public function authenticate(VertexConfigTransfer $vertexConfigTransfer): VertexAuthResponseTransfer
     {
         return $this->getFactory()
             ->createVertexApiAuthenticator()

@@ -12,10 +12,5 @@ use Generated\Shared\Transfer\VertexConfigTransfer;
 
 interface VertexApiAuthenticatorInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexAuthResponseTransfer
-     */
     public function authenticate(VertexConfigTransfer $vertexConfigTransfer): VertexAuthResponseTransfer;
 }

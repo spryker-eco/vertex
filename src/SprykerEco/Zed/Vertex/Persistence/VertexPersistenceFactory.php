@@ -19,25 +19,16 @@ use SprykerEco\Zed\Vertex\Persistence\Propel\Mapper\VertexTaxIdValidationMapper;
  */
 class VertexPersistenceFactory extends AbstractPersistenceFactory
 {
-    /**
-     * @return \Orm\Zed\Vertex\Persistence\SpyVertexApiAccessTokenQuery
-     */
     public function createVertexApiAccessTokenQuery(): SpyVertexApiAccessTokenQuery
     {
         return SpyVertexApiAccessTokenQuery::create();
     }
 
-    /**
-     * @return \SprykerEco\Zed\Vertex\Persistence\Propel\Mapper\VertexApiAccessTokenMapper
-     */
     public function createVertexApiAccessTokenMapper(): VertexApiAccessTokenMapper
     {
         return new VertexApiAccessTokenMapper();
     }
 
-    /**
-     * @return \SprykerEco\Zed\Vertex\Persistence\Propel\Mapper\VertexTaxIdValidationMapper
-     */
     public function createVertexTaxIdValidationMapper(): VertexTaxIdValidationMapper
     {
         return new VertexTaxIdValidationMapper();

@@ -14,13 +14,6 @@ use Generated\Shared\Transfer\VertexSuppliesTransfer;
 
 interface SuppliesApiInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     * @param \Generated\Shared\Transfer\VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexApiResponseTransfer
-     */
     public function calculateTax(
         VertexSuppliesTransfer $vertexSuppliesTransfer,
         VertexConfigTransfer $vertexConfigTransfer,

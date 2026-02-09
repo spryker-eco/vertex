@@ -18,11 +18,6 @@ class FallbackCalculator implements FallbackCalculatorInterface
     {
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return void
-     */
     public function recalculate(CalculableObjectTransfer $calculableObjectTransfer): void
     {
         foreach ($this->fallbackCalculationPlugins as $fallbackCalculationPlugin) {

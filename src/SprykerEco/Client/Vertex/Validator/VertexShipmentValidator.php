@@ -14,19 +14,10 @@ class VertexShipmentValidator implements VertexShipmentValidatorInterface
 {
     protected const ERROR_SHIPMENT_FIELD_IS_REQUIRED = 'Shipment field %s is required';
 
-    /**
-     * @param \SprykerEco\Client\Vertex\Validator\VertexAddressValidatorInterface $addressValidator
-     */
     public function __construct(protected VertexAddressValidatorInterface $addressValidator)
     {
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexShipmentTransfer $vertexShipmentTransfer
-     * @param \Generated\Shared\Transfer\VertexValidationResponseTransfer $vertexValidationResponseTransfer
-     *
-     * @return void
-     */
     public function validate(
         VertexShipmentTransfer $vertexShipmentTransfer,
         VertexValidationResponseTransfer $vertexValidationResponseTransfer,

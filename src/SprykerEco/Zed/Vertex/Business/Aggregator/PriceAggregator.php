@@ -19,12 +19,6 @@ use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapper;
 
 class PriceAggregator implements PriceAggregatorInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $VertexSaleTransfer
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return \Generated\Shared\Transfer\CalculableObjectTransfer
-     */
     public function calculatePriceAggregation(
         VertexSaleTransfer $VertexSaleTransfer,
         CalculableObjectTransfer $calculableObjectTransfer
@@ -35,38 +29,26 @@ class PriceAggregator implements PriceAggregatorInterface
         return $calculableObjectTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $VertexSaleTransfer
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return \Generated\Shared\Transfer\CalculableObjectTransfer
-     */
     protected function calculateTaxAmountFullAggregationAndPriceToPayAggregationForItems(
         VertexSaleTransfer $VertexSaleTransfer,
         CalculableObjectTransfer $calculableObjectTransfer
     ): CalculableObjectTransfer {
         $indexedQuoteItems = $this->getItemsIndexedBySkuAndItemIndex($calculableObjectTransfer->getItems());
 
-        /** @var \Generated\Shared\Transfer\VertexItemTransfer $VertexSaleItem */
-        foreach ($VertexSaleTransfer->getItems() as $VertexSaleItem) {
-            if (!isset($indexedQuoteItems[$VertexSaleItem->getId()])) {
+        /** @var \Generated\Shared\Transfer\VertexItemTransfer $vertexSaleItem */
+        foreach ($VertexSaleTransfer->getItems() as $vertexSaleItem) {
+            if (!isset($indexedQuoteItems[$vertexSaleItem->getId()])) {
                 continue;
             }
 
-            $indexedQuoteItems[$VertexSaleItem->getId()] = $this->calculateTaxAmountFullAggregationForItem($indexedQuoteItems[$VertexSaleItem->getId()], $VertexSaleItem);
-            $indexedQuoteItems[$VertexSaleItem->getId()] = $this->calculatePriceToPayAggregationForItem($indexedQuoteItems[$VertexSaleItem->getId()], $calculableObjectTransfer->getPriceModeOrFail());
-            $indexedQuoteItems[$VertexSaleItem->getId()]->setTaxRateAverageAggregation(0);
+            $indexedQuoteItems[$vertexSaleItem->getId()] = $this->calculateTaxAmountFullAggregationForItem($indexedQuoteItems[$vertexSaleItem->getId()], $vertexSaleItem);
+            $indexedQuoteItems[$vertexSaleItem->getId()] = $this->calculatePriceToPayAggregationForItem($indexedQuoteItems[$vertexSaleItem->getId()], $calculableObjectTransfer->getPriceModeOrFail());
+            $indexedQuoteItems[$vertexSaleItem->getId()]->setTaxRateAverageAggregation(0);
         }
 
         return $calculableObjectTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ItemTransfer $quoteItem
-     * @param \Generated\Shared\Transfer\VertexItemTransfer $VertexItemTransfer
-     *
-     * @return \Generated\Shared\Transfer\ItemTransfer
-     */
     protected function calculateTaxAmountFullAggregationForItem(ItemTransfer $quoteItem, VertexItemTransfer $VertexItemTransfer): ItemTransfer
     {
         $saleItemQuantity = $this->getItemQuantity($VertexItemTransfer);
@@ -87,11 +69,6 @@ class PriceAggregator implements PriceAggregatorInterface
         return $quoteItem;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexItemTransfer $VertexItemTransfer
-     *
-     * @return int
-     */
     protected function getItemQuantity(VertexItemTransfer $VertexItemTransfer): int
     {
         if (!$VertexItemTransfer->getVertexShippingWarehouses()->count()) {
@@ -106,12 +83,6 @@ class PriceAggregator implements PriceAggregatorInterface
         return $quantity;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ItemTransfer $itemTransfer
-     * @param string $priceMode
-     *
-     * @return \Generated\Shared\Transfer\ItemTransfer
-     */
     protected function calculatePriceToPayAggregationForItem(ItemTransfer $itemTransfer, string $priceMode): ItemTransfer
     {
         $itemTransfer->requireSumSubtotalAggregation()
@@ -153,9 +124,6 @@ class PriceAggregator implements PriceAggregatorInterface
         return $indexedItems;
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function calculatePriceToPayAggregationForExpenses(
         VertexSaleTransfer $VertexSaleTransfer,
         CalculableObjectTransfer $calculableObjectTransfer
@@ -175,11 +143,6 @@ class PriceAggregator implements PriceAggregatorInterface
         return $calculableObjectTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return \Generated\Shared\Transfer\CalculableObjectTransfer
-     */
     protected function preDefineTaxAmount(CalculableObjectTransfer $calculableObjectTransfer): CalculableObjectTransfer
     {
         foreach ($calculableObjectTransfer->getExpenses() as $expenseTransfer) {
@@ -194,12 +157,6 @@ class PriceAggregator implements PriceAggregatorInterface
         return $calculableObjectTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ExpenseTransfer $expenseTransfer
-     * @param \Generated\Shared\Transfer\VertexShipmentTransfer $VertexShipmentTransfer
-     *
-     * @return \Generated\Shared\Transfer\ExpenseTransfer
-     */
     protected function calculateTaxAmountForExpense(ExpenseTransfer $expenseTransfer, VertexShipmentTransfer $VertexShipmentTransfer): ExpenseTransfer
     {
         if ($VertexShipmentTransfer->getRefundedTaxTotal()) {
@@ -214,12 +171,6 @@ class PriceAggregator implements PriceAggregatorInterface
         return $expenseTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ExpenseTransfer $expenseTransfer
-     * @param string $priceMode
-     *
-     * @return \Generated\Shared\Transfer\ExpenseTransfer
-     */
     protected function calculatePriceToPayAggregationForExpense(ExpenseTransfer $expenseTransfer, string $priceMode): ExpenseTransfer
     {
         $expenseTransfer->setUnitPriceToPayAggregation(
@@ -262,14 +213,6 @@ class PriceAggregator implements PriceAggregatorInterface
         return $indexedExpenses;
     }
 
-    /**
-     * @param int $price
-     * @param string $priceMode
-     * @param int $discountAmount
-     * @param int $taxAmount
-     *
-     * @return int
-     */
     protected function calculatePriceToPayAggregation(int $price, string $priceMode, int $discountAmount = 0, int $taxAmount = 0): int
     {
         if ($priceMode === ItemExpensePriceRetriever::PRICE_MODE_NET) {

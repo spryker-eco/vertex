@@ -30,6 +30,8 @@ class VertexFacadeRefundTest extends Unit
 {
     public const DEFAULT_OMS_PROCESS_NAME = 'Test01';
 
+    public const CLIENT_VERTEX = 'CLIENT_VERTEX';
+
     protected VertexBusinessTester $tester;
 
     public function setUp(): void
@@ -64,7 +66,7 @@ class VertexFacadeRefundTest extends Unit
                 ->setAccessToken('test-token')
                 ->setExpiresIn(1000),
         );
-        $this->tester->setDependency('CLIENT_VERTEX', $vertexClientMock);
+        $this->tester->setDependency(static::CLIENT_VERTEX, $vertexClientMock);
 
         // Act
         $this->tester->getFacade()->processOrderRefund($orderItemsIds, $orderTransfer->getIdSalesOrder());
@@ -91,7 +93,7 @@ class VertexFacadeRefundTest extends Unit
         // Assert
         $vertexClientMock->expects($this->never())->method('sendTaxRefund');
         $vertexClientMock->expects($this->never())->method('authenticate');
-        $this->tester->setDependency('CLIENT_VERTEX', $vertexClientMock);
+        $this->tester->setDependency(static::CLIENT_VERTEX, $vertexClientMock);
 
         // Act
         $this->tester->getFacade()->processOrderRefund($orderItemsIds, $orderTransfer->getIdSalesOrder());

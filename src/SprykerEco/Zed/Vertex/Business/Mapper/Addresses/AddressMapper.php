@@ -15,12 +15,6 @@ use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 
 class AddressMapper implements AddressMapperInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\AddressTransfer $addressTransfer
-     * @param \Generated\Shared\Transfer\VertexAddressTransfer $VertexAddressTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexAddressTransfer
-     */
     public function mapAddressTransferToVertexAddressTransfer(
         AddressTransfer $addressTransfer,
         VertexAddressTransfer $VertexAddressTransfer
@@ -28,12 +22,6 @@ class AddressMapper implements AddressMapperInterface
         return $this->mapAddressAndMerchantProfileAddressTransferToVertexAddressTransfer($addressTransfer, $VertexAddressTransfer);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\StockAddressTransfer $addressTransfer
-     * @param \Generated\Shared\Transfer\VertexAddressTransfer $VertexAddressTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexAddressTransfer
-     */
     public function mapStockAddressTransferToVertexAddressTransfer(
         StockAddressTransfer $addressTransfer,
         VertexAddressTransfer $VertexAddressTransfer
@@ -50,12 +38,6 @@ class AddressMapper implements AddressMapperInterface
         return $VertexAddressTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\MerchantProfileAddressTransfer $addressTransfer
-     * @param \Generated\Shared\Transfer\VertexAddressTransfer $VertexAddressTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexAddressTransfer
-     */
     public function mapMerchantProfileAddressTransferToVertexAddressTransfer(
         MerchantProfileAddressTransfer $addressTransfer,
         VertexAddressTransfer $VertexAddressTransfer
@@ -63,12 +45,6 @@ class AddressMapper implements AddressMapperInterface
         return $this->mapAddressAndMerchantProfileAddressTransferToVertexAddressTransfer($addressTransfer, $VertexAddressTransfer);
     }
 
-    /**
-     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $addressTransfer
-     * @param \Generated\Shared\Transfer\VertexAddressTransfer $VertexAddressTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexAddressTransfer
-     */
     protected function mapAddressAndMerchantProfileAddressTransferToVertexAddressTransfer(
         AbstractTransfer $addressTransfer,
         VertexAddressTransfer $VertexAddressTransfer

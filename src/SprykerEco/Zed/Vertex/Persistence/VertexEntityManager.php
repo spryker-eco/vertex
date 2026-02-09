@@ -18,11 +18,6 @@ use Spryker\Zed\Kernel\Persistence\AbstractEntityManager;
  */
 class VertexEntityManager extends AbstractEntityManager implements VertexEntityManagerInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\TaxIdValidationHistoryTransfer $taxIdValidationHistoryTransfer
-     *
-     * @return void
-     */
     public function saveTaxIdValidationHistory(TaxIdValidationHistoryTransfer $taxIdValidationHistoryTransfer): void
     {
         $taxIdValidationHistoryEntity = new SpyVertexTaxIdValidationHistory();
@@ -33,11 +28,6 @@ class VertexEntityManager extends AbstractEntityManager implements VertexEntityM
         $taxIdValidationHistoryEntity->save();
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer
-     *
-     * @return void
-     */
     public function saveAccessToken(VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer): void
     {
         $vertexApiAccessTokenEntity = $this->getFactory()

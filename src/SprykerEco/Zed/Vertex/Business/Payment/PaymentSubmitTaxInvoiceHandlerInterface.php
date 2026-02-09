@@ -8,6 +8,7 @@
 namespace SprykerEco\Zed\Vertex\Business\Payment;
 
 use Generated\Shared\Transfer\OrderTransfer;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 
 interface PaymentSubmitTaxInvoiceHandlerInterface
 {
@@ -16,5 +17,5 @@ interface PaymentSubmitTaxInvoiceHandlerInterface
      *
      * @return void
      */
-    public function handleSubmitPaymentTaxInvoice(OrderTransfer $orderTransfer): void;
+    public function handleSubmitPaymentTaxInvoice(OrderTransfer $orderTransfer): VertexCalculationResponseTransfer;
 }
