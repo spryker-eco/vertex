@@ -36,15 +36,11 @@ class VertexSaleValidator implements VertexSaleValidatorInterface
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexSaleTransfer::DOCUMENT_DATE));
         }
 
-        if (!$vertexSaleTransfer->getTaxMetadata()) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexSaleTransfer::TAX_METADATA));
-        }
-
         if (!$vertexSaleTransfer->getItems()->count()) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexSaleTransfer::ITEMS));
         }
 
-        if (!$vertexSaleTransfer->getShipments()->count()) {
+        if (!$vertexSaleTransfer->getShipments()) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexSaleTransfer::SHIPMENTS));
         }
 

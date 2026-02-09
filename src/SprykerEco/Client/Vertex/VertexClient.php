@@ -48,7 +48,7 @@ class VertexClient extends AbstractClient implements VertexClientInterface
      *
      * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
-    public function calculateQuoteTax(
+    public function calculateTax(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexConfigTransfer $vertexConfigTransfer
     ): VertexCalculationResponseTransfer {
@@ -67,12 +67,31 @@ class VertexClient extends AbstractClient implements VertexClientInterface
      *
      * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
-    public function calculateOrderTax(
+    public function sendTaxInvoice(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexConfigTransfer $vertexConfigTransfer
     ): VertexCalculationResponseTransfer {
         return $this->getFactory()
-            ->createInvoiceVertexTaxCalculator()
+            ->createVertexTaxCalculator()
+            ->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
+     *
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
+     */
+    public function sendTaxRefund(
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
+        VertexConfigTransfer $vertexConfigTransfer
+    ): VertexCalculationResponseTransfer {
+        return $this->getFactory()
+            ->createRefundVertexTaxCalculator()
             ->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
     }
 

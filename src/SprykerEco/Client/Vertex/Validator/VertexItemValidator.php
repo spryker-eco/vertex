@@ -14,22 +14,12 @@ class VertexItemValidator implements VertexItemValidatorInterface
 {
     protected const ERROR_ITEM_FIELD_IS_REQUIRED = 'Field %s is required for item %s';
 
-    /**
-     * @param \SprykerEco\Client\Vertex\Validator\VertexAddressValidatorInterface $addressValidator
-     * @param \SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidatorInterface $shippingWarehouseValidator
-     */
     public function __construct(
         protected VertexAddressValidatorInterface $addressValidator,
         protected VertexShippingWarehouseValidatorInterface $shippingWarehouseValidator
     ) {
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexItemTransfer $vertexItemTransfer
-     * @param \Generated\Shared\Transfer\VertexValidationResponseTransfer $vertexValidationResponseTransfer
-     *
-     * @return void
-     */
     public function validate(
         VertexItemTransfer $vertexItemTransfer,
         VertexValidationResponseTransfer $vertexValidationResponseTransfer,

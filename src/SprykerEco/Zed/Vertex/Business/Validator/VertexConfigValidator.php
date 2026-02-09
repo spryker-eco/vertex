@@ -23,11 +23,11 @@ class VertexConfigValidator
 
     protected const RESPONSE_MESSAGE_NOT_VALID_URL_SECURITY_URI_FIELD = 'Security URI has wrong format.';
 
-    protected const RESPONSE_MESSAGE_NOT_VALID_URL_TAXAMO_API_URL_FIELD = 'API URI has wrong format.';
-
     protected const RESPONSE_MESSAGE_BLANK_TRANSACTION_CALLS_URI_FIELD = 'Transaction Calls URI is required.';
 
     protected const RESPONSE_MESSAGE_NOT_VALID_URL_TRANSACTION_CALLS_URI_FIELD = 'Transaction Calls URI has wrong format.';
+
+    protected const RESPONSE_MESSAGE_NOT_VALID_URL_TAXAMO_API_URI_FIELD = 'Taxamo api url has wrong format.';
 
     protected const RESPONSE_MESSAGE_BLANK_CLIENT_ID_FIELD = 'Client ID is required.';
 
@@ -38,8 +38,6 @@ class VertexConfigValidator
     protected const RESPONSE_MESSAGE_NOT_STRING_CLIENT_SECRET_FIELD = 'Client Secret must be a string.';
 
     protected const RESPONSE_MESSAGE_BLANK_TAXAMO_TOKEN_FIELD = 'Seller token is required.';
-
-    protected const RESPONSE_MESSAGE_NOT_VALID_CREDENTIAL = 'API URL or token is invalid.';
 
     /**
      * @var \SprykerEco\Client\Vertex\VertexClientInterface
@@ -157,6 +155,10 @@ class VertexConfigValidator
     ): void {
         if (!$vertexConfigTransfer->getTaxamoApiUrl()) {
             $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_TAXAMO_API_URL_FIELD);
+        }
+
+        if (!filter_var($vertexConfigTransfer->getTaxamoApiUrl(), FILTER_VALIDATE_URL)) {
+            $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_NOT_VALID_URL_TAXAMO_API_URI_FIELD);
         }
     }
 

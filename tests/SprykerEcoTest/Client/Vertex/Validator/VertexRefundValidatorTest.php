@@ -15,7 +15,7 @@ use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\VertexShipmentTransfer;
 use SprykerEco\Client\Vertex\Validator\VertexAddressValidator;
-use SprykerEco\Client\Vertex\Validator\VertexInvoiceValidator;
+use SprykerEco\Client\Vertex\Validator\VertexRefundValidator;
 use SprykerEco\Client\Vertex\Validator\VertexItemValidator;
 use SprykerEco\Client\Vertex\Validator\VertexSaleValidator;
 use SprykerEco\Client\Vertex\Validator\VertexShipmentValidator;
@@ -27,9 +27,9 @@ use SprykerEcoTest\Client\Vertex\VertexClientTester;
  * @group Client
  * @group Vertex
  * @group Validator
- * @group VertexInvoiceValidatorTest
+ * @group VertexRefundValidatorTest
  */
-class VertexInvoiceValidatorTest extends Unit
+class VertexRefundValidatorTest extends Unit
 {
     protected VertexClientTester $tester;
 
@@ -83,7 +83,7 @@ class VertexInvoiceValidatorTest extends Unit
         );
         $shipmentValidator = new VertexShipmentValidator(new VertexAddressValidator());
         $saleValidator = new VertexSaleValidator($itemValidator, $shipmentValidator);
-        $validator = new VertexInvoiceValidator($saleValidator);
+        $validator = new VertexRefundValidator($saleValidator);
 
         // Act
         $result = $validator->validate($request);
@@ -142,7 +142,7 @@ class VertexInvoiceValidatorTest extends Unit
         );
         $shipmentValidator = new VertexShipmentValidator(new VertexAddressValidator());
         $saleValidator = new VertexSaleValidator($itemValidator, $shipmentValidator);
-        $validator = new VertexInvoiceValidator($saleValidator);
+        $validator = new VertexRefundValidator($saleValidator);
 
         // Act
         $result = $validator->validate($request);
@@ -166,7 +166,7 @@ class VertexInvoiceValidatorTest extends Unit
         );
         $shipmentValidator = new VertexShipmentValidator(new VertexAddressValidator());
         $saleValidator = new VertexSaleValidator($itemValidator, $shipmentValidator);
-        $validator = new VertexInvoiceValidator($saleValidator);
+        $validator = new VertexRefundValidator($saleValidator);
 
         // Act
         $result = $validator->validate($request);
@@ -226,7 +226,7 @@ class VertexInvoiceValidatorTest extends Unit
         );
         $shipmentValidator = new VertexShipmentValidator(new VertexAddressValidator());
         $saleValidator = new VertexSaleValidator($itemValidator, $shipmentValidator);
-        $validator = new VertexInvoiceValidator($saleValidator);
+        $validator = new VertexRefundValidator($saleValidator);
 
         // Act
         $result = $validator->validate($request);
@@ -284,7 +284,7 @@ class VertexInvoiceValidatorTest extends Unit
         );
         $shipmentValidator = new VertexShipmentValidator(new VertexAddressValidator());
         $saleValidator = new VertexSaleValidator($itemValidator, $shipmentValidator);
-        $validator = new VertexInvoiceValidator($saleValidator);
+        $validator = new VertexRefundValidator($saleValidator);
 
         // Act
         $result = $validator->validate($request);
@@ -310,7 +310,7 @@ class VertexInvoiceValidatorTest extends Unit
         );
         $shipmentValidator = new VertexShipmentValidator(new VertexAddressValidator());
         $saleValidator = new VertexSaleValidator($itemValidator, $shipmentValidator);
-        $validator = new VertexInvoiceValidator($saleValidator);
+        $validator = new VertexRefundValidator($saleValidator);
 
         // Act
         $result = $validator->validate($request);

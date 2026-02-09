@@ -48,7 +48,7 @@ interface VertexClientInterface
      *
      * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
-    public function calculateQuoteTax(
+    public function calculateTax(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexConfigTransfer $vertexConfigTransfer
     ): VertexCalculationResponseTransfer;
@@ -56,7 +56,28 @@ interface VertexClientInterface
     /**
      * Specification:
      * - Calculates tax for an invoice using Vertex API.
-     * - Validates the calculation request using VertexInvoiceValidator.
+     * - Validates the calculation request using VertexRefundValidator.
+     * - Requires VertexConfigTransfer.vertexAuthResponse with valid access token.
+     * - Requires VertexCalculationRequestTransfer.sale with valid sale data.
+     * - Sends request to Vertex API and returns tax calculation results.
+     * - Returns VertexCalculationResponseTransfer with calculated tax amounts.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
+     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
+     *
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
+     */
+    public function sendTaxInvoice(
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
+        VertexConfigTransfer $vertexConfigTransfer
+    ): VertexCalculationResponseTransfer;
+
+    /**
+     * Specification:
+     * - Calculates tax for an invoice using Vertex API.
+     * - Validates the calculation request using VertexRefundValidator.
      * - Requires VertexConfigTransfer.vertexAuthResponse with valid access token.
      * - Requires VertexCalculationRequestTransfer.reportingDate to be set.
      * - Requires VertexCalculationRequestTransfer.sale with valid sale data.
@@ -70,7 +91,7 @@ interface VertexClientInterface
      *
      * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
-    public function calculateOrderTax(
+    public function sendTaxRefund(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexConfigTransfer $vertexConfigTransfer
     ): VertexCalculationResponseTransfer;
