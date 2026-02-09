@@ -66,6 +66,7 @@ use SprykerEco\Client\Vertex\Validator\VertexInvoiceValidator;
 use SprykerEco\Client\Vertex\Validator\VertexItemValidator;
 use SprykerEco\Client\Vertex\Validator\VertexItemValidatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexQuotationValidator;
+use SprykerEco\Client\Vertex\Validator\VertexRefundValidator;
 use SprykerEco\Client\Vertex\Validator\VertexSaleValidator;
 use SprykerEco\Client\Vertex\Validator\VertexSaleValidatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexShipmentValidator;
@@ -144,19 +145,19 @@ class VertexFactory extends AbstractFactory
         return new VertexShippingWarehouseValidator($this->createVertexAddressValidator());
     }
 
-    public function createInvoiceVertexTaxCalculator(): VertexTaxCalculatorInterface
+    public function createRefundVertexTaxCalculator(): VertexTaxCalculatorInterface
     {
         return new VertexTaxCalculator(
             $this->createSuppliesInvoiceRequestBuilder(),
             $this->createSuppliesApi(),
             $this->createVertexSuppliesResponseBuilder(),
-            $this->createVertexInvoiceValidator(),
+            $this->createVertexRefundValidator(),
         );
     }
 
-    public function createVertexInvoiceValidator(): VertexValidatorInterface
+    public function createVertexRefundValidator(): VertexValidatorInterface
     {
-        return new VertexInvoiceValidator($this->createVertexSaleValidator());
+        return new VertexRefundValidator($this->createVertexSaleValidator());
     }
 
     public function createVertexTaxIdValidator(): VertexTaxIdValidatorInterface

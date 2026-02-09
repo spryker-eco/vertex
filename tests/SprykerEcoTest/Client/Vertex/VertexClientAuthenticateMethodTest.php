@@ -10,13 +10,10 @@ namespace SprykerEcoTest\Client\Vertex;
 use Codeception\Test\Unit;
 
 /**
- * Auto-generated group annotations
- *
- * @group SprykerTest
+ * @group SprykerEcoTest
  * @group Client
  * @group Vertex
  * @group VertexClientAuthenticateMethodTest
- * Add your own group annotations below this line
  */
 class VertexClientAuthenticateMethodTest extends Unit
 {

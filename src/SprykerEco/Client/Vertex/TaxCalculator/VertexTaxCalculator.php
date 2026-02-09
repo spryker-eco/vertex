@@ -16,9 +16,6 @@ use SprykerEco\Client\Vertex\Builder\SuppliesRequestBuilder;
 use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterface;
 use SprykerEco\Client\Vertex\Validator\VertexValidatorInterface;
 
-/**
- * This class is used for tax calculation (`quotation`) AND for `invoice` request sending, depending on SuppliesRequestBuilder builders list.
- */
 class VertexTaxCalculator implements VertexTaxCalculatorInterface
 {
     protected const ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN = 'Unable to connect to Vertex API: access token is invalid';
@@ -27,13 +24,6 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
 
     protected const ERROR_MESSAGE_TRANSACTION_CALL_URI = 'Unable to connect to Vertex API: TransactionCallsUri config is not set';
 
-    protected const ERROR_MESSAGE_SALE_IS_MISSED = 'Sale is missed';
-
-    /**
-     * @param \SprykerEco\Client\Vertex\Builder\SuppliesRequestBuilder $vertexSuppliesRequestBuilder
-     * @param \SprykerEco\Client\Vertex\Api\V2\Client\SuppliesApiInterface $suppliesApi
-     * @param \SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterface $vertexSuppliesResponseBuilder
-     */
     public function __construct(
         protected SuppliesRequestBuilder $vertexSuppliesRequestBuilder,
         protected SuppliesApiInterface $suppliesApi,
@@ -42,12 +32,6 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
     ) {
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
-     * @param \Generated\Shared\Transfer\VertexConfigTransfer $vertexConfigTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
-     */
     public function calculateTax(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexConfigTransfer $vertexConfigTransfer

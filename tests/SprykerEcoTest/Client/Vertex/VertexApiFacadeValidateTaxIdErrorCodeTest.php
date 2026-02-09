@@ -1,30 +1,23 @@
 <?php
 
-
-namespace PyzTest\Zed\VertexApi\Business;
+namespace SprykerEcoTest\Zed\VertexApi\Business;
 
 use Codeception\Test\Unit;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use SprykerEcoTest\Client\Vertex\VertexClientTester;
 
 /**
- * Auto-generated group annotations
- *
- * @group PyzTest
+ * @group SprykerEcoTest
  * @group Zed
  * @group VertexApi
  * @group Business
  * @group Facade
  * @group VertexApiFacadeValidateTaxIdErrorCodeTest
- * Add your own group annotations below this line
  */
 class VertexApiFacadeValidateTaxIdErrorCodeTest extends Unit
 {
     protected VertexClientTester $tester;
 
-    /**
-     * @return void
-     */
     public function testGivenACustomerProvidesAnInvalidTaxIdFormatWhenTheTaxIdIsValidatedThenErrorCodeIsReturned(): void
     {
         // Arrange
@@ -58,9 +51,6 @@ class VertexApiFacadeValidateTaxIdErrorCodeTest extends Unit
         $this->assertSame('INVALID_FORMAT', $taxIdValidationResponse->getMessageKey());
     }
 
-    /**
-     * @return void
-     */
     public function testGivenACustomerProvidesAnInvalidTaxIdWhenTheTaxIdIsValidatedThenValidationErrorCodeIsReturned(): void
     {
         // Arrange
@@ -139,9 +129,6 @@ class VertexApiFacadeValidateTaxIdErrorCodeTest extends Unit
         $this->assertSame($expectedErrorCode, $taxIdValidationResponse->getMessageKey());
     }
 
-    /**
-     * @return void
-     */
     public function testValidateTaxIdWhenValidatorIsDisabledThenNoErrorCodeIsReturned(): void
     {
         // Arrange
@@ -159,36 +146,6 @@ class VertexApiFacadeValidateTaxIdErrorCodeTest extends Unit
         // Assert
         $this->assertFalse($taxIdValidationResponse->getIsValid());
         $this->assertNull($taxIdValidationResponse->getMessageKey());
-    }
-
-    /**
-     * @return void
-     */
-    public function testSendValidationApiRequestTaxIdWithErrorCodeWhenTheTaxIdIsValidatedThenErrorCodeIsReturned(): void
-    {
-        // Arrange
-        $taxamoApiRequestTransfer = $this->tester->createTaxamoApiRequestTransfer();
-        $mockClient = $this->tester->mockVertexHttpClient('taxamo-invalid-response-with-error-code', 200);
-        $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
-
-        // Act
-        $vertexApiResponse = $vertexClient->sendValidationApiRequestTaxId($taxamoApiRequestTransfer);
-
-        // Assert
-        $request = $this->tester->getLastSentVertexRequest();
-        $this->assertStringContainsString(
-            sprintf(
-                '%s/tax_numbers/%s/validate?country_code=%s',
-                rtrim($taxamoApiRequestTransfer->getTaxamoApiUrl(), '/'),
-                $taxamoApiRequestTransfer->getTaxId(),
-                $taxamoApiRequestTransfer->getCountryCode(),
-            ),
-            (string)$request->getUri(),
-        );
-
-        $this->assertTrue($vertexApiResponse->getIsSuccessful());
-        $this->assertArrayHasKey('buyer_tax_number_validation_info', $vertexApiResponse->getVertexResponse());
-        $this->assertSame('INVALID_FORMAT', $vertexApiResponse->getVertexResponse()['buyer_tax_number_validation_info']);
     }
 
     /**

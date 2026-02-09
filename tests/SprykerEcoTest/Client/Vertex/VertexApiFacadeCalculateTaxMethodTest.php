@@ -11,17 +11,19 @@ use Codeception\PHPUnit\Constraint\JsonContains;
 use Codeception\Test\Unit;
 use Exception;
 use Generated\Shared\Transfer\VertexConfigTransfer;
+use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Response;
+use SprykerEco\Client\Vertex\Validator\VertexValidatorInterface;
+use SprykerEco\Client\Vertex\VertexClientInterface;
+use SprykerEco\Client\Vertex\VertexDependencyProvider;
+use SprykerEco\Client\Vertex\VertexFactory;
 
 /**
- * Auto-generated group annotations
- *
  * @group SprykerEcoTest
  * @group Client
  * @group Vertex
  * @group VertexApiFacadeCalculateQuoteTaxMethodTest
- * Add your own group annotations below this line
  */
 class VertexApiFacadeCalculateTaxMethodTest extends Unit
 {
@@ -223,6 +225,25 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         ]));
     }
 
+    public function testCalculateQuoteTaxMethodReturnsErrorWhenValidationFails(): void
+    {
+        // Arrange
+        $vertexConfigTransfer = $this->tester->haveVertexConfig();
+        $vertexCalculationRequestTransfer = $this->tester->haveVertexCalculationRequestTransfer();
+        $validationErrorMessages = ['sale.transactionId is required', 'sale.documentNumber is required'];
+        $mockValidator = $this->createMockValidator($validationErrorMessages);
+        $mockClient = $this->mockClientForVertexTaxQuotationRequest('vertex-tax-quotation-valid-response', 200);
+        $vertexClient = $this->getVertexClientWithMockedValidator($mockClient, $mockValidator);
+
+        // Act
+        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+
+        // Assert
+        $this->assertFalse($vertexCalculationResponseTransfer->getIsSuccessful());
+        $this->assertStringContainsString('sale.transactionId is required', $vertexCalculationResponseTransfer->getErrorMessage());
+        $this->assertStringContainsString('sale.documentNumber is required', $vertexCalculationResponseTransfer->getErrorMessage());
+    }
+
     protected function mockAndAssertThatClientUsesTheRightTransactionCallsUriToCallSuppliesEndpoint(string $expectedUrl): ClientInterface
     {
         $response = $this->tester->getVertexStandardResponse('vertex-tax-quotation-valid-response');
@@ -263,5 +284,64 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
             ->willReturn($response);
 
         return $mockClient;
+    }
+
+    /**
+     * @param array<string> $errorMessages
+     *
+     * @return \SprykerEco\Client\Vertex\Validator\VertexValidatorInterface
+     */
+    protected function createMockValidator(array $errorMessages): VertexValidatorInterface
+    {
+        $mockValidator = $this->makeEmpty(VertexValidatorInterface::class);
+        $validationResponse = (new VertexValidationResponseTransfer())
+            ->setIsValid(false)
+            ->setMessages($errorMessages);
+
+        $mockValidator->expects($this->once())
+            ->method('validate')
+            ->willReturn($validationResponse);
+
+        return $mockValidator;
+    }
+
+    /**
+     * @param \GuzzleHttp\ClientInterface $mockClient
+     * @param \SprykerEco\Client\Vertex\Validator\VertexValidatorInterface $mockValidator
+     *
+     * @return \SprykerEco\Client\Vertex\VertexClientInterface
+     */
+    protected function getVertexClientWithMockedValidator(ClientInterface $mockClient, VertexValidatorInterface $mockValidator): VertexClientInterface
+    {
+        $factoryMock = new class ($mockClient, $mockValidator) extends VertexFactory {
+            private ClientInterface $httpClient;
+            private VertexValidatorInterface $validator;
+
+            public function __construct(ClientInterface $httpClient, VertexValidatorInterface $validator)
+            {
+                $this->httpClient = $httpClient;
+                $this->validator = $validator;
+            }
+
+            public function createHttpClient(): ClientInterface
+            {
+                return $this->httpClient;
+            }
+
+            public function createVertexQuotationValidator(): VertexValidatorInterface
+            {
+                return $this->validator;
+            }
+
+            protected function getDependencyProvider()
+            {
+                return new VertexDependencyProvider();
+            }
+        };
+
+        $client = $this->tester->getClient();
+        $client->setFactory($factoryMock);
+
+        return $client;
     }
 }

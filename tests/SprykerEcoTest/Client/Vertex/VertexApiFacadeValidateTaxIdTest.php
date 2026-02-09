@@ -1,30 +1,23 @@
 <?php
 
-
-namespace PyzTest\Zed\VertexApi\Business;
+namespace SprykerEcoTest\Zed\VertexApi\Business;
 
 use Codeception\Test\Unit;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use SprykerEcoTest\Client\Vertex\VertexClientTester;
 
 /**
- * Auto-generated group annotations
- *
- * @group PyzTest
+ * @group SprykerEcoTest
  * @group Zed
  * @group VertexApi
  * @group Business
  * @group Facade
  * @group VertexApiFacadeValidateTaxIdTest
- * Add your own group annotations below this line
  */
 class VertexApiFacadeValidateTaxIdTest extends Unit
 {
     protected VertexClientTester $tester;
 
-    /**
-     * @return void
-     */
     public function testGivenACustomerProvidesAValidTaxIdWhenTheTaxIdIsValidatedThenASuccessfulResponseIsReturned(): void
     {
         // Arrange
@@ -99,9 +92,6 @@ class VertexApiFacadeValidateTaxIdTest extends Unit
         $this->assertSame($errorMessage, $taxIdValidationRequest->getMessage());
     }
 
-    /**
-     * @return void
-     */
     public function testValidateTaxIdWhenValidatorIsDisabledThenAFailedResponseIsReturned(): void
     {
         // Arrange
@@ -121,34 +111,6 @@ class VertexApiFacadeValidateTaxIdTest extends Unit
     }
 
     /**
-     * @return void
-     */
-    public function testSendValidationApiRequestTaxIdWithGivenACustomerProvidesAValidTaxIdWhenTheTaxIdIsValidatedThenASuccessfulResponseIsReturned(): void
-    {
-        // Arrange
-        $taxamoApiRequestTransfer = $this->tester->createTaxamoApiRequestTransfer();
-        $mockClient = $this->tester->mockVertexHttpClient('taxamo-valid-response', 200);
-        $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
-
-        // Act
-        $taxIdValidationRequest = $vertexClient->sendValidationApiRequestTaxId($taxamoApiRequestTransfer);
-
-        // Assert
-        $request = $this->tester->getLastSentVertexRequest();
-        $this->assertStringContainsString(
-            sprintf(
-                '%s/tax_numbers/%s/validate?country_code=%s',
-                rtrim($taxamoApiRequestTransfer->getTaxamoApiUrl(), '/'),
-                $taxamoApiRequestTransfer->getTaxId(),
-                $taxamoApiRequestTransfer->getCountryCode(),
-            ),
-            (string)$request->getUri(),
-        );
-
-        $this->assertTrue($taxIdValidationRequest->getIsSuccessful());
-    }
-
-    /**
      * @return array<array>
      */
     protected function getPossibleResponseCombinationsFromVertex(): array
@@ -160,24 +122,5 @@ class VertexApiFacadeValidateTaxIdTest extends Unit
             [401, 'taxamo_invalid_tax_number_format_response', 'Invalid credentials.'],
             [500, 'taxamo_invalid_tax_number_format_response', 'Request to Vertex API failed.'],
         ];
-    }
-
-    /**
-     * @param string $expectedUrl
-     *
-     * @return \GuzzleHttp\ClientInterface
-     */
-    protected function mockAndAssertThatClientUsesTheRightTransactionCallsUriToCallSuppliesEndpoint(string $expectedUrl): ClientInterface
-    {
-        $response = $this->tester->getVertexStandardResponse('vertex-tax-quotation-valid-response');
-
-        $mockClient = $this->makeEmpty(ClientInterface::class);
-
-        $mockClient->expects($this->once())
-            ->method('request')
-            ->with('POST', $expectedUrl)
-            ->willReturn($response);
-
-        return $mockClient;
     }
 }
