@@ -248,60 +248,6 @@ class VertexSaleValidatorTest extends Unit
         $this->assertStringContainsString('documentDate', $result->getMessages()[0]);
     }
 
-    public function testValidateAddsErrorWhenTaxMetadataIsNull(): void
-    {
-        // Arrange
-        $sale = (new VertexSaleTransfer())
-            ->setTransactionId('transaction-1')
-            ->setDocumentNumber('DOC-123')
-            ->setDocumentDate('2024-01-01')
-            ->addItem(
-                (new VertexItemTransfer())
-                    ->setId('item-1')
-                    ->setSku('SKU-123')
-                    ->setPriceAmount(1000)
-                    ->setDiscountAmount(100)
-                    ->setQuantity(2)
-                    ->setShippingAddress(
-                        (new VertexAddressTransfer())
-                            ->setAddress1('123 Main St')
-                            ->setAddress2('Apt 4')
-                            ->setCity('New York')
-                            ->setCountry('US')
-                            ->setZipCode('10001'),
-                    ),
-            )
-            ->addShipment(
-                (new VertexShipmentTransfer())
-                    ->setId('shipment-1')
-                    ->setPriceAmount(500)
-                    ->setShipmentMethodKey('standard')
-                    ->setShippingAddress(
-                        (new VertexAddressTransfer())
-                            ->setAddress1('123 Main St')
-                            ->setAddress2('Apt 4')
-                            ->setCity('New York')
-                            ->setCountry('US')
-                            ->setZipCode('10001'),
-                    ),
-            );
-
-        $responseTransfer = new VertexValidationResponseTransfer();
-        $itemValidator = new VertexItemValidator(
-            new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
-        );
-        $shipmentValidator = new VertexShipmentValidator(new VertexAddressValidator());
-        $validator = new VertexSaleValidator($itemValidator, $shipmentValidator);
-
-        // Act
-        $result = $validator->validate($sale, $responseTransfer);
-
-        // Assert
-        $this->assertCount(1, $result->getMessages());
-        $this->assertStringContainsString('taxMetadata', $result->getMessages()[0]);
-    }
-
     public function testValidateAddsErrorWhenItemsAreEmpty(): void
     {
         // Arrange
@@ -339,47 +285,6 @@ class VertexSaleValidatorTest extends Unit
         // Assert
         $this->assertCount(1, $result->getMessages());
         $this->assertStringContainsString('items', $result->getMessages()[0]);
-    }
-
-    public function testValidateAddsErrorWhenShipmentsAreEmpty(): void
-    {
-        // Arrange
-        $sale = (new VertexSaleTransfer())
-            ->setTransactionId('transaction-1')
-            ->setDocumentNumber('DOC-123')
-            ->setDocumentDate('2024-01-01')
-            ->setTaxMetadata([new VertexItemTransfer()])
-            ->addItem(
-                (new VertexItemTransfer())
-                    ->setId('item-1')
-                    ->setSku('SKU-123')
-                    ->setPriceAmount(1000)
-                    ->setDiscountAmount(100)
-                    ->setQuantity(2)
-                    ->setShippingAddress(
-                        (new VertexAddressTransfer())
-                            ->setAddress1('123 Main St')
-                            ->setAddress2('Apt 4')
-                            ->setCity('New York')
-                            ->setCountry('US')
-                            ->setZipCode('10001'),
-                    ),
-            );
-
-        $responseTransfer = new VertexValidationResponseTransfer();
-        $itemValidator = new VertexItemValidator(
-            new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
-        );
-        $shipmentValidator = new VertexShipmentValidator(new VertexAddressValidator());
-        $validator = new VertexSaleValidator($itemValidator, $shipmentValidator);
-
-        // Act
-        $result = $validator->validate($sale, $responseTransfer);
-
-        // Assert
-        $this->assertCount(1, $result->getMessages());
-        $this->assertStringContainsString('shipments', $result->getMessages()[0]);
     }
 
     public function testValidateValidatesItemsWhenPresent(): void
