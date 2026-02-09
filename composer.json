@@ -37,13 +37,12 @@
     },
     "suggest": {
         "spryker/calculation": "If you want to use Calculation plugin.",
-        "spryker/oms": "If you want to use SubmitPaymentTaxInvoicePlugin"
+        "spryker/oms": "If you want to use VertexSubmitPaymentTaxInvoicePlugin"
     },
     "autoload": {
         "psr-4": {
             "SprykerEco\\": "src/SprykerEco/",
-            "SprykerEcoTest\\Shared\\Vertex\\Helper\\": "tests/SprykerEcoTest/Shared/Vertex/_support/Helper/",
-            "SprykerEcoTest\\AsyncApi\\Vertex\\Helper\\": "tests/SprykerEcoTest/AsyncApi/Vertex/_support/Helper/"
+            "SprykerEcoTest\\Shared\\Vertex\\Helper\\": "tests/SprykerEcoTest/Shared/Vertex/_support/Helper/"
         }
     },
     "autoload-dev": {
