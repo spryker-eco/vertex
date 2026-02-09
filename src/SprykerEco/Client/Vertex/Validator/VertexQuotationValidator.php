@@ -15,7 +15,7 @@ class VertexQuotationValidator implements VertexValidatorInterface
 {
     protected const ERROR_FIELD_IS_REQUIRED = 'Field %s is required';
 
-    public function __construct(protected VertexSaleValidator $saleValidator)
+    public function __construct(protected VertexSaleValidatorInterface $saleValidator)
     {
     }
 

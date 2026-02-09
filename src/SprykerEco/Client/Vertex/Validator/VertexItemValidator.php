@@ -15,32 +15,18 @@ class VertexItemValidator implements VertexItemValidatorInterface
     protected const ERROR_ITEM_FIELD_IS_REQUIRED = 'Field %s is required for item %s';
 
     /**
-     * @var \SprykerEco\Client\Vertex\Validator\VertexAddressValidator
-     */
-    protected $addressValidator;
-
-    /**
-     * @var \SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidator
-     */
-    protected $shippingWarehouseValidator;
-
-    /**
-     * @param \SprykerEco\Client\Vertex\Validator\VertexAddressValidator $addressValidator
-     * @param \SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidator $shippingWarehouseValidator
+     * @param \SprykerEco\Client\Vertex\Validator\VertexAddressValidatorInterface $addressValidator
+     * @param \SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidatorInterface $shippingWarehouseValidator
      */
     public function __construct(
-        VertexAddressValidator $addressValidator,
-        VertexShippingWarehouseValidator $shippingWarehouseValidator
+        protected VertexAddressValidatorInterface $addressValidator,
+        protected VertexShippingWarehouseValidatorInterface $shippingWarehouseValidator
     ) {
-        $this->addressValidator = $addressValidator;
-        $this->shippingWarehouseValidator = $shippingWarehouseValidator;
     }
 
     /**
      * @param \Generated\Shared\Transfer\VertexItemTransfer $vertexItemTransfer
-     * @param string $fieldName
      * @param \Generated\Shared\Transfer\VertexValidationResponseTransfer $vertexValidationResponseTransfer
-     * @param bool $requireRefundableAmount
      *
      * @return void
      */

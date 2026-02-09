@@ -14,11 +14,8 @@ class VertexShippingWarehouseValidator implements VertexShippingWarehouseValidat
 {
     protected const ERROR_WAREHOUSE_FIELD_IS_REQUIRED = 'Field %s is required for shipping warehouse';
 
-    protected VertexAddressValidator $addressValidator;
-
-    public function __construct(VertexAddressValidator $addressValidator)
+    public function __construct(protected VertexAddressValidatorInterface $addressValidator)
     {
-        $this->addressValidator = $addressValidator;
     }
 
     public function validate(

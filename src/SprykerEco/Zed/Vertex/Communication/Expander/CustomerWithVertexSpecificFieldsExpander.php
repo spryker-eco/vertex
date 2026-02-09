@@ -40,7 +40,7 @@ class CustomerWithVertexSpecificFieldsExpander
     /**
      * @param \Generated\Shared\Transfer\OrderTransfer|\Generated\Shared\Transfer\CalculableObjectTransfer $transfer
      *
-     * @return array<array>
+     * @return array<mixed>
      */
     private function getCustomerData(OrderTransfer|CalculableObjectTransfer $transfer): array
     {

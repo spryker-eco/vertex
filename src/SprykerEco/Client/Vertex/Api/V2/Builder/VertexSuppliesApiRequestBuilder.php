@@ -14,7 +14,7 @@ class VertexSuppliesApiRequestBuilder
     /**
      * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function buildVertexSuppliesRequest(VertexSuppliesTransfer $vertexSuppliesTransfer): array
     {

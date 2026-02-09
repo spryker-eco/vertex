@@ -30,9 +30,9 @@ class VertexSuppliesMetadataBuilder implements VertexSuppliesRequestBuilderInter
     }
 
     /**
-     * @param array $metadataArray
+     * @param array<mixed> $metadataArray
      *
-     * @return array
+     * @return array<mixed>
      */
     protected function filterArrayEmptyValues(array $metadataArray): array
     {

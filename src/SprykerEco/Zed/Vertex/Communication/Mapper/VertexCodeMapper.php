@@ -74,7 +74,7 @@ class VertexCodeMapper
     ];
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     protected $exemptionsCertificates = [
         0 => 'Vertex Exemption Certificate',
@@ -109,7 +109,7 @@ class VertexCodeMapper
     }
 
     /**
-     * @param array $fixturesData
+     * @param array<mixed> $fixturesData
      * @param string $field
      *
      * @return void
@@ -172,7 +172,7 @@ class VertexCodeMapper
     }
 
     /**
-     * @param array $classCodes
+     * @param array<mixed> $classCodes
      * @param string|null $key
      *
      * @return string

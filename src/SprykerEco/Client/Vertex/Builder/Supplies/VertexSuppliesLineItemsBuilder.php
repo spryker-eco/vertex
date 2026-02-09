@@ -141,7 +141,7 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
             $vertexItemTransfer->getId() . '_' . $idIndex++,
         );
 
-        $clonedItemTransfer->setQuantity((string)$vertexShippingWarehouseTransfer->getQuantityOrFail());
+        $clonedItemTransfer->setQuantity($vertexShippingWarehouseTransfer->getQuantityOrFail());
 
         $clonedItemTransfer->setWarehouseAddressOrFail(
             $vertexShippingWarehouseTransfer->getWarehouseAddressOrFail(),

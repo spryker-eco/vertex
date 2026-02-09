@@ -68,7 +68,7 @@ class FilteringMessageFormatter implements MessageFormatterInterface
      * @param \Psr\Http\Message\ResponseInterface|null $originalResponse
      * @param \Throwable|null $error
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function extractContext(RequestInterface $originalRequest, ?ResponseInterface $originalResponse = null, ?Throwable $error = null): array
     {
@@ -148,9 +148,9 @@ class FilteringMessageFormatter implements MessageFormatterInterface
     }
 
     /**
-     * @param array $contents
+     * @param array<mixed> $contents
      *
-     * @return array
+     * @return array<mixed>
      */
     protected function filterContents(array $contents): array
     {

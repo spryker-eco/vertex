@@ -15,11 +15,11 @@ class PriceConverter
     protected const CURRENCY_DENOMINATION_DEFAULT = 100;
 
     /**
-     * @param string $priceAmount
+     * @param int|string $priceAmount
      *
      * @return float
      */
-    public function convertPriceForVertex(string $priceAmount): float
+    public function convertPriceForVertex(int|string $priceAmount): float
     {
         if (!$priceAmount) {
             return 0;
@@ -29,11 +29,11 @@ class PriceConverter
     }
 
     /**
-     * @param string $priceAmount
+     * @param int|string $priceAmount
      *
      * @return float
      */
-    public function convertToNegatedPriceForVertex(string $priceAmount): float
+    public function convertToNegatedPriceForVertex(int|string $priceAmount): float
     {
         return -1 * $this->convertPriceForVertex($priceAmount);
     }

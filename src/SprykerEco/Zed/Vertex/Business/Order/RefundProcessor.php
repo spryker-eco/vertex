@@ -17,7 +17,7 @@ use Spryker\Zed\Sales\Business\SalesFacadeInterface;
 use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
-use SprykerEco\Zed\Vertex\Business\Mapper\vertexMapperInterface;
+use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 
 class RefundProcessor implements RefundProcessorInterface
@@ -28,7 +28,7 @@ class RefundProcessor implements RefundProcessorInterface
      * @param \SprykerEco\Client\Vertex\VertexClientInterface $vertexClient
      * @param \Spryker\Zed\Store\Business\StoreFacadeInterface $storeFacade
      * @param \Spryker\Zed\Sales\Business\SalesFacadeInterface $salesFacade
-     * @param \SprykerEco\Zed\Vertex\Business\Mapper\vertexMapperInterface $vertexMapper
+     * @param \SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface $vertexMapper
      * @param array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface|\Spryker\Zed\TaxAppExtension\Dependency\Plugin\OrderTaxAppExpanderPluginInterface> $orderVertexExpanderPlugins
      * @param \SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface $vertexAccessTokenProvider
      * @param \SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface $configResolver
@@ -37,7 +37,7 @@ class RefundProcessor implements RefundProcessorInterface
         protected VertexClientInterface $vertexClient,
         protected StoreFacadeInterface $storeFacade,
         protected SalesFacadeInterface $salesFacade,
-        protected vertexMapperInterface $vertexMapper,
+        protected VertexMapperInterface $vertexMapper,
         protected array $orderVertexExpanderPlugins,
         protected VertexAccessTokenProviderInterface $vertexAccessTokenProvider,
         protected VertexConfigResolverInterface $configResolver,
@@ -105,6 +105,12 @@ class RefundProcessor implements RefundProcessorInterface
         return $orderTransfer;
     }
 
+    /**
+     * @param array<int> $orderItemIds
+     * @param int $idSalesOrder
+     *
+     * @return \Generated\Shared\Transfer\OrderTransfer|null
+     */
     protected function createOrderWithItemsToBeRefunded(array $orderItemIds, int $idSalesOrder): ?OrderTransfer
     {
         $orderTransfer = $this->salesFacade->findOrderByIdSalesOrder($idSalesOrder);

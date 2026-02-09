@@ -38,7 +38,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
         protected VertexMapperInterface $vertexMapper,
         protected array $orderVertexExpanderPlugins,
         protected VertexConfigResolverInterface $configResolver,
-        protected VertexAccessTokenProviderInterface $accessTokenProvider,
+        protected VertexAccessTokenProviderInterface $vertexAccessTokenProvider,
         protected VertexClientInterface $vertexClient,
     ) {
     }
@@ -82,7 +82,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
             return;
         }
 
-        $vertexApiAccessTokenTransfer = $this->accessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
+        $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 
         $vertexCalculationRequestTransfer = (new VertexCalculationRequestTransfer())
             ->setSale($vertexSaleTransfer)
@@ -108,13 +108,13 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
     }
 
     /**
-     * @param \Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer $submitPaymentTaxInvoiceTransfer
+     * @param \Generated\Shared\Transfer\VertexSubmitPaymentTaxInvoiceTransfer $vertexSubmitPaymentTaxInvoiceTransfer
      * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer
      *
      * @return void
      */
     protected function setMessageAttributesTransfer(
-        VertexSubmitPaymentTaxInvoiceTransfer $submitPaymentTaxInvoiceTransfer,
+        VertexSubmitPaymentTaxInvoiceTransfer $vertexSubmitPaymentTaxInvoiceTransfer,
         OrderTransfer $orderTransfer
     ): void {
         $storeTransfer = $this->storeFacade->getStoreByName($orderTransfer->getStoreOrFail());
@@ -122,7 +122,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
         $messageAttributesTransfer = new MessageAttributesTransfer();
         $messageAttributesTransfer->setStoreReference($storeTransfer->getStoreReference());
 
-        $submitPaymentTaxInvoiceTransfer->setMessageAttributes($messageAttributesTransfer);
+        $vertexSubmitPaymentTaxInvoiceTransfer->setMessageAttributes($messageAttributesTransfer);
     }
 
     /**

@@ -54,13 +54,13 @@ class VertexSuppliesResponseBuilder implements VertexSuppliesResponseBuilderInte
             if ($lineItemTaxes[$itemId] < 0) {
                 $refundedTaxTotal = $refundedTaxTotal + $lineItemTaxes[$itemId];
 
-                $item->setRefundedTaxTotal($this->priceConverter->convertPriceForSpryker($lineItemTaxes[$itemId]));
-                $item->setTaxTotal($this->priceConverter->convertPriceForSpryker(0));
+                $item->setRefundedTaxTotal((int)$this->priceConverter->convertPriceForSpryker($lineItemTaxes[$itemId]));
+                $item->setTaxTotal((int)$this->priceConverter->convertPriceForSpryker(0));
 
                 continue;
             }
 
-            $item->setTaxTotal($this->priceConverter->convertPriceForSpryker($lineItemTaxes[$itemId]));
+            $item->setTaxTotal((int)$this->priceConverter->convertPriceForSpryker($lineItemTaxes[$itemId]));
         }
 
         foreach ($vertexSaleTransfer->getShipments() as $shipment) {
@@ -72,20 +72,20 @@ class VertexSuppliesResponseBuilder implements VertexSuppliesResponseBuilderInte
             if ($lineItemTaxes[$shipmentId] < 0) {
                 $refundedTaxTotal = $refundedTaxTotal + $lineItemTaxes[$shipmentId];
 
-                $shipment->setRefundedTaxTotal($this->priceConverter->convertPriceForSpryker($lineItemTaxes[$shipmentId]));
-                $shipment->setTaxTotal($this->priceConverter->convertPriceForSpryker(0));
+                $shipment->setRefundedTaxTotal((int)$this->priceConverter->convertPriceForSpryker($lineItemTaxes[$shipmentId]));
+                $shipment->setTaxTotal((int)$this->priceConverter->convertPriceForSpryker(0));
 
                 continue;
             }
 
-            $shipment->setTaxTotal($this->priceConverter->convertPriceForSpryker($lineItemTaxes[$shipmentId]));
+            $shipment->setTaxTotal((int)$this->priceConverter->convertPriceForSpryker($lineItemTaxes[$shipmentId]));
         }
 
         // It is still necessary to return the correct total tax amount for the order including the refunded tax amount.
         $taxTotal = $totalTax - $refundedTaxTotal;
 
-        $vertexSaleTransfer->setTaxTotal($this->priceConverter->convertPriceForSpryker($taxTotal));
-        $vertexSaleTransfer->setRefundedTaxTotal($this->priceConverter->convertPriceForSpryker($refundedTaxTotal));
+        $vertexSaleTransfer->setTaxTotal((int)$this->priceConverter->convertPriceForSpryker($taxTotal));
+        $vertexSaleTransfer->setRefundedTaxTotal((int)$this->priceConverter->convertPriceForSpryker($refundedTaxTotal));
 
         return (new VertexCalculationResponseTransfer())
             ->setSale($vertexSaleTransfer)
