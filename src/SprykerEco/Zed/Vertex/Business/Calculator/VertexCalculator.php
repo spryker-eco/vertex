@@ -106,7 +106,7 @@ class VertexCalculator implements VertexCalculatorInterface
                 ->setErrorMessage(static::ERROR_MESSAGE_MISSING_VERTEX_ACCESS_TOKEN);
         }
 
-        return $this->vertexClient->calculateQuoteTax(
+        return $this->vertexClient->calculateTax(
             (new VertexCalculationRequestTransfer())
                 ->setSale($vertexSaleTransfer)
                 ->setVertexApiAccessToken($vertexApiAccessTokenTransfer),

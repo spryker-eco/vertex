@@ -87,7 +87,7 @@ class RefundProcessor implements RefundProcessorInterface
         $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 
         //TODO: Add an early return if the access token is not available
-        $this->vertexClient->calculateOrderTax(
+        $this->vertexClient->sendTaxRefund(
             (new VertexCalculationRequestTransfer())
                 ->setSale($vertexSaleTransfer)
                 ->setReportingDate((new DateTime())->format('Y-m-d'))

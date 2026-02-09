@@ -96,7 +96,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
             ],
         );
 
-        $vertexCalculationResponseTransfer = $this->vertexClient->calculateOrderTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexCalculationResponseTransfer = $this->vertexClient->sendTaxInvoice($vertexCalculationRequestTransfer, $vertexConfigTransfer);
 
         $this->getLogger()->info(
             'Finished tax calculation request for invoicing process',
