@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Spryker Suite.
- * For full license information, please view the LICENSE file that was distributed with this source code.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
 namespace SprykerEcoTest\Client\Vertex\Builder;
@@ -20,7 +20,6 @@ use SprykerEcoTest\Client\Vertex\VertexClientTester;
  * @group Builder
  * @group SuppliesRequestBuilderTest
  * Add your own group annotations below this line
- * 
  */
 class SuppliesRequestBuilderTest extends Unit
 {

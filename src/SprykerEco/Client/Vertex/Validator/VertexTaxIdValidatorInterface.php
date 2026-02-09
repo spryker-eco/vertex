@@ -1,15 +1,15 @@
 <?php
 
 /**
- * This file is part of the Spryker Suite.
- * For full license information, please view the LICENSE file that was distributed with this source code.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
 namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
-use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
+use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
 interface VertexTaxIdValidatorInterface
 {
@@ -19,5 +19,8 @@ interface VertexTaxIdValidatorInterface
      *
      * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
      */
-    public function validate(TaxIdValidationRequestTransfer $taxIdValidationRequest, VertexConfigTransfer $vertexConfigTransfer): VertexValidationResponseTransfer;
+    public function validate(
+        TaxIdValidationRequestTransfer $taxIdValidationRequest,
+        VertexConfigTransfer $vertexConfigTransfer
+    ): VertexValidationResponseTransfer;
 }

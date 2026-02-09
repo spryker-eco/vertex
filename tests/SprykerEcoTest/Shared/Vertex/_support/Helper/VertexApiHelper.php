@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Spryker Suite.
- * For full license information, please view the LICENSE file that was distributed with this source code.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
 namespace SprykerEcoTest\Shared\Vertex\Helper;
@@ -11,13 +11,10 @@ use Codeception\Module;
 use Generated\Shared\DataBuilder\SaleBuilder;
 use Generated\Shared\DataBuilder\SaleItemBuilder;
 use Generated\Shared\DataBuilder\ShipmentBuilder;
-use Generated\Shared\DataBuilder\ShippingWarehouseBuilder;
 use Generated\Shared\DataBuilder\SubmitPaymentTaxInvoiceBuilder;
 use Generated\Shared\DataBuilder\TaxamoApiRequestBuilder;
-use Generated\Shared\DataBuilder\TaxCalculationRequestBuilder;
 use Generated\Shared\DataBuilder\TaxIdValidationRequestBuilder;
 use Generated\Shared\DataBuilder\VertexApiAccessTokenBuilder;
-use Generated\Shared\DataBuilder\VertexApiAuthResponseBuilder;
 use Generated\Shared\DataBuilder\VertexApiCredentialBuilder;
 use Generated\Shared\DataBuilder\VertexCalculationRequestBuilder;
 use Generated\Shared\DataBuilder\VertexConfigBuilder;
@@ -25,11 +22,8 @@ use Generated\Shared\DataBuilder\VertexItemBuilder;
 use Generated\Shared\DataBuilder\VertexSaleBuilder;
 use Generated\Shared\DataBuilder\VertexShipmentBuilder;
 use Generated\Shared\DataBuilder\VertexShippingWarehouseBuilder;
-use Generated\Shared\Transfer\SaleItemTransfer;
-use Generated\Shared\Transfer\ShippingWarehouseTransfer;
 use Generated\Shared\Transfer\SubmitPaymentTaxInvoiceTransfer;
 use Generated\Shared\Transfer\TaxamoApiRequestTransfer;
-use Generated\Shared\Transfer\TaxCalculationRequestTransfer;
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexApiAccessTokenTransfer;
 use Generated\Shared\Transfer\VertexApiCredentialTransfer;
@@ -218,7 +212,6 @@ class VertexApiHelper extends Module
         return $taxCalculationRequestTransfer;
     }
 
-    
     /**
      * @param array $seed
      *
@@ -229,7 +222,7 @@ class VertexApiHelper extends Module
         return (new VertexConfigBuilder($seed))
             ->build();
     }
-    
+
     /**
      * @param array $seed
      *

@@ -10,7 +10,7 @@ namespace SprykerEco\Zed\Vertex\Communication\Mapper;
 class VertexCodeMapper
 {
     /**
-     * @var string[]
+     * @var array<string>
      */
     protected $customerCodes = [
         0 => 'VCCC_0',
@@ -26,7 +26,7 @@ class VertexCodeMapper
     ];
 
     /**
-     * @var string[]
+     * @var array<string>
      */
     protected array $productCodes = [
         0 => 'VPCC_0',
@@ -42,7 +42,7 @@ class VertexCodeMapper
     ];
 
     /**
-     * @var string[]
+     * @var array<string>
      */
     protected array $productOptionCodes = [
         0 => 'VPCC_0',
@@ -58,7 +58,7 @@ class VertexCodeMapper
     ];
 
     /**
-     * @var string[]
+     * @var array<string>
      */
     protected array $expenseCodes = [
         0 => 'VPCC_0',

@@ -21,7 +21,6 @@ use Generated\Shared\DataBuilder\ShipmentBuilder;
 use Generated\Shared\DataBuilder\ShipmentMethodBuilder;
 use Generated\Shared\DataBuilder\StockAddressBuilder;
 use Generated\Shared\Transfer\AccessTokenResponseTransfer;
-use Generated\Shared\Transfer\AcpHttpResponseTransfer;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\CalculableObjectTransfer;
 use Generated\Shared\Transfer\CustomerTransfer;
@@ -33,31 +32,23 @@ use Generated\Shared\Transfer\QuoteTransfer;
 use Generated\Shared\Transfer\StockAddressTransfer;
 use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\TaxAppConfigTransfer;
-use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfig;
 use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfigQuery;
-use Orm\Zed\TaxApp\Persistence\SpyTaxIdValidationHistoryQuery;
 use Orm\Zed\Vertex\Persistence\SpyVertexTaxIdValidationHistoryQuery;
-use PHPUnit\Framework\Constraint\Callback;
 use ReflectionProperty;
-use Spryker\Client\TaxApp\TaxAppClient;
 use Spryker\Shared\Oms\OmsConstants;
 use Spryker\Zed\Calculation\Business\CalculationBusinessFactory;
 use Spryker\Zed\Calculation\Business\CalculationFacade;
 use Spryker\Zed\Calculation\CalculationDependencyProvider;
 use Spryker\Zed\Calculation\Dependency\Service\CalculationToUtilTextBridge;
 use Spryker\Zed\Kernel\Container;
-use Spryker\Zed\KernelApp\Business\KernelAppFacadeInterface;
 use Spryker\Zed\MerchantProfile\Communication\Plugin\TaxApp\MerchantProfileAddressCalculableObjectTaxAppExpanderPlugin;
-use Spryker\Zed\MerchantProfile\Communication\Plugin\Vertex\MerchantProfileAddressCalculableObjectVertexExpanderPlugin;
 use Spryker\Zed\Oms\Business\OrderStateMachine\PersistenceManager;
-use Spryker\Zed\TaxApp\Dependency\Facade\TaxAppToKernelAppFacadeBridge;
 use Spryker\Zed\TaxApp\Dependency\Facade\TaxAppToOauthClientFacadeBridge;
-use Spryker\Zed\TaxApp\TaxAppDependencyProvider;
 use SprykerEco\Client\Vertex\VertexClient;
 use SprykerEco\Zed\Vertex\VertexDependencyProvider;
-use SprykerEcoTest\Shared\Vertex\Plugins\CalculableObjectVertexExpanderPlugin;
 
 /**
  * Inherited Methods
@@ -416,7 +407,7 @@ class VertexBusinessTester extends Actor
         $vertexClientMock->expects(Expected::once()->getMatcher())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('some-access-token')
-                ->setExpiresIn(100000)
+                ->setExpiresIn(100000),
         );
         $this->setDependency('CLIENT_VERTEX', $vertexClientMock);
     }

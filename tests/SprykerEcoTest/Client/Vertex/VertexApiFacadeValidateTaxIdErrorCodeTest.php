@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the Spryker Suite.
- * For full license information, please view the LICENSE file that was distributed with this source code.
- */
 
 namespace PyzTest\Zed\VertexApi\Business;
 
@@ -40,7 +36,7 @@ class VertexApiFacadeValidateTaxIdErrorCodeTest extends Unit
 
         $mockClient = $this->tester->mockVertexHttpClient('taxamo-invalid-response-with-error-code');
         $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
-       
+
         $taxIdValidationRequestTransfer = $this->tester->haveTaxIdValidationRequestTransfer();
 
         // Act

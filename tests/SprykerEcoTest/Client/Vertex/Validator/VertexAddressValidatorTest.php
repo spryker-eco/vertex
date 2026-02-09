@@ -165,4 +165,3 @@ class VertexAddressValidatorTest extends Unit
         $this->assertStringContainsString('testField.zipCode', $responseTransfer->getMessages()[2]);
     }
 }
-

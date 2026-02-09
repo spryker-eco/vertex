@@ -7,9 +7,7 @@
 
 namespace SprykerEco\Client\Vertex\Validator;
 
-use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
-use Generated\Shared\Transfer\VertexShipmentTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
 class VertexSaleValidator implements VertexSaleValidatorInterface
@@ -19,7 +17,8 @@ class VertexSaleValidator implements VertexSaleValidatorInterface
     public function __construct(
         protected VertexItemValidatorInterface $itemValidator,
         protected VertexShipmentValidatorInterface $shipmentValidator
-    ) {}
+    ) {
+    }
 
     public function validate(
         VertexSaleTransfer $vertexSaleTransfer,
@@ -66,4 +65,3 @@ class VertexSaleValidator implements VertexSaleValidatorInterface
         return $vertexValidationResponseTransfer;
     }
 }
-

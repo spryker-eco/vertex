@@ -23,7 +23,8 @@ class Calculator implements CalculatorInterface
         protected FallbackCalculatorInterface $fallbackQuoteCalculator,
         protected FallbackCalculatorInterface $fallbackOrderCalculator,
         protected VertexCalculatorInterface $vertexCalculator
-    ) {}
+    ) {
+    }
 
     /**
      * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer

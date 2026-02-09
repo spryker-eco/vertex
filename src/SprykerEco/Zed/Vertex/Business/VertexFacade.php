@@ -9,8 +9,6 @@ namespace SprykerEco\Zed\Vertex\Business;
 
 use Generated\Shared\Transfer\CalculableObjectTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
-use Generated\Shared\Transfer\VertexConfigCriteriaTransfer;
-use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Spryker\Zed\Kernel\Business\AbstractFacade;
@@ -45,7 +43,7 @@ class VertexFacade extends AbstractFacade implements VertexFacadeInterface
      *
      * @return void
      */
-    public function handleSubmitPaymentTaxInvoice(OrderTransfer  $orderTransfer): void
+    public function handleSubmitPaymentTaxInvoice(OrderTransfer $orderTransfer): void
     {
         $this->getFactory()->createPaymentSubmitTaxInvoiceHandler()->handleSubmitPaymentTaxInvoice($orderTransfer);
     }

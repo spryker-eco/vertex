@@ -10,7 +10,6 @@ namespace SprykerEco\Client\Vertex\Zed;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Spryker\Client\ZedRequest\ZedRequestClientInterface;
-use SprykerEco\Client\Vertex\Zed\VertexStubInterface;
 
 class VertexStub implements VertexStubInterface
 {
@@ -22,10 +21,10 @@ class VertexStub implements VertexStubInterface
     }
 
    /**
-     * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $vertexValidationRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
-     */
+    * @param \Generated\Shared\Transfer\VertexValidationRequestTransfer $vertexValidationRequestTransfer
+    *
+    * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
+    */
     public function requestTaxIdValidation(VertexValidationRequestTransfer $vertexValidationRequestTransfer): VertexValidationResponseTransfer
     {
         /** @var \Generated\Shared\Transfer\VertexValidationResponseTransfer $vertexValidationResponseTransfer */

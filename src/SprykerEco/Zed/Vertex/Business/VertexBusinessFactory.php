@@ -12,9 +12,9 @@ use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use Spryker\Zed\Sales\Business\SalesFacadeInterface;
 use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerEco\Client\Vertex\Validator\VertexAddressValidator;
+use SprykerEco\Client\Vertex\Validator\VertexInvoiceValidator;
 use SprykerEco\Client\Vertex\Validator\VertexItemValidator;
 use SprykerEco\Client\Vertex\Validator\VertexQuotationValidator;
-use SprykerEco\Client\Vertex\Validator\VertexInvoiceValidator;
 use SprykerEco\Client\Vertex\Validator\VertexSaleValidator;
 use SprykerEco\Client\Vertex\Validator\VertexShipmentValidator;
 use SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidator;
@@ -53,10 +53,9 @@ use SprykerEco\Zed\Vertex\VertexDependencyProvider;
  */
 class VertexBusinessFactory extends AbstractBusinessFactory
 {
-
-    /**
-     * @return \Spryker\Zed\Store\Business\StoreFacadeInterface
-     */
+ /**
+  * @return \Spryker\Zed\Store\Business\StoreFacadeInterface
+  */
     public function getStoreFacade(): StoreFacadeInterface
     {
         return $this->getProvidedDependency(VertexDependencyProvider::FACADE_STORE);
@@ -88,7 +87,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
             $this->createVertexConfigResolver(),
             $this->createFallbackQuoteCalculator(),
             $this->createFallbackOrderCalculator(),
-            $this->createVertexCalculator()
+            $this->createVertexCalculator(),
         );
     }
 
@@ -240,7 +239,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     {
         return new VertexItemValidator(
             $this->createAddressValidator(),
-            $this->createShippingWarehouseValidator()
+            $this->createShippingWarehouseValidator(),
         );
     }
 
@@ -259,7 +258,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     {
         return new VertexSaleValidator(
             $this->createItemValidator(),
-            $this->createShipmentValidator()
+            $this->createShipmentValidator(),
         );
     }
 
@@ -300,7 +299,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
         return new VertexConfigResolver(
             $this->getConfig(),
             $this->getStoreFacade(),
-            $this->createVertexConfigValidator()
+            $this->createVertexConfigValidator(),
         );
     }
 

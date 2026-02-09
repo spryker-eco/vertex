@@ -51,7 +51,8 @@ class VertexFacadeRefundTest extends Unit
         }, $orderTransfer->getItems()->getArrayCopy());
 
         $this->tester->setConfig(
-            VertexConstants::IS_INVOICING_ENABLED, true
+            VertexConstants::IS_INVOICING_ENABLED,
+            true,
         );
 
         $vertexClientMock = $this->createMock(VertexClient::class);
@@ -61,7 +62,7 @@ class VertexFacadeRefundTest extends Unit
         $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
+                ->setExpiresIn(1000),
         );
         $this->tester->setDependency('CLIENT_VERTEX', $vertexClientMock);
 
@@ -81,7 +82,8 @@ class VertexFacadeRefundTest extends Unit
         }, $orderTransfer->getItems()->getArrayCopy());
 
         $this->tester->setConfig(
-            VertexConstants::IS_INVOICING_ENABLED, false
+            VertexConstants::IS_INVOICING_ENABLED,
+            false,
         );
 
         $vertexClientMock = $this->createMock(VertexClient::class);

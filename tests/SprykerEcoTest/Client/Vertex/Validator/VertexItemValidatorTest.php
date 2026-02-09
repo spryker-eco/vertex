@@ -43,13 +43,13 @@ class VertexItemValidatorTest extends Unit
                     ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
-                    ->setZipCode('10001')
+                    ->setZipCode('10001'),
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
         $validator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
 
         // Act
@@ -73,13 +73,13 @@ class VertexItemValidatorTest extends Unit
                     ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
-                    ->setZipCode('10001')
+                    ->setZipCode('10001'),
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
         $validator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
 
         // Act
@@ -105,13 +105,13 @@ class VertexItemValidatorTest extends Unit
                     ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
-                    ->setZipCode('10001')
+                    ->setZipCode('10001'),
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
         $validator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
 
         // Act
@@ -137,13 +137,13 @@ class VertexItemValidatorTest extends Unit
                     ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
-                    ->setZipCode('10001')
+                    ->setZipCode('10001'),
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
         $validator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
 
         // Act
@@ -168,13 +168,13 @@ class VertexItemValidatorTest extends Unit
                     ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
-                    ->setZipCode('10001')
+                    ->setZipCode('10001'),
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
         $validator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
 
         // Act
@@ -199,13 +199,13 @@ class VertexItemValidatorTest extends Unit
                     ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
-                    ->setZipCode('10001')
+                    ->setZipCode('10001'),
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
         $validator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
 
         // Act
@@ -229,7 +229,7 @@ class VertexItemValidatorTest extends Unit
         $responseTransfer = new VertexValidationResponseTransfer();
         $validator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
 
         // Act
@@ -251,14 +251,14 @@ class VertexItemValidatorTest extends Unit
             ->setQuantity(2)
             ->setShippingAddress(
                 (new VertexAddressTransfer())
-                    ->setAddress1('123 Main St')
-            // Missing city, country, zipCode
+                    ->setAddress1('123 Main St'),
+                // Missing city, country, zipCode
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
         $validator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
 
         // Act
@@ -284,18 +284,18 @@ class VertexItemValidatorTest extends Unit
                     ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
-                    ->setZipCode('10001')
+                    ->setZipCode('10001'),
             )
             ->setSellerAddress(
                 (new VertexAddressTransfer())
-                    ->setAddress1('456 Seller St')
-            // Missing city, country, zipCode
+                    ->setAddress1('456 Seller St'),
+                // Missing city, country, zipCode
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
         $validator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
 
         // Act
@@ -321,18 +321,18 @@ class VertexItemValidatorTest extends Unit
                     ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
-                    ->setZipCode('10001')
+                    ->setZipCode('10001'),
             )
             ->setBillingAddress(
                 (new VertexAddressTransfer())
-                    ->setAddress1('789 Billing St')
-            // Missing city, country, zipCode
+                    ->setAddress1('789 Billing St'),
+                // Missing city, country, zipCode
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
         $validator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
 
         // Act
@@ -358,7 +358,7 @@ class VertexItemValidatorTest extends Unit
                     ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
-                    ->setZipCode('10001')
+                    ->setZipCode('10001'),
             )
             ->addVertexShippingWarehouse(
                 (new VertexShippingWarehouseTransfer())
@@ -368,14 +368,14 @@ class VertexItemValidatorTest extends Unit
                             ->setAddress1('Warehouse St')
                             ->setCity('New York')
                             ->setCountry('US')
-                            ->setZipCode('10001')
-                    )
+                            ->setZipCode('10001'),
+                    ),
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
         $validator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
 
         // Act
@@ -386,4 +386,3 @@ class VertexItemValidatorTest extends Unit
         $this->assertStringContainsString('quantity', $responseTransfer->getMessages()[0]);
     }
 }
-

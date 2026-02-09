@@ -18,4 +18,3 @@ interface VertexAddressValidatorInterface
         VertexValidationResponseTransfer $vertexValidationResponseTransfer
     ): void;
 }
-

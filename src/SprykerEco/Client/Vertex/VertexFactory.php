@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Spryker Suite.
- * For full license information, please view the LICENSE file that was distributed with this source code.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
 namespace SprykerEco\Client\Vertex;
@@ -17,6 +17,10 @@ use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use Spryker\Client\Kernel\AbstractFactory;
+use Spryker\Client\ZedRequest\ZedRequestClientInterface;
+use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
+use Spryker\Shared\Log\LoggerTrait;
 use SprykerEco\Client\Vertex\Api\V2\Builder\VertexSuppliesApiRequestBuilder;
 use SprykerEco\Client\Vertex\Api\V2\Client\SecurityApi;
 use SprykerEco\Client\Vertex\Api\V2\Client\SecurityApiInterface;
@@ -56,25 +60,21 @@ use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilder;
 use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterface;
 use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculator;
 use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface;
-use SprykerEco\Client\Vertex\Validator\VertexInvoiceValidator;
-use SprykerEco\Client\Vertex\Validator\VertexQuotationValidator;
 use SprykerEco\Client\Vertex\Validator\VertexAddressValidator;
 use SprykerEco\Client\Vertex\Validator\VertexAddressValidatorInterface;
+use SprykerEco\Client\Vertex\Validator\VertexInvoiceValidator;
 use SprykerEco\Client\Vertex\Validator\VertexItemValidator;
 use SprykerEco\Client\Vertex\Validator\VertexItemValidatorInterface;
+use SprykerEco\Client\Vertex\Validator\VertexQuotationValidator;
 use SprykerEco\Client\Vertex\Validator\VertexSaleValidator;
 use SprykerEco\Client\Vertex\Validator\VertexSaleValidatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexShipmentValidator;
 use SprykerEco\Client\Vertex\Validator\VertexShipmentValidatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidator;
 use SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidatorInterface;
-use SprykerEco\Client\Vertex\Validator\VertexValidatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexTaxIdValidator;
-use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
-use Spryker\Shared\Log\LoggerTrait;
-use Spryker\Client\Kernel\AbstractFactory;
-use Spryker\Client\ZedRequest\ZedRequestClientInterface;
 use SprykerEco\Client\Vertex\Validator\VertexTaxIdValidatorInterface;
+use SprykerEco\Client\Vertex\Validator\VertexValidatorInterface;
 use SprykerEco\Client\Vertex\Zed\VertexStub;
 use SprykerEco\Client\Vertex\Zed\VertexStubInterface;
 
@@ -392,7 +392,6 @@ class VertexFactory extends AbstractFactory
     {
         return new VertexLineItemMetadataBuilder();
     }
-
 
     /**
      * @codeCoverageIgnore We can't use the real client for any of the tests.

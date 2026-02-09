@@ -7,12 +7,7 @@
 
 namespace SprykerEcoTest\Zed\Vertex\Business;
 
-use Codeception\Stub;
 use Codeception\Test\Unit;
-use Generated\Shared\Transfer\AcpHttpRequestTransfer;
-use Generated\Shared\Transfer\AcpHttpResponseTransfer;
-use Generated\Shared\Transfer\StoreTransfer;
-use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use SprykerEco\Client\Vertex\VertexClient;
 use SprykerEco\Shared\Vertex\VertexConstants;
@@ -53,7 +48,7 @@ class VertexFacadeValidateTaxIdTest extends Unit
             ->willReturn(
                 (new VertexValidationResponseTransfer())
                     ->setIsValid(true)
-                    ->setAdditionalInfo('test')
+                    ->setAdditionalInfo('test'),
             );
         $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
@@ -76,7 +71,7 @@ class VertexFacadeValidateTaxIdTest extends Unit
             ->willReturn(
                 (new VertexValidationResponseTransfer())
                     ->setIsValid(false)
-                    ->setMessage('Tax Validator API is unavailable.')
+                    ->setMessage('Tax Validator API is unavailable.'),
             );
         $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
@@ -99,7 +94,7 @@ class VertexFacadeValidateTaxIdTest extends Unit
             ->willReturn(
                 (new VertexValidationResponseTransfer())
                     ->setIsValid(false)
-                    ->setMessage('message')
+                    ->setMessage('message'),
             );
         $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 

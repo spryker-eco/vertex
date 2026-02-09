@@ -11,7 +11,7 @@ use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 
 /**
- * @method \Spryker\Zed\Vertex\VertexConfig getConfig()
+ * @method \SprykerEco\Zed\Vertex\VertexConfig getConfig()
  */
 class VertexDependencyProvider extends AbstractBundleDependencyProvider
 {

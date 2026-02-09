@@ -47,4 +47,3 @@ class VertexAddressValidator implements VertexAddressValidatorInterface
         }
     }
 }
-

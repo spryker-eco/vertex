@@ -7,7 +7,6 @@
 
 namespace SprykerEco\Zed\Vertex\Business\Validator;
 
-use Generated\Shared\Transfer\TaxamoApiRequestTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use SprykerEco\Client\Vertex\VertexClientInterface;
@@ -15,19 +14,31 @@ use SprykerEco\Client\Vertex\VertexClientInterface;
 class VertexConfigValidator
 {
     protected const ERROR_FIELD_IS_REQUIRED = 'Field %s is required';
+
     protected const REQUEST_APPLICATION_STATUS_IS_ACTIVE = 'application_status_isActive';
 
     protected const RESPONSE_MESSAGE_BLANK_SECURITY_URI_FIELD = 'Security URI is required.';
+
     protected const RESPONSE_MESSAGE_TAXAMO_API_URL_FIELD = 'Api URI is required.';
+
     protected const RESPONSE_MESSAGE_NOT_VALID_URL_SECURITY_URI_FIELD = 'Security URI has wrong format.';
+
     protected const RESPONSE_MESSAGE_NOT_VALID_URL_TAXAMO_API_URL_FIELD = 'API URI has wrong format.';
+
     protected const RESPONSE_MESSAGE_BLANK_TRANSACTION_CALLS_URI_FIELD = 'Transaction Calls URI is required.';
+
     protected const RESPONSE_MESSAGE_NOT_VALID_URL_TRANSACTION_CALLS_URI_FIELD = 'Transaction Calls URI has wrong format.';
+
     protected const RESPONSE_MESSAGE_BLANK_CLIENT_ID_FIELD = 'Client ID is required.';
+
     protected const RESPONSE_MESSAGE_NOT_STRING_CLIENT_ID_FIELD = 'Client ID must be a string.';
+
     protected const RESPONSE_MESSAGE_BLANK_CLIENT_SECRET_FIELD = 'Client Secret is required.';
+
     protected const RESPONSE_MESSAGE_NOT_STRING_CLIENT_SECRET_FIELD = 'Client Secret must be a string.';
+
     protected const RESPONSE_MESSAGE_BLANK_TAXAMO_TOKEN_FIELD = 'Seller token is required.';
+
     protected const RESPONSE_MESSAGE_NOT_VALID_CREDENTIAL = 'API URL or token is invalid.';
 
     /**
@@ -68,6 +79,7 @@ class VertexConfigValidator
     ): void {
         if (!$vertexConfigTransfer->getSecurityUri()) {
             $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_BLANK_SECURITY_URI_FIELD);
+
             return;
         }
 
@@ -82,6 +94,7 @@ class VertexConfigValidator
     ): void {
         if (!$vertexConfigTransfer->getTransactionCallsUri()) {
             $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_BLANK_TRANSACTION_CALLS_URI_FIELD);
+
             return;
         }
 
@@ -96,6 +109,7 @@ class VertexConfigValidator
     ): void {
         if (!$vertexConfigTransfer->getClientId()) {
             $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_BLANK_CLIENT_ID_FIELD);
+
             return;
         }
 
@@ -110,6 +124,7 @@ class VertexConfigValidator
     ): void {
         if (!$vertexConfigTransfer->getClientSecret()) {
             $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_BLANK_CLIENT_SECRET_FIELD);
+
             return;
         }
 
@@ -154,4 +169,3 @@ class VertexConfigValidator
         }
     }
 }
-

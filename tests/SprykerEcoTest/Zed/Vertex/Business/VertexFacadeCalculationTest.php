@@ -7,11 +7,10 @@
 
 namespace SprykerEcoTest\Zed\Vertex\Business;
 
-use Codeception\Stub;
 use Codeception\Test\Unit;
 use Generated\Shared\Transfer\StoreTransfer;
-use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
 use Ramsey\Uuid\Uuid;
@@ -20,9 +19,8 @@ use Spryker\Zed\Calculation\Communication\Plugin\Calculator\GrandTotalCalculator
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemDiscountAmountFullAggregatorPlugin;
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemSubtotalAggregatorPlugin;
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\PriceCalculatorPlugin;
-use SprykerEco\Shared\Vertex\VertexConstants;
-use SprykerEco\Zed\Vertex\Dependency\Facade\VertexToStoreFacadeInterface;
 use SprykerEco\Client\Vertex\VertexClient;
+use SprykerEco\Shared\Vertex\VertexConstants;
 use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
 
 /**
@@ -83,7 +81,7 @@ class VertexFacadeCalculationTest extends Unit
         $clientMock->expects($this->once())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
+                ->setExpiresIn(1000),
         );
         $this->tester->mockFactoryMethod('getVertexClient', $clientMock);
 
@@ -110,7 +108,7 @@ class VertexFacadeCalculationTest extends Unit
         $clientMock->expects($this->once())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
+                ->setExpiresIn(1000),
         );
         $this->tester->mockFactoryMethod('getVertexClient', $clientMock);
 
@@ -138,7 +136,7 @@ class VertexFacadeCalculationTest extends Unit
         $clientMock->expects($this->never())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
+                ->setExpiresIn(1000),
         );
         $this->tester->mockFactoryMethod('getVertexClient', $clientMock);
 
@@ -175,7 +173,7 @@ class VertexFacadeCalculationTest extends Unit
         $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
+                ->setExpiresIn(1000),
         );
         $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
@@ -195,7 +193,7 @@ class VertexFacadeCalculationTest extends Unit
         $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
+                ->setExpiresIn(1000),
         );
         $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
@@ -384,7 +382,7 @@ class VertexFacadeCalculationTest extends Unit
         $vertexClient->expects($this->once())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
+                ->setExpiresIn(1000),
         );
         $this->tester->mockFactoryMethod('getVertexClient', $vertexClient);
 
@@ -414,7 +412,7 @@ class VertexFacadeCalculationTest extends Unit
         $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
+                ->setExpiresIn(1000),
         );
         $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
@@ -445,7 +443,7 @@ class VertexFacadeCalculationTest extends Unit
         $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
+                ->setExpiresIn(1000),
         );
         $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
@@ -475,7 +473,7 @@ class VertexFacadeCalculationTest extends Unit
         $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
+                ->setExpiresIn(1000),
         );
         $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 
@@ -505,7 +503,7 @@ class VertexFacadeCalculationTest extends Unit
         $vertexClientMock->expects($this->once())->method('authenticate')->willReturn(
             (new VertexAuthResponseTransfer())
                 ->setAccessToken('test-token')
-                ->setExpiresIn(1000)
+                ->setExpiresIn(1000),
         );
         $this->tester->mockFactoryMethod('getVertexClient', $vertexClientMock);
 

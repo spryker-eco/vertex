@@ -1,19 +1,19 @@
 <?php
 
 /**
- * This file is part of the Spryker Suite.
- * For full license information, please view the LICENSE file that was distributed with this source code.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
 namespace SprykerEco\Client\Vertex\Builder\Supplies;
 
-use Generated\Shared\Transfer\VertexShippingWarehouseTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCustomerTransfer;
 use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
 use Generated\Shared\Transfer\VertexLocationTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
+use Generated\Shared\Transfer\VertexShippingWarehouseTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
 use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
 
@@ -61,7 +61,7 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
     }
 
     /**
-     * @param \Generated\Shared\Transfer\VertexSaleTransfer $vertexSaleTransfer,
+     * @param \Generated\Shared\Transfer\VertexSaleTransfer $vertexSaleTransfer
      * @param \Generated\Shared\Transfer\VertexItemTransfer $vertexItemTransfer
      * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
      *

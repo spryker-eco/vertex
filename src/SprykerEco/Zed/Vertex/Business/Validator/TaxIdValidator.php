@@ -7,10 +7,10 @@
 
 namespace SprykerEco\Zed\Vertex\Business\Validator;
 
-use Generated\Shared\Transfer\VertexValidationRequestTransfer;
-use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Generated\Shared\Transfer\TaxIdValidationHistoryTransfer;
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
+use Generated\Shared\Transfer\VertexValidationRequestTransfer;
+use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;

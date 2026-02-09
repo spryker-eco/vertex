@@ -7,7 +7,6 @@
 
 namespace SprykerEco\Zed\Vertex\Business\Calculator;
 
-use Generated\Shared\Transfer\ApiErrorMessageTransfer;
 use Generated\Shared\Transfer\CalculableObjectTransfer;
 use Generated\Shared\Transfer\TaxTotalTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
@@ -15,7 +14,6 @@ use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Spryker\Shared\Log\LoggerTrait;
-use SprykerEco\Client\Vertex\Validator\VertexQuotationValidator;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Aggregator\PriceAggregatorInterface;
@@ -57,7 +55,8 @@ class VertexCalculator implements VertexCalculatorInterface
         protected array $calculableObjectVertexExpanderPlugins,
         protected PriceAggregatorInterface $priceAggregator,
         protected VertexAccessTokenProviderInterface $vertexAccessTokenProvider,
-    ) {}
+    ) {
+    }
 
     public function recalculate(CalculableObjectTransfer $calculableObjectTransfer, VertexConfigTransfer $vertexConfigTransfer): void
     {
@@ -111,7 +110,7 @@ class VertexCalculator implements VertexCalculatorInterface
             (new VertexCalculationRequestTransfer())
                 ->setSale($vertexSaleTransfer)
                 ->setVertexApiAccessToken($vertexApiAccessTokenTransfer),
-            $vertexConfigTransfer
+            $vertexConfigTransfer,
         );
     }
 

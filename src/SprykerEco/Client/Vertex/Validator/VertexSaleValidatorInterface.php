@@ -7,9 +7,7 @@
 
 namespace SprykerEco\Client\Vertex\Validator;
 
-use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
-use Generated\Shared\Transfer\VertexShipmentTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 
 interface VertexSaleValidatorInterface
@@ -19,4 +17,3 @@ interface VertexSaleValidatorInterface
         VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): VertexValidationResponseTransfer;
 }
-

@@ -1,17 +1,16 @@
 <?php
 
 /**
- * This file is part of the Spryker Suite.
- * For full license information, please view the LICENSE file that was distributed with this source code.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
 namespace SprykerEco\Client\Vertex\TaxCalculator;
 
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
-use Generated\Shared\Transfer\VertexSuppliesTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
-use Generated\Shared\Transfer\VertexValidationResponseTransfer;
+use Generated\Shared\Transfer\VertexSuppliesTransfer;
 use SprykerEco\Client\Vertex\Api\V2\Client\SuppliesApiInterface;
 use SprykerEco\Client\Vertex\Builder\SuppliesRequestBuilder;
 use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterface;

@@ -9,16 +9,16 @@ namespace SprykerEco\Zed\Vertex\Business\Payment;
 
 use Generated\Shared\Transfer\MessageAttributesTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
-use Generated\Shared\Transfer\VertexSubmitPaymentTaxInvoiceTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
+use Generated\Shared\Transfer\VertexSubmitPaymentTaxInvoiceTransfer;
 use Spryker\Shared\Log\LoggerTrait;
+use Spryker\Zed\Sales\Business\SalesFacadeInterface;
+use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
-use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
-use Spryker\Zed\Sales\Business\SalesFacadeInterface;
-use Spryker\Zed\Store\Business\StoreFacadeInterface;
 
 class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerInterface
 {
@@ -40,7 +40,8 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
         protected VertexConfigResolverInterface $configResolver,
         protected VertexAccessTokenProviderInterface $accessTokenProvider,
         protected VertexClientInterface $vertexClient,
-    ) {}
+    ) {
+    }
 
     /**
      * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer

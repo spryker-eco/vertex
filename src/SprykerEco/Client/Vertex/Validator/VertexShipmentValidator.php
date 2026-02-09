@@ -40,28 +40,27 @@ class VertexShipmentValidator implements VertexShipmentValidatorInterface
         VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): void {
         if (!$vertexShipmentTransfer->getId()) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_SHIPMENT_FIELD_IS_REQUIRED,  VertexShipmentTransfer::ID));
+            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_SHIPMENT_FIELD_IS_REQUIRED, VertexShipmentTransfer::ID));
         }
 
         if (!$vertexShipmentTransfer->getPriceAmount()) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_SHIPMENT_FIELD_IS_REQUIRED,  VertexShipmentTransfer::PRICE_AMOUNT));
+            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_SHIPMENT_FIELD_IS_REQUIRED, VertexShipmentTransfer::PRICE_AMOUNT));
         }
 
         if (!$vertexShipmentTransfer->getShipmentMethodKey()) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_SHIPMENT_FIELD_IS_REQUIRED,  VertexShipmentTransfer::SHIPMENT_METHOD_KEY));
+            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_SHIPMENT_FIELD_IS_REQUIRED, VertexShipmentTransfer::SHIPMENT_METHOD_KEY));
         }
 
         if (!$vertexShipmentTransfer->getShippingAddress()) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_SHIPMENT_FIELD_IS_REQUIRED,  VertexShipmentTransfer::SHIPPING_ADDRESS));
+            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_SHIPMENT_FIELD_IS_REQUIRED, VertexShipmentTransfer::SHIPPING_ADDRESS));
         }
 
         if ($vertexShipmentTransfer->getShippingAddress()) {
-            $this->addressValidator->validate($vertexShipmentTransfer->getShippingAddress(),  VertexShipmentTransfer::SHIPPING_ADDRESS, $vertexValidationResponseTransfer);
+            $this->addressValidator->validate($vertexShipmentTransfer->getShippingAddress(), VertexShipmentTransfer::SHIPPING_ADDRESS, $vertexValidationResponseTransfer);
         }
 
         if ($vertexShipmentTransfer->getBillingAddress()) {
-            $this->addressValidator->validate($vertexShipmentTransfer->getBillingAddress(),  VertexShipmentTransfer::BILLING_ADDRESS, $vertexValidationResponseTransfer);
+            $this->addressValidator->validate($vertexShipmentTransfer->getBillingAddress(), VertexShipmentTransfer::BILLING_ADDRESS, $vertexValidationResponseTransfer);
         }
     }
 }
-

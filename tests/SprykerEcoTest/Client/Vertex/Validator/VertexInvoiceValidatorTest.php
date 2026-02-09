@@ -55,8 +55,8 @@ class VertexInvoiceValidatorTest extends Unit
                             ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
-                            ->setZipCode('10001')
-                    )
+                            ->setZipCode('10001'),
+                    ),
             )
             ->addShipment(
                 (new VertexShipmentTransfer())
@@ -69,8 +69,8 @@ class VertexInvoiceValidatorTest extends Unit
                             ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
-                            ->setZipCode('10001')
-                    )
+                            ->setZipCode('10001'),
+                    ),
             );
 
         $request = (new VertexCalculationRequestTransfer())
@@ -79,7 +79,7 @@ class VertexInvoiceValidatorTest extends Unit
 
         $itemValidator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
         $shipmentValidator = new VertexShipmentValidator(new VertexAddressValidator());
         $saleValidator = new VertexSaleValidator($itemValidator, $shipmentValidator);
@@ -115,8 +115,8 @@ class VertexInvoiceValidatorTest extends Unit
                             ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
-                            ->setZipCode('10001')
-                    )
+                            ->setZipCode('10001'),
+                    ),
             )
             ->addShipment(
                 (new VertexShipmentTransfer())
@@ -129,8 +129,8 @@ class VertexInvoiceValidatorTest extends Unit
                             ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
-                            ->setZipCode('10001')
-                    )
+                            ->setZipCode('10001'),
+                    ),
             );
 
         $request = (new VertexCalculationRequestTransfer())
@@ -138,7 +138,7 @@ class VertexInvoiceValidatorTest extends Unit
 
         $itemValidator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
         $shipmentValidator = new VertexShipmentValidator(new VertexAddressValidator());
         $saleValidator = new VertexSaleValidator($itemValidator, $shipmentValidator);
@@ -162,7 +162,7 @@ class VertexInvoiceValidatorTest extends Unit
 
         $itemValidator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
         $shipmentValidator = new VertexShipmentValidator(new VertexAddressValidator());
         $saleValidator = new VertexSaleValidator($itemValidator, $shipmentValidator);
@@ -198,8 +198,8 @@ class VertexInvoiceValidatorTest extends Unit
                             ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
-                            ->setZipCode('10001')
-                    )
+                            ->setZipCode('10001'),
+                    ),
             )
             ->addShipment(
                 (new VertexShipmentTransfer())
@@ -212,8 +212,8 @@ class VertexInvoiceValidatorTest extends Unit
                             ->setAddress2('Apt 4')
                             ->setCity('New York')
                             ->setCountry('US')
-                            ->setZipCode('10001')
-                    )
+                            ->setZipCode('10001'),
+                    ),
             );
 
         $request = (new VertexCalculationRequestTransfer())
@@ -222,7 +222,7 @@ class VertexInvoiceValidatorTest extends Unit
 
         $itemValidator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
         $shipmentValidator = new VertexShipmentValidator(new VertexAddressValidator());
         $saleValidator = new VertexSaleValidator($itemValidator, $shipmentValidator);
@@ -257,8 +257,8 @@ class VertexInvoiceValidatorTest extends Unit
                             ->setAddress1('123 Main St')
                             ->setCity('New York')
                             ->setCountry('US')
-                            ->setZipCode('10001')
-                    )
+                            ->setZipCode('10001'),
+                    ),
             )
             ->addShipment(
                 (new VertexShipmentTransfer())
@@ -270,8 +270,8 @@ class VertexInvoiceValidatorTest extends Unit
                             ->setAddress1('123 Main St')
                             ->setCity('New York')
                             ->setCountry('US')
-                            ->setZipCode('10001')
-                    )
+                            ->setZipCode('10001'),
+                    ),
             );
 
         $request = (new VertexCalculationRequestTransfer())
@@ -280,7 +280,7 @@ class VertexInvoiceValidatorTest extends Unit
 
         $itemValidator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
         $shipmentValidator = new VertexShipmentValidator(new VertexAddressValidator());
         $saleValidator = new VertexSaleValidator($itemValidator, $shipmentValidator);
@@ -306,7 +306,7 @@ class VertexInvoiceValidatorTest extends Unit
 
         $itemValidator = new VertexItemValidator(
             new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator())
+            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
         );
         $shipmentValidator = new VertexShipmentValidator(new VertexAddressValidator());
         $saleValidator = new VertexSaleValidator($itemValidator, $shipmentValidator);
@@ -320,4 +320,3 @@ class VertexInvoiceValidatorTest extends Unit
         $this->assertGreaterThan(0, count($result->getMessages()));
     }
 }
-

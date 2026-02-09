@@ -14,7 +14,9 @@ class FallbackCalculator implements FallbackCalculatorInterface
     /**
      * @param array<\Spryker\Zed\CalculationExtension\Dependency\Plugin\CalculationPluginInterface> $fallbackCalculationPlugins
      */
-    public function __construct(protected array $fallbackCalculationPlugins) {}
+    public function __construct(protected array $fallbackCalculationPlugins)
+    {
+    }
 
     /**
      * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer

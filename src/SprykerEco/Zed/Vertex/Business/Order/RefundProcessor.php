@@ -25,7 +25,7 @@ class RefundProcessor implements RefundProcessorInterface
     use LoggerTrait;
 
     /**
-     * @param \SprykerEco\Client\Vertex\VertexClientInterface $VertexClient
+     * @param \SprykerEco\Client\Vertex\VertexClientInterface $vertexClient
      * @param \Spryker\Zed\Store\Business\StoreFacadeInterface $storeFacade
      * @param \Spryker\Zed\Sales\Business\SalesFacadeInterface $salesFacade
      * @param \SprykerEco\Zed\Vertex\Business\Mapper\vertexMapperInterface $vertexMapper
@@ -41,7 +41,8 @@ class RefundProcessor implements RefundProcessorInterface
         protected array $orderVertexExpanderPlugins,
         protected VertexAccessTokenProviderInterface $vertexAccessTokenProvider,
         protected VertexConfigResolverInterface $configResolver,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array<int> $orderItemIds
@@ -91,7 +92,7 @@ class RefundProcessor implements RefundProcessorInterface
                 ->setSale($vertexSaleTransfer)
                 ->setReportingDate((new DateTime())->format('Y-m-d'))
                 ->setVertexApiAccessToken($vertexApiAccessTokenTransfer),
-            $vertexConfigTransfer
+            $vertexConfigTransfer,
         );
     }
 

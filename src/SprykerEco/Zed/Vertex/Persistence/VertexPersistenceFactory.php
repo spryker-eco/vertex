@@ -1,21 +1,21 @@
 <?php
 
 /**
- * This file is part of the Spryker Suite.
- * For full license information, please view the LICENSE file that was distributed with this source code.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
 namespace SprykerEco\Zed\Vertex\Persistence;
 
 use Orm\Zed\Vertex\Persistence\SpyVertexApiAccessTokenQuery;
-use SprykerEco\Zed\Vertex\Persistence\Propel\Mapper\VertexApiAccessTokenMapper;
 use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
+use SprykerEco\Zed\Vertex\Persistence\Propel\Mapper\VertexApiAccessTokenMapper;
 use SprykerEco\Zed\Vertex\Persistence\Propel\Mapper\VertexTaxIdValidationMapper;
 
 /**
- * @method \SprykerEco\Zed\VertexApi\VertexApiConfig getConfig()
- * @method \SprykerEco\Zed\VertexApi\Persistence\VertexApiRepositoryInterface getRepository()
- * @method \SprykerEco\Zed\VertexApi\Persistence\VertexApiEntityManagerInterface getEntityManager()
+ * @method \SprykerEco\Zed\Vertex\VertexConfig getConfig()
+ * @method \SprykerEco\Zed\Vertex\Persistence\VertexRepositoryInterface getRepository()
+ * @method \SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface getEntityManager()
  */
 class VertexPersistenceFactory extends AbstractPersistenceFactory
 {

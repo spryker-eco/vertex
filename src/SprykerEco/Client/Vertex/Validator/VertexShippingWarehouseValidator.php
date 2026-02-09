@@ -14,7 +14,7 @@ class VertexShippingWarehouseValidator implements VertexShippingWarehouseValidat
 {
     protected const ERROR_WAREHOUSE_FIELD_IS_REQUIRED = 'Field %s is required for shipping warehouse';
 
-    protected $addressValidator;
+    protected VertexAddressValidator $addressValidator;
 
     public function __construct(VertexAddressValidator $addressValidator)
     {
@@ -26,16 +26,15 @@ class VertexShippingWarehouseValidator implements VertexShippingWarehouseValidat
         VertexValidationResponseTransfer $vertexValidationResponseTransfer
     ): void {
         if (!$warehouse->getQuantity()) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_WAREHOUSE_FIELD_IS_REQUIRED,  VertexShippingWarehouseTransfer::QUANTITY));
+            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_WAREHOUSE_FIELD_IS_REQUIRED, VertexShippingWarehouseTransfer::QUANTITY));
         }
 
         if ($warehouse->getWarehouseAddress()) {
             $this->addressValidator->validate(
                 $warehouse->getWarehouseAddress(),
                 VertexShippingWarehouseTransfer::WAREHOUSE_ADDRESS,
-                $vertexValidationResponseTransfer
+                $vertexValidationResponseTransfer,
             );
         }
     }
 }
-

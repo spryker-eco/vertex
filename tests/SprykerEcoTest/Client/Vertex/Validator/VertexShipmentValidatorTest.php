@@ -39,7 +39,7 @@ class VertexShipmentValidatorTest extends Unit
                     ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
-                    ->setZipCode('10001')
+                    ->setZipCode('10001'),
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
@@ -64,7 +64,7 @@ class VertexShipmentValidatorTest extends Unit
                     ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
-                    ->setZipCode('10001')
+                    ->setZipCode('10001'),
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
@@ -90,7 +90,7 @@ class VertexShipmentValidatorTest extends Unit
                     ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
-                    ->setZipCode('10001')
+                    ->setZipCode('10001'),
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
@@ -116,7 +116,7 @@ class VertexShipmentValidatorTest extends Unit
                     ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
-                    ->setZipCode('10001')
+                    ->setZipCode('10001'),
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
@@ -158,8 +158,8 @@ class VertexShipmentValidatorTest extends Unit
             ->setShipmentMethodKey('standard')
             ->setShippingAddress(
                 (new VertexAddressTransfer())
-                    ->setAddress1('123 Main St')
-            // Missing city, country, zipCode
+                    ->setAddress1('123 Main St'),
+                // Missing city, country, zipCode
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
@@ -186,12 +186,12 @@ class VertexShipmentValidatorTest extends Unit
                     ->setAddress2('Apt 4')
                     ->setCity('New York')
                     ->setCountry('US')
-                    ->setZipCode('10001')
+                    ->setZipCode('10001'),
             )
             ->setBillingAddress(
                 (new VertexAddressTransfer())
-                    ->setAddress1('456 Billing St')
-            // Missing city, country, zipCode
+                    ->setAddress1('456 Billing St'),
+                // Missing city, country, zipCode
             );
 
         $responseTransfer = new VertexValidationResponseTransfer();
@@ -208,8 +208,8 @@ class VertexShipmentValidatorTest extends Unit
                 'Address field billingAddress.zipCode is required',
                 'Address field billingAddress.city is required',
                 'Address field billingAddress.country is required',
-            ], $responseTransfer->getMessages()
+            ],
+            $responseTransfer->getMessages(),
         );
     }
 }
-

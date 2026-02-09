@@ -15,10 +15,10 @@ use SprykerEco\Zed\Vertex\Communication\Expander\ProductOptionWithVertexCodeExpa
 use SprykerEco\Zed\Vertex\Communication\Mapper\VertexCodeMapper;
 
 /**
- * @method \Spryker\Zed\Vertex\VertexConfig getConfig()
- * @method \Spryker\Zed\Vertex\Business\VertexFacadeInterface getFacade()
- * @method \Spryker\Zed\Vertex\Persistence\VertexRepositoryInterface getRepository()
- * @method \Spryker\Zed\Vertex\Persistence\VertexEntityManagerInterface getEntityManager()
+ * @method \SprykerEco\Zed\Vertex\VertexConfig getConfig()
+ * @method \SprykerEco\Zed\Vertex\Business\VertexFacadeInterface getFacade()
+ * @method \SprykerEco\Zed\Vertex\Persistence\VertexRepositoryInterface getRepository()
+ * @method \SprykerEco\Zed\Vertex\Persistence\VertexEntityManagerInterface getEntityManager()
  */
 class VertexCommunicationFactory extends AbstractCommunicationFactory
 {

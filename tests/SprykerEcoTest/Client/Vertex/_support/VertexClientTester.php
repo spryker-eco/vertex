@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Spryker Suite.
- * For full license information, please view the LICENSE file that was distributed with this source code.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
 declare(strict_types=1);
@@ -22,8 +22,6 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Pyz\Zed\VertexApi\Business\AccessTokenProvider\AccessTokenProviderInterface;
-use Pyz\Zed\VertexConfig\Business\VertexConfigFacadeInterface;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Client\Vertex\VertexDependencyProvider;
 use SprykerEco\Client\Vertex\VertexFactory;
@@ -257,6 +255,7 @@ class VertexClientTester extends Actor
 
     /**
      * @param string $fixtureName
+     * @param int $code
      *
      * @return \GuzzleHttp\Psr7\Response
      */
@@ -295,31 +294,16 @@ class VertexClientTester extends Actor
     }
 
     /**
-     * @return void
-     */
-    public function mockVertexConfigFacadeToReturnConfigWithData(): void
-    {
-        $mockFacade = Stub::makeEmpty(
-            VertexConfigFacadeInterface::class,
-            [
-                'getConfig' => $this->haveVertexConfigTransfer(),
-            ],
-        );
-
-        $this->mockFactoryMethod('getVertexConfigFacade', $mockFacade);
-    }
-
-    /**
      * @param \GuzzleHttp\ClientInterface $mockClient
-     * 
+     *
      * @return \SprykerEco\Client\Vertex\VertexClientInterface
      */
     public function getVertexClientWithMockedFactory(ClientInterface $mockClient): VertexClientInterface
     {
-        $factoryMock = new class($mockClient) extends VertexFactory {
-            private $httpClient;
+        $factoryMock = new class ($mockClient) extends VertexFactory {
+            private ClientInterface $httpClient;
 
-            public function __construct($httpClient)
+            public function __construct(ClientInterface $httpClient)
             {
                 $this->httpClient = $httpClient;
             }

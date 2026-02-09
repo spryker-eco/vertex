@@ -29,7 +29,7 @@ class VertexItemValidator implements VertexItemValidatorInterface
      * @param \SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidator $shippingWarehouseValidator
      */
     public function __construct(
-        VertexAddressValidator     $addressValidator,
+        VertexAddressValidator $addressValidator,
         VertexShippingWarehouseValidator $shippingWarehouseValidator
     ) {
         $this->addressValidator = $addressValidator;
@@ -61,23 +61,23 @@ class VertexItemValidator implements VertexItemValidatorInterface
         }
 
         if (!$vertexItemTransfer->getQuantity()) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ITEM_FIELD_IS_REQUIRED,  VertexItemTransfer::QUANTITY, $vertexItemTransfer->getSku()));
+            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ITEM_FIELD_IS_REQUIRED, VertexItemTransfer::QUANTITY, $vertexItemTransfer->getSku()));
         }
 
         if (!$vertexItemTransfer->getSku()) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ITEM_FIELD_IS_REQUIRED,  VertexItemTransfer::SKU, $vertexItemTransfer->getSku()));
+            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ITEM_FIELD_IS_REQUIRED, VertexItemTransfer::SKU, $vertexItemTransfer->getSku()));
         }
 
         if (!$vertexItemTransfer->getShippingAddress()) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ITEM_FIELD_IS_REQUIRED,  VertexItemTransfer::SHIPPING_ADDRESS, $vertexItemTransfer->getSku()));
+            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ITEM_FIELD_IS_REQUIRED, VertexItemTransfer::SHIPPING_ADDRESS, $vertexItemTransfer->getSku()));
         }
 
         if ($vertexItemTransfer->getShippingAddress()) {
-            $this->addressValidator->validate($vertexItemTransfer->getShippingAddress(),  VertexItemTransfer::SHIPPING_ADDRESS, $vertexValidationResponseTransfer);
+            $this->addressValidator->validate($vertexItemTransfer->getShippingAddress(), VertexItemTransfer::SHIPPING_ADDRESS, $vertexValidationResponseTransfer);
         }
 
         if ($vertexItemTransfer->getSellerAddress()) {
-            $this->addressValidator->validate($vertexItemTransfer->getSellerAddress(),  VertexItemTransfer::SELLER_ADDRESS, $vertexValidationResponseTransfer);
+            $this->addressValidator->validate($vertexItemTransfer->getSellerAddress(), VertexItemTransfer::SELLER_ADDRESS, $vertexValidationResponseTransfer);
         }
 
         if ($vertexItemTransfer->getBillingAddress()) {
@@ -88,10 +88,9 @@ class VertexItemValidator implements VertexItemValidatorInterface
             foreach ($vertexItemTransfer->getVertexShippingWarehouses() as $vertexShippingWarehouseTransfer) {
                 $this->shippingWarehouseValidator->validate(
                     $vertexShippingWarehouseTransfer,
-                    $vertexValidationResponseTransfer
+                    $vertexValidationResponseTransfer,
                 );
             }
         }
     }
 }
-

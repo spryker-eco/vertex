@@ -13,6 +13,8 @@ use SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface;
 
 /**
  * @method \SprykerEco\Zed\Vertex\Communication\VertexCommunicationFactory getFactory()
+ * @method \SprykerEco\Zed\Vertex\VertexConfig getConfig()
+ * @method \SprykerEco\Zed\Vertex\Business\VertexFacadeInterface getFacade()
  */
 class OrderExpensesWithVertexCodeExpanderPlugin extends AbstractPlugin implements OrderVertexExpanderPluginInterface
 {

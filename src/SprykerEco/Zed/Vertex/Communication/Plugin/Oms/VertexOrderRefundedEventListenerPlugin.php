@@ -19,6 +19,7 @@ use Spryker\Zed\OmsExtension\Dependency\Plugin\OmsEventTriggeredListenerPluginIn
 class VertexOrderRefundedEventListenerPlugin extends AbstractPlugin implements OmsEventTriggeredListenerPluginInterface
 {
     /**
+     * {@inheritDoc}
      * Specification:
      * - Checks if this plugin is applicable for the given OMS event.
      * - Returns true if the event ID is 'refund', false otherwise.

@@ -17,4 +17,3 @@ interface VertexShipmentValidatorInterface
         VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): void;
 }
-

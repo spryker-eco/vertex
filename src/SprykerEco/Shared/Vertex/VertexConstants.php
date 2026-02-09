@@ -92,7 +92,6 @@ interface VertexConstants
      */
     public const IS_ACTIVE = 'VERTEX:IS_ACTIVE';
 
-
     /**
      * Specification:
      * - The Vertex Taxamo API URL for tax calculation.
@@ -102,7 +101,6 @@ interface VertexConstants
      * @var string
      */
     public const TAXAMO_API_URL = 'VERTEX:TAXAMO_API_URL';
-
 
     /**
      * Specification:
@@ -127,6 +125,8 @@ interface VertexConstants
     /**
      * Specification:
      * - Determines whether the invoicing is enabled or not.
+     *
+     * @var string
      */
     public const IS_INVOICING_ENABLED = 'VERTEX:IS_INVOICING_ENABLED';
 
@@ -150,4 +150,3 @@ interface VertexConstants
      */
     public const VENDOR_CODE = 'VERTEX:VENDOR_CODE';
 }
-
