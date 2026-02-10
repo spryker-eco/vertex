@@ -84,6 +84,8 @@ class VertexBusinessAssertionHelper extends Module
         VertexClient $vertexClientMock,
         CalculableObjectTransfer $mockedCalculableObjectTransfer,
     ): void {
+        $this->haveExpectedTaxQuotationRequestSaleItems();
+
         $vertexClientMock->expects(new InvokedCountMatcher(1))
             ->method('calculateTax')
             ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($mockedCalculableObjectTransfer) {
