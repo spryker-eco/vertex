@@ -37,8 +37,6 @@
 
     <transfer name="VertexCalculationRequest" strict="true">
         <property name="sale" type="VertexSale"/>
-        <property name="storeReference" type="string" dataBuilderRule="numerify('store####')"/>
-        <property name="tenantIdentifier" type="string" dataBuilderRule="numerify('store####')"/>
         <property name="vertexConfiguration" type="VertexConfig"/>
     </transfer>
 
