@@ -43,10 +43,6 @@ class VertexItemValidator implements VertexItemValidatorInterface
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ITEM_FIELD_IS_REQUIRED, VertexItemTransfer::SKU, $vertexItemTransfer->getSku()));
         }
 
-        if (!$vertexItemTransfer->getShippingAddress()) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ITEM_FIELD_IS_REQUIRED, VertexItemTransfer::SHIPPING_ADDRESS, $vertexItemTransfer->getSku()));
-        }
-
         if ($vertexItemTransfer->getShippingAddress()) {
             $this->addressValidator->validate($vertexItemTransfer->getShippingAddress(), VertexItemTransfer::SHIPPING_ADDRESS, $vertexValidationResponseTransfer);
         }
