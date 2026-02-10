@@ -33,7 +33,6 @@ use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\TaxAppConfigTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
-use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfig;
 use Orm\Zed\Vertex\Persistence\SpyVertexTaxIdValidationHistoryQuery;
 use ReflectionProperty;
 use Spryker\Shared\Oms\OmsConstants;
@@ -42,7 +41,6 @@ use Spryker\Zed\Calculation\Business\CalculationFacade;
 use Spryker\Zed\Calculation\CalculationDependencyProvider;
 use Spryker\Zed\Calculation\Dependency\Service\CalculationToUtilTextBridge;
 use Spryker\Zed\Kernel\Container;
-use Spryker\Zed\MerchantProfile\Communication\Plugin\TaxApp\MerchantProfileAddressCalculableObjectTaxAppExpanderPlugin;
 use Spryker\Zed\Oms\Business\OrderStateMachine\PersistenceManager;
 use SprykerEco\Client\Vertex\VertexClient;
 use SprykerEco\Zed\Vertex\VertexDependencyProvider;
@@ -84,9 +82,7 @@ class VertexBusinessTester extends Actor
     {
         $this->setDependency(
             VertexDependencyProvider::PLUGINS_CALCULABLE_OBJECT_VERTEX_EXPANDER,
-            [
-                new MerchantProfileAddressCalculableObjectTaxAppExpanderPlugin(),
-            ],
+            [],
         );
     }
 
@@ -198,32 +194,6 @@ class VertexBusinessTester extends Actor
     protected function getVertexTaxIdValidationHistoryQuery(): SpyVertexTaxIdValidationHistoryQuery
     {
         return SpyVertexTaxIdValidationHistoryQuery::create();
-    }
-
-    public function assertTaxAppConfigStoredProperly(
-        TaxAppConfigTransfer $taxAppConfigTransfer,
-        ?SpyTaxAppConfig $taxAppConfigEntity = null,
-    ): void {
-        $this->assertNotNull($taxAppConfigEntity);
-        $this->assertEquals(
-            $taxAppConfigTransfer->getApplicationId(),
-            $taxAppConfigEntity->getApplicationId(),
-        );
-        $this->assertEquals(
-            $taxAppConfigTransfer->getApiUrl(),
-            $taxAppConfigEntity->getApiUrl(),
-        );
-        $this->assertEquals(
-            $taxAppConfigTransfer->getVendorCode(),
-            $taxAppConfigEntity->getVendorCode(),
-        );
-    }
-
-    public function findTaxAppConfigByIdStore(int $idStore): ?SpyTaxAppConfig
-    {
-        return $this->getTaxAppConfigQuery()
-            ->filterByFkStore($idStore)
-            ->findOne();
     }
 
     protected function clearPersistenceManagerCache(): void

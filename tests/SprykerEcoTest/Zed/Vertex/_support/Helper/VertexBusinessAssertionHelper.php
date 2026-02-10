@@ -14,7 +14,6 @@ use Generated\Shared\Transfer\CalculableObjectTransfer;
 use Generated\Shared\Transfer\TaxAppApiUrlsTransfer;
 use Generated\Shared\Transfer\TaxAppConfigTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
-use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfigQuery;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
 use SprykerEco\Client\Vertex\VertexClient;
@@ -176,45 +175,5 @@ class VertexBusinessAssertionHelper extends Module
 
         $this->assertEquals(0, $itemsSumTaxAmountFullAggregation);
         $this->assertEquals(0, $expensesSumTaxAmount);
-    }
-
-    public function assertAllTaxAppConfigsForTenantHaveNewApiUrl(
-        TaxAppConfigTransfer $taxAppConfigTransfer,
-    ): void {
-        $taxAppConfigEntityCollection = SpyTaxAppConfigQuery::create()
-            ->filterByVendorCode($taxAppConfigTransfer->getVendorCode())
-            ->find();
-
-        $this->assertTrue($taxAppConfigEntityCollection->count() > 1);
-
-        foreach ($taxAppConfigEntityCollection as $taxAppConfigEntity) {
-            $taxAppConfigEntityApiUrls = json_decode($taxAppConfigEntity->getApiUrls(), true);
-            $taxAppConfigEntityApiUrls = (new TaxAppApiUrlsTransfer())->fromArray($taxAppConfigEntityApiUrls, true);
-            $this->assertEquals($taxAppConfigEntityApiUrls->getQuotationUrl(), $taxAppConfigTransfer->getApiUrlsOrFail()->getQuotationUrl());
-            $this->assertEquals($taxAppConfigEntityApiUrls->getRefundsUrl(), $taxAppConfigTransfer->getApiUrlsOrFail()->getRefundsUrl());
-        }
-    }
-
-    public function assertAllTaxAppConfigsForTenantHaveBeenDeleted(string $vendorCode): void
-    {
-        $taxAppConfigEntityCollectionDeleted = SpyTaxAppConfigQuery::create()
-            ->filterByVendorCode($vendorCode)
-            ->find();
-
-        $this->assertTrue($taxAppConfigEntityCollectionDeleted->count() === 0);
-    }
-
-    public function assertProperTaxAppConfigsHaveBeenDeletedByVendorCodes(string $vendorCodeNotDeleted, string $vendorCodeDeleted): void
-    {
-        $deletedTaxAppConfigEntityCollection = SpyTaxAppConfigQuery::create()
-            ->filterByVendorCode($vendorCodeDeleted)
-            ->find();
-
-        $notDeletedTaxAppConfigEntityCollection = SpyTaxAppConfigQuery::create()
-            ->filterByVendorCode($vendorCodeNotDeleted)
-            ->find();
-
-        $this->assertTrue($deletedTaxAppConfigEntityCollection->count() === 0);
-        $this->assertTrue($notDeletedTaxAppConfigEntityCollection->count() > 0);
     }
 }
