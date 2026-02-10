@@ -37,11 +37,11 @@ class SecurityApi implements SecurityApiInterface
         try {
             $response = $this->client->request(
                 'POST',
-                $vertexApiCredentialTransfer->getSecurityUri(),
+                $vertexApiCredentialTransfer->getSecurityUriOrFail(),
                 [
                     'form_params' => [
-                        'client_id' => $vertexApiCredentialTransfer->getClientId(),
-                        'client_secret' => $vertexApiCredentialTransfer->getClientSecret(),
+                        'client_id' => $vertexApiCredentialTransfer->getClientIdOrFail(),
+                        'client_secret' => $vertexApiCredentialTransfer->getClientSecretOrFail(),
                         'grant_type' => VertexConfig::CREDENTIALS_GRANT_TYPE,
                     ],
                     'timeout' => VertexConfig::VERTEX_REQUEST_ACCESS_TOKEN_TIMEOUT,

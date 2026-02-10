@@ -17,8 +17,7 @@ class VertexItemValidator implements VertexItemValidatorInterface
     public function __construct(
         protected VertexAddressValidatorInterface $addressValidator,
         protected VertexShippingWarehouseValidatorInterface $shippingWarehouseValidator
-    ) {
-    }
+    ) {}
 
     public function validate(
         VertexItemTransfer $vertexItemTransfer,
@@ -60,7 +59,7 @@ class VertexItemValidator implements VertexItemValidatorInterface
             $this->addressValidator->validate($vertexItemTransfer->getBillingAddress(), VertexItemTransfer::BILLING_ADDRESS, $vertexValidationResponseTransfer);
         }
 
-        if ($vertexItemTransfer->getVertexShippingWarehouses()) {
+        if ($vertexItemTransfer->getVertexShippingWarehouses()->count()) {
             foreach ($vertexItemTransfer->getVertexShippingWarehouses() as $vertexShippingWarehouseTransfer) {
                 $this->shippingWarehouseValidator->validate(
                     $vertexShippingWarehouseTransfer,

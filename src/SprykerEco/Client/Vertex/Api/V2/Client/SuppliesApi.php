@@ -52,7 +52,7 @@ class SuppliesApi implements SuppliesApiInterface
         try {
             $response = $this->client->request(
                 'POST',
-                str_replace('/supplies', '', $vertexConfigTransfer->getTransactionCallsUri()) . '/supplies',
+                str_replace('/supplies', '', $vertexConfigTransfer->getTransactionCallsUriOrFail()) . '/supplies',
                 [
                     'headers' => $this->getHeaders($vertexApiAccessTokenTransfer),
                     'body' => $this->utilEncodingService->encodeJson($requestBody),

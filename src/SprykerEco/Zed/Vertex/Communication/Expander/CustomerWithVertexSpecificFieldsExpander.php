@@ -14,9 +14,7 @@ use SprykerEco\Zed\Vertex\Communication\Mapper\VertexCodeMapper;
 
 class CustomerWithVertexSpecificFieldsExpander
 {
-    public function __construct(protected VertexCodeMapper $vertexCodeMapper)
-    {
-    }
+    public function __construct(protected VertexCodeMapper $vertexCodeMapper) {}
 
     /**
      * @param \Generated\Shared\Transfer\OrderTransfer|\Generated\Shared\Transfer\CalculableObjectTransfer $transfer
@@ -43,11 +41,11 @@ class CustomerWithVertexSpecificFieldsExpander
     {
         $result = [
             'customerCode' => [
-                'classCode' => $this->vertexCodeMapper->getCustomerClassCode($transfer->getCustomer()->getCustomerReference()),
+                'classCode' => $this->vertexCodeMapper->getCustomerClassCode($transfer->getCustomer()?->getCustomerReference()),
             ],
         ];
 
-        $exemptionCertificateNumber = $this->vertexCodeMapper->getExemptionCertificate($transfer->getCustomer()->getCustomerReference());
+        $exemptionCertificateNumber = $this->vertexCodeMapper->getExemptionCertificate($transfer->getCustomer()?->getCustomerReference());
 
         if ($exemptionCertificateNumber) {
             $result['exemptionCertificate']['exemptionCertificateNumber'] = $exemptionCertificateNumber;
