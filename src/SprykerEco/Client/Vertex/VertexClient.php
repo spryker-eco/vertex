@@ -72,7 +72,7 @@ class VertexClient extends AbstractClient implements VertexClientInterface
         VertexConfigTransfer $vertexConfigTransfer
     ): VertexCalculationResponseTransfer {
         return $this->getFactory()
-            ->createVertexTaxCalculator()
+            ->createInvoiceVertexTaxCalculator()
             ->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
     }
 

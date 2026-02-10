@@ -145,6 +145,16 @@ class VertexFactory extends AbstractFactory
         return new VertexShippingWarehouseValidator($this->createVertexAddressValidator());
     }
 
+    public function createInvoiceVertexTaxCalculator(): VertexTaxCalculatorInterface
+    {
+        return new VertexTaxCalculator(
+            $this->createSuppliesInvoiceRequestBuilder(),
+            $this->createSuppliesApi(),
+            $this->createVertexSuppliesResponseBuilder(),
+            $this->createVertexQuotationValidator(),
+        );
+    }
+
     public function createRefundVertexTaxCalculator(): VertexTaxCalculatorInterface
     {
         return new VertexTaxCalculator(
