@@ -12,8 +12,6 @@ namespace SprykerEcoTest\Client\Vertex;
 use Codeception\Actor;
 use Codeception\Stub;
 use Codeception\Stub\Expected;
-use Generated\Shared\Transfer\VertexApiAccessTokenTransfer;
-use Generated\Shared\Transfer\VertexApiCredentialTransfer;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Handler\MockHandler;
