@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEcoTest\Zed\Vertex\Helper;
 
 use Codeception\Module;
@@ -73,7 +75,7 @@ class VertexBusinessAssertionHelper extends Module
                         );
 
                         self::assertTrue(
-                            strlen($quantityWarehouseMap->getWarehouseAddress()->getCountry()) == 2,
+                            strlen($quantityWarehouseMap->getWarehouseAddress()->getCountry()) === 2,
                             'Warehouse mapping country code must be a string with 2 characters',
                         );
                     }
@@ -85,7 +87,7 @@ class VertexBusinessAssertionHelper extends Module
 
     public function assertRequestTaxQuotationReceivesSalesItemWithCorrectItemsAndWithoutWarehouseAddress(
         VertexClient $vertexClientMock,
-        CalculableObjectTransfer $mockedCalculableObjectTransfer
+        CalculableObjectTransfer $mockedCalculableObjectTransfer,
     ): void {
         $expectation = $this->haveExpectedTaxQuotationRequestSaleItems();
 
@@ -197,7 +199,7 @@ class VertexBusinessAssertionHelper extends Module
      * @return void
      */
     public function assertAllTaxAppConfigsForTenantHaveNewApiUrl(
-        TaxAppConfigTransfer $taxAppConfigTransfer
+        TaxAppConfigTransfer $taxAppConfigTransfer,
     ): void {
         $taxAppConfigEntityCollection = SpyTaxAppConfigQuery::create()
             ->filterByVendorCode($taxAppConfigTransfer->getVendorCode())
@@ -224,7 +226,7 @@ class VertexBusinessAssertionHelper extends Module
             ->filterByVendorCode($vendorCode)
             ->find();
 
-        $this->assertTrue($taxAppConfigEntityCollectionDeleted->count() == 0);
+        $this->assertTrue($taxAppConfigEntityCollectionDeleted->count() === 0);
     }
 
     /**
@@ -243,7 +245,7 @@ class VertexBusinessAssertionHelper extends Module
             ->filterByVendorCode($vendorCodeNotDeleted)
             ->find();
 
-        $this->assertTrue($deletedTaxAppConfigEntityCollection->count() == 0);
+        $this->assertTrue($deletedTaxAppConfigEntityCollection->count() === 0);
         $this->assertTrue($notDeletedTaxAppConfigEntityCollection->count() > 0);
     }
 }

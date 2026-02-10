@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Business\Validator;
 
 use Generated\Shared\Transfer\VertexConfigTransfer;
@@ -39,7 +41,9 @@ class VertexConfigValidator
 
     protected const RESPONSE_MESSAGE_BLANK_TAXAMO_TOKEN_FIELD = 'Seller token is required.';
 
-    public function __construct(protected VertexClientInterface $vertexClient) {}
+    public function __construct(protected VertexClientInterface $vertexClient)
+    {
+    }
 
     public function validate(VertexConfigTransfer $vertexConfigTransfer): VertexValidationResponseTransfer
     {
@@ -65,7 +69,7 @@ class VertexConfigValidator
 
     protected function validateSecurityUri(
         VertexConfigTransfer $vertexConfigTransfer,
-        VertexValidationResponseTransfer $vertexValidationResponseTransfer
+        VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): void {
         if (!$vertexConfigTransfer->getSecurityUri()) {
             $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_BLANK_SECURITY_URI_FIELD);
@@ -73,14 +77,16 @@ class VertexConfigValidator
             return;
         }
 
-        if (!filter_var($vertexConfigTransfer->getSecurityUri(), FILTER_VALIDATE_URL)) {
-            $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_NOT_VALID_URL_SECURITY_URI_FIELD);
+        if (filter_var($vertexConfigTransfer->getSecurityUri(), FILTER_VALIDATE_URL)) {
+            return;
         }
+
+        $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_NOT_VALID_URL_SECURITY_URI_FIELD);
     }
 
     protected function validateTransactionCallsUri(
         VertexConfigTransfer $vertexConfigTransfer,
-        VertexValidationResponseTransfer $vertexValidationResponseTransfer
+        VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): void {
         if (!$vertexConfigTransfer->getTransactionCallsUri()) {
             $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_BLANK_TRANSACTION_CALLS_URI_FIELD);
@@ -88,14 +94,16 @@ class VertexConfigValidator
             return;
         }
 
-        if (!filter_var($vertexConfigTransfer->getTransactionCallsUri(), FILTER_VALIDATE_URL)) {
-            $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_NOT_VALID_URL_TRANSACTION_CALLS_URI_FIELD);
+        if (filter_var($vertexConfigTransfer->getTransactionCallsUri(), FILTER_VALIDATE_URL)) {
+            return;
         }
+
+        $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_NOT_VALID_URL_TRANSACTION_CALLS_URI_FIELD);
     }
 
     protected function validateClientId(
         VertexConfigTransfer $vertexConfigTransfer,
-        VertexValidationResponseTransfer $vertexValidationResponseTransfer
+        VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): void {
         if (!$vertexConfigTransfer->getClientId()) {
             $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_BLANK_CLIENT_ID_FIELD);
@@ -106,7 +114,7 @@ class VertexConfigValidator
 
     protected function validateClientSecret(
         VertexConfigTransfer $vertexConfigTransfer,
-        VertexValidationResponseTransfer $vertexValidationResponseTransfer
+        VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): void {
         if (!$vertexConfigTransfer->getClientSecret()) {
             $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_BLANK_CLIENT_SECRET_FIELD);
@@ -117,41 +125,49 @@ class VertexConfigValidator
 
     protected function validateIsActive(
         VertexConfigTransfer $vertexConfigTransfer,
-        VertexValidationResponseTransfer $vertexValidationResponseTransfer
+        VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): void {
-        if ($vertexConfigTransfer->getIsActive() === null) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, static::REQUEST_APPLICATION_STATUS_IS_ACTIVE));
+        if ($vertexConfigTransfer->getIsActive() !== null) {
+            return;
         }
+
+        $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, static::REQUEST_APPLICATION_STATUS_IS_ACTIVE));
     }
 
     protected function validateIsInvoicingEnabled(
         VertexConfigTransfer $vertexConfigTransfer,
-        VertexValidationResponseTransfer $vertexValidationResponseTransfer
+        VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): void {
-        if ($vertexConfigTransfer->getIsInvoicingEnabled() === null) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, 'isInvoicingEnabled'));
+        if ($vertexConfigTransfer->getIsInvoicingEnabled() !== null) {
+            return;
         }
+
+        $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, 'isInvoicingEnabled'));
     }
 
     protected function validateTaxamoApiUrl(
         VertexConfigTransfer $vertexConfigTransfer,
-        VertexValidationResponseTransfer $vertexValidationResponseTransfer
+        VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): void {
         if (!$vertexConfigTransfer->getTaxamoApiUrl()) {
             $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_TAXAMO_API_URL_FIELD);
         }
 
-        if (!filter_var($vertexConfigTransfer->getTaxamoApiUrl(), FILTER_VALIDATE_URL)) {
-            $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_NOT_VALID_URL_TAXAMO_API_URI_FIELD);
+        if (filter_var($vertexConfigTransfer->getTaxamoApiUrl(), FILTER_VALIDATE_URL)) {
+            return;
         }
+
+        $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_NOT_VALID_URL_TAXAMO_API_URI_FIELD);
     }
 
     protected function validateTaxamoToken(
         VertexConfigTransfer $vertexConfigTransfer,
-        VertexValidationResponseTransfer $vertexValidationResponseTransfer
+        VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): void {
-        if (!$vertexConfigTransfer->getTaxamoToken()) {
-            $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_BLANK_TAXAMO_TOKEN_FIELD);
+        if ($vertexConfigTransfer->getTaxamoToken()) {
+            return;
         }
+
+        $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_BLANK_TAXAMO_TOKEN_FIELD);
     }
 }

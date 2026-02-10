@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\TaxCalculator;
 
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
@@ -34,7 +36,7 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
 
     public function calculateTax(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        VertexConfigTransfer $vertexConfigTransfer
+        VertexConfigTransfer $vertexConfigTransfer,
     ): VertexCalculationResponseTransfer {
         if (!$vertexConfigTransfer->getIsActive()) {
             return $this->vertexSuppliesResponseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, static::ERROR_MESSAGE_INACTIVE_VERTEX_APP);
@@ -63,9 +65,11 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
 
         $lineItemIdToInitialIdentifierMapping = [];
         foreach ($vertexSuppliesRequestTransfer->getLineItems() as $lineItem) {
-            if ($lineItem->getInitialIdentifier() && $lineItem->getShouldBeGrouped()) {
-                $lineItemIdToInitialIdentifierMapping[$lineItem->getLineItemId()] = $lineItem->getInitialIdentifier();
+            if (!$lineItem->getInitialIdentifier() || !$lineItem->getShouldBeGrouped()) {
+                continue;
             }
+
+            $lineItemIdToInitialIdentifierMapping[$lineItem->getLineItemId()] = $lineItem->getInitialIdentifier();
         }
 
         $vertexApiResponseTransfer = $this->suppliesApi->calculateTax(

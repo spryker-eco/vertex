@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace SprykerEcoTest\Zed\Vertex;
 
@@ -115,7 +115,7 @@ class VertexBusinessTester extends Actor
         StoreTransfer $storeTransfer,
         string $priceMode = 'NET_MODE',
         bool $withBillingAddress = true,
-        array $billingAddressSeed = []
+        array $billingAddressSeed = [],
     ): CalculableObjectTransfer {
         $merchantTransfer1 = $this->haveMerchant();
         $this->haveMerchantProfile($merchantTransfer1);
@@ -229,7 +229,7 @@ class VertexBusinessTester extends Actor
      */
     public function assertTaxAppConfigStoredProperly(
         TaxAppConfigTransfer $taxAppConfigTransfer,
-        ?SpyTaxAppConfig $taxAppConfigEntity = null
+        ?SpyTaxAppConfig $taxAppConfigEntity = null,
     ): void {
         $this->assertNotNull($taxAppConfigEntity);
         $this->assertEquals(

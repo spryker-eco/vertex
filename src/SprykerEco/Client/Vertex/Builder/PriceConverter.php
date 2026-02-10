@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Builder;
 
 class PriceConverter
@@ -12,7 +14,7 @@ class PriceConverter
     protected const CURRENCY_DENOMINATION_DEFAULT = 100;
 
     /**
-     * @param int|string $priceAmount
+     * @param string|int $priceAmount
      *
      * @return float
      */
@@ -26,7 +28,7 @@ class PriceConverter
     }
 
     /**
-     * @param int|string $priceAmount
+     * @param string|int $priceAmount
      *
      * @return float
      */

@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Dependency\Plugin;
 
 use Generated\Shared\Transfer\CalculableObjectTransfer;

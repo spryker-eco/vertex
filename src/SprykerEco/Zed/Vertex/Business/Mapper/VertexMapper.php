@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Business\Mapper;
 
 use ArrayObject;
@@ -44,18 +46,17 @@ class VertexMapper implements VertexMapperInterface
      */
     protected const ORIGINAL_TRANSFER_MISSING_EXCEPTION = 'Could not get original transfer from CalculableObjectTransfer';
 
-
     public function __construct(
         protected AddressMapperInterface $addressMapper,
         protected ItemExpensePriceRetrieverInterface $priceFormatter,
         protected StoreFacadeInterface $storeFacade,
-        protected VertexConfig $vertexConfig
+        protected VertexConfig $vertexConfig,
     ) {
     }
 
     public function mapCalculableObjectToVertexSaleTransfer(
         CalculableObjectTransfer $calculableObjectTransfer,
-        VertexSaleTransfer $vertexSaleTransfer
+        VertexSaleTransfer $vertexSaleTransfer,
     ): VertexSaleTransfer {
         $vertexSaleTransfer = $vertexSaleTransfer->fromArray($calculableObjectTransfer->toArray(), true);
         $saleItemTransfers = new ArrayObject();
@@ -118,7 +119,7 @@ class VertexMapper implements VertexMapperInterface
         ItemTransfer $itemTransfer,
         string $priceMode,
         ?AddressTransfer $billingAddressTransfer,
-        int $itemIndex
+        int $itemIndex,
     ): VertexItemTransfer {
         $vertexItemTransfer = new VertexItemTransfer();
 
@@ -171,7 +172,7 @@ class VertexMapper implements VertexMapperInterface
     public function mapMerchantStockAddressTransferToVertexShippingWarehouse(
         VertexItemTransfer $vertexItemTransfer,
         MerchantStockAddressTransfer $merchantStockAddressTransfer,
-        VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer
+        VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer,
     ): VertexShippingWarehouseTransfer {
         $quantityToShip = 0;
         if ($merchantStockAddressTransfer->getQuantityToShip()) {
@@ -191,7 +192,7 @@ class VertexMapper implements VertexMapperInterface
     public function mapExpenseTransferToVertexShipmentTransfer(
         ExpenseTransfer $expenseTransfer,
         string $priceMode,
-        ?AddressTransfer $billingAddressTransfer
+        ?AddressTransfer $billingAddressTransfer,
     ): VertexShipmentTransfer {
         $vertexShipmentTransfer = new VertexShipmentTransfer();
 
@@ -283,7 +284,7 @@ class VertexMapper implements VertexMapperInterface
     public function setTaxSaleCountryCode(
         CalculableObjectTransfer $calculableObjectTransfer,
         VertexSaleTransfer $vertexSaleTransfer,
-        OrderTransfer|QuoteTransfer $originalTransfer
+        OrderTransfer|QuoteTransfer $originalTransfer,
     ): VertexSaleTransfer {
         $sellerCountryCode = $customerCountryCode = $this->findStoreCountryCode($calculableObjectTransfer);
 

@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Business\Aggregator;
 
 use Generated\Shared\Transfer\CalculableObjectTransfer;
@@ -14,6 +16,6 @@ interface PriceAggregatorInterface
 {
     public function calculatePriceAggregation(
         VertexSaleTransfer $VertexSaleTransfer,
-        CalculableObjectTransfer $calculableObjectTransfer
+        CalculableObjectTransfer $calculableObjectTransfer,
     ): CalculableObjectTransfer;
 }

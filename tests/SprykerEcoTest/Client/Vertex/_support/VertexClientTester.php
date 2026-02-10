@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace SprykerEcoTest\Client\Vertex;
 
@@ -157,17 +157,15 @@ class VertexClientTester extends Actor
      */
     protected function mockClientForVertexApiCredentialRequest(
         VertexApiCredentialTransfer $vertexApiCredentialTransfer,
-        ResponseInterface $response
+        ResponseInterface $response,
     ): ClientInterface {
-        $mockClient = Stub::makeEmpty(ClientInterface::class, [
+        return Stub::makeEmpty(ClientInterface::class, [
             'request' => function () use ($response) {
                 Expected::once();
 
                 return $response;
             },
         ]);
-
-        return $mockClient;
     }
 
     // /**
@@ -226,13 +224,12 @@ class VertexClientTester extends Actor
         $this->mockHttpClient = new MockHandler([$this->getVertexStandardResponse($fixtureName, $statusCode)]);
 
         $handlerStack = HandlerStack::create($this->mockHttpClient);
-        $client = new Client([
+
+        return new Client([
             'handler' => $handlerStack,
             RequestOptions::TIMEOUT => 10,
             RequestOptions::CONNECT_TIMEOUT => 3,
         ]);
-
-        return $client;
     }
 
     /**

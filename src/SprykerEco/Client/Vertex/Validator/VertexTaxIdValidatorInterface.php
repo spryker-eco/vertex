@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
@@ -15,6 +17,6 @@ interface VertexTaxIdValidatorInterface
 {
     public function validate(
         TaxIdValidationRequestTransfer $taxIdValidationRequest,
-        VertexConfigTransfer $vertexConfigTransfer
+        VertexConfigTransfer $vertexConfigTransfer,
     ): VertexValidationResponseTransfer;
 }

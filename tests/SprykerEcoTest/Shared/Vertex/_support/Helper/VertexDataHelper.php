@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEcoTest\Shared\Vertex\Helper;
 
 use ArrayObject;
@@ -159,7 +161,7 @@ class VertexDataHelper extends Module
      */
     public function assertTaxAppConfigStoredProperly(
         TaxAppConfigTransfer $taxAppConfigTransfer,
-        ?SpyTaxAppConfig $taxAppConfigEntity = null
+        ?SpyTaxAppConfig $taxAppConfigEntity = null,
     ): void {
         $this->assertNotNull($taxAppConfigEntity);
         $this->assertEquals(
@@ -213,9 +215,11 @@ class VertexDataHelper extends Module
         $this->assertNotNull($taxAppConfigEntity, sprintf('Expected to find a Tax App configuration for the vendor with vendor code "%s" but it was not found.', $vendorCode));
         $this->assertSame($taxAppConfigEntity->getFkStore(), $idStore, sprintf('Expected for a Tax App configuration to have the store with id "%s" but it has "%s".', $idStore, $taxAppConfigEntity->getFkStore()));
 
-        if ($isActive !== null) {
-            $this->assertSame($taxAppConfigEntity->getIsActive(), $isActive, sprintf('Expected for a Tax App configuration to have the isActive flag "%b" but it has "%b".', $isActive, $taxAppConfigEntity->getIsActive()));
+        if ($isActive === null) {
+            return;
         }
+
+        $this->assertSame($taxAppConfigEntity->getIsActive(), $isActive, sprintf('Expected for a Tax App configuration to have the isActive flag "%b" but it has "%b".', $isActive, $taxAppConfigEntity->getIsActive()));
     }
 
     /**
@@ -235,10 +239,12 @@ class VertexDataHelper extends Module
         $countAppConfigEntities = 0;
         foreach ($taxAppConfigEntities as $taxAppConfigEntity) {
             foreach ($allowedStores as $allowedStore) {
-                if ($taxAppConfigEntity->getFkStore() === $allowedStore->getIdStore()) {
-                    $this->assertSame($taxAppConfigEntity->getFkStore(), $allowedStore->getIdStore(), sprintf('Expected for a Tax App configuration to have the store with id "%s" but it has "%s".', $allowedStore->getIdStore(), $taxAppConfigEntity->getFkStore()));
-                    $countAppConfigEntities++;
+                if ($taxAppConfigEntity->getFkStore() !== $allowedStore->getIdStore()) {
+                    continue;
                 }
+
+                $this->assertSame($taxAppConfigEntity->getFkStore(), $allowedStore->getIdStore(), sprintf('Expected for a Tax App configuration to have the store with id "%s" but it has "%s".', $allowedStore->getIdStore(), $taxAppConfigEntity->getFkStore()));
+                $countAppConfigEntities++;
             }
         }
 

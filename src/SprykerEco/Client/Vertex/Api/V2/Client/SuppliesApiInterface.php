@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Api\V2\Client;
 
 use Generated\Shared\Transfer\VertexApiAccessTokenTransfer;
@@ -17,6 +19,6 @@ interface SuppliesApiInterface
     public function calculateTax(
         VertexSuppliesTransfer $vertexSuppliesTransfer,
         VertexConfigTransfer $vertexConfigTransfer,
-        VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer
+        VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer,
     ): VertexApiResponseTransfer;
 }

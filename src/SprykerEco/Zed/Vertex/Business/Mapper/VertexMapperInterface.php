@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Business\Mapper;
 
 use Generated\Shared\Transfer\AddressTransfer;
@@ -22,26 +24,26 @@ interface VertexMapperInterface
 {
     public function mapCalculableObjectToVertexSaleTransfer(
         CalculableObjectTransfer $calculableObjectTransfer,
-        VertexSaleTransfer $VertexSaleTransfer
+        VertexSaleTransfer $VertexSaleTransfer,
     ): VertexSaleTransfer;
 
     public function mapItemTransfersToSaleItemTransfers(
         ItemTransfer $itemTransfer,
         string $priceMode,
         ?AddressTransfer $billingAddressTransfer,
-        int $itemIndex
+        int $itemIndex,
     ): VertexItemTransfer;
 
     public function mapMerchantStockAddressTransferToVertexShippingWarehouse(
         VertexItemTransfer $VertexItemTransfer,
         MerchantStockAddressTransfer $merchantStockAddressTransfer,
-        VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer
+        VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer,
     ): VertexShippingWarehouseTransfer;
 
     public function mapExpenseTransferToVertexShipmentTransfer(
         ExpenseTransfer $expenseTransfer,
         string $priceMode,
-        ?AddressTransfer $billingAddressTransfer
+        ?AddressTransfer $billingAddressTransfer,
     ): VertexShipmentTransfer;
 
     public function mapOrderTransferToVertexSaleTransfer(OrderTransfer $orderTransfer, VertexSaleTransfer $VertexSaleTransfer): VertexSaleTransfer;

@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\VertexItemTransfer;
@@ -16,8 +18,9 @@ class VertexItemValidator implements VertexItemValidatorInterface
 
     public function __construct(
         protected VertexAddressValidatorInterface $addressValidator,
-        protected VertexShippingWarehouseValidatorInterface $shippingWarehouseValidator
-    ) {}
+        protected VertexShippingWarehouseValidatorInterface $shippingWarehouseValidator,
+    ) {
+    }
 
     public function validate(
         VertexItemTransfer $vertexItemTransfer,
@@ -55,13 +58,15 @@ class VertexItemValidator implements VertexItemValidatorInterface
             $this->addressValidator->validate($vertexItemTransfer->getBillingAddress(), VertexItemTransfer::BILLING_ADDRESS, $vertexValidationResponseTransfer);
         }
 
-        if ($vertexItemTransfer->getVertexShippingWarehouses()->count()) {
-            foreach ($vertexItemTransfer->getVertexShippingWarehouses() as $vertexShippingWarehouseTransfer) {
-                $this->shippingWarehouseValidator->validate(
-                    $vertexShippingWarehouseTransfer,
-                    $vertexValidationResponseTransfer,
-                );
-            }
+        if (!$vertexItemTransfer->getVertexShippingWarehouses()->count()) {
+            return;
+        }
+
+        foreach ($vertexItemTransfer->getVertexShippingWarehouses() as $vertexShippingWarehouseTransfer) {
+            $this->shippingWarehouseValidator->validate(
+                $vertexShippingWarehouseTransfer,
+                $vertexValidationResponseTransfer,
+            );
         }
     }
 }

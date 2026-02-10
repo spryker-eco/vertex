@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
+declare(strict_types = 1);
+
 namespace SprykerEcoTest\Zed\VertexApi\Business;
 
 use Codeception\Test\Unit;
@@ -61,7 +68,7 @@ class VertexApiFacadeValidateTaxIdTest extends Unit
     public function testGivenACustomerProvidesAnInValidDataWhenTheTaxIdIsValidatedThenAFailedResponseIsReturned(
         int $statusCode,
         string $fixtureName,
-        string $errorMessage
+        string $errorMessage,
     ): void {
         // Arrange
         $vertexConfigTransfer = $this->tester->haveVertexConfig([

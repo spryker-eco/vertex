@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Builder\Supplies;
 
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
@@ -26,7 +28,7 @@ class VertexSuppliesTransactionTypeBuilder implements VertexSuppliesRequestBuild
      */
     public function build(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        VertexSuppliesTransfer $vertexSuppliesTransfer
+        VertexSuppliesTransfer $vertexSuppliesTransfer,
     ): VertexSuppliesTransfer {
         return $vertexSuppliesTransfer->setTransactionType(static::TRANSACTION_TYPE);
     }

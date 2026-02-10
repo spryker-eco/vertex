@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEcoTest\Client\Vertex;
 
 use Codeception\PHPUnit\Constraint\JsonContains;
@@ -315,6 +317,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
     {
         $factoryMock = new class ($mockClient, $mockValidator) extends VertexFactory {
             private ClientInterface $httpClient;
+
             private VertexValidatorInterface $validator;
 
             public function __construct(ClientInterface $httpClient, VertexValidatorInterface $validator)

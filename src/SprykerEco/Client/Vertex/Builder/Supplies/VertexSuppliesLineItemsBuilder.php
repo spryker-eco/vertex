@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Builder\Supplies;
 
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
@@ -44,7 +46,7 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
      */
     public function build(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        VertexSuppliesTransfer $vertexSuppliesTransfer
+        VertexSuppliesTransfer $vertexSuppliesTransfer,
     ): VertexSuppliesTransfer {
         $vertexSaleTransfer = $vertexCalculationRequestTransfer->getSaleOrFail();
         foreach ($vertexSaleTransfer->getItems() as $vertexItemTransfer) {
@@ -70,7 +72,7 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
     protected function buildWithSingleWarehouse(
         VertexSaleTransfer $vertexSaleTransfer,
         VertexItemTransfer $vertexItemTransfer,
-        VertexSuppliesTransfer $vertexSuppliesTransfer
+        VertexSuppliesTransfer $vertexSuppliesTransfer,
     ): VertexSuppliesTransfer {
         $vertexLineItemTransfer = new VertexLineItemTransfer();
 
@@ -98,7 +100,7 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
     protected function buildWithMultipleWarehouses(
         VertexSaleTransfer $vertexSaleTransfer,
         VertexItemTransfer $vertexItemTransfer,
-        VertexSuppliesTransfer $vertexSuppliesTransfer
+        VertexSuppliesTransfer $vertexSuppliesTransfer,
     ): VertexSuppliesTransfer {
         $idIndex = 0;
         foreach ($vertexItemTransfer->getVertexShippingWarehouses() as $vertexShippingWarehouse) {
@@ -133,7 +135,7 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
     protected function cloneVertexItemTransferWithVertexShippingWarehouseData(
         VertexItemTransfer $vertexItemTransfer,
         VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer,
-        int &$idIndex
+        int &$idIndex,
     ): VertexItemTransfer {
         $clonedItemTransfer = clone $vertexItemTransfer;
 
@@ -158,7 +160,7 @@ class VertexSuppliesLineItemsBuilder implements VertexSuppliesRequestBuilderInte
      */
     protected function runVertexSuppliesLineItemsBuilders(
         VertexItemTransfer $vertexItemTransfer,
-        VertexLineItemTransfer $vertexLineItemTransfer
+        VertexLineItemTransfer $vertexLineItemTransfer,
     ): VertexLineItemTransfer {
         foreach ($this->vertexLineItemBuilders as $builder) {
             $vertexLineItemTransfer = $builder->build($vertexItemTransfer, $vertexLineItemTransfer);

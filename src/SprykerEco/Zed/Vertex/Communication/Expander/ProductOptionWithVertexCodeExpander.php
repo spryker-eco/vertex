@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Communication\Expander;
 
 use Generated\Shared\Transfer\CalculableObjectTransfer;
@@ -26,17 +28,19 @@ class ProductOptionWithVertexCodeExpander
     public function expand(OrderTransfer|CalculableObjectTransfer $transfer): OrderTransfer|CalculableObjectTransfer
     {
         foreach ($transfer->getItems() as $itemTransfer) {
-            if ($itemTransfer->getProductOptions()->count() > 0) {
-                foreach ($itemTransfer->getProductOptions() as $productOption) {
-                    $productOption->setTaxMetadata(
-                        (new ItemTaxMetadataTransfer())
-                            ->setProduct(
-                                [
-                                    'productClass' => $this->vertexCodeMapper->getProductOptionClassCode($productOption->getSku()),
-                                ],
-                            ),
-                    );
-                }
+            if ($itemTransfer->getProductOptions()->count() <= 0) {
+                continue;
+            }
+
+            foreach ($itemTransfer->getProductOptions() as $productOption) {
+                $productOption->setTaxMetadata(
+                    (new ItemTaxMetadataTransfer())
+                        ->setProduct(
+                            [
+                                'productClass' => $this->vertexCodeMapper->getProductOptionClassCode($productOption->getSku()),
+                            ],
+                        ),
+                );
             }
         }
 

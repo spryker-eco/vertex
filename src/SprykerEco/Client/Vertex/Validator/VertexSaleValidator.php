@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\VertexSaleTransfer;
@@ -16,7 +18,7 @@ class VertexSaleValidator implements VertexSaleValidatorInterface
 
     public function __construct(
         protected VertexItemValidatorInterface $itemValidator,
-        protected VertexShipmentValidatorInterface $shipmentValidator
+        protected VertexShipmentValidatorInterface $shipmentValidator,
     ) {
     }
 

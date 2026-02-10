@@ -5,12 +5,15 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Business\Order;
 
 use ArrayObject;
 use DateTime;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Spryker\Shared\Log\LoggerTrait;
 use Spryker\Zed\Sales\Business\SalesFacadeInterface;
@@ -19,7 +22,6 @@ use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
-use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 
 class RefundProcessor implements RefundProcessorInterface
 {
@@ -136,9 +138,11 @@ class RefundProcessor implements RefundProcessorInterface
         foreach ($orderTransfer->getItems() as $item) {
             $itemId = $item->getIdSalesOrderItemOrFail();
 
-            if (in_array($itemId, $orderItemIds)) {
-                $newOrderItems[] = $item;
+            if (!in_array($itemId, $orderItemIds)) {
+                continue;
             }
+
+            $newOrderItems[] = $item;
         }
 
         $orderTransfer->setItems(new ArrayObject($newOrderItems));

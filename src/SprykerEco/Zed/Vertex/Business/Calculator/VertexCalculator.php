@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Business\Calculator;
 
 use Generated\Shared\Transfer\CalculableObjectTransfer;
@@ -84,15 +86,17 @@ class VertexCalculator implements VertexCalculatorInterface
 
         $calculableObjectTransfer = $this->priceAggregator->calculatePriceAggregation($vertexCalculationResponseTransfer->getSaleOrFail(), $calculableObjectTransfer);
 
-        if ($vertexCalculationResponseTransfer->getIsSuccessful()) {
-            $calculableObjectTransfer->setVertexSaleHash($this->getVertexSaleHash($vertexSaleTransfer));
-            $calculableObjectTransfer->setVertexCalculationResponse($vertexCalculationResponseTransfer);
+        if (!$vertexCalculationResponseTransfer->getIsSuccessful()) {
+            return;
         }
+
+        $calculableObjectTransfer->setVertexSaleHash($this->getVertexSaleHash($vertexSaleTransfer));
+        $calculableObjectTransfer->setVertexCalculationResponse($vertexCalculationResponseTransfer);
     }
 
     protected function getVertexCalculationResponse(
         VertexSaleTransfer $vertexSaleTransfer,
-        VertexConfigTransfer $vertexConfigTransfer
+        VertexConfigTransfer $vertexConfigTransfer,
     ): VertexCalculationResponseTransfer {
         $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 
@@ -118,7 +122,7 @@ class VertexCalculator implements VertexCalculatorInterface
 
     protected function getCachedVertexResponseTransfer(
         CalculableObjectTransfer $calculableObjectTransfer,
-        VertexSaleTransfer $vertexSaleTransfer
+        VertexSaleTransfer $vertexSaleTransfer,
     ): ?VertexCalculationResponseTransfer {
         $currentTaxRequestHash = null;
 

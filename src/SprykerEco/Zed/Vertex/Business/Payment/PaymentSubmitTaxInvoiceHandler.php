@@ -5,11 +5,14 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Business\Payment;
 
 use Generated\Shared\Transfer\MessageAttributesTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\VertexSubmitPaymentTaxInvoiceTransfer;
 use Spryker\Shared\Log\LoggerTrait;
@@ -19,7 +22,6 @@ use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
-use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 
 class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerInterface
 {
@@ -43,7 +45,6 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
         protected VertexClientInterface $vertexClient,
     ) {
     }
-
 
     public function handleSubmitPaymentTaxInvoice(OrderTransfer $orderTransfer): VertexCalculationResponseTransfer
     {
@@ -122,7 +123,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
 
     protected function setMessageAttributesTransfer(
         VertexSubmitPaymentTaxInvoiceTransfer $vertexSubmitPaymentTaxInvoiceTransfer,
-        OrderTransfer $orderTransfer
+        OrderTransfer $orderTransfer,
     ): void {
         $storeTransfer = $this->storeFacade->getStoreByName($orderTransfer->getStoreOrFail());
 

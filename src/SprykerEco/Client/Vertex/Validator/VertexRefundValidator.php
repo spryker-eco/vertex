@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
@@ -40,9 +42,11 @@ class VertexRefundValidator implements VertexValidatorInterface
         );
 
         foreach ($vertexSaleTransfer->getItems() as $vertexSaleItemTransfer) {
-            if (!$vertexSaleItemTransfer->getRefundableAmount()) {
-                $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexItemTransfer::REFUNDABLE_AMOUNT));
+            if ($vertexSaleItemTransfer->getRefundableAmount()) {
+                continue;
             }
+
+            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexItemTransfer::REFUNDABLE_AMOUNT));
         }
 
         if ($vertexValidationResponseTransfer->getMessages()) {

@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\VertexShippingWarehouseTransfer;
@@ -14,22 +16,26 @@ class VertexShippingWarehouseValidator implements VertexShippingWarehouseValidat
 {
     protected const ERROR_WAREHOUSE_FIELD_IS_REQUIRED = 'Field %s is required for shipping warehouse';
 
-    public function __construct(protected VertexAddressValidatorInterface $addressValidator) {}
+    public function __construct(protected VertexAddressValidatorInterface $addressValidator)
+    {
+    }
 
     public function validate(
         VertexShippingWarehouseTransfer $warehouse,
-        VertexValidationResponseTransfer $vertexValidationResponseTransfer
+        VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): void {
         if (!$warehouse->getQuantity()) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_WAREHOUSE_FIELD_IS_REQUIRED, VertexShippingWarehouseTransfer::QUANTITY));
         }
 
-        if ($warehouse->getWarehouseAddress()) {
-            $this->addressValidator->validate(
-                $warehouse->getWarehouseAddress(),
-                VertexShippingWarehouseTransfer::WAREHOUSE_ADDRESS,
-                $vertexValidationResponseTransfer,
-            );
+        if (!$warehouse->getWarehouseAddress()) {
+            return;
         }
+
+        $this->addressValidator->validate(
+            $warehouse->getWarehouseAddress(),
+            VertexShippingWarehouseTransfer::WAREHOUSE_ADDRESS,
+            $vertexValidationResponseTransfer,
+        );
     }
 }
