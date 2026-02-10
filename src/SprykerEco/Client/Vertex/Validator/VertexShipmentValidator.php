@@ -22,16 +22,12 @@ class VertexShipmentValidator implements VertexShipmentValidatorInterface
         VertexShipmentTransfer $vertexShipmentTransfer,
         VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): void {
-        if (!$vertexShipmentTransfer->getId()) {
+        if ($vertexShipmentTransfer->getId() === null) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_SHIPMENT_FIELD_IS_REQUIRED, VertexShipmentTransfer::ID));
         }
 
-        if (!$vertexShipmentTransfer->getPriceAmount()) {
+        if ($vertexShipmentTransfer->getPriceAmount() === null) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_SHIPMENT_FIELD_IS_REQUIRED, VertexShipmentTransfer::PRICE_AMOUNT));
-        }
-
-        if (!$vertexShipmentTransfer->getShipmentMethodKey()) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_SHIPMENT_FIELD_IS_REQUIRED, VertexShipmentTransfer::SHIPMENT_METHOD_KEY));
         }
 
         if (!$vertexShipmentTransfer->getShippingAddress()) {

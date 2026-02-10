@@ -214,7 +214,8 @@ class VertexMapper implements VertexMapperInterface
         if ($expenseTransfer->getCanceledAmount()) {
             $vertexShipmentTransfer->setRefundableAmount($this->priceFormatter->getSumPriceWithoutDiscount($expenseTransfer, $priceMode));
         }
-        $vertexShipmentTransfer->setDiscountAmount($expenseTransfer->getSumDiscountAmountAggregation());
+        $discountAmount = $expenseTransfer->getSumDiscountAmountAggregation() ?? $expenseTransfer->getSumPrice();
+        $vertexShipmentTransfer->setDiscountAmount($discountAmount);
 
         return $vertexShipmentTransfer;
     }

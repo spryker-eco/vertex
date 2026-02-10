@@ -23,11 +23,11 @@ class VertexItemValidator implements VertexItemValidatorInterface
         VertexItemTransfer $vertexItemTransfer,
         VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): void {
-        if (!$vertexItemTransfer->getId()) {
+        if ($vertexItemTransfer->getId() === null) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ITEM_FIELD_IS_REQUIRED, VertexItemTransfer::ID, $vertexItemTransfer->getSku()));
         }
 
-        if (!$vertexItemTransfer->getPriceAmount()) {
+        if ($vertexItemTransfer->getPriceAmount() === null) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ITEM_FIELD_IS_REQUIRED, VertexItemTransfer::PRICE_AMOUNT, $vertexItemTransfer->getSku()));
         }
 
