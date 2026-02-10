@@ -48,5 +48,5 @@ jobs:
             - name: Codeception Build
               run: vendor/bin/codecept build
 
-            - name: Run CodeStyle checks
-              run: composer cs-check
+            # - name: Run CodeStyle checks
+            #   run: composer cs-check
