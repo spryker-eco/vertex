@@ -15,19 +15,14 @@ use SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface;
 
 class VertexLineItemQuantityBuilder implements VertexLineItemBuilderInterface
 {
-    /**
-     * @var string
-     */
     protected const UNIT_OF_MEASURE_EACH = 'EA';
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexItemTransfer|\Generated\Shared\Transfer\VertexShipmentTransfer $itemTransfer
-     * @param \Generated\Shared\Transfer\VertexLineItemTransfer $vertexLineItemTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexLineItemTransfer
-     */
     public function build(VertexItemTransfer|VertexShipmentTransfer $itemTransfer, VertexLineItemTransfer $vertexLineItemTransfer): VertexLineItemTransfer
     {
+        if (!$itemTransfer instanceof VertexItemTransfer) {
+            return $vertexLineItemTransfer;
+        }
+
         $vertexQuantityTransfer = (new VertexQuantityTransfer())
             ->setUnitOfMeasure(static::UNIT_OF_MEASURE_EACH)
             ->setValue((float)$itemTransfer->getQuantityOrFail());

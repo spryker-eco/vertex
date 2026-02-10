@@ -44,11 +44,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
     ) {
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer
-     *
-     * @return void
-     */
+
     public function handleSubmitPaymentTaxInvoice(OrderTransfer $orderTransfer): VertexCalculationResponseTransfer
     {
         $idSalesOrder = $orderTransfer->getIdSalesOrderOrFail();
@@ -59,7 +55,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
         if (!$orderTransfer) {
             $this->getLogger()->warning(sprintf('Order with ID `%s` not found', $idSalesOrder));
 
-            $vertexCalculationResponseTransfer;
+            return $vertexCalculationResponseTransfer;
         }
 
         $orderTransfer = $this->executeOrderVertexExpanderPlugins($orderTransfer);
@@ -79,7 +75,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
             return $vertexCalculationResponseTransfer;
         }
 
-        if (!$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsInvoicingEnabled()) {
+        if (!$vertexConfigTransfer->getIsActive()) {
             $this->getLogger()->warning('Vertex configuration not active');
 
             return $vertexCalculationResponseTransfer;
@@ -93,7 +89,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
 
         $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 
-        if (!$vertexApiAccessTokenTransfer) {
+        if (!$vertexApiAccessTokenTransfer->getAccessToken()) {
             $this->getLogger()->warning('Vertex API access token not found');
 
             return $vertexCalculationResponseTransfer;
@@ -106,7 +102,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
         $this->getLogger()->info(
             'Starting tax calculation request for invoicing process',
             [
-                'transactionId' => $vertexCalculationRequestTransfer->getSale()->getTransactionId(),
+                'transactionId' => $vertexCalculationRequestTransfer->getSale()?->getTransactionId(),
                 'requestTransfer' => $vertexCalculationRequestTransfer->modifiedToArray(),
             ],
         );
@@ -116,7 +112,7 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
         $this->getLogger()->info(
             'Finished tax calculation request for invoicing process',
             [
-                'transactionId' => $vertexCalculationRequestTransfer->getSale()->getTransactionId(),
+                'transactionId' => $vertexCalculationRequestTransfer->getSale()?->getTransactionId(),
                 'responseTransfer' => $vertexCalculationResponseTransfer->modifiedToArray(),
             ],
         );

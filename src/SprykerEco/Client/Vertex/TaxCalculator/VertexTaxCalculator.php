@@ -75,7 +75,7 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
         );
 
         if (!$vertexApiResponseTransfer->getIsSuccessful()) {
-            return $this->vertexSuppliesResponseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, $vertexApiResponseTransfer->getErrorMessage());
+            return $this->vertexSuppliesResponseBuilder->buildErrorResponse($vertexCalculationRequestTransfer, $vertexApiResponseTransfer->getErrorMessageOrFail());
         }
 
         return $this->vertexSuppliesResponseBuilder->buildResponse($vertexApiResponseTransfer, $vertexCalculationRequestTransfer, $lineItemIdToInitialIdentifierMapping);

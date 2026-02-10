@@ -15,12 +15,6 @@ use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
 
 class VertexSuppliesDefaultsBuilder implements VertexSuppliesRequestBuilderInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
-     * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexSuppliesTransfer
-     */
     public function build(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexSuppliesTransfer $vertexSuppliesTransfer
@@ -30,7 +24,7 @@ class VertexSuppliesDefaultsBuilder implements VertexSuppliesRequestBuilderInter
 
         $seller = $vertexSuppliesTransfer->getSeller() ?? new VertexSellerTransfer();
 
-        if (!$seller->getCompany() && strlen($vertexConfigTransfer->getDefaultTaxpayerCompanyCode()) > 0) {
+        if (!$seller->getCompany() && strlen($vertexConfigTransfer->getDefaultTaxpayerCompanyCodeOrFail()) > 0) {
             $seller->setCompany($vertexConfigTransfer->getDefaultTaxpayerCompanyCode());
         }
 

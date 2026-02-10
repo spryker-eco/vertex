@@ -98,6 +98,11 @@ class VertexCodeMapper
         }
 
         $fixtures = file_get_contents($fixturesPath);
+        
+        if (!$fixtures) {
+            return;
+        }
+
         $fixturesData = json_decode($fixtures, true);
         if (!is_array($fixturesData)) {
             return;
@@ -179,6 +184,10 @@ class VertexCodeMapper
      */
     protected function getClassCode(array $classCodes, ?string $key): string
     {
+        if (!$key) {
+            return '';
+        }
+
         if (isset($classCodes[$key])) {
             return (string)$classCodes[$key];
         }

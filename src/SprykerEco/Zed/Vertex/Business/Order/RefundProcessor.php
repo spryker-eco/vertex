@@ -51,7 +51,7 @@ class RefundProcessor implements RefundProcessorInterface
      * @param array<int> $orderItemIds
      * @param int $idSalesOrder
      *
-     * @return void
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
     public function processOrderRefund(array $orderItemIds, int $idSalesOrder): VertexCalculationResponseTransfer
     {
@@ -83,7 +83,7 @@ class RefundProcessor implements RefundProcessorInterface
 
         $vertexSaleTransfer = $this->vertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
 
-        if (!$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsInvoicingEnabled()) {
+        if (!$vertexConfigTransfer->getIsInvoicingEnabled()) {
             $this->getLogger()->warning('App is Inactive or configured to not submit void invoice');
 
             return $vertexCalculationResponseTransfer;

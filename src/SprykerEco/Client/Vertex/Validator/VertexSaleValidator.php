@@ -40,10 +40,6 @@ class VertexSaleValidator implements VertexSaleValidatorInterface
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexSaleTransfer::ITEMS));
         }
 
-        if (!$vertexSaleTransfer->getShipments()) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexSaleTransfer::SHIPMENTS));
-        }
-
         foreach ($vertexSaleTransfer->getItems() as $vertexItemTransfer) {
             $this->itemValidator->validate(
                 $vertexItemTransfer,

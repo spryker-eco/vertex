@@ -61,7 +61,7 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     protected function addVertexClient(Container $container): Container
     {
         $container->set(static::CLIENT_VERTEX, function (Container $container) {
-            return $container->getLocator()->Vertex()->client();
+            return $container->getLocator()->vertex()->client();
         });
 
         return $container;

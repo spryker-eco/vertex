@@ -45,7 +45,7 @@ class VertexConfigResolver implements VertexConfigResolverInterface
 
         if (!$vertexValidationResponseTransfer->getIsValid()) {
             $this->getLogger()->warning(
-                $vertexValidationResponseTransfer->getMessage(),
+                $vertexValidationResponseTransfer->getMessageOrFail(),
             );
 
             return null;

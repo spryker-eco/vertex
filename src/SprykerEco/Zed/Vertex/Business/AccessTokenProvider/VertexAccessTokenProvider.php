@@ -97,7 +97,7 @@ class VertexAccessTokenProvider implements VertexAccessTokenProviderInterface
 
     protected function isAccessTokenExpired(VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer): bool
     {
-        $dateTime = new DateTime($vertexApiAccessTokenTransfer->getExpirationDate());
+        $dateTime = new DateTime($vertexApiAccessTokenTransfer->getExpirationDateOrFail());
 
         if ($dateTime->getTimestamp() <= time()) {
             return true;

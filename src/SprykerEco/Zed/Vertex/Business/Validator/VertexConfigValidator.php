@@ -102,10 +102,6 @@ class VertexConfigValidator
 
             return;
         }
-
-        if (!is_string($vertexConfigTransfer->getClientId())) {
-            $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_NOT_STRING_CLIENT_ID_FIELD);
-        }
     }
 
     protected function validateClientSecret(
@@ -116,10 +112,6 @@ class VertexConfigValidator
             $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_BLANK_CLIENT_SECRET_FIELD);
 
             return;
-        }
-
-        if (!is_string($vertexConfigTransfer->getClientSecret())) {
-            $vertexValidationResponseTransfer->addMessage(static::RESPONSE_MESSAGE_NOT_STRING_CLIENT_SECRET_FIELD);
         }
     }
 

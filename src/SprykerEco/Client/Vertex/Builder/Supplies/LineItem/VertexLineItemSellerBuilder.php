@@ -16,21 +16,14 @@ use SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface;
 
 class VertexLineItemSellerBuilder implements VertexLineItemBuilderInterface
 {
-    /**
-     * @param \SprykerEco\Client\Vertex\Builder\LocationMapper $locationMapper
-     */
-    public function __construct(protected LocationMapper $locationMapper)
-    {
-    }
+    public function __construct(protected LocationMapper $locationMapper) {}
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexItemTransfer|\Generated\Shared\Transfer\VertexShipmentTransfer $itemTransfer
-     * @param \Generated\Shared\Transfer\VertexLineItemTransfer $vertexLineItemTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexLineItemTransfer
-     */
     public function build(VertexItemTransfer|VertexShipmentTransfer $itemTransfer, VertexLineItemTransfer $vertexLineItemTransfer): VertexLineItemTransfer
     {
+        if (!$itemTransfer instanceof VertexItemTransfer) {
+            return $vertexLineItemTransfer;
+        }
+
         $vertexSellerTransfer = (new VertexSellerTransfer());
         if ($itemTransfer->getWarehouseAddress()) {
             $vertexSellerTransfer

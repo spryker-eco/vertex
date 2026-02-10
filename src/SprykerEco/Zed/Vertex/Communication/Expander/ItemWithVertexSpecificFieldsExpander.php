@@ -48,7 +48,7 @@ class ItemWithVertexSpecificFieldsExpander
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, mixed>
      */
     protected function getFlexibleCodeFields(): array
     {
@@ -61,7 +61,7 @@ class ItemWithVertexSpecificFieldsExpander
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, mixed>
      */
     protected function getFlexibleNumericFields(): array
     {
@@ -74,7 +74,7 @@ class ItemWithVertexSpecificFieldsExpander
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, mixed>
      */
     public function getFlexibleDateFields(): array
     {
