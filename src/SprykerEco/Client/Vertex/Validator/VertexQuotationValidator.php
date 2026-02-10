@@ -36,7 +36,7 @@ class VertexQuotationValidator implements VertexValidatorInterface
         );
 
         foreach ($vertexSaleTransfer->getShipments() as $vertexShipmentTransfer) {
-            if (!$vertexShipmentTransfer->getDiscountAmount()) {
+            if ($vertexShipmentTransfer->getDiscountAmount() === null) {
                 $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexShipmentTransfer::DISCOUNT_AMOUNT));
             }
         }
