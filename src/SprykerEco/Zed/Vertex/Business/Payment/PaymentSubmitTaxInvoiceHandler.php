@@ -22,18 +22,20 @@ use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
+use SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface;
 
 class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerInterface
 {
     use LoggerTrait;
 
     /**
-     * @param \Spryker\Zed\Store\Business\StoreFacadeInterface $storeFacade
-     * @param \Spryker\Zed\Sales\Business\SalesFacadeInterface $salesFacade
-     * @param \SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface $vertexMapper
-     * @param array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface|\Spryker\Zed\TaxAppExtension\Dependency\Plugin\OrderTaxAppExpanderPluginInterface> $orderVertexExpanderPlugins
-     * @param \SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface $vertexAccessTokenProvider
-     * @param \SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface $configResolver
+     * @param StoreFacadeInterface $storeFacade
+     * @param SalesFacadeInterface $salesFacade
+     * @param VertexMapperInterface $vertexMapper
+     * @param array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface> $orderVertexExpanderPlugins
+     * @param VertexConfigResolverInterface $configResolver
+     * @param VertexAccessTokenProviderInterface $vertexAccessTokenProvider
+     * @param VertexClientInterface $vertexClient
      */
     public function __construct(
         protected StoreFacadeInterface $storeFacade,

@@ -15,12 +15,6 @@ use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
 
 class VertexSuppliesDocumentNumberBuilder implements VertexSuppliesRequestBuilderInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
-     * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexSuppliesTransfer
-     */
     public function build(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexSuppliesTransfer $vertexSuppliesTransfer,

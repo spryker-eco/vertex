@@ -35,7 +35,6 @@ interface VertexMapperInterface
     ): VertexItemTransfer;
 
     public function mapMerchantStockAddressTransferToVertexShippingWarehouse(
-        VertexItemTransfer $VertexItemTransfer,
         MerchantStockAddressTransfer $merchantStockAddressTransfer,
         VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer,
     ): VertexShippingWarehouseTransfer;

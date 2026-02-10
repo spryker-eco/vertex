@@ -21,11 +21,6 @@ use SprykerEco\Client\Vertex\VertexClient;
 
 class VertexBusinessAssertionHelper extends Module
 {
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return void
-     */
     public function assertCalculableObjectTransferExtendedWithTaxMetadata(CalculableObjectTransfer $calculableObjectTransfer): void
     {
         $this->assertNotNull($calculableObjectTransfer->getTaxMetadata());
@@ -89,8 +84,6 @@ class VertexBusinessAssertionHelper extends Module
         VertexClient $vertexClientMock,
         CalculableObjectTransfer $mockedCalculableObjectTransfer,
     ): void {
-        $expectation = $this->haveExpectedTaxQuotationRequestSaleItems();
-
         $vertexClientMock->expects(new InvokedCountMatcher(1))
             ->method('calculateTax')
             ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($mockedCalculableObjectTransfer) {
@@ -148,11 +141,6 @@ class VertexBusinessAssertionHelper extends Module
         ];
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return void
-     */
     public function assertQuoteHasCorrectGrandTotal(CalculableObjectTransfer $calculableObjectTransfer): void
     {
         $itemsSumPriceToPayAggregation = 0;
@@ -171,11 +159,6 @@ class VertexBusinessAssertionHelper extends Module
         $this->assertEquals($grandTotal, ($expensesSumPriceToPayAggregation + $itemsSumPriceToPayAggregation));
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return void
-     */
     public function assertQuoteHasZeroTaxTotal(CalculableObjectTransfer $calculableObjectTransfer): void
     {
         $itemsSumTaxAmountFullAggregation = 0;
@@ -193,11 +176,6 @@ class VertexBusinessAssertionHelper extends Module
         $this->assertEquals(0, $expensesSumTaxAmount);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\TaxAppConfigTransfer $taxAppConfigTransfer
-     *
-     * @return void
-     */
     public function assertAllTaxAppConfigsForTenantHaveNewApiUrl(
         TaxAppConfigTransfer $taxAppConfigTransfer,
     ): void {
@@ -215,11 +193,6 @@ class VertexBusinessAssertionHelper extends Module
         }
     }
 
-    /**
-     * @param string $vendorCode
-     *
-     * @return void
-     */
     public function assertAllTaxAppConfigsForTenantHaveBeenDeleted(string $vendorCode): void
     {
         $taxAppConfigEntityCollectionDeleted = SpyTaxAppConfigQuery::create()
@@ -229,12 +202,6 @@ class VertexBusinessAssertionHelper extends Module
         $this->assertTrue($taxAppConfigEntityCollectionDeleted->count() === 0);
     }
 
-    /**
-     * @param string $vendorCodeNotDeleted
-     * @param string $vendorCodeDeleted
-     *
-     * @return void
-     */
     public function assertProperTaxAppConfigsHaveBeenDeletedByVendorCodes(string $vendorCodeNotDeleted, string $vendorCodeDeleted): void
     {
         $deletedTaxAppConfigEntityCollection = SpyTaxAppConfigQuery::create()

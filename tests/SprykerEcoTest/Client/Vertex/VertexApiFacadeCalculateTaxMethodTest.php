@@ -18,7 +18,6 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Response;
 use SprykerEco\Client\Vertex\Validator\VertexValidatorInterface;
 use SprykerEco\Client\Vertex\VertexClientInterface;
-use SprykerEco\Client\Vertex\VertexDependencyProvider;
 use SprykerEco\Client\Vertex\VertexFactory;
 
 /**

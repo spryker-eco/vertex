@@ -38,7 +38,7 @@ class VertexSubmitPaymentTaxInvoicePlugin extends AbstractPlugin implements Comm
      *
      * @return array
      */
-    public function run(array $orderItems, SpySalesOrder $orderEntity, ReadOnlyArrayObject $data): array
+    public function run(array $orderItems, SpySalesOrder $orderEntity, ReadOnlyArrayObject $data): array // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter
     {
         $orderTransfer = new OrderTransfer();
         $orderTransfer->setIdSalesOrder($orderEntity->getIdSalesOrder());

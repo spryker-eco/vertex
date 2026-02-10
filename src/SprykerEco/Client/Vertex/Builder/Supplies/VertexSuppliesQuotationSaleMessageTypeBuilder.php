@@ -15,19 +15,10 @@ use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
 
 class VertexSuppliesQuotationSaleMessageTypeBuilder implements VertexSuppliesRequestBuilderInterface
 {
-    /**
-     * @var string
-     */
     protected const SALE_MESSAGE_TYPE = 'QUOTATION';
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
-     * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexSuppliesTransfer
-     */
     public function build(
-        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer, // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter
         VertexSuppliesTransfer $vertexSuppliesTransfer,
     ): VertexSuppliesTransfer {
         return $vertexSuppliesTransfer->setSaleMessageType(static::SALE_MESSAGE_TYPE);

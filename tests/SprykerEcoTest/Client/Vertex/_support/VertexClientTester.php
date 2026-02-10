@@ -23,7 +23,6 @@ use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use SprykerEco\Client\Vertex\VertexClientInterface;
-use SprykerEco\Client\Vertex\VertexDependencyProvider;
 use SprykerEco\Client\Vertex\VertexFactory;
 
 /**
@@ -56,7 +55,7 @@ class VertexClientTester extends Actor
         return file_get_contents($this->getFixturesPath($fixtureName));
     }
 
-    public function mockClientForVertexApiCredentialWithValidResponse(VertexApiCredentialTransfer $vertexApiCredentialTransfer): ClientInterface
+    public function mockClientForVertexApiCredentialWithValidResponse(): ClientInterface
     {
         $response = new Response(
             200,
@@ -67,7 +66,7 @@ class VertexClientTester extends Actor
         return $this->mockClientForVertexApiCredentialRequest($response);
     }
 
-    public function mockClientForVertexApiCredentialWithFailedResponse(VertexApiCredentialTransfer $vertexApiCredentialTransfer): ClientInterface
+    public function mockClientForVertexApiCredentialWithFailedResponse(): ClientInterface
     {
         $response = new Response(
             500,
@@ -78,7 +77,7 @@ class VertexClientTester extends Actor
         return $this->mockClientForVertexApiCredentialRequest($response);
     }
 
-    public function mockClientForVertexApiCredentialResponseWithEmptyAccessToken(VertexApiCredentialTransfer $vertexApiCredentialTransfer): ClientInterface
+    public function mockClientForVertexApiCredentialResponseWithEmptyAccessToken(): ClientInterface
     {
         $response = new Response(
             200,
@@ -89,7 +88,7 @@ class VertexClientTester extends Actor
         return $this->mockClientForVertexApiCredentialRequest($response);
     }
 
-    public function mockClientForVertexApiCredentialResponseWithMissingAccessToken(VertexApiCredentialTransfer $vertexApiCredentialTransfer): ClientInterface
+    public function mockClientForVertexApiCredentialResponseWithMissingAccessToken(): ClientInterface
     {
         $response = new Response(
             200,
@@ -100,7 +99,7 @@ class VertexClientTester extends Actor
         return $this->mockClientForVertexApiCredentialRequest($response);
     }
 
-    public function mockClientForVertexApiCredentialResponseWithInvalidCredentials(VertexApiCredentialTransfer $vertexApiCredentialTransfer): ClientInterface
+    public function mockClientForVertexApiCredentialResponseWithInvalidCredentials(): ClientInterface
     {
         $response = new Response(
             401,
@@ -148,25 +147,6 @@ class VertexClientTester extends Actor
             [],
             $this->getVertexResponseFromFixture($fixtureName),
         );
-    }
-
-    public function mockClientForVertexTaxQuotationRequest(string $fixtureName, int $statusCode): void
-    {
-        $response = new Response(
-            $statusCode,
-            [],
-            $this->getVertexResponseFromFixture($fixtureName),
-        );
-
-        $mockClient = Stub::makeEmpty(ClientInterface::class, [
-            'request' => function () use ($response) {
-                Expected::once();
-
-                return $response;
-            },
-        ]);
-
-        $this->mockFactoryMethod('createHttpClient', $mockClient);
     }
 
     public function getVertexClientWithMockedFactory(ClientInterface $mockClient): VertexClientInterface

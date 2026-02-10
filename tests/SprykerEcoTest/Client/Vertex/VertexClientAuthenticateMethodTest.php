@@ -28,8 +28,7 @@ class VertexClientAuthenticateMethodTest extends Unit
     {
         // Arrange
         $vertexConfigTransfer = $this->tester->haveVertexConfig();
-        $vertexApiCredentialTransfer = $this->tester->haveVertexApiCredentialTransfer($vertexConfigTransfer->toArray());
-        $mockClient = $this->tester->mockClientForVertexApiCredentialWithValidResponse($vertexApiCredentialTransfer);
+        $mockClient = $this->tester->mockClientForVertexApiCredentialWithValidResponse();
         $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
 
         // Act

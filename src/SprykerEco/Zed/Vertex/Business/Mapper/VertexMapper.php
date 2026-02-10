@@ -157,7 +157,6 @@ class VertexMapper implements VertexMapperInterface
         if ($itemTransfer->getMerchantStockAddresses()->count()) {
             foreach ($itemTransfer->getMerchantStockAddresses() as $merchantStockAddress) {
                 $vertexShippingWarehouseTransfer = $this->mapMerchantStockAddressTransferToVertexShippingWarehouse(
-                    $vertexItemTransfer,
                     $merchantStockAddress,
                     new VertexShippingWarehouseTransfer(),
                 );
@@ -170,7 +169,6 @@ class VertexMapper implements VertexMapperInterface
     }
 
     public function mapMerchantStockAddressTransferToVertexShippingWarehouse(
-        VertexItemTransfer $vertexItemTransfer,
         MerchantStockAddressTransfer $merchantStockAddressTransfer,
         VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer,
     ): VertexShippingWarehouseTransfer {
@@ -221,13 +219,6 @@ class VertexMapper implements VertexMapperInterface
         return $vertexShipmentTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @throws \Exception
-     *
-     * @return \Generated\Shared\Transfer\OrderTransfer|\Generated\Shared\Transfer\QuoteTransfer
-     */
     protected function getOriginalTransfer(CalculableObjectTransfer $calculableObjectTransfer): OrderTransfer|QuoteTransfer
     {
         if ($calculableObjectTransfer->getOriginalQuote() !== null) {
@@ -241,11 +232,6 @@ class VertexMapper implements VertexMapperInterface
         throw new Exception(static::ORIGINAL_TRANSFER_MISSING_EXCEPTION);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\OrderTransfer|\Generated\Shared\Transfer\QuoteTransfer $transfer
-     *
-     * @return string
-     */
     protected function getTransferIdentifier(OrderTransfer|QuoteTransfer $transfer): string
     {
         $transferIdentifier = null;
@@ -306,11 +292,6 @@ class VertexMapper implements VertexMapperInterface
         return $vertexSaleTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return string|null
-     */
     protected function findStoreCountryCode(CalculableObjectTransfer $calculableObjectTransfer): ?string
     {
         if (!empty($calculableObjectTransfer->getStoreOrFail()->getCountries()[0])) {
