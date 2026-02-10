@@ -163,7 +163,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $this->expectException(Exception::class);
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
     }
 
     public function testCalculateQuoteTaxMethodUsesTheRightTransactionCallsUriToCallSuppliesEndpoint(): void
@@ -181,7 +181,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
     }
 
     public function testCalculateQuoteTaxUsesDefaultTaxpayerCompanyCode(): void
@@ -194,7 +194,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $vertexCalculationRequestTransfer = $this->tester->haveVertexCalculationRequestTransfer();
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
 
         // Assert
         $request = $this->tester->getLastSentVertexRequest();
@@ -334,11 +334,6 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
             public function createVertexQuotationValidator(): VertexValidatorInterface
             {
                 return $this->validator;
-            }
-
-            protected function getDependencyProvider()
-            {
-                return new VertexDependencyProvider();
             }
         };
 

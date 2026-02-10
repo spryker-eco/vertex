@@ -30,7 +30,7 @@ class FilteringMessageFormatter implements MessageFormatterInterface
 
     protected const MASKED_VALUE = '*****';
 
-    public function format(RequestInterface $request, ?ResponseInterface $response = null, ?Throwable $error = null): string
+    public function format(RequestInterface $request, ?ResponseInterface $response = null, ?Throwable $error = null): string // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter
     {
         $message = static::MESSAGE_FORMAT_REQUEST;
 
