@@ -57,16 +57,18 @@ class RefundProcessor implements RefundProcessorInterface
     {
         $orderTransfer = $this->createOrderWithItemsToBeRefunded($orderItemIds, $idSalesOrder);
 
+        $vertexCalculationResponseTransfer = (new VertexCalculationResponseTransfer())->setIsSuccessful(false);
+
         if (!$orderTransfer) {
             $this->getLogger()->warning(sprintf('Order with ID `%s` not found', $idSalesOrder));
 
-            return;
+            return $vertexCalculationResponseTransfer;
         }
 
         if ($orderTransfer->getStore() === null) {
             $this->getLogger()->warning('Store from order not found');
 
-            return;
+            return $vertexCalculationResponseTransfer;
         }
 
         $vertexConfigTransfer = $this->configResolver->resolve();
@@ -74,7 +76,7 @@ class RefundProcessor implements RefundProcessorInterface
         if (!$vertexConfigTransfer || !$vertexConfigTransfer->getIsActive()) {
             $this->getLogger()->warning('App is not configured or is not active.');
 
-            return;
+            return $vertexCalculationResponseTransfer;
         }
 
         $orderTransfer = $this->executeOrderVertexExpanderPlugins($orderTransfer);
@@ -84,7 +86,7 @@ class RefundProcessor implements RefundProcessorInterface
         if (!$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsInvoicingEnabled()) {
             $this->getLogger()->warning('App is Inactive or configured to not submit void invoice');
 
-            return;
+            return $vertexCalculationResponseTransfer;
         }
 
         $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
