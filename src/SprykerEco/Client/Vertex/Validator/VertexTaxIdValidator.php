@@ -43,9 +43,9 @@ class VertexTaxIdValidator implements VertexTaxIdValidatorInterface
         $errorCode = $this->getErrorCode($vertexApiResponse);
 
         return $this->createVertexValidationResponseTransfer(
-            $errorMessage ? false : $vertexApiResponse->getIsSuccessful(),
+            $errorMessage ? false : (bool)$vertexApiResponse->getIsSuccessful(),
             $errorMessage,
-            json_encode($vertexApiResponse->getVertexResponse()),
+            json_encode($vertexApiResponse->getVertexResponse()) ?: null,
             $errorCode,
         );
     }
@@ -55,7 +55,7 @@ class VertexTaxIdValidator implements VertexTaxIdValidatorInterface
         if ($vertexApiResponse->getIsSuccessful()) {
             $validationData = $vertexApiResponse->getVertexResponse();
             if (isset($validationData['buyer_tax_number_format_valid']) && $validationData['buyer_tax_number_format_valid'] === false) {
-                 return 'Wrong format of the tax number.';
+                return 'Wrong format of the tax number.';
             }
 
             if (isset($validationData['buyer_tax_number_valid']) && $validationData['buyer_tax_number_valid'] === false) {

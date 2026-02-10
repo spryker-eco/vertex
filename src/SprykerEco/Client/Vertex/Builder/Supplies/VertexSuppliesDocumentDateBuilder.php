@@ -24,7 +24,7 @@ class VertexSuppliesDocumentDateBuilder implements VertexSuppliesRequestBuilderI
         VertexSuppliesTransfer $vertexSuppliesTransfer
     ): VertexSuppliesTransfer {
         return $vertexSuppliesTransfer->setDocumentDate(
-            $vertexCalculationRequestTransfer->getSale()->getDocumentDateOrFail(),
+            $vertexCalculationRequestTransfer->getSale()?->getDocumentDateOrFail(),
         );
     }
 }

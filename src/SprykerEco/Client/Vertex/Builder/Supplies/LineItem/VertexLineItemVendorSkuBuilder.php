@@ -14,18 +14,12 @@ use SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface;
 
 class VertexLineItemVendorSkuBuilder implements VertexLineItemBuilderInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexItemTransfer|\Generated\Shared\Transfer\VertexShipmentTransfer $itemTransfer
-     * @param \Generated\Shared\Transfer\VertexLineItemTransfer $vertexLineItemTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexLineItemTransfer
-     */
     public function build(VertexItemTransfer|VertexShipmentTransfer $itemTransfer, VertexLineItemTransfer $vertexLineItemTransfer): VertexLineItemTransfer
     {
-        $sku = $itemTransfer->getSkuOrFail();
-
-        $vertexLineItemTransfer
-            ->setVendorSKU($sku);
+        if ($itemTransfer instanceof VertexItemTransfer) {
+            $vertexLineItemTransfer
+                ->setVendorSKU($itemTransfer->getSkuOrFail());
+        }
 
         return $vertexLineItemTransfer;
     }

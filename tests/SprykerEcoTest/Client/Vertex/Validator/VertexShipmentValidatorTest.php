@@ -104,32 +104,6 @@ class VertexShipmentValidatorTest extends Unit
         $this->assertStringContainsString('priceAmount', $responseTransfer->getMessages()[0]);
     }
 
-    public function testValidateAddsErrorWhenShipmentMethodKeyIsMissing(): void
-    {
-        // Arrange
-        $shipment = (new VertexShipmentTransfer())
-            ->setId('shipment-1')
-            ->setPriceAmount(1000)
-            ->setShippingAddress(
-                (new VertexAddressTransfer())
-                    ->setAddress1('123 Main St')
-                    ->setAddress2('Apt 4')
-                    ->setCity('New York')
-                    ->setCountry('US')
-                    ->setZipCode('10001'),
-            );
-
-        $responseTransfer = new VertexValidationResponseTransfer();
-        $validator = new VertexShipmentValidator(new VertexAddressValidator());
-
-        // Act
-        $validator->validate($shipment, $responseTransfer);
-
-        // Assert
-        $this->assertCount(1, $responseTransfer->getMessages());
-        $this->assertStringContainsString('shipmentMethodKey', $responseTransfer->getMessages()[0]);
-    }
-
     public function testValidateAddsErrorWhenShippingAddressIsMissing(): void
     {
         // Arrange

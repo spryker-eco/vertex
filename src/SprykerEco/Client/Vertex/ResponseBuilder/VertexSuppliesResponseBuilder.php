@@ -36,6 +36,12 @@ class VertexSuppliesResponseBuilder implements VertexSuppliesResponseBuilderInte
 
         $vertexSaleTransfer = $vertexCalculationRequestTransfer->getSale();
 
+        if (!$vertexSaleTransfer) {
+            return (new VertexCalculationResponseTransfer())
+                ->setIsSuccessful(false)
+                ->setErrorMessage('Vertex sale transfer is missing');
+        }
+
         // Total tax calculated for the order
         $totalTax = $vertexResponse['data']['totalTax'];
 

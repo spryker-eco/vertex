@@ -15,7 +15,7 @@ interface RefundProcessorInterface
      * @param array<int> $orderItemIds
      * @param int $idSalesOrder
      *
-     * @return void
+     * @return \Generated\Shared\Transfer\VertexCalculationResponseTransfer
      */
     public function processOrderRefund(array $orderItemIds, int $idSalesOrder): VertexCalculationResponseTransfer;
 }

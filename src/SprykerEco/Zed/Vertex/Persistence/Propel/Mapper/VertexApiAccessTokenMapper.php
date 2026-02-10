@@ -12,12 +12,6 @@ use Orm\Zed\Vertex\Persistence\Base\SpyVertexApiAccessToken;
 
 class VertexApiAccessTokenMapper
 {
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer
-     * @param \Orm\Zed\VertexApi\Persistence\SpyVertexApiAccessToken $vertexApiAccessTokenEntity
-     *
-     * @return \Orm\Zed\VertexApi\Persistence\SpyVertexApiAccessToken
-     */
     public function mapVertexApiAccessTokenTransferToVertexApiAccessTokenEntity(
         VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer,
         SpyVertexApiAccessToken $vertexApiAccessTokenEntity
@@ -25,12 +19,6 @@ class VertexApiAccessTokenMapper
         return $vertexApiAccessTokenEntity->fromArray($vertexApiAccessTokenTransfer->toArray());
     }
 
-    /**
-     * @param \Orm\Zed\VertexApi\Persistence\SpyVertexApiAccessToken $vertexApiAccessTokenEntity
-     * @param \Generated\Shared\Transfer\VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexApiAccessTokenTransfer
-     */
     public function mapVertexApiAccessTokenEntityToVertexApiAccessTokenTransfer(
         SpyVertexApiAccessToken $vertexApiAccessTokenEntity,
         VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer
