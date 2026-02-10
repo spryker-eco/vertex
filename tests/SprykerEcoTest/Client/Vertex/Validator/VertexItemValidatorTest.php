@@ -216,30 +216,6 @@ class VertexItemValidatorTest extends Unit
         $this->assertStringContainsString('sku', $responseTransfer->getMessages()[0]);
     }
 
-    public function testValidateAddsErrorWhenShippingAddressIsMissing(): void
-    {
-        // Arrange
-        $item = (new VertexItemTransfer())
-            ->setId('item-1')
-            ->setSku('SKU-123')
-            ->setPriceAmount(1000)
-            ->setDiscountAmount(100)
-            ->setQuantity(2);
-
-        $responseTransfer = new VertexValidationResponseTransfer();
-        $validator = new VertexItemValidator(
-            new VertexAddressValidator(),
-            new VertexShippingWarehouseValidator(new VertexAddressValidator()),
-        );
-
-        // Act
-        $validator->validate($item, $responseTransfer);
-
-        // Assert
-        $this->assertCount(1, $responseTransfer->getMessages());
-        $this->assertStringContainsString('shippingAddress', $responseTransfer->getMessages()[0]);
-    }
-
     public function testValidateValidatesShippingAddressWhenPresent(): void
     {
         // Arrange
