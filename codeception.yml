@@ -1,6 +1,6 @@
 namespace: SprykerEcoTest
 include:
-    - tests/SprykerEcoTest/AsyncApi/Vertex
+    - tests/SprykerEcoTest/Glue/Vertex
     - tests/SprykerEcoTest/Zed/Vertex
     - tests/SprykerEcoTest/Client/Vertex
 paths:
