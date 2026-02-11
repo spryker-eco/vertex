@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex;
 
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
@@ -50,7 +52,7 @@ class VertexClient extends AbstractClient implements VertexClientInterface
      */
     public function calculateTax(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        VertexConfigTransfer $vertexConfigTransfer
+        VertexConfigTransfer $vertexConfigTransfer,
     ): VertexCalculationResponseTransfer {
         return $this->getFactory()
             ->createVertexTaxCalculator()
@@ -69,7 +71,7 @@ class VertexClient extends AbstractClient implements VertexClientInterface
      */
     public function sendTaxInvoice(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        VertexConfigTransfer $vertexConfigTransfer
+        VertexConfigTransfer $vertexConfigTransfer,
     ): VertexCalculationResponseTransfer {
         return $this->getFactory()
             ->createInvoiceVertexTaxCalculator()
@@ -88,7 +90,7 @@ class VertexClient extends AbstractClient implements VertexClientInterface
      */
     public function sendTaxRefund(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        VertexConfigTransfer $vertexConfigTransfer
+        VertexConfigTransfer $vertexConfigTransfer,
     ): VertexCalculationResponseTransfer {
         return $this->getFactory()
             ->createRefundVertexTaxCalculator()
@@ -107,7 +109,7 @@ class VertexClient extends AbstractClient implements VertexClientInterface
      */
     public function validateTaxId(
         TaxIdValidationRequestTransfer $taxIdValidationRequest,
-        VertexConfigTransfer $vertexConfigTransfer
+        VertexConfigTransfer $vertexConfigTransfer,
     ): VertexValidationResponseTransfer {
         return $this->getFactory()
             ->createVertexTaxIdValidator()
@@ -124,7 +126,7 @@ class VertexClient extends AbstractClient implements VertexClientInterface
      * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
      */
     public function requestTaxIdValidation(
-        VertexValidationRequestTransfer $vertexValidationRequestTransfer
+        VertexValidationRequestTransfer $vertexValidationRequestTransfer,
     ): VertexValidationResponseTransfer {
         return $this->getFactory()
             ->createZedStub()

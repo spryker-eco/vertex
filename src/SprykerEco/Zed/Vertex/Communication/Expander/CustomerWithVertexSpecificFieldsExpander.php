@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Communication\Expander;
 
 use Generated\Shared\Transfer\CalculableObjectTransfer;
@@ -14,7 +16,9 @@ use SprykerEco\Zed\Vertex\Communication\Mapper\VertexCodeMapper;
 
 class CustomerWithVertexSpecificFieldsExpander
 {
-    public function __construct(protected VertexCodeMapper $vertexCodeMapper) {}
+    public function __construct(protected VertexCodeMapper $vertexCodeMapper)
+    {
+    }
 
     /**
      * @param \Generated\Shared\Transfer\OrderTransfer|\Generated\Shared\Transfer\CalculableObjectTransfer $transfer

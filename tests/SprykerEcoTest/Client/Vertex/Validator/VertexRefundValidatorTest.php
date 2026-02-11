@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEcoTest\Client\Vertex\Validator;
 
 use Codeception\Test\Unit;
@@ -15,8 +17,8 @@ use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\VertexShipmentTransfer;
 use SprykerEco\Client\Vertex\Validator\VertexAddressValidator;
-use SprykerEco\Client\Vertex\Validator\VertexRefundValidator;
 use SprykerEco\Client\Vertex\Validator\VertexItemValidator;
+use SprykerEco\Client\Vertex\Validator\VertexRefundValidator;
 use SprykerEco\Client\Vertex\Validator\VertexSaleValidator;
 use SprykerEco\Client\Vertex\Validator\VertexShipmentValidator;
 use SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidator;

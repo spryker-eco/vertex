@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Api\V2\Client;
 
 use Generated\Shared\Transfer\VertexApiAccessTokenTransfer;
@@ -30,8 +32,9 @@ class SuppliesApi implements SuppliesApiInterface
     public function __construct(
         protected ClientInterface $client,
         protected VertexSuppliesApiRequestBuilder $vertexSuppliesApiRequestBuilder,
-        protected UtilEncodingServiceInterface $utilEncodingService
-    ) {}
+        protected UtilEncodingServiceInterface $utilEncodingService,
+    ) {
+    }
 
     /**
      * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
@@ -45,7 +48,7 @@ class SuppliesApi implements SuppliesApiInterface
     public function calculateTax(
         VertexSuppliesTransfer $vertexSuppliesTransfer,
         VertexConfigTransfer $vertexConfigTransfer,
-        VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer
+        VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer,
     ): VertexApiResponseTransfer {
         $requestBody = $this->vertexSuppliesApiRequestBuilder->buildVertexSuppliesRequest($vertexSuppliesTransfer);
 

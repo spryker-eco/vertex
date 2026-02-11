@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Communication\Mapper;
 
 class VertexCodeMapper
@@ -98,7 +100,7 @@ class VertexCodeMapper
         }
 
         $fixtures = file_get_contents($fixturesPath);
-        
+
         if (!$fixtures) {
             return;
         }
@@ -121,9 +123,11 @@ class VertexCodeMapper
      */
     protected function importFixtureData(array $fixturesData, string $field): void
     {
-        if (property_exists($this, $field) && is_array($fixturesData[$field]) && !empty($fixturesData[$field])) {
-            $this->{$field} = $fixturesData[$field];
+        if (!property_exists($this, $field) || !is_array($fixturesData[$field]) || empty($fixturesData[$field])) {
+            return;
         }
+
+        $this->{$field} = $fixturesData[$field];
     }
 
     /**

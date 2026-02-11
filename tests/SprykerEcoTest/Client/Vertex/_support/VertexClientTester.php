@@ -5,15 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace SprykerEcoTest\Client\Vertex;
 
 use Codeception\Actor;
 use Codeception\Stub;
 use Codeception\Stub\Expected;
-use Generated\Shared\Transfer\VertexApiAccessTokenTransfer;
-use Generated\Shared\Transfer\VertexApiCredentialTransfer;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Handler\MockHandler;
@@ -23,7 +21,6 @@ use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use SprykerEco\Client\Vertex\VertexClientInterface;
-use SprykerEco\Client\Vertex\VertexDependencyProvider;
 use SprykerEco\Client\Vertex\VertexFactory;
 
 /**
@@ -39,19 +36,11 @@ class VertexClientTester extends Actor
 
     protected MockHandler $mockHttpClient;
 
-    /**
-     * @return \SprykerEco\Client\Vertex\VertexClientInterface
-     */
     public function getClient(): VertexClientInterface
     {
         return $this->getLocator()->vertex()->client();
     }
 
-    /**
-     * @param string $fixtureName
-     *
-     * @return string
-     */
     protected function getFixturesPath(string $fixtureName): string
     {
         $pathTemplate = '%s/%s.json';
@@ -59,22 +48,12 @@ class VertexClientTester extends Actor
         return sprintf($pathTemplate, codecept_data_dir('Fixtures'), $fixtureName);
     }
 
-    /**
-     * @param string $fixtureName
-     *
-     * @return string
-     */
     public function getVertexResponseFromFixture(string $fixtureName): string
     {
         return file_get_contents($this->getFixturesPath($fixtureName));
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiCredentialTransfer $vertexApiCredentialTransfer
-     *
-     * @return \GuzzleHttp\ClientInterface
-     */
-    public function mockClientForVertexApiCredentialWithValidResponse(VertexApiCredentialTransfer $vertexApiCredentialTransfer): ClientInterface
+    public function mockClientForVertexApiCredentialWithValidResponse(): ClientInterface
     {
         $response = new Response(
             200,
@@ -82,15 +61,10 @@ class VertexClientTester extends Actor
             '{"access_token":"access-token","expires_in":"3600"}',
         );
 
-        return $this->mockClientForVertexApiCredentialRequest($vertexApiCredentialTransfer, $response);
+        return $this->mockClientForVertexApiCredentialRequest($response);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiCredentialTransfer $vertexApiCredentialTransfer
-     *
-     * @return \GuzzleHttp\ClientInterface
-     */
-    public function mockClientForVertexApiCredentialWithFailedResponse(VertexApiCredentialTransfer $vertexApiCredentialTransfer): ClientInterface
+    public function mockClientForVertexApiCredentialWithFailedResponse(): ClientInterface
     {
         $response = new Response(
             500,
@@ -98,15 +72,10 @@ class VertexClientTester extends Actor
             '{"error":"Error message"}',
         );
 
-        return $this->mockClientForVertexApiCredentialRequest($vertexApiCredentialTransfer, $response);
+        return $this->mockClientForVertexApiCredentialRequest($response);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiCredentialTransfer $vertexApiCredentialTransfer
-     *
-     * @return \GuzzleHttp\ClientInterface
-     */
-    public function mockClientForVertexApiCredentialResponseWithEmptyAccessToken(VertexApiCredentialTransfer $vertexApiCredentialTransfer): ClientInterface
+    public function mockClientForVertexApiCredentialResponseWithEmptyAccessToken(): ClientInterface
     {
         $response = new Response(
             200,
@@ -114,15 +83,10 @@ class VertexClientTester extends Actor
             '{"access_token":"","expires_in":"3600"}',
         );
 
-        return $this->mockClientForVertexApiCredentialRequest($vertexApiCredentialTransfer, $response);
+        return $this->mockClientForVertexApiCredentialRequest($response);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiCredentialTransfer $vertexApiCredentialTransfer
-     *
-     * @return \GuzzleHttp\ClientInterface
-     */
-    public function mockClientForVertexApiCredentialResponseWithMissingAccessToken(VertexApiCredentialTransfer $vertexApiCredentialTransfer): ClientInterface
+    public function mockClientForVertexApiCredentialResponseWithMissingAccessToken(): ClientInterface
     {
         $response = new Response(
             200,
@@ -130,15 +94,10 @@ class VertexClientTester extends Actor
             '{"expires_in":"3600"}',
         );
 
-        return $this->mockClientForVertexApiCredentialRequest($vertexApiCredentialTransfer, $response);
+        return $this->mockClientForVertexApiCredentialRequest($response);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiCredentialTransfer $vertexApiCredentialTransfer
-     *
-     * @return \GuzzleHttp\ClientInterface
-     */
-    public function mockClientForVertexApiCredentialResponseWithInvalidCredentials(VertexApiCredentialTransfer $vertexApiCredentialTransfer): ClientInterface
+    public function mockClientForVertexApiCredentialResponseWithInvalidCredentials(): ClientInterface
     {
         $response = new Response(
             401,
@@ -146,119 +105,39 @@ class VertexClientTester extends Actor
             '',
         );
 
-        return $this->mockClientForVertexApiCredentialRequest($vertexApiCredentialTransfer, $response);
+        return $this->mockClientForVertexApiCredentialRequest($response);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexApiCredentialTransfer $vertexApiCredentialTransfer
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
-     * @return \GuzzleHttp\ClientInterface
-     */
     protected function mockClientForVertexApiCredentialRequest(
-        VertexApiCredentialTransfer $vertexApiCredentialTransfer,
-        ResponseInterface $response
+        ResponseInterface $response,
     ): ClientInterface {
-        $mockClient = Stub::makeEmpty(ClientInterface::class, [
+        return Stub::makeEmpty(ClientInterface::class, [
             'request' => function () use ($response) {
                 Expected::once();
 
                 return $response;
             },
         ]);
-
-        return $mockClient;
     }
 
-    // /**
-    //  * @param \Generated\Shared\Transfer\VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer
-    //  *
-    //  * @return void
-    //  */
-    // public function mockAccessTokenProvider(VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer): void
-    // {
-    //     $mockAccessTokenProvider = Stub::makeEmpty(AccessTokenProviderInterface::class, [
-    //        'provideVertexAccessToken' => function () use ($vertexApiAccessTokenTransfer) {
-    //             Expected::once();
-
-    //             return $vertexApiAccessTokenTransfer;
-    //        },
-    //     ]);
-
-    //     $this->mockFactoryMethod('createAccessTokenProvider', $mockAccessTokenProvider);
-    // }
-
-    /**
-     * @return \Generated\Shared\Transfer\VertexApiAccessTokenTransfer
-     */
-    public function haveValidVertexApiAccessTokenTransfer(): VertexApiAccessTokenTransfer
-    {
-        return (new VertexApiAccessTokenTransfer())
-            ->setAccessToken('access-token')
-            ->setCredentialHash('credential-hash')
-            ->setExpirationDate('2099-1-1 00:05:00');
-    }
-
-    // /**
-    //  * @param array $responses
-    //  *
-    //  * @return void
-    //  */
-    // public function mockVertexHttpClient(array $responses): void
-    // {
-    //     $this->mockHttpClient = new MockHandler($responses);
-
-    //     $handlerStack = HandlerStack::create($this->mockHttpClient);
-    //     $client = new Client([
-    //         'handler' => $handlerStack,
-    //         RequestOptions::TIMEOUT => 10,
-    //         RequestOptions::CONNECT_TIMEOUT => 3,
-    //     ]);
-
-    //     $this->setVertexHttpClient($client);
-    // }
-
-    /**
-     * @return \GuzzleHttp\ClientInterface
-     */
     public function mockVertexHttpClient(string $fixtureName, int $statusCode = 200): ClientInterface
     {
         $this->mockHttpClient = new MockHandler([$this->getVertexStandardResponse($fixtureName, $statusCode)]);
 
         $handlerStack = HandlerStack::create($this->mockHttpClient);
-        $client = new Client([
+
+        return new Client([
             'handler' => $handlerStack,
             RequestOptions::TIMEOUT => 10,
             RequestOptions::CONNECT_TIMEOUT => 3,
         ]);
-
-        return $client;
     }
 
-    /**
-     * @param \GuzzleHttp\ClientInterface $httpClient
-     *
-     * @return void
-     */
-    protected function setVertexHttpClient(ClientInterface $httpClient): void
-    {
-        $this->mockFactoryMethod('createHttpClient', $httpClient);
-    }
-
-    /**
-     * @return \Psr\Http\Message\RequestInterface|null
-     */
     public function getLastSentVertexRequest(): ?RequestInterface
     {
         return $this->mockHttpClient->getLastRequest();
     }
 
-    /**
-     * @param string $fixtureName
-     * @param int $code
-     *
-     * @return \GuzzleHttp\Psr7\Response
-     */
     public function getVertexStandardResponse(string $fixtureName, int $code = 200): Response
     {
         return new Response(
@@ -268,36 +147,6 @@ class VertexClientTester extends Actor
         );
     }
 
-    /**
-     * @param string $fixtureName
-     * @param int $statusCode
-     *
-     * @return void
-     */
-    public function mockClientForVertexTaxQuotationRequest(string $fixtureName, int $statusCode): void
-    {
-        $response = new Response(
-            $statusCode,
-            [],
-            $this->getVertexResponseFromFixture($fixtureName),
-        );
-
-        $mockClient = Stub::makeEmpty(ClientInterface::class, [
-            'request' => function () use ($response) {
-                Expected::once();
-
-                return $response;
-            },
-        ]);
-
-        $this->mockFactoryMethod('createHttpClient', $mockClient);
-    }
-
-    /**
-     * @param \GuzzleHttp\ClientInterface $mockClient
-     *
-     * @return \SprykerEco\Client\Vertex\VertexClientInterface
-     */
     public function getVertexClientWithMockedFactory(ClientInterface $mockClient): VertexClientInterface
     {
         $factoryMock = new class ($mockClient) extends VertexFactory {
@@ -311,11 +160,6 @@ class VertexClientTester extends Actor
             public function createHttpClient(): ClientInterface
             {
                 return $this->httpClient;
-            }
-
-            protected function getDependencyProvider()
-            {
-                return new VertexDependencyProvider();
             }
         };
 

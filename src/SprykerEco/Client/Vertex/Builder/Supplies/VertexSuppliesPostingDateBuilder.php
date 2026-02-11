@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Builder\Supplies;
 
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
@@ -21,7 +23,7 @@ class VertexSuppliesPostingDateBuilder implements VertexSuppliesRequestBuilderIn
      */
     public function build(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        VertexSuppliesTransfer $vertexSuppliesTransfer
+        VertexSuppliesTransfer $vertexSuppliesTransfer,
     ): VertexSuppliesTransfer {
         if ($vertexCalculationRequestTransfer->getReportingDate()) {
             return $vertexSuppliesTransfer->setPostingDate(

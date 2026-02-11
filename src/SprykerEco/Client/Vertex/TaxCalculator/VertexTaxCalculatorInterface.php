@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\TaxCalculator;
 
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
@@ -15,6 +17,6 @@ interface VertexTaxCalculatorInterface
 {
     public function calculateTax(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        VertexConfigTransfer $vertexConfigTransfer
+        VertexConfigTransfer $vertexConfigTransfer,
     ): VertexCalculationResponseTransfer;
 }

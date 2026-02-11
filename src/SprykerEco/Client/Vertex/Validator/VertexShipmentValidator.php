@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\VertexShipmentTransfer;
@@ -38,8 +40,10 @@ class VertexShipmentValidator implements VertexShipmentValidatorInterface
             $this->addressValidator->validate($vertexShipmentTransfer->getShippingAddress(), VertexShipmentTransfer::SHIPPING_ADDRESS, $vertexValidationResponseTransfer);
         }
 
-        if ($vertexShipmentTransfer->getBillingAddress()) {
-            $this->addressValidator->validate($vertexShipmentTransfer->getBillingAddress(), VertexShipmentTransfer::BILLING_ADDRESS, $vertexValidationResponseTransfer);
+        if (!$vertexShipmentTransfer->getBillingAddress()) {
+            return;
         }
+
+        $this->addressValidator->validate($vertexShipmentTransfer->getBillingAddress(), VertexShipmentTransfer::BILLING_ADDRESS, $vertexValidationResponseTransfer);
     }
 }

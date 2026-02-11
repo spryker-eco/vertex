@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEcoTest\Shared\Vertex\Helper;
 
 use ArrayObject;
@@ -35,8 +37,6 @@ use Generated\Shared\Transfer\TaxRefundRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
-use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfig;
-use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfigQuery;
 use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerTest\Shared\Testify\Helper\DataCleanupHelperTrait;
 use SprykerTest\Shared\Testify\Helper\LocatorHelperTrait;
@@ -103,94 +103,6 @@ class VertexDataHelper extends Module
         return (new TaxAppConfigConditionsBuilder())->seed($seed)->build();
     }
 
-    /**
-     * @param array $seed
-     *
-     * @return \Generated\Shared\Transfer\TaxAppConfigTransfer
-     */
-    public function haveTaxAppConfig(array $seed = []): TaxAppConfigTransfer
-    {
-        $taxAppConfigTransfer = $this->createTaxAppConfigTransfer();
-        $seed = array_merge($taxAppConfigTransfer->toArray(), $seed);
-        unset($seed['api_urls']);
-        $taxAppApiUrlsJson = json_encode($taxAppConfigTransfer->getApiUrls()->toArray());
-
-        $taxAppConfigEntity = (new SpyTaxAppConfig())
-            ->fromArray($seed);
-
-        $taxAppConfigEntity->setApiUrls($taxAppApiUrlsJson);
-
-        $taxAppConfigEntity->save();
-
-        $this->getDataCleanupHelper()->_addCleanup(function () use ($taxAppConfigEntity): void {
-            $taxAppConfigEntity->delete();
-        });
-
-        $spyTaxAppConfigTransfer = $taxAppConfigEntity->toArray();
-        unset($spyTaxAppConfigTransfer['api_urls']);
-
-        $taxAppConfigTransfer = $taxAppConfigTransfer->fromArray($spyTaxAppConfigTransfer, true);
-        $taxAppConfigTransfer->setApiUrls($taxAppConfigTransfer->getApiUrls());
-
-        return $taxAppConfigTransfer;
-    }
-
-    /**
-     * @return void
-     */
-    public function ensureTaxAppConfigTableIsEmpty(): void
-    {
-        $this->getTableRelationsCleanupHelper()->ensureDatabaseTableIsEmpty($this->getTaxAppConfigQuery());
-    }
-
-    /**
-     * @return \Orm\Zed\TaxApp\Persistence\SpyTaxAppConfigQuery
-     */
-    protected function getTaxAppConfigQuery(): SpyTaxAppConfigQuery
-    {
-        return SpyTaxAppConfigQuery::create();
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\TaxAppConfigTransfer $taxAppConfigTransfer
-     * @param \Orm\Zed\TaxApp\Persistence\SpyTaxAppConfig|null $taxAppConfigEntity
-     *
-     * @return void
-     */
-    public function assertTaxAppConfigStoredProperly(
-        TaxAppConfigTransfer $taxAppConfigTransfer,
-        ?SpyTaxAppConfig $taxAppConfigEntity = null
-    ): void {
-        $this->assertNotNull($taxAppConfigEntity);
-        $this->assertEquals(
-            $taxAppConfigTransfer->getApplicationId(),
-            $taxAppConfigEntity->getApplicationId(),
-        );
-        $this->assertEquals(
-            $taxAppConfigTransfer->getApiUrl(),
-            $taxAppConfigEntity->getApiUrl(),
-        );
-        $this->assertEquals(
-            $taxAppConfigTransfer->getVendorCode(),
-            $taxAppConfigEntity->getVendorCode(),
-        );
-    }
-
-    /**
-     * @param int $idStore
-     *
-     * @return \Orm\Zed\TaxApp\Persistence\SpyTaxAppConfig|null
-     */
-    public function findTaxAppConfigByIdStore(int $idStore): ?SpyTaxAppConfig
-    {
-        return $this->getTaxAppConfigQuery()
-            ->filterByFkStore($idStore)
-            ->findOne();
-    }
-
-    /**
-     * @return \Generated\Shared\Transfer\StoreTransfer
-     */
     public function createStoreTransferWithStoreReference(): StoreTransfer
     {
         return (new StoreTransfer())
@@ -199,13 +111,6 @@ class VertexDataHelper extends Module
             ->setStoreReference('test_store_reference');
     }
 
-    /**
-     * @param string $vendorCode
-     * @param int|null $idStore
-     * @param bool|null $isActive
-     *
-     * @return void
-     */
     public function assertTaxAppWithVendorCodeIsConfigured(string $vendorCode, ?int $idStore = null, ?bool $isActive = null): void
     {
         $taxAppConfigEntity = $this->findTaxAppConfigByVendorCode($vendorCode);
@@ -213,9 +118,11 @@ class VertexDataHelper extends Module
         $this->assertNotNull($taxAppConfigEntity, sprintf('Expected to find a Tax App configuration for the vendor with vendor code "%s" but it was not found.', $vendorCode));
         $this->assertSame($taxAppConfigEntity->getFkStore(), $idStore, sprintf('Expected for a Tax App configuration to have the store with id "%s" but it has "%s".', $idStore, $taxAppConfigEntity->getFkStore()));
 
-        if ($isActive !== null) {
-            $this->assertSame($taxAppConfigEntity->getIsActive(), $isActive, sprintf('Expected for a Tax App configuration to have the isActive flag "%b" but it has "%b".', $isActive, $taxAppConfigEntity->getIsActive()));
+        if ($isActive === null) {
+            return;
         }
+
+        $this->assertSame($taxAppConfigEntity->getIsActive(), $isActive, sprintf('Expected for a Tax App configuration to have the isActive flag "%b" but it has "%b".', $isActive, $taxAppConfigEntity->getIsActive()));
     }
 
     /**
@@ -235,77 +142,23 @@ class VertexDataHelper extends Module
         $countAppConfigEntities = 0;
         foreach ($taxAppConfigEntities as $taxAppConfigEntity) {
             foreach ($allowedStores as $allowedStore) {
-                if ($taxAppConfigEntity->getFkStore() === $allowedStore->getIdStore()) {
-                    $this->assertSame($taxAppConfigEntity->getFkStore(), $allowedStore->getIdStore(), sprintf('Expected for a Tax App configuration to have the store with id "%s" but it has "%s".', $allowedStore->getIdStore(), $taxAppConfigEntity->getFkStore()));
-                    $countAppConfigEntities++;
+                if ($taxAppConfigEntity->getFkStore() !== $allowedStore->getIdStore()) {
+                    continue;
                 }
+
+                $this->assertSame($taxAppConfigEntity->getFkStore(), $allowedStore->getIdStore(), sprintf('Expected for a Tax App configuration to have the store with id "%s" but it has "%s".', $allowedStore->getIdStore(), $taxAppConfigEntity->getFkStore()));
+                $countAppConfigEntities++;
             }
         }
 
         $this->assertSame(count($allowedStores), $countAppConfigEntities, sprintf('Expected to find Tax App configurations with vendor code "%s" but it was not found.', $vendorCode));
     }
 
-    /**
-     * @param string $vendorCode
-     *
-     * @return void
-     */
     public function assertTaxAppWithVendorCodeDoesNotExist(string $vendorCode): void
     {
         $taxAppConfigEntity = $this->findTaxAppConfigByVendorCode($vendorCode);
 
         $this->assertNull($taxAppConfigEntity, sprintf('Expected not to find a Tax App configuration for the vendor with vendor code "%s" but it was found.', $vendorCode));
-    }
-
-    /**
-     * @param string $vendorCode
-     *
-     * @return \Orm\Zed\TaxApp\Persistence\SpyTaxAppConfig|null
-     */
-    protected function findTaxAppConfigByVendorCode(string $vendorCode): ?SpyTaxAppConfig
-    {
-        return $this->getTaxAppConfigQuery()
-            ->filterByVendorCode($vendorCode)
-            ->findOne();
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\StoreTransfer|null $storeTransfer
-     *
-     * @return void
-     */
-    public function configureStoreFacadeGetStoreByStoreReferenceMethod(?StoreTransfer $storeTransfer = null): void
-    {
-        if (!$storeTransfer) {
-            $storeTransfer = $this->createStoreTransferWithStoreReference();
-        }
-
-        $storeFacadeMock = Stub::makeEmpty(StoreFacadeInterface::class, [
-            'getStoreByStoreReference' => $storeTransfer,
-            'getCurrentStore' => $storeTransfer,
-            'getAllStores' => [$storeTransfer],
-            'getIsDynamicStoreEnabled' => true,
-            'isDynamicStoreEnabled' => true,
-        ]);
-        $this->getLocatorHelper()->addToLocatorCache('store-facade', $storeFacadeMock);
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\StoreTransfer $storeTransfer1
-     * @param \Generated\Shared\Transfer\StoreTransfer $storeTransfer2
-     *
-     * @return void
-     */
-    public function configureStoreFacadeGetStoreByStoreReferenceWithMultipleStoresMethod(StoreTransfer $storeTransfer1, StoreTransfer $storeTransfer2): void
-    {
-        $storeFacadeMock = Stub::makeEmpty(StoreFacadeInterface::class, [
-            'getStoreByStoreReference' => $storeTransfer1,
-            'getCurrentStore' => $storeTransfer1,
-            'getAllStores' => [$storeTransfer1, $storeTransfer2],
-            'getIsDynamicStoreEnabled' => true,
-            'isDynamicStoreEnabled' => true,
-        ]);
-        $this->getLocatorHelper()->addToLocatorCache('store-facade', $storeFacadeMock);
     }
 
     /**

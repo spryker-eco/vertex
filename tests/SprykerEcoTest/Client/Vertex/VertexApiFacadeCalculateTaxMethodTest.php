@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEcoTest\Client\Vertex;
 
 use Codeception\PHPUnit\Constraint\JsonContains;
@@ -16,7 +18,6 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Response;
 use SprykerEco\Client\Vertex\Validator\VertexValidatorInterface;
 use SprykerEco\Client\Vertex\VertexClientInterface;
-use SprykerEco\Client\Vertex\VertexDependencyProvider;
 use SprykerEco\Client\Vertex\VertexFactory;
 
 /**
@@ -161,7 +162,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $this->expectException(Exception::class);
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
     }
 
     public function testCalculateQuoteTaxMethodUsesTheRightTransactionCallsUriToCallSuppliesEndpoint(): void
@@ -179,7 +180,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
     }
 
     public function testCalculateQuoteTaxUsesDefaultTaxpayerCompanyCode(): void
@@ -192,7 +193,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
         $vertexCalculationRequestTransfer = $this->tester->haveVertexCalculationRequestTransfer();
 
         // Act
-        $vertexCalculationResponseTransfer = $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
+        $vertexClient->calculateTax($vertexCalculationRequestTransfer, $vertexConfigTransfer);
 
         // Assert
         $request = $this->tester->getLastSentVertexRequest();
@@ -315,6 +316,7 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
     {
         $factoryMock = new class ($mockClient, $mockValidator) extends VertexFactory {
             private ClientInterface $httpClient;
+
             private VertexValidatorInterface $validator;
 
             public function __construct(ClientInterface $httpClient, VertexValidatorInterface $validator)
@@ -331,11 +333,6 @@ class VertexApiFacadeCalculateTaxMethodTest extends Unit
             public function createVertexQuotationValidator(): VertexValidatorInterface
             {
                 return $this->validator;
-            }
-
-            protected function getDependencyProvider()
-            {
-                return new VertexDependencyProvider();
             }
         };
 

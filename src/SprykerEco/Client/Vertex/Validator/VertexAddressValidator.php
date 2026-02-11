@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\VertexAddressTransfer;
@@ -17,7 +19,7 @@ class VertexAddressValidator implements VertexAddressValidatorInterface
     public function validate(
         VertexAddressTransfer $address,
         string $fieldName,
-        VertexValidationResponseTransfer $vertexValidationResponseTransfer
+        VertexValidationResponseTransfer $vertexValidationResponseTransfer,
     ): void {
         if (!$address->getAddress1()) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ADDRESS_FIELD_IS_REQUIRED, $fieldName . '.' . VertexAddressTransfer::ADDRESS1));
@@ -35,8 +37,10 @@ class VertexAddressValidator implements VertexAddressValidatorInterface
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ADDRESS_FIELD_IS_REQUIRED, $fieldName . '.' . VertexAddressTransfer::COUNTRY));
         }
 
-        if (!$address->getZipCode()) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ADDRESS_FIELD_IS_REQUIRED, $fieldName . '.' . VertexAddressTransfer::ZIP_CODE));
+        if ($address->getZipCode()) {
+            return;
         }
+
+        $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ADDRESS_FIELD_IS_REQUIRED, $fieldName . '.' . VertexAddressTransfer::ZIP_CODE));
     }
 }

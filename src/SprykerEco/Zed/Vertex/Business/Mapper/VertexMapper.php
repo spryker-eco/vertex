@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Business\Mapper;
 
 use ArrayObject;
@@ -44,18 +46,17 @@ class VertexMapper implements VertexMapperInterface
      */
     protected const ORIGINAL_TRANSFER_MISSING_EXCEPTION = 'Could not get original transfer from CalculableObjectTransfer';
 
-
     public function __construct(
         protected AddressMapperInterface $addressMapper,
         protected ItemExpensePriceRetrieverInterface $priceFormatter,
         protected StoreFacadeInterface $storeFacade,
-        protected VertexConfig $vertexConfig
+        protected VertexConfig $vertexConfig,
     ) {
     }
 
     public function mapCalculableObjectToVertexSaleTransfer(
         CalculableObjectTransfer $calculableObjectTransfer,
-        VertexSaleTransfer $vertexSaleTransfer
+        VertexSaleTransfer $vertexSaleTransfer,
     ): VertexSaleTransfer {
         $vertexSaleTransfer = $vertexSaleTransfer->fromArray($calculableObjectTransfer->toArray(), true);
         $saleItemTransfers = new ArrayObject();
@@ -118,7 +119,7 @@ class VertexMapper implements VertexMapperInterface
         ItemTransfer $itemTransfer,
         string $priceMode,
         ?AddressTransfer $billingAddressTransfer,
-        int $itemIndex
+        int $itemIndex,
     ): VertexItemTransfer {
         $vertexItemTransfer = new VertexItemTransfer();
 
@@ -156,7 +157,6 @@ class VertexMapper implements VertexMapperInterface
         if ($itemTransfer->getMerchantStockAddresses()->count()) {
             foreach ($itemTransfer->getMerchantStockAddresses() as $merchantStockAddress) {
                 $vertexShippingWarehouseTransfer = $this->mapMerchantStockAddressTransferToVertexShippingWarehouse(
-                    $vertexItemTransfer,
                     $merchantStockAddress,
                     new VertexShippingWarehouseTransfer(),
                 );
@@ -169,9 +169,8 @@ class VertexMapper implements VertexMapperInterface
     }
 
     public function mapMerchantStockAddressTransferToVertexShippingWarehouse(
-        VertexItemTransfer $vertexItemTransfer,
         MerchantStockAddressTransfer $merchantStockAddressTransfer,
-        VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer
+        VertexShippingWarehouseTransfer $vertexShippingWarehouseTransfer,
     ): VertexShippingWarehouseTransfer {
         $quantityToShip = 0;
         if ($merchantStockAddressTransfer->getQuantityToShip()) {
@@ -191,7 +190,7 @@ class VertexMapper implements VertexMapperInterface
     public function mapExpenseTransferToVertexShipmentTransfer(
         ExpenseTransfer $expenseTransfer,
         string $priceMode,
-        ?AddressTransfer $billingAddressTransfer
+        ?AddressTransfer $billingAddressTransfer,
     ): VertexShipmentTransfer {
         $vertexShipmentTransfer = new VertexShipmentTransfer();
 
@@ -220,13 +219,6 @@ class VertexMapper implements VertexMapperInterface
         return $vertexShipmentTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @throws \Exception
-     *
-     * @return \Generated\Shared\Transfer\OrderTransfer|\Generated\Shared\Transfer\QuoteTransfer
-     */
     protected function getOriginalTransfer(CalculableObjectTransfer $calculableObjectTransfer): OrderTransfer|QuoteTransfer
     {
         if ($calculableObjectTransfer->getOriginalQuote() !== null) {
@@ -240,11 +232,6 @@ class VertexMapper implements VertexMapperInterface
         throw new Exception(static::ORIGINAL_TRANSFER_MISSING_EXCEPTION);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\OrderTransfer|\Generated\Shared\Transfer\QuoteTransfer $transfer
-     *
-     * @return string
-     */
     protected function getTransferIdentifier(OrderTransfer|QuoteTransfer $transfer): string
     {
         $transferIdentifier = null;
@@ -283,7 +270,7 @@ class VertexMapper implements VertexMapperInterface
     public function setTaxSaleCountryCode(
         CalculableObjectTransfer $calculableObjectTransfer,
         VertexSaleTransfer $vertexSaleTransfer,
-        OrderTransfer|QuoteTransfer $originalTransfer
+        OrderTransfer|QuoteTransfer $originalTransfer,
     ): VertexSaleTransfer {
         $sellerCountryCode = $customerCountryCode = $this->findStoreCountryCode($calculableObjectTransfer);
 
@@ -305,11 +292,6 @@ class VertexMapper implements VertexMapperInterface
         return $vertexSaleTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return string|null
-     */
     protected function findStoreCountryCode(CalculableObjectTransfer $calculableObjectTransfer): ?string
     {
         if (!empty($calculableObjectTransfer->getStoreOrFail()->getCountries()[0])) {

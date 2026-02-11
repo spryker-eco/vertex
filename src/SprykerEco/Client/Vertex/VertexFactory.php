@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex;
 
 use GuzzleHttp\Client;
@@ -62,7 +64,6 @@ use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculator;
 use SprykerEco\Client\Vertex\TaxCalculator\VertexTaxCalculatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexAddressValidator;
 use SprykerEco\Client\Vertex\Validator\VertexAddressValidatorInterface;
-use SprykerEco\Client\Vertex\Validator\VertexInvoiceValidator;
 use SprykerEco\Client\Vertex\Validator\VertexItemValidator;
 use SprykerEco\Client\Vertex\Validator\VertexItemValidatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexQuotationValidator;

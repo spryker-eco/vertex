@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Business\Aggregator;
 
 use ArrayObject;
@@ -21,7 +23,7 @@ class PriceAggregator implements PriceAggregatorInterface
 {
     public function calculatePriceAggregation(
         VertexSaleTransfer $VertexSaleTransfer,
-        CalculableObjectTransfer $calculableObjectTransfer
+        CalculableObjectTransfer $calculableObjectTransfer,
     ): CalculableObjectTransfer {
         $this->calculateTaxAmountFullAggregationAndPriceToPayAggregationForItems($VertexSaleTransfer, $calculableObjectTransfer);
         $this->calculatePriceToPayAggregationForExpenses($VertexSaleTransfer, $calculableObjectTransfer);
@@ -31,7 +33,7 @@ class PriceAggregator implements PriceAggregatorInterface
 
     protected function calculateTaxAmountFullAggregationAndPriceToPayAggregationForItems(
         VertexSaleTransfer $VertexSaleTransfer,
-        CalculableObjectTransfer $calculableObjectTransfer
+        CalculableObjectTransfer $calculableObjectTransfer,
     ): CalculableObjectTransfer {
         $indexedQuoteItems = $this->getItemsIndexedBySkuAndItemIndex($calculableObjectTransfer->getItems());
 
@@ -126,7 +128,7 @@ class PriceAggregator implements PriceAggregatorInterface
 
     protected function calculatePriceToPayAggregationForExpenses(
         VertexSaleTransfer $VertexSaleTransfer,
-        CalculableObjectTransfer $calculableObjectTransfer
+        CalculableObjectTransfer $calculableObjectTransfer,
     ): CalculableObjectTransfer {
         $calculableObjectTransfer = $this->preDefineTaxAmount($calculableObjectTransfer);
         $indexedExpenses = $this->filterShipmentExpenses($calculableObjectTransfer->getExpenses());
@@ -149,9 +151,11 @@ class PriceAggregator implements PriceAggregatorInterface
             if ($expenseTransfer->getSumTaxAmount() === null) {
                 $expenseTransfer->setSumTaxAmount(0);
             }
-            if ($expenseTransfer->getUnitTaxAmount() === null) {
-                $expenseTransfer->setUnitTaxAmount(0);
+            if ($expenseTransfer->getUnitTaxAmount() !== null) {
+                continue;
             }
+
+            $expenseTransfer->setUnitTaxAmount(0);
         }
 
         return $calculableObjectTransfer;

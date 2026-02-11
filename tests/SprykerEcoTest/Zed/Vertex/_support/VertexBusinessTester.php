@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace SprykerEcoTest\Zed\Vertex;
 
@@ -20,7 +20,6 @@ use Generated\Shared\DataBuilder\QuoteBuilder;
 use Generated\Shared\DataBuilder\ShipmentBuilder;
 use Generated\Shared\DataBuilder\ShipmentMethodBuilder;
 use Generated\Shared\DataBuilder\StockAddressBuilder;
-use Generated\Shared\Transfer\AccessTokenResponseTransfer;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\CalculableObjectTransfer;
 use Generated\Shared\Transfer\CustomerTransfer;
@@ -34,8 +33,6 @@ use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\TaxAppConfigTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
-use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfig;
-use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfigQuery;
 use Orm\Zed\Vertex\Persistence\SpyVertexTaxIdValidationHistoryQuery;
 use ReflectionProperty;
 use Spryker\Shared\Oms\OmsConstants;
@@ -44,9 +41,7 @@ use Spryker\Zed\Calculation\Business\CalculationFacade;
 use Spryker\Zed\Calculation\CalculationDependencyProvider;
 use Spryker\Zed\Calculation\Dependency\Service\CalculationToUtilTextBridge;
 use Spryker\Zed\Kernel\Container;
-use Spryker\Zed\MerchantProfile\Communication\Plugin\TaxApp\MerchantProfileAddressCalculableObjectTaxAppExpanderPlugin;
 use Spryker\Zed\Oms\Business\OrderStateMachine\PersistenceManager;
-use Spryker\Zed\TaxApp\Dependency\Facade\TaxAppToOauthClientFacadeBridge;
 use SprykerEco\Client\Vertex\VertexClient;
 use SprykerEco\Zed\Vertex\VertexDependencyProvider;
 
@@ -72,13 +67,6 @@ class VertexBusinessTester extends Actor
 {
     use _generated\VertexBusinessTesterActions;
 
-    /**
-     * @param string $taxId
-     * @param string $countryCode
-     * @param string $responseData
-     *
-     * @return void
-     */
     public function assertTaxIdValidationHistoryEntryDoesNotExist(string $taxId, string $countryCode, string $responseData): void
     {
         $taxIdValidationHistoryEntity = $this->getVertexTaxIdValidationHistoryQuery()
@@ -90,16 +78,11 @@ class VertexBusinessTester extends Actor
         $this->assertSame($responseData, $taxIdValidationHistoryEntity->getResponseData());
     }
 
-    /**
-     * @return void
-     */
     public function setQuoteTaxMetadataExpanderPlugins(): void
     {
         $this->setDependency(
             VertexDependencyProvider::PLUGINS_CALCULABLE_OBJECT_VERTEX_EXPANDER,
-            [
-                new MerchantProfileAddressCalculableObjectTaxAppExpanderPlugin(),
-            ],
+            [],
         );
     }
 
@@ -107,7 +90,7 @@ class VertexBusinessTester extends Actor
      * @param \Generated\Shared\Transfer\StoreTransfer $storeTransfer
      * @param string $priceMode
      * @param bool $withBillingAddress
-     * @param array $billingAddressSeed
+     * @param array<mixed> $billingAddressSeed
      *
      * @return \Generated\Shared\Transfer\CalculableObjectTransfer
      */
@@ -115,7 +98,7 @@ class VertexBusinessTester extends Actor
         StoreTransfer $storeTransfer,
         string $priceMode = 'NET_MODE',
         bool $withBillingAddress = true,
-        array $billingAddressSeed = []
+        array $billingAddressSeed = [],
     ): CalculableObjectTransfer {
         $merchantTransfer1 = $this->haveMerchant();
         $this->haveMerchantProfile($merchantTransfer1);
@@ -173,11 +156,6 @@ class VertexBusinessTester extends Actor
         return $calculableObjectTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\StoreTransfer $storeTransfer
-     *
-     * @return \Generated\Shared\Transfer\CalculableObjectTransfer
-     */
     public function createCalculableObjectTransferWithoutShipment(StoreTransfer $storeTransfer): CalculableObjectTransfer
     {
         $merchantTransfer1 = $this->haveMerchant();
@@ -208,9 +186,6 @@ class VertexBusinessTester extends Actor
         return $calculableObjectTransfer;
     }
 
-    /**
-     * @return void
-     */
     public function ensureVertexTaxIdValidationHistoryTableIsEmpty(): void
     {
         $this->ensureDatabaseTableIsEmpty($this->getVertexTaxIdValidationHistoryQuery());
@@ -221,57 +196,6 @@ class VertexBusinessTester extends Actor
         return SpyVertexTaxIdValidationHistoryQuery::create();
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\TaxAppConfigTransfer $taxAppConfigTransfer
-     * @param \Orm\Zed\TaxApp\Persistence\SpyTaxAppConfig|null $taxAppConfigEntity
-     *
-     * @return void
-     */
-    public function assertTaxAppConfigStoredProperly(
-        TaxAppConfigTransfer $taxAppConfigTransfer,
-        ?SpyTaxAppConfig $taxAppConfigEntity = null
-    ): void {
-        $this->assertNotNull($taxAppConfigEntity);
-        $this->assertEquals(
-            $taxAppConfigTransfer->getApplicationId(),
-            $taxAppConfigEntity->getApplicationId(),
-        );
-        $this->assertEquals(
-            $taxAppConfigTransfer->getApiUrl(),
-            $taxAppConfigEntity->getApiUrl(),
-        );
-        $this->assertEquals(
-            $taxAppConfigTransfer->getVendorCode(),
-            $taxAppConfigEntity->getVendorCode(),
-        );
-    }
-
-    /**
-     * @param int $idStore
-     *
-     * @return \Orm\Zed\SearchHttp\Persistence\SpySearchHttpConfig|null
-     */
-    public function findTaxAppConfigByIdStore(int $idStore): ?SpyTaxAppConfig
-    {
-        return $this->getTaxAppConfigQuery()
-            ->filterByFkStore($idStore)
-            ->findOne();
-    }
-
-    /**
-     * @return \Generated\Shared\Transfer\StoreTransfer
-     */
-    public function createStoreWithStoreReference(): StoreTransfer
-    {
-        return (new StoreTransfer())
-            ->setName('test_store_name')
-            ->setIdStore(1)
-            ->setStoreReference('test_store_reference');
-    }
-
-    /**
-     * @return void
-     */
     protected function clearPersistenceManagerCache(): void
     {
         $stateCacheProperty = new ReflectionProperty(PersistenceManager::class, 'stateCache');
@@ -282,12 +206,6 @@ class VertexBusinessTester extends Actor
         $processCacheProperty->setValue([]);
     }
 
-    /**
-     * @param array $activeProcesses
-     * @param string|null $xmlFolder
-     *
-     * @return void
-     */
     public function configureTestStateMachine(array $activeProcesses, ?string $xmlFolder = null): void
     {
         $this->clearPersistenceManagerCache();
@@ -300,11 +218,6 @@ class VertexBusinessTester extends Actor
         $this->setConfig(OmsConstants::ACTIVE_PROCESSES, $activeProcesses);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\StoreTransfer $storeTransfer
-     *
-     * @return \Generated\Shared\Transfer\CalculableObjectTransfer
-     */
     public function haveCalculableObjectTransferWithMerchantStockAddress(StoreTransfer $storeTransfer): CalculableObjectTransfer
     {
         $merchantTransfer1 = $this->haveMerchant();
@@ -380,26 +293,6 @@ class VertexBusinessTester extends Actor
         return $calculableObjectTransfer;
     }
 
-    /**
-     * @return void
-     */
-    public function mockOauthClient(): void
-    {
-        $accessTokenResponseTransfer = (new AccessTokenResponseTransfer())
-            ->setIsSuccessful(true)
-            ->setAccessToken('some-access-token')
-            ->setExpiresAt((string)(time() + 86400));
-
-        $oauthClientFacadeBridgeMock = Stub::makeEmpty(TaxAppToOauthClientFacadeBridge::class, [
-            'getAccessToken' => $accessTokenResponseTransfer,
-        ]);
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\VertexCalculationResponseTransfer $vertexCalculationResponseTransfer
-     *
-     * @return void
-     */
     public function mockVertexClientWithVertexCalculationResponse(VertexCalculationResponseTransfer $vertexCalculationResponseTransfer): void
     {
         $vertexClientMock = Stub::makeEmpty(VertexClient::class);
@@ -442,12 +335,6 @@ class VertexBusinessTester extends Actor
         return $calculationFacade;
     }
 
-    /**
-     * @param string $stateMachineProcessName
-     * @param \Generated\Shared\Transfer\StoreTransfer $storeTransfer
-     *
-     * @return \Generated\Shared\Transfer\OrderTransfer
-     */
     public function createOrderByStateMachineProcessName(string $stateMachineProcessName, StoreTransfer $storeTransfer): OrderTransfer
     {
         $quoteTransfer = $this->buildFakeQuote(
@@ -467,38 +354,6 @@ class VertexBusinessTester extends Actor
             ->setBillingAddress($quoteTransfer->getBillingAddress());
     }
 
-    /**
-     * @param string $applicationId
-     * @param int $idStore
-     *
-     * @return void
-     */
-    public function assertTaxAppConfigStoreRelationExists(string $applicationId, int $idStore): void
-    {
-        $this->assertTrue(
-            SpyTaxAppConfigQuery::create()->filterByApplicationId($applicationId)->filterByFkStore($idStore)->exists(),
-        );
-    }
-
-    /**
-     * @param string $applicationId
-     * @param int $idStore
-     *
-     * @return void
-     */
-    public function assertTaxAppConfigStoreRelationDoesNotExist(string $applicationId, int $idStore): void
-    {
-        $this->assertFalse(
-            SpyTaxAppConfigQuery::create()->filterByApplicationId($applicationId)->filterByFkStore($idStore)->exists(),
-        );
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\CustomerTransfer $customerTransfer
-     * @param \Generated\Shared\Transfer\StoreTransfer $storeTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuoteTransfer
-     */
     protected function buildFakeQuote(CustomerTransfer $customerTransfer, StoreTransfer $storeTransfer): QuoteTransfer
     {
         $shipmentBuilder = (new ShipmentBuilder())

@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
@@ -36,9 +38,11 @@ class VertexQuotationValidator implements VertexValidatorInterface
         );
 
         foreach ($vertexSaleTransfer->getShipments() as $vertexShipmentTransfer) {
-            if ($vertexShipmentTransfer->getDiscountAmount() === null) {
-                $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexShipmentTransfer::DISCOUNT_AMOUNT));
+            if ($vertexShipmentTransfer->getDiscountAmount() !== null) {
+                continue;
             }
+
+            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_FIELD_IS_REQUIRED, VertexShipmentTransfer::DISCOUNT_AMOUNT));
         }
 
         if ($vertexValidationResponseTransfer->getMessages()) {

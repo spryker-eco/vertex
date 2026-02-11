@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Builder\Supplies\LineItem;
 
 use Generated\Shared\Transfer\VertexItemTransfer;
@@ -16,7 +18,9 @@ use SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface;
 
 class VertexLineItemSellerBuilder implements VertexLineItemBuilderInterface
 {
-    public function __construct(protected LocationMapper $locationMapper) {}
+    public function __construct(protected LocationMapper $locationMapper)
+    {
+    }
 
     public function build(VertexItemTransfer|VertexShipmentTransfer $itemTransfer, VertexLineItemTransfer $vertexLineItemTransfer): VertexLineItemTransfer
     {

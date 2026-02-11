@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Persistence\Propel\Mapper;
 
 use Generated\Shared\Transfer\VertexApiAccessTokenTransfer;
@@ -14,14 +16,14 @@ class VertexApiAccessTokenMapper
 {
     public function mapVertexApiAccessTokenTransferToVertexApiAccessTokenEntity(
         VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer,
-        SpyVertexApiAccessToken $vertexApiAccessTokenEntity
+        SpyVertexApiAccessToken $vertexApiAccessTokenEntity,
     ): SpyVertexApiAccessToken {
         return $vertexApiAccessTokenEntity->fromArray($vertexApiAccessTokenTransfer->toArray());
     }
 
     public function mapVertexApiAccessTokenEntityToVertexApiAccessTokenTransfer(
         SpyVertexApiAccessToken $vertexApiAccessTokenEntity,
-        VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer
+        VertexApiAccessTokenTransfer $vertexApiAccessTokenTransfer,
     ): VertexApiAccessTokenTransfer {
         return $vertexApiAccessTokenTransfer->fromArray($vertexApiAccessTokenEntity->toArray(), true);
     }

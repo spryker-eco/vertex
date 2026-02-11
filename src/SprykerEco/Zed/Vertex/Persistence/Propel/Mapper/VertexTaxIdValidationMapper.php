@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Persistence\Propel\Mapper;
 
 use Generated\Shared\Transfer\TaxIdValidationHistoryTransfer;
@@ -20,7 +22,7 @@ class VertexTaxIdValidationMapper
      */
     public function mapTaxIdValidationHistoryTransferToVertexTaxIdValidationHistoryEntity(
         TaxIdValidationHistoryTransfer $taxIdValidationHistoryTransfer,
-        SpyVertexTaxIdValidationHistory $vertexTaxIdValidationHistoryEntity
+        SpyVertexTaxIdValidationHistory $vertexTaxIdValidationHistoryEntity,
     ): SpyVertexTaxIdValidationHistory {
         return $vertexTaxIdValidationHistoryEntity->fromArray($taxIdValidationHistoryTransfer->toArray());
     }

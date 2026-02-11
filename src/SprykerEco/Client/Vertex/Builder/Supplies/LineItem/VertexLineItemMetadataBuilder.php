@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Builder\Supplies\LineItem;
 
 use Generated\Shared\Transfer\VertexItemTransfer;
@@ -40,9 +42,11 @@ class VertexLineItemMetadataBuilder implements VertexLineItemBuilderInterface
                 continue;
             }
 
-            if (is_array($value)) {
-                $metadataArray[$key] = $this->filterArrayEmptyValues($value);
+            if (!is_array($value)) {
+                continue;
             }
+
+            $metadataArray[$key] = $this->filterArrayEmptyValues($value);
         }
 
         return $metadataArray;

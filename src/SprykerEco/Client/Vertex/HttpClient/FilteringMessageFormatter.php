@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\HttpClient;
 
 use GuzzleHttp\Psr7\Utils;
@@ -28,7 +30,7 @@ class FilteringMessageFormatter implements MessageFormatterInterface
 
     protected const MASKED_VALUE = '*****';
 
-    public function format(RequestInterface $request, ?ResponseInterface $response = null, ?Throwable $error = null): string
+    public function format(RequestInterface $request, ?ResponseInterface $response = null, ?Throwable $error = null): string // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter
     {
         $message = static::MESSAGE_FORMAT_REQUEST;
 
@@ -125,9 +127,11 @@ class FilteringMessageFormatter implements MessageFormatterInterface
     protected function filterContents(array $contents): array
     {
         array_walk_recursive($contents, function (&$value, $key): void {
-            if (in_array(strtolower($key), static::FILTERED_KEYS)) {
-                $value = static::MASKED_VALUE;
+            if (!in_array(strtolower($key), static::FILTERED_KEYS)) {
+                return;
             }
+
+            $value = static::MASKED_VALUE;
         });
 
         return $contents;

@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Business\Calculator;
 
 use Generated\Shared\Transfer\CalculableObjectTransfer;
@@ -22,7 +24,7 @@ class Calculator implements CalculatorInterface
         protected VertexConfigResolverInterface $vertexConfigResolver,
         protected FallbackCalculatorInterface $fallbackQuoteCalculator,
         protected FallbackCalculatorInterface $fallbackOrderCalculator,
-        protected VertexCalculatorInterface $vertexCalculator
+        protected VertexCalculatorInterface $vertexCalculator,
     ) {
     }
 
@@ -54,9 +56,11 @@ class Calculator implements CalculatorInterface
             return;
         }
 
-        if ($calculableObjectTransfer->getOriginalOrder()) {
-            $this->fallbackOrderCalculator->recalculate($calculableObjectTransfer);
+        if (!$calculableObjectTransfer->getOriginalOrder()) {
+            return;
         }
+
+        $this->fallbackOrderCalculator->recalculate($calculableObjectTransfer);
     }
 
     protected function setHideTaxInCartFlagToTrue(CalculableObjectTransfer $calculableObjectTransfer): CalculableObjectTransfer
@@ -70,8 +74,10 @@ class Calculator implements CalculatorInterface
 
     protected function setHideTaxInCartFlagToFalse(CalculableObjectTransfer $calculableObjectTransfer): void
     {
-        if ($calculableObjectTransfer->getOriginalQuote() !== null) {
-            $calculableObjectTransfer->getOriginalQuote()->setHideTaxInCart(false);
+        if ($calculableObjectTransfer->getOriginalQuote() === null) {
+            return;
         }
+
+        $calculableObjectTransfer->getOriginalQuote()->setHideTaxInCart(false);
     }
 }

@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Api\V2\Client;
 
 use Generated\Shared\Transfer\TaxamoApiRequestTransfer;
@@ -32,8 +34,9 @@ class TaxamoApi
 
     public function __construct(
         protected ClientInterface $client,
-        protected UtilEncodingServiceInterface $utilEncodingService
-    ) {}
+        protected UtilEncodingServiceInterface $utilEncodingService,
+    ) {
+    }
 
     public function validateTaxId(TaxamoApiRequestTransfer $taxamoApiRequestTransfer): VertexApiResponseTransfer
     {

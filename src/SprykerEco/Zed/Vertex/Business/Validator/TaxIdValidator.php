@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Business\Validator;
 
 use Generated\Shared\Transfer\TaxIdValidationHistoryTransfer;
@@ -66,7 +68,7 @@ class TaxIdValidator implements TaxIdValidatorInterface
     protected function createVertexValidationResponseTransfer(
         bool $isValid,
         string $message,
-        string $messageKey
+        string $messageKey,
     ): VertexValidationResponseTransfer {
         return (new VertexValidationResponseTransfer())
             ->setIsValid($isValid)

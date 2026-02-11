@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEcoTest\Client\Vertex;
 
 use Codeception\Test\Unit;
@@ -26,8 +28,7 @@ class VertexClientAuthenticateMethodTest extends Unit
     {
         // Arrange
         $vertexConfigTransfer = $this->tester->haveVertexConfig();
-        $vertexApiCredentialTransfer = $this->tester->haveVertexApiCredentialTransfer($vertexConfigTransfer->toArray());
-        $mockClient = $this->tester->mockClientForVertexApiCredentialWithValidResponse($vertexApiCredentialTransfer);
+        $mockClient = $this->tester->mockClientForVertexApiCredentialWithValidResponse();
         $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
 
         // Act

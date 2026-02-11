@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Communication\Plugin\Oms\Command;
 
 use Generated\Shared\Transfer\OrderTransfer;
@@ -36,7 +38,7 @@ class VertexSubmitPaymentTaxInvoicePlugin extends AbstractPlugin implements Comm
      *
      * @return array
      */
-    public function run(array $orderItems, SpySalesOrder $orderEntity, ReadOnlyArrayObject $data): array
+    public function run(array $orderItems, SpySalesOrder $orderEntity, ReadOnlyArrayObject $data): array // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter
     {
         $orderTransfer = new OrderTransfer();
         $orderTransfer->setIdSalesOrder($orderEntity->getIdSalesOrder());

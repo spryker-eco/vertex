@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex;
 
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
@@ -50,7 +52,7 @@ interface VertexClientInterface
      */
     public function calculateTax(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        VertexConfigTransfer $vertexConfigTransfer
+        VertexConfigTransfer $vertexConfigTransfer,
     ): VertexCalculationResponseTransfer;
 
     /**
@@ -71,7 +73,7 @@ interface VertexClientInterface
      */
     public function sendTaxInvoice(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        VertexConfigTransfer $vertexConfigTransfer
+        VertexConfigTransfer $vertexConfigTransfer,
     ): VertexCalculationResponseTransfer;
 
     /**
@@ -93,7 +95,7 @@ interface VertexClientInterface
      */
     public function sendTaxRefund(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        VertexConfigTransfer $vertexConfigTransfer
+        VertexConfigTransfer $vertexConfigTransfer,
     ): VertexCalculationResponseTransfer;
 
     /**
@@ -112,7 +114,7 @@ interface VertexClientInterface
      */
     public function validateTaxId(
         TaxIdValidationRequestTransfer $taxIdValidationRequest,
-        VertexConfigTransfer $vertexConfigTransfer
+        VertexConfigTransfer $vertexConfigTransfer,
     ): VertexValidationResponseTransfer;
 
     /**
@@ -128,6 +130,6 @@ interface VertexClientInterface
      * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
      */
     public function requestTaxIdValidation(
-        VertexValidationRequestTransfer $vertexValidationRequestTransfer
+        VertexValidationRequestTransfer $vertexValidationRequestTransfer,
     ): VertexValidationResponseTransfer;
 }

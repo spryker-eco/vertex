@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Builder\Supplies;
 
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
@@ -13,20 +15,11 @@ use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
 
 class VertexSuppliesInvoiceSaleMessageTypeBuilder implements VertexSuppliesRequestBuilderInterface
 {
-    /**
-     * @var string
-     */
     protected const SALE_MESSAGE_TYPE = 'INVOICE';
 
-    /**
-     * @param \Generated\Shared\Transfer\VertexCalculationRequestTransfer $vertexCalculationRequestTransfer
-     * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer
-     *
-     * @return \Generated\Shared\Transfer\VertexSuppliesTransfer
-     */
     public function build(
-        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        VertexSuppliesTransfer $vertexSuppliesTransfer
+        VertexCalculationRequestTransfer $vertexCalculationRequestTransfer, // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter
+        VertexSuppliesTransfer $vertexSuppliesTransfer,
     ): VertexSuppliesTransfer {
         return $vertexSuppliesTransfer->setSaleMessageType(static::SALE_MESSAGE_TYPE);
     }

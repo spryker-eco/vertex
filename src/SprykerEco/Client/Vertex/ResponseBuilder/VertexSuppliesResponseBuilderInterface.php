@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\ResponseBuilder;
 
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
@@ -23,7 +25,7 @@ interface VertexSuppliesResponseBuilderInterface
     public function buildResponse(
         VertexApiResponseTransfer $vertexApiResponseTransfer,
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        array $lineItemIdToInitialIdentifierMapping
+        array $lineItemIdToInitialIdentifierMapping,
     ): VertexCalculationResponseTransfer;
 
     /**
@@ -34,6 +36,6 @@ interface VertexSuppliesResponseBuilderInterface
      */
     public function buildErrorResponse(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        string $errorMessage
+        string $errorMessage,
     ): VertexCalculationResponseTransfer;
 }

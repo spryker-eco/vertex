@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Validator;
 
 use Generated\Shared\Transfer\TaxamoApiRequestTransfer;
@@ -27,7 +29,7 @@ class VertexTaxIdValidator implements VertexTaxIdValidatorInterface
 
     public function validate(
         TaxIdValidationRequestTransfer $taxIdValidationRequest,
-        VertexConfigTransfer $vertexConfigTransfer
+        VertexConfigTransfer $vertexConfigTransfer,
     ): VertexValidationResponseTransfer {
         if (!$vertexConfigTransfer->getIsActive() || !$vertexConfigTransfer->getIsTaxIdValidatorEnabled()) {
             return $this->createVertexValidationResponseTransfer(false, static::ERROR_MESSAGE_INACTIVE_VERTEX_APP);
@@ -70,7 +72,7 @@ class VertexTaxIdValidator implements VertexTaxIdValidatorInterface
         bool $isValid = true,
         ?string $message = null,
         ?string $additionalInfo = null,
-        ?string $errorCode = null
+        ?string $errorCode = null,
     ): VertexValidationResponseTransfer {
         $vertexValidationResponseTransfer = (new VertexValidationResponseTransfer())->setIsValid($isValid);
 

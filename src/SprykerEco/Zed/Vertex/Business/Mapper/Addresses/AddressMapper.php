@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Business\Mapper\Addresses;
 
 use Generated\Shared\Transfer\AddressTransfer;
@@ -17,14 +19,14 @@ class AddressMapper implements AddressMapperInterface
 {
     public function mapAddressTransferToVertexAddressTransfer(
         AddressTransfer $addressTransfer,
-        VertexAddressTransfer $VertexAddressTransfer
+        VertexAddressTransfer $VertexAddressTransfer,
     ): VertexAddressTransfer {
         return $this->mapAddressAndMerchantProfileAddressTransferToVertexAddressTransfer($addressTransfer, $VertexAddressTransfer);
     }
 
     public function mapStockAddressTransferToVertexAddressTransfer(
         StockAddressTransfer $addressTransfer,
-        VertexAddressTransfer $VertexAddressTransfer
+        VertexAddressTransfer $VertexAddressTransfer,
     ): VertexAddressTransfer {
         $VertexAddressTransfer = $VertexAddressTransfer->fromArray($addressTransfer->toArray(), true);
 
@@ -40,14 +42,14 @@ class AddressMapper implements AddressMapperInterface
 
     public function mapMerchantProfileAddressTransferToVertexAddressTransfer(
         MerchantProfileAddressTransfer $addressTransfer,
-        VertexAddressTransfer $VertexAddressTransfer
+        VertexAddressTransfer $VertexAddressTransfer,
     ): VertexAddressTransfer {
         return $this->mapAddressAndMerchantProfileAddressTransferToVertexAddressTransfer($addressTransfer, $VertexAddressTransfer);
     }
 
     protected function mapAddressAndMerchantProfileAddressTransferToVertexAddressTransfer(
         AbstractTransfer $addressTransfer,
-        VertexAddressTransfer $VertexAddressTransfer
+        VertexAddressTransfer $VertexAddressTransfer,
     ): VertexAddressTransfer {
         $VertexAddressTransfer = $VertexAddressTransfer->fromArray($addressTransfer->toArray(), true);
 

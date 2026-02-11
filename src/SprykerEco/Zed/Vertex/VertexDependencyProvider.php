@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex;
 
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
@@ -42,7 +44,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
         $container = $this->addOrderVertexExpanderPlugins($container);
         $container = $this->addSalesFacade($container);
         $container = $this->addVertexClient($container);
-        $container = $this->addSecretsManagerClient($container);
         $container = $this->addUtilEncodingService($container);
         $container = $this->addFallbackQuoteCalculationPlugins($container);
         $container = $this->addFallbackOrderCalculationPlugins($container);
@@ -80,15 +81,6 @@ class VertexDependencyProvider extends AbstractBundleDependencyProvider
     {
         $container->set(static::FACADE_STORE, function (Container $container) {
             return $container->getLocator()->store()->facade();
-        });
-
-        return $container;
-    }
-
-    protected function addSecretsManagerClient(Container $container): Container
-    {
-        $container->set(static::CLIENT_SECRETS_MANAGER, function (Container $container) {
-            return $container->getLocator()->secretsManager()->client();
         });
 
         return $container;

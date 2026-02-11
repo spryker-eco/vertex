@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Business;
 
 use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
@@ -12,9 +14,7 @@ use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use Spryker\Zed\Sales\Business\SalesFacadeInterface;
 use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerEco\Client\Vertex\Validator\VertexAddressValidator;
-use SprykerEco\Client\Vertex\Validator\VertexInvoiceValidator;
 use SprykerEco\Client\Vertex\Validator\VertexItemValidator;
-use SprykerEco\Client\Vertex\Validator\VertexQuotationValidator;
 use SprykerEco\Client\Vertex\Validator\VertexSaleValidator;
 use SprykerEco\Client\Vertex\Validator\VertexShipmentValidator;
 use SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidator;

@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Zed\Vertex\Business\Resolver;
 
 use Generated\Shared\Transfer\VertexConfigTransfer;
@@ -21,7 +23,7 @@ class VertexConfigResolver implements VertexConfigResolverInterface
     public function __construct(
         protected VertexConfig $vertexConfig,
         protected StoreFacadeInterface $storeFacade,
-        protected VertexConfigValidator $vertexConfigValidator
+        protected VertexConfigValidator $vertexConfigValidator,
     ) {
     }
 

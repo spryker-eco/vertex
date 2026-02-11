@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Client\Vertex\Builder\Supplies;
 
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
@@ -21,7 +23,7 @@ class VertexSuppliesMetadataBuilder implements VertexSuppliesRequestBuilderInter
      */
     public function build(
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
-        VertexSuppliesTransfer $vertexSuppliesTransfer
+        VertexSuppliesTransfer $vertexSuppliesTransfer,
     ): VertexSuppliesTransfer {
         $taxMetadata = $vertexCalculationRequestTransfer->getSaleOrFail()->getTaxMetadata();
         $taxMetadata = $this->filterArrayEmptyValues($taxMetadata);
@@ -43,9 +45,11 @@ class VertexSuppliesMetadataBuilder implements VertexSuppliesRequestBuilderInter
                 continue;
             }
 
-            if (is_array($value)) {
-                $metadataArray[$key] = $this->filterArrayEmptyValues($value);
+            if (!is_array($value)) {
+                continue;
             }
+
+            $metadataArray[$key] = $this->filterArrayEmptyValues($value);
         }
 
         return $metadataArray;

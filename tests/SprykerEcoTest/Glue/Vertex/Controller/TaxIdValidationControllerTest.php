@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerTest\Glue\Vertex\Controller;
 
 use Codeception\Stub;
@@ -147,7 +149,7 @@ class TaxIdValidationControllerTest extends Unit
         RestVertexValidationAttributesTransfer $restVertexValidationAttributesTransfer,
         VertexValidationResponseTransfer $VertexValidationResponseTransfer,
         array $glossaryTranslations,
-        string $expectedMessage
+        string $expectedMessage,
     ): void {
         // Arrange
         $vertexClientMock = $this->getMockBuilder(VertexClientInterface::class)->getMock();

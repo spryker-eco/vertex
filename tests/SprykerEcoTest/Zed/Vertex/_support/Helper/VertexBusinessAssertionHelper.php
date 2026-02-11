@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEcoTest\Zed\Vertex\Helper;
 
 use Codeception\Module;
@@ -12,18 +14,12 @@ use Generated\Shared\Transfer\CalculableObjectTransfer;
 use Generated\Shared\Transfer\TaxAppApiUrlsTransfer;
 use Generated\Shared\Transfer\TaxAppConfigTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
-use Orm\Zed\TaxApp\Persistence\SpyTaxAppConfigQuery;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
 use SprykerEco\Client\Vertex\VertexClient;
 
 class VertexBusinessAssertionHelper extends Module
 {
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return void
-     */
     public function assertCalculableObjectTransferExtendedWithTaxMetadata(CalculableObjectTransfer $calculableObjectTransfer): void
     {
         $this->assertNotNull($calculableObjectTransfer->getTaxMetadata());
@@ -73,7 +69,7 @@ class VertexBusinessAssertionHelper extends Module
                         );
 
                         self::assertTrue(
-                            strlen($quantityWarehouseMap->getWarehouseAddress()->getCountry()) == 2,
+                            strlen($quantityWarehouseMap->getWarehouseAddress()->getCountry()) === 2,
                             'Warehouse mapping country code must be a string with 2 characters',
                         );
                     }
@@ -85,9 +81,9 @@ class VertexBusinessAssertionHelper extends Module
 
     public function assertRequestTaxQuotationReceivesSalesItemWithCorrectItemsAndWithoutWarehouseAddress(
         VertexClient $vertexClientMock,
-        CalculableObjectTransfer $mockedCalculableObjectTransfer
+        CalculableObjectTransfer $mockedCalculableObjectTransfer,
     ): void {
-        $expectation = $this->haveExpectedTaxQuotationRequestSaleItems();
+        $this->haveExpectedTaxQuotationRequestSaleItems();
 
         $vertexClientMock->expects(new InvokedCountMatcher(1))
             ->method('calculateTax')
@@ -146,11 +142,6 @@ class VertexBusinessAssertionHelper extends Module
         ];
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return void
-     */
     public function assertQuoteHasCorrectGrandTotal(CalculableObjectTransfer $calculableObjectTransfer): void
     {
         $itemsSumPriceToPayAggregation = 0;
@@ -169,11 +160,6 @@ class VertexBusinessAssertionHelper extends Module
         $this->assertEquals($grandTotal, ($expensesSumPriceToPayAggregation + $itemsSumPriceToPayAggregation));
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CalculableObjectTransfer $calculableObjectTransfer
-     *
-     * @return void
-     */
     public function assertQuoteHasZeroTaxTotal(CalculableObjectTransfer $calculableObjectTransfer): void
     {
         $itemsSumTaxAmountFullAggregation = 0;
@@ -189,61 +175,5 @@ class VertexBusinessAssertionHelper extends Module
 
         $this->assertEquals(0, $itemsSumTaxAmountFullAggregation);
         $this->assertEquals(0, $expensesSumTaxAmount);
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\TaxAppConfigTransfer $taxAppConfigTransfer
-     *
-     * @return void
-     */
-    public function assertAllTaxAppConfigsForTenantHaveNewApiUrl(
-        TaxAppConfigTransfer $taxAppConfigTransfer
-    ): void {
-        $taxAppConfigEntityCollection = SpyTaxAppConfigQuery::create()
-            ->filterByVendorCode($taxAppConfigTransfer->getVendorCode())
-            ->find();
-
-        $this->assertTrue($taxAppConfigEntityCollection->count() > 1);
-
-        foreach ($taxAppConfigEntityCollection as $taxAppConfigEntity) {
-            $taxAppConfigEntityApiUrls = json_decode($taxAppConfigEntity->getApiUrls(), true);
-            $taxAppConfigEntityApiUrls = (new TaxAppApiUrlsTransfer())->fromArray($taxAppConfigEntityApiUrls, true);
-            $this->assertEquals($taxAppConfigEntityApiUrls->getQuotationUrl(), $taxAppConfigTransfer->getApiUrlsOrFail()->getQuotationUrl());
-            $this->assertEquals($taxAppConfigEntityApiUrls->getRefundsUrl(), $taxAppConfigTransfer->getApiUrlsOrFail()->getRefundsUrl());
-        }
-    }
-
-    /**
-     * @param string $vendorCode
-     *
-     * @return void
-     */
-    public function assertAllTaxAppConfigsForTenantHaveBeenDeleted(string $vendorCode): void
-    {
-        $taxAppConfigEntityCollectionDeleted = SpyTaxAppConfigQuery::create()
-            ->filterByVendorCode($vendorCode)
-            ->find();
-
-        $this->assertTrue($taxAppConfigEntityCollectionDeleted->count() == 0);
-    }
-
-    /**
-     * @param string $vendorCodeNotDeleted
-     * @param string $vendorCodeDeleted
-     *
-     * @return void
-     */
-    public function assertProperTaxAppConfigsHaveBeenDeletedByVendorCodes(string $vendorCodeNotDeleted, string $vendorCodeDeleted): void
-    {
-        $deletedTaxAppConfigEntityCollection = SpyTaxAppConfigQuery::create()
-            ->filterByVendorCode($vendorCodeDeleted)
-            ->find();
-
-        $notDeletedTaxAppConfigEntityCollection = SpyTaxAppConfigQuery::create()
-            ->filterByVendorCode($vendorCodeNotDeleted)
-            ->find();
-
-        $this->assertTrue($deletedTaxAppConfigEntityCollection->count() == 0);
-        $this->assertTrue($notDeletedTaxAppConfigEntityCollection->count() > 0);
     }
 }

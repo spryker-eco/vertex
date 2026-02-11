@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types = 1);
+
 namespace SprykerEco\Glue\Vertex\Controller;
 
 use Generated\Shared\Transfer\RestVertexValidationAttributesTransfer;
@@ -41,7 +43,7 @@ class TaxIdValidationController extends AbstractController
      */
     public function postAction(
         RestRequestInterface $restRequest,
-        RestVertexValidationAttributesTransfer $restVertexValidationAttributesTransfer
+        RestVertexValidationAttributesTransfer $restVertexValidationAttributesTransfer,
     ): RestResponseInterface {
         $locale = $restRequest->getMetadata()->getLocale();
 
