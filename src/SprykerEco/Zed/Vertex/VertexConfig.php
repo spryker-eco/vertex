@@ -20,7 +20,7 @@ class VertexConfig extends AbstractBundleConfig
      * Specification:
      * - Returns the OAuth client ID for Vertex API authentication.
      * - Retrieved from configuration using VertexConstants::CLIENT_ID.
-     * - Returns empty string if not configured.
+     * - Returns null if not configured.
      *
      * @api
      *
@@ -28,14 +28,14 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getClientId(): string
     {
-        return $this->get(VertexConstants::CLIENT_ID, '');
+        return $this->get(VertexConstants::CLIENT_ID, null);
     }
 
     /**
      * Specification:
      * - Returns the OAuth client secret for Vertex API authentication.
      * - Retrieved from configuration using VertexConstants::CLIENT_SECRET.
-     * - Returns empty string if not configured.
+     * - Returns null if not configured.
      *
      * @api
      *
@@ -43,14 +43,14 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getClientSecret(): string
     {
-        return $this->get(VertexConstants::CLIENT_SECRET, '');
+        return $this->get(VertexConstants::CLIENT_SECRET, null);
     }
 
     /**
      * Specification:
      * - Returns the security URI endpoint for Vertex API OAuth authentication.
      * - Retrieved from configuration using VertexConstants::SECURITY_URI.
-     * - Returns empty string if not configured.
+     * - Returns null if not configured.
      *
      * @api
      *
@@ -58,14 +58,14 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getSecurityUri(): string
     {
-        return $this->get(VertexConstants::SECURITY_URI, '');
+        return $this->get(VertexConstants::SECURITY_URI, null);
     }
 
     /**
      * Specification:
      * - Returns the transaction calls URI endpoint for Vertex API tax calculations.
      * - Retrieved from configuration using VertexConstants::TRANSACTION_CALLS_URI.
-     * - Returns empty string if not configured.
+     * - Returns null if not configured.
      *
      * @api
      *
@@ -73,14 +73,14 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getTransactionCallsUri(): string
     {
-        return $this->get(VertexConstants::TRANSACTION_CALLS_URI, '');
+        return $this->get(VertexConstants::TRANSACTION_CALLS_URI, null);
     }
 
     /**
      * Specification:
      * - Returns the Taxamo API URL for tax ID validation.
      * - Retrieved from configuration using VertexConstants::TAXAMO_API_URL.
-     * - Returns empty string if not configured.
+     * - Returns null if not configured.
      *
      * @api
      *
@@ -88,14 +88,14 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getTaxamoApiUrl(): string
     {
-        return $this->get(VertexConstants::TAXAMO_API_URL, '');
+        return $this->get(VertexConstants::TAXAMO_API_URL, null);
     }
 
     /**
      * Specification:
      * - Returns the Taxamo API token for authentication.
      * - Retrieved from configuration using VertexConstants::TAXAMO_TOKEN.
-     * - Returns empty string if not configured.
+     * - Returns null if not configured.
      *
      * @api
      *
@@ -103,7 +103,7 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getTaxamoToken(): string
     {
-        return $this->get(VertexConstants::TAXAMO_TOKEN, '');
+        return $this->get(VertexConstants::TAXAMO_TOKEN, null);
     }
 
     /**
@@ -253,5 +253,10 @@ class VertexConfig extends AbstractBundleConfig
     public function getVendorCode(): string
     {
         return $this->get(VertexConstants::VENDOR_CODE, '');
+    }
+
+    public function getDefaultTaxpayerCompanyCode(): string
+    {
+        return $this->get(VertexConstants::DEFAULT_TAXPAYER_COMPANY_CODE, '');
     }
 }

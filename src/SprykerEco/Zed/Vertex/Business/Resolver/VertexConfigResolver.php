@@ -41,13 +41,14 @@ class VertexConfigResolver implements VertexConfigResolverInterface
             ->setTaxamoApiUrl($this->vertexConfig->getTaxamoApiUrl())
             ->setCredentialHash($this->getCredentialHash($this->vertexConfig->getClientId(), $this->vertexConfig->getClientSecret()))
             ->setIsInvoicingEnabled($this->vertexConfig->isInvoicingEnabled())
-            ->setVendorCode($this->vertexConfig->getVendorCode());
+            ->setVendorCode($this->vertexConfig->getVendorCode())
+            ->setDefaultTaxpayerCompanyCode($this->vertexConfig->getDefaultTaxpayerCompanyCode());
 
         $vertexValidationResponseTransfer = $this->vertexConfigValidator->validate($vertexConfigTransfer);
 
         if (!$vertexValidationResponseTransfer->getIsValid()) {
             $this->getLogger()->warning(
-                $vertexValidationResponseTransfer->getMessageOrFail(),
+                $vertexValidationResponseTransfer->getMessage() ?: 'Vertex config is not valid',
             );
 
             return null;

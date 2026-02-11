@@ -144,11 +144,21 @@ interface VertexConstants
 
     /**
      * Specification:
-     * - Determines vendor code.
+     * - Vertex vendor code.
      *
      * @api
      *
      * @var string
      */
     public const VENDOR_CODE = 'VERTEX:VENDOR_CODE';
+
+    /**
+     * Specification:
+     * - Default taxpayer company code.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const DEFAULT_TAXPAYER_COMPANY_CODE = 'VERTEX:DEFAULT_TAXPAYER_COMPANY_CODE';
 }
