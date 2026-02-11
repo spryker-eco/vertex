@@ -24,7 +24,7 @@ class VertexSuppliesDefaultsBuilder implements VertexSuppliesRequestBuilderInter
 
         $seller = $vertexSuppliesTransfer->getSeller() ?? new VertexSellerTransfer();
 
-        if (!$seller->getCompany() && strlen($vertexConfigTransfer->getDefaultTaxpayerCompanyCodeOrFail()) > 0) {
+        if (!$seller->getCompany() && strlen($vertexConfigTransfer->getDefaultTaxpayerCompanyCode()) > 0) {
             $seller->setCompany($vertexConfigTransfer->getDefaultTaxpayerCompanyCode());
         }
 
