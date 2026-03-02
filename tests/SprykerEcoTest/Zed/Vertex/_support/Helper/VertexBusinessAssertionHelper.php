@@ -11,8 +11,6 @@ namespace SprykerEcoTest\Zed\Vertex\Helper;
 
 use Codeception\Module;
 use Generated\Shared\Transfer\CalculableObjectTransfer;
-use Generated\Shared\Transfer\TaxAppApiUrlsTransfer;
-use Generated\Shared\Transfer\TaxAppConfigTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;

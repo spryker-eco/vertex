@@ -11,7 +11,6 @@ namespace SprykerEcoTest\Shared\Vertex\Helper;
 
 use ArrayObject;
 use Codeception\Module;
-use Codeception\Stub;
 use Generated\Shared\DataBuilder\AddressBuilder;
 use Generated\Shared\DataBuilder\CalculableObjectBuilder;
 use Generated\Shared\DataBuilder\ItemBuilder;
@@ -37,7 +36,6 @@ use Generated\Shared\Transfer\TaxRefundRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
-use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerTest\Shared\Testify\Helper\DataCleanupHelperTrait;
 use SprykerTest\Shared\Testify\Helper\LocatorHelperTrait;
 use SprykerTest\Shared\Testify\Helper\TableRelationsCleanupHelperTrait;

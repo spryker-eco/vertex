@@ -30,7 +30,6 @@ use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Generated\Shared\Transfer\StockAddressTransfer;
 use Generated\Shared\Transfer\StoreTransfer;
-use Generated\Shared\Transfer\TaxAppConfigTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Orm\Zed\Vertex\Persistence\SpyVertexTaxIdValidationHistoryQuery;
