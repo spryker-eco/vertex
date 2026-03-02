@@ -34,7 +34,7 @@ class VertexFacadeValidateTaxIdTest extends Unit
     {
         parent::setUp();
 
-        $this->tester->setConfig(VertexConstants::IS_ACTIVE, true);
+        $this->tester->mockVertexConfigResolver();
 
         $this->tester->ensureVertexTaxIdValidationHistoryTableIsEmpty();
     }
@@ -112,7 +112,7 @@ class VertexFacadeValidateTaxIdTest extends Unit
     {
         // Arrange
         $vertexValidationRequestTransfer = $this->tester->createVertexValidationRequestTransfer();
-        $this->tester->setConfig(VertexConstants::IS_ACTIVE, false);
+        $this->tester->mockVertexConfigResolver(false);
 
         // Act
         $vertexValidationResponseTransfer = $this->tester->getFacade()->validateTaxId($vertexValidationRequestTransfer);

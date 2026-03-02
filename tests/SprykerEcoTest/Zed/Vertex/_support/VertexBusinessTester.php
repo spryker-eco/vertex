@@ -32,6 +32,8 @@ use Generated\Shared\Transfer\StockAddressTransfer;
 use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
+use Generated\Shared\Transfer\VertexConfigTransfer;
+use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use Orm\Zed\Vertex\Persistence\SpyVertexTaxIdValidationHistoryQuery;
 use ReflectionProperty;
 use Spryker\Shared\Oms\OmsConstants;
@@ -290,6 +292,21 @@ class VertexBusinessTester extends Actor
         $calculableObjectTransfer->setOriginalQuote($quoteTransfer);
 
         return $calculableObjectTransfer;
+    }
+
+    public function mockVertexConfigResolver(bool $isActive = true): VertexConfigTransfer
+    {
+        $vertexConfigTransfer = (new VertexConfigTransfer())
+            ->setIsActive($isActive)
+            ->setCredentialHash('test')
+            ->setIsInvoicingEnabled(true)
+            ->setIsTaxAssistEnabled(true)
+            ->setIsTaxIdValidatorEnabled(true);
+
+        $vertexConfigResolverMock = Stub::makeEmpty(VertexConfigResolverInterface::class, ['resolve' => $vertexConfigTransfer]);
+        $this->mockFactoryMethod('createVertexConfigResolver', $vertexConfigResolverMock);
+
+        return $vertexConfigTransfer;
     }
 
     public function mockVertexClientWithVertexCalculationResponse(VertexCalculationResponseTransfer $vertexCalculationResponseTransfer): void

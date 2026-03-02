@@ -77,6 +77,8 @@ class TaxIdValidationControllerTest extends Unit
     public function testPostrequestTaxIdValidationWhenRequestIsValidReturnsSuccessfulResponse(): void
     {
         // Arrange
+        $this->tester->mockConfigMethod('getIsActive', true);
+
         $restVertexValidationAttributesTransfer = $this->tester->createRestVertexValidationAttributesTransfer();
 
         $vertexClientMock = $this->getMockBuilder(VertexClientInterface::class)->getMock();
@@ -110,6 +112,8 @@ class TaxIdValidationControllerTest extends Unit
     public function testGivenAMalformedRequestWhenTheTaxIdValidationApiIsCalledThenTheErrorMessageIsReturnedInTheResponse(): void
     {
         // Arrange
+        $this->tester->mockConfigMethod('getIsActive', true);
+
         $restVertexValidationAttributesTransfer = (new RestVertexValidationAttributesTransfer())->setTaxId('test')->setCountryCode('DE');
 
         $vertexClientMock = $this->getMockBuilder(VertexClientInterface::class)->getMock();
@@ -152,6 +156,8 @@ class TaxIdValidationControllerTest extends Unit
         string $expectedMessage,
     ): void {
         // Arrange
+        $this->tester->mockConfigMethod('getIsActive', true);
+
         $vertexClientMock = $this->getMockBuilder(VertexClientInterface::class)->getMock();
         $glossaryStorageClientMock = $this->getMockBuilder(GlossaryStorageClientInterface::class)->getMock();
 

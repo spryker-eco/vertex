@@ -46,14 +46,13 @@ class VertexFacadeRefundTest extends Unit
     {
         // Arrange
         $storeTransfer = $this->tester->haveStore();
+        $this->tester->mockVertexConfigResolver();
 
         $orderTransfer = $this->getOrderTransferForRefund($storeTransfer);
 
         $orderItemsIds = array_map(function ($item) {
             return $item->getIdSalesOrderItem();
         }, $orderTransfer->getItems()->getArrayCopy());
-
-        $this->tester->mockConfigMethod('isInvoicingEnabled', true);
 
         $vertexClientMock = $this->createMock(VertexClient::class);
 

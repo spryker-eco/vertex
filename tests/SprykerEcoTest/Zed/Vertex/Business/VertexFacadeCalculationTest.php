@@ -13,8 +13,6 @@ use Codeception\Test\Unit;
 use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
-use Generated\Shared\Transfer\VertexConfigTransfer;
-use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
 use Ramsey\Uuid\Uuid;
@@ -24,7 +22,6 @@ use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemDiscountAmountFu
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\ItemSubtotalAggregatorPlugin;
 use Spryker\Zed\Calculation\Communication\Plugin\Calculator\PriceCalculatorPlugin;
 use SprykerEco\Client\Vertex\VertexClient;
-use SprykerEco\Shared\Vertex\VertexConstants;
 use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
 
 /**
@@ -50,6 +47,7 @@ class VertexFacadeCalculationTest extends Unit
     {
         parent::setUp();
 
+        $this->tester->mockVertexConfigResolver();
         $this->storeTransfer = $this->tester->haveStore([StoreTransfer::COUNTRIES => ['US']], false);
         $this->tester->setQuoteTaxMetadataExpanderPlugins();
     }
@@ -57,14 +55,6 @@ class VertexFacadeCalculationTest extends Unit
     public function testCalculableObjectHasTaxTotalWhenRecalculateRequestsTaxFromExternalApiSuccessfully(): void
     {
         // Arrange
-        $vertexConfigTransfer = (new VertexConfigTransfer())
-            ->setIsActive(true)
-            ->setCredentialHash('test');
-
-        $vertexConfigResolverMock = $this->createMock(VertexConfigResolverInterface::class);
-        $vertexConfigResolverMock->method('resolve')->willReturn($vertexConfigTransfer);
-        $this->tester->mockFactoryMethod('createVertexConfigResolver', $vertexConfigResolverMock);
-
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
 
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);
@@ -312,11 +302,11 @@ class VertexFacadeCalculationTest extends Unit
     public function testQuoteDoesNotHaveHideTaxInCartFlagWhenVertexIsNotActive(): void
     {
         // Arrange
+        $this->tester->mockVertexConfigResolver(false);
+
         $storeTransfer = $this->tester->haveStore([StoreTransfer::NAME => 'Foo'], false);
 
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($storeTransfer);
-
-        $this->tester->setConfig(VertexConstants::IS_ACTIVE, false);
 
         // Act
         $this->tester->getFacade()->recalculate($calculableObjectTransfer);
