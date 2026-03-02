@@ -23,7 +23,6 @@
         "spryker/zed-request": "^3.4.0"
     },
     "require-dev": {
-        "codeception/module-asserts": "^3.3",
         "spryker/calculation": "*",
         "spryker/code-sniffer": "*",
         "spryker/container": "*",
