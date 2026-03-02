@@ -11,6 +11,9 @@ namespace SprykerEco\Glue\Vertex;
 
 use Spryker\Glue\Kernel\AbstractBundleConfig;
 
+/**
+ * @method \SprykerEco\Shared\Vertex\VertexConfig getSharedConfig()
+ */
 class VertexConfig extends AbstractBundleConfig
 {
     /**
@@ -42,4 +45,18 @@ class VertexConfig extends AbstractBundleConfig
      * @var string
      */
     public const RESPONSE_DETAIL_MESSAGE_INVALID_REQUEST_DATA = 'Invalid request data.';
+
+    /**
+     * Specification:
+     * - Returns whether Vertex tax calculation is active.
+     * - Returns false by default if not configured.
+     *
+     * @api
+     *
+     * @return bool
+     */
+    public function getIsActive(): bool
+    {
+        return $this->getSharedConfig()->getIsActive();
+    }
 }

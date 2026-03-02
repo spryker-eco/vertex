@@ -12,6 +12,7 @@ namespace SprykerEco\Glue\Vertex\Processor\Validator;
 use Generated\Shared\Transfer\RestErrorMessageTransfer;
 use Generated\Shared\Transfer\RestVertexValidationAttributesTransfer;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
+use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use Spryker\Client\GlossaryStorage\GlossaryStorageClientInterface;
 use Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceBuilderInterface;
 use Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface;
@@ -31,15 +32,21 @@ class TaxIdValidator implements TaxIdValidatorInterface
      */
     protected const GLOSSARY_SUFFIX_VERTEX = 'vertex';
 
+    protected const MESSAGE_VERTEX_IS_DISABLED = 'Tax service is disabled.';
+
+    protected const GLOSSARY_KEY_VERTEX_IS_DISABLED = 'vertex.tax-app-disabled';
+
     /**
      * @param \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceBuilderInterface $restResourceBuilder
      * @param \SprykerEco\Client\Vertex\VertexClientInterface $vertexClient
      * @param \Spryker\Client\GlossaryStorage\GlossaryStorageClientInterface $glossaryStorageClient
+     * @param \SprykerEco\Glue\Vertex\VertexConfig $vertexConfig
      */
     public function __construct(
         protected RestResourceBuilderInterface $restResourceBuilder,
         protected VertexClientInterface $vertexClient,
         protected GlossaryStorageClientInterface $glossaryStorageClient,
+        protected VertexConfig $vertexConfig,
     ) {
     }
 
@@ -51,6 +58,15 @@ class TaxIdValidator implements TaxIdValidatorInterface
      */
     public function validate(RestVertexValidationAttributesTransfer $restVertexValidationAttributesTransfer, string $locale): RestResponseInterface
     {
+        if ($this->vertexConfig->getIsActive() === false) {
+            $vertexValidationResponseTransfer = (new VertexValidationResponseTransfer())
+                ->setIsValid(false)
+                ->setMessageKey(static::GLOSSARY_KEY_VERTEX_IS_DISABLED)
+                ->setMessage(static::MESSAGE_VERTEX_IS_DISABLED);
+
+            return $this->prepareRestErrorMessageTransfer($vertexValidationResponseTransfer, $locale);
+        }
+
         if (!$restVertexValidationAttributesTransfer->getTaxId() || !$restVertexValidationAttributesTransfer->getCountryCode()) {
             $messageByLocale = $this->getGlossaryMessage(VertexConfig::RESPONSE_DETAIL_MESSAGE_INVALID_REQUEST_DATA, $locale, static::GLOSSARY_KEY_RESPONSE_DETAIL_INVALID_REQUEST_DATA);
 
@@ -68,15 +84,7 @@ class TaxIdValidator implements TaxIdValidatorInterface
         }
 
         if ($vertexValidationResponseTransfer->getMessage()) {
-            $messageKey = $vertexValidationResponseTransfer->getMessageKey() ? sprintf('%s.%s', static::GLOSSARY_SUFFIX_VERTEX, $vertexValidationResponseTransfer->getMessageKey()) : null;
-
-            $messageByLocale = $this->getGlossaryMessage($vertexValidationResponseTransfer->getMessage(), $locale, $messageKey);
-
-            return $this->restResourceBuilder->createRestResponse()->addError(
-                (new RestErrorMessageTransfer())
-                    ->setStatus(Response::HTTP_BAD_REQUEST)
-                    ->setDetail($messageByLocale),
-            )->setStatus(Response::HTTP_BAD_REQUEST);
+            return $this->prepareRestErrorMessageTransfer($vertexValidationResponseTransfer, $locale);
         }
 
         return $this->restResourceBuilder->createRestResponse()->setStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -102,5 +110,20 @@ class TaxIdValidator implements TaxIdValidatorInterface
         }
 
         return $defaultMessage;
+    }
+
+    protected function prepareRestErrorMessageTransfer(
+        VertexValidationResponseTransfer $vertexValidationResponseTransfer,
+        string $locale
+    ): RestResponseInterface {
+        $messageKey = $vertexValidationResponseTransfer->getMessageKey() ? sprintf('%s.%s', static::GLOSSARY_SUFFIX_VERTEX, $vertexValidationResponseTransfer->getMessageKey()) : null;
+
+        $messageByLocale = $this->getGlossaryMessage($vertexValidationResponseTransfer->getMessage(), $locale, $messageKey);
+
+        return $this->restResourceBuilder->createRestResponse()->addError(
+            (new RestErrorMessageTransfer())
+                ->setStatus(Response::HTTP_BAD_REQUEST)
+                ->setDetail($messageByLocale),
+        )->setStatus(Response::HTTP_BAD_REQUEST);
     }
 }
