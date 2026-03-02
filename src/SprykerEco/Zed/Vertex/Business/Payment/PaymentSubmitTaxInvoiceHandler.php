@@ -49,26 +49,8 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
 
     public function handleSubmitPaymentTaxInvoice(OrderTransfer $orderTransfer): VertexCalculationResponseTransfer
     {
-        $idSalesOrder = $orderTransfer->getIdSalesOrderOrFail();
-        $orderTransfer = $this->salesFacade->findOrderByIdSalesOrder($idSalesOrder);
-
-        $vertexCalculationResponseTransfer = (new VertexCalculationResponseTransfer())->setIsSuccessful(false);
-
-        if (!$orderTransfer) {
-            $this->getLogger()->warning(sprintf('Order with ID `%s` not found', $idSalesOrder));
-
-            return $vertexCalculationResponseTransfer;
-        }
-
-        $orderTransfer = $this->executeOrderVertexExpanderPlugins($orderTransfer);
-
-        $vertexSaleTransfer = $this->vertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
-
-        $submitPaymentTaxInvoiceTransfer = new VertexSubmitPaymentTaxInvoiceTransfer();
-        $submitPaymentTaxInvoiceTransfer->setSale($vertexSaleTransfer);
-
-        $this->setMessageAttributesTransfer($submitPaymentTaxInvoiceTransfer, $orderTransfer);
-
+        $vertexCalculationResponseTransfer = (new VertexCalculationResponseTransfer())
+            ->setIsSuccessful(false);
         $vertexConfigTransfer = $this->configResolver->resolve();
 
         if (!$vertexConfigTransfer) {
@@ -88,6 +70,24 @@ class PaymentSubmitTaxInvoiceHandler implements PaymentSubmitTaxInvoiceHandlerIn
 
             return $vertexCalculationResponseTransfer;
         }
+
+        $idSalesOrder = $orderTransfer->getIdSalesOrderOrFail();
+        $orderTransfer = $this->salesFacade->findOrderByIdSalesOrder($idSalesOrder);
+
+        if (!$orderTransfer) {
+            $this->getLogger()->warning(sprintf('Order with ID `%s` not found', $idSalesOrder));
+
+            return $vertexCalculationResponseTransfer;
+        }
+
+        $orderTransfer = $this->executeOrderVertexExpanderPlugins($orderTransfer);
+
+        $vertexSaleTransfer = $this->vertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
+
+        $submitPaymentTaxInvoiceTransfer = new VertexSubmitPaymentTaxInvoiceTransfer();
+        $submitPaymentTaxInvoiceTransfer->setSale($vertexSaleTransfer);
+
+        $this->setMessageAttributesTransfer($submitPaymentTaxInvoiceTransfer, $orderTransfer);
 
         $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 

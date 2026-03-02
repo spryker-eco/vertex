@@ -57,9 +57,23 @@ class RefundProcessor implements RefundProcessorInterface
      */
     public function processOrderRefund(array $orderItemIds, int $idSalesOrder): VertexCalculationResponseTransfer
     {
-        $orderTransfer = $this->createOrderWithItemsToBeRefunded($orderItemIds, $idSalesOrder);
+        $vertexCalculationResponseTransfer = (new VertexCalculationResponseTransfer())
+            ->setIsSuccessful(false);
+        $vertexConfigTransfer = $this->configResolver->resolve();
 
-        $vertexCalculationResponseTransfer = (new VertexCalculationResponseTransfer())->setIsSuccessful(false);
+        if (!$vertexConfigTransfer || !$vertexConfigTransfer->getIsActive()) {
+            $this->getLogger()->warning('App is not configured or is not active.');
+
+            return $vertexCalculationResponseTransfer;
+        }
+
+        if (!$vertexConfigTransfer->getIsInvoicingEnabled()) {
+            $this->getLogger()->warning('App is Inactive or configured to not submit void invoice');
+
+            return $vertexCalculationResponseTransfer;
+        }
+
+        $orderTransfer = $this->createOrderWithItemsToBeRefunded($orderItemIds, $idSalesOrder);
 
         if (!$orderTransfer) {
             $this->getLogger()->warning(sprintf('Order with ID `%s` not found', $idSalesOrder));
@@ -73,23 +87,9 @@ class RefundProcessor implements RefundProcessorInterface
             return $vertexCalculationResponseTransfer;
         }
 
-        $vertexConfigTransfer = $this->configResolver->resolve();
-
-        if (!$vertexConfigTransfer || !$vertexConfigTransfer->getIsActive()) {
-            $this->getLogger()->warning('App is not configured or is not active.');
-
-            return $vertexCalculationResponseTransfer;
-        }
-
         $orderTransfer = $this->executeOrderVertexExpanderPlugins($orderTransfer);
 
         $vertexSaleTransfer = $this->vertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
-
-        if (!$vertexConfigTransfer->getIsInvoicingEnabled()) {
-            $this->getLogger()->warning('App is Inactive or configured to not submit void invoice');
-
-            return $vertexCalculationResponseTransfer;
-        }
 
         $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 
