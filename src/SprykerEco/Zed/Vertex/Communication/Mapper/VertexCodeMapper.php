@@ -9,6 +9,9 @@ declare(strict_types = 1);
 
 namespace SprykerEco\Zed\Vertex\Communication\Mapper;
 
+/**
+ * This class is just example of how to implement code mapping for Vertex. No real codes are used.
+ */
 class VertexCodeMapper
 {
     /**

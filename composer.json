@@ -53,7 +53,7 @@
     "prefer-stable": true,
     "scripts": {
         "cs-check": "phpcs -p -s src/ tests/",
-        "cs-fix": "phpcbf -p src/ tests/",
+        "cs-fix": "phpcbf -p src/ tests/"
     },
     "extra": {
         "branch-alias": {

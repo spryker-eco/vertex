@@ -151,50 +151,6 @@ class VertexConfig extends AbstractBundleConfig
         return $this->get(VertexConstants::IS_TAX_ASSIST_ENABLED, false);
     }
 
-    /**
-     * Specification:
-     * - Returns the OAuth provider name for tax calculation authentication.
-     * - Retrieved from configuration using VertexConstants::OAUTH_PROVIDER_NAME.
-     * - Returns empty string by default if not configured.
-     *
-     * @api
-     *
-     * @return string
-     */
-    public function getOauthProviderNameForTaxCalculation(): string
-    {
-        return $this->get(VertexConstants::OAUTH_PROVIDER_NAME, '');
-    }
-
-    /**
-     * Specification:
-     * - Returns the OAuth grant type for tax calculation authentication.
-     * - Retrieved from configuration using VertexConstants::OAUTH_GRANT_TYPE.
-     * - Returns empty string by default if not configured.
-     *
-     * @api
-     *
-     * @return string
-     */
-    public function getOauthGrantTypeForTaxCalculation(): string
-    {
-        return $this->get(VertexConstants::OAUTH_GRANT_TYPE, '');
-    }
-
-    /**
-     * Specification:
-     * - Returns the OAuth audience option for tax calculation authentication.
-     * - Retrieved from configuration using VertexConstants::OAUTH_OPTION_AUDIENCE.
-     * - Returns empty string by default if not configured.
-     *
-     * @api
-     *
-     * @return string
-     */
-    public function getOauthOptionAudienceForTaxCalculation(): string
-    {
-        return $this->get(VertexConstants::OAUTH_OPTION_AUDIENCE, '');
-    }
 
     /**
      * Specification:

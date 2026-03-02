@@ -1,7 +1,7 @@
 # Vertex Module
 
 [![Latest Stable Version](https://poser.pugx.org/spryker-eco/vertex/v/stable.svg)](https://packagist.org/packages/spryker-eco/vertex)
-[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.4-8892BF.svg)](https://php.net/)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%208.3-8892BF.svg)](https://php.net/)
 
 Vertex module is responsible for handling tax calculation.
 
@@ -74,6 +74,7 @@ protected function getQuoteCalculatorPluginStack(Container $container): array
     return [
         // ... other plugins
         new VertexCalculationPlugin(),
+        // ... total calculation plugins
     ];
 }
 
@@ -82,6 +83,7 @@ protected function getOrderCalculatorPluginStack(Container $container): array
     return [
         // ... other plugins
         new VertexCalculationPlugin(),
+        // ... total calculation plugins
     ];
 }
 ```
@@ -89,6 +91,7 @@ protected function getOrderCalculatorPluginStack(Container $container): array
 #### 5.2 Register CalculableObject Expander Plugins and Order Expander Plugins
 
 Add order and CalculableObject expander plugins to `src/Pyz/Zed/Vertex/VertexDependencyProvider.php`:
+Proposed plugins are examples, you can choose which ones to register based on your requirements or create custom ones if needed.
 
 ```php
 use SprykerEco\Zed\Vertex\Communication\Plugin\Order\OrderCustomerWithVertexCodeExpanderPlugin;
@@ -184,10 +187,7 @@ protected function getResourceRoutePlugins(): array
 - `IS_TAX_ASSIST_ENABLED`: Enable tax assist feature
 - `IS_INVOICING_ENABLED`: Enable invoicing functionality
 - `VENDOR_CODE`: Vendor code for Vertex tax calculations
-- `OAUTH_PROVIDER_NAME`: OAuth provider name for tax calculation
-- `OAUTH_GRANT_TYPE`: OAuth grant type for tax calculation
-- `OAUTH_OPTION_AUDIENCE`: OAuth audience option for tax calculation
 
 ## Documentation
 
-[Spryker Documentation](https://docs.spryker.com)
+[Spryker Documentation](https://docs.spryker.com/docs/pbc/all/tax-management/latest/base-shop/third-party-integrations/vertex/connect-vertex#prerequisites)

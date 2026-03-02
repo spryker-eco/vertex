@@ -16,36 +16,6 @@ interface VertexConstants
 {
     /**
      * Specification:
-     * - Oauth provider name for tax calculation.
-     *
-     * @api
-     *
-     * @var string
-     */
-    public const OAUTH_PROVIDER_NAME = 'VERTEX:OAUTH_PROVIDER_NAME';
-
-    /**
-     * Specification:
-     * - Oauth grant type for tax calculation.
-     *
-     * @api
-     *
-     * @var string
-     */
-    public const OAUTH_GRANT_TYPE = 'VERTEX:OAUTH_GRANT_TYPE';
-
-    /**
-     * Specification:
-     * - Oauth audience option for tax calculation.
-     *
-     * @api
-     *
-     * @var string
-     */
-    public const OAUTH_OPTION_AUDIENCE = 'VERTEX:OAUTH_OPTION_AUDIENCE';
-
-    /**
-     * Specification:
      * - Identifier of the Vertex application.
      *
      * @api

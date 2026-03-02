@@ -65,6 +65,8 @@ class VertexCommunicationFactory extends AbstractCommunicationFactory
     }
 
     /**
+     * This mapper is just example, please implement your own logic to map your tax codes to vertex codes.
+     *
      * @return \SprykerEco\Zed\Vertex\Communication\Mapper\VertexCodeMapper
      */
     public function createVertexCodeMapper(): VertexCodeMapper

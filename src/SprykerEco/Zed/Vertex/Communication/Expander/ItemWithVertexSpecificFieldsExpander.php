@@ -15,6 +15,9 @@ use Generated\Shared\Transfer\ItemTaxMetadataTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
 use SprykerEco\Zed\Vertex\Communication\Mapper\VertexCodeMapper;
 
+/**
+ * This class is just example of how to implement expander for Vertex. No real data is used.
+ */
 class ItemWithVertexSpecificFieldsExpander
 {
     public function __construct(protected VertexCodeMapper $vertexCodeMapper)
