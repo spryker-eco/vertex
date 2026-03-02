@@ -124,7 +124,6 @@ class VertexConfig extends AbstractBundleConfig
     /**
      * Specification:
      * - Returns whether the tax ID validator feature is enabled.
-     * - Retrieved from configuration using VertexConstants::IS_TAX_ID_VALIDATOR_ENABLED.
      * - Returns false by default if not configured.
      *
      * @api
@@ -133,13 +132,12 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function isTaxIdValidatorEnabled(): bool
     {
-        return $this->get(VertexConstants::IS_TAX_ID_VALIDATOR_ENABLED, false);
+        return false;
     }
 
     /**
      * Specification:
      * - Returns whether the tax assist feature is enabled.
-     * - Retrieved from configuration using VertexConstants::IS_TAX_ASSIST_ENABLED.
      * - Returns false by default if not configured.
      *
      * @api
@@ -148,7 +146,7 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function isTaxAssistEnabled(): bool
     {
-        return $this->get(VertexConstants::IS_TAX_ASSIST_ENABLED, false);
+        return false;
     }
 
     /**
@@ -183,7 +181,6 @@ class VertexConfig extends AbstractBundleConfig
     /**
      * Specification:
      * - Returns whether invoicing feature is enabled for Vertex.
-     * - Retrieved from configuration using VertexConstants::IS_INVOICING_ENABLED.
      * - Returns false by default if not configured.
      *
      * @api
@@ -192,7 +189,7 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function isInvoicingEnabled(): bool
     {
-        return $this->get(VertexConstants::IS_INVOICING_ENABLED, false);
+        return false;
     }
 
     /**

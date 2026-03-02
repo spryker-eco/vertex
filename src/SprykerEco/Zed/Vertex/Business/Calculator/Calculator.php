@@ -32,7 +32,7 @@ class Calculator implements CalculatorInterface
     {
         $vertexConfigTransfer = $this->vertexConfigResolver->resolve();
 
-        if (!$vertexConfigTransfer || !$vertexConfigTransfer->getIsActive()) {
+        if (!$vertexConfigTransfer->getIsActive()) {
             $this->setHideTaxInCartFlagToFalse($calculableObjectTransfer);
 
             $this->recalculateUsingFallbackCalculator($calculableObjectTransfer);

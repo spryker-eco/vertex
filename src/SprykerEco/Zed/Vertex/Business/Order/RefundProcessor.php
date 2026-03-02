@@ -61,7 +61,7 @@ class RefundProcessor implements RefundProcessorInterface
             ->setIsSuccessful(false);
         $vertexConfigTransfer = $this->configResolver->resolve();
 
-        if (!$vertexConfigTransfer || !$vertexConfigTransfer->getIsActive()) {
+        if (!$vertexConfigTransfer->getIsActive()) {
             $this->getLogger()->warning('App is not configured or is not active.');
 
             return $vertexCalculationResponseTransfer;

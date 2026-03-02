@@ -86,34 +86,6 @@ interface VertexConstants
 
     /**
      * Specification:
-     * - Determines whether the tax ID validator is enabled or not.
-     *
-     * @api
-     *
-     * @var string
-     */
-    public const IS_TAX_ID_VALIDATOR_ENABLED = 'VERTEX:IS_TAX_ID_VALIDATOR_ENABLED';
-
-    /**
-     * Specification:
-     * - Determines whether the invoicing is enabled or not.
-     *
-     * @var string
-     */
-    public const IS_INVOICING_ENABLED = 'VERTEX:IS_INVOICING_ENABLED';
-
-    /**
-     * Specification:
-     * - Determines whether the tax assist is enabled or not.
-     *
-     * @api
-     *
-     * @var string
-     */
-    public const IS_TAX_ASSIST_ENABLED = 'VERTEX:IS_TAX_ASSIST_ENABLED';
-
-    /**
-     * Specification:
      * - Vertex vendor code.
      *
      * @api

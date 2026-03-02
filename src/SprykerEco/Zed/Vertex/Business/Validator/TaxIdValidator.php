@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerEco\Zed\Vertex\Business\Validator;
 
+use Exception;
 use Generated\Shared\Transfer\TaxIdValidationHistoryTransfer;
 use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
@@ -35,7 +36,11 @@ class TaxIdValidator implements TaxIdValidatorInterface
     {
         $vertexValidationRequestTransfer->requireTaxId();
         $vertexValidationRequestTransfer->requireCountryCode();
-        $vertexConfigTransfer = $this->vertexConfigResolver->resolve();
+        try {
+            $vertexConfigTransfer = $this->vertexConfigResolver->resolve();
+        } catch (Exception $exception) {
+            $vertexConfigTransfer = null;
+        }
 
         if (
             !$vertexConfigTransfer ||

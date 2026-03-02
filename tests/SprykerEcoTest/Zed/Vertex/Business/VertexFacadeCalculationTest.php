@@ -13,6 +13,8 @@ use Codeception\Test\Unit;
 use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexConfigTransfer;
+use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
 use Ramsey\Uuid\Uuid;
@@ -55,6 +57,14 @@ class VertexFacadeCalculationTest extends Unit
     public function testCalculableObjectHasTaxTotalWhenRecalculateRequestsTaxFromExternalApiSuccessfully(): void
     {
         // Arrange
+        $vertexConfigTransfer = (new VertexConfigTransfer())
+            ->setIsActive(true)
+            ->setCredentialHash('test');
+
+        $vertexConfigResolverMock = $this->createMock(VertexConfigResolverInterface::class);
+        $vertexConfigResolverMock->method('resolve')->willReturn($vertexConfigTransfer);
+        $this->tester->mockFactoryMethod('createVertexConfigResolver', $vertexConfigResolverMock);
+
         $calculableObjectTransfer = $this->tester->createCalculableObjectTransfer($this->storeTransfer);
 
         $vertexCalculationResponseTransfer = $this->tester->haveVertexCalculationResponseTransfer(['isSuccessful' => true]);

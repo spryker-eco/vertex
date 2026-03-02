@@ -13,5 +13,5 @@ use Generated\Shared\Transfer\VertexConfigTransfer;
 
 interface VertexConfigResolverInterface
 {
-    public function resolve(): ?VertexConfigTransfer;
+    public function resolve(): VertexConfigTransfer;
 }

@@ -30,21 +30,42 @@ $config[VertexConstants::SECURITY_URI] = getenv('VERTEX_SECURITY_URI');
 $config[VertexConstants::TRANSACTION_CALLS_URI] = getenv('VERTEX_TRANSACTION_CALLS_URI');
 
 // Optional: Tax ID Validator (requires Taxamo)
-$config[VertexConstants::IS_TAX_ID_VALIDATOR_ENABLED] = false;
 $config[VertexConstants::TAXAMO_API_URL] = getenv('TAXAMO_API_URL');
 $config[VertexConstants::TAXAMO_TOKEN] = getenv('TAXAMO_TOKEN');
-
-// Optional: Tax Assist Feature
-$config[VertexConstants::IS_TAX_ASSIST_ENABLED] = false;
-
-// Optional: Invoicing Feature
-$config[VertexConstants::IS_INVOICING_ENABLED] = false;
 
 // Optional: Vendor Code
 $config[VertexConstants::VENDOR_CODE] = '';
 ```
 
-### 3. Set Up Database Schema
+### 3. Override Feature Flags in Config
+
+`isTaxIdValidatorEnabled`, `isTaxAssistEnabled`, and `isInvoicingEnabled` default to `false` and are not driven by constants. Override them in `src/Pyz/Zed/Vertex/VertexConfig.php`:
+
+```php
+namespace Pyz\Zed\Vertex;
+
+use SprykerEco\Zed\Vertex\VertexConfig as SprykerEcoVertexConfig;
+
+class VertexConfig extends SprykerEcoVertexConfig
+{
+    public function isTaxIdValidatorEnabled(): bool
+    {
+        return true;
+    }
+
+    public function isTaxAssistEnabled(): bool
+    {
+        return true;
+    }
+
+    public function isInvoicingEnabled(): bool
+    {
+        return true;
+    }
+}
+```
+
+### 4. Set Up Database Schema
 
 Install the database schema by running:
 
@@ -52,7 +73,7 @@ Install the database schema by running:
 vendor/bin/console propel:install
 ```
 
-### 4. Generate Transfer Objects
+### 5. Generate Transfer Objects
 
 Generate transfer objects for the module:
 
@@ -60,9 +81,9 @@ Generate transfer objects for the module:
 vendor/bin/console transfer:generate
 ```
 
-### 5. Register Plugins
+### 6. Register Plugins
 
-#### 5.1 Register Tax Calculation Plugin
+#### 6.1 Register Tax Calculation Plugin
 
 Add the Vertex calculation plugin to `src/Pyz/Zed/Calculation/CalculationDependencyProvider.php`:
 
@@ -88,7 +109,7 @@ protected function getOrderCalculatorPluginStack(Container $container): array
 }
 ```
 
-#### 5.2 Register CalculableObject Expander Plugins and Order Expander Plugins
+#### 6.2 Register CalculableObject Expander Plugins and Order Expander Plugins
 
 Add order and CalculableObject expander plugins to `src/Pyz/Zed/Vertex/VertexDependencyProvider.php`:
 Proposed plugins are examples, you can choose which ones to register based on your requirements or create custom ones if needed.
@@ -126,7 +147,7 @@ protected function getOrderVertexExpanderPlugins(): array
 }
 ```
 
-#### 5.3 Register OMS Plugins (Optional)
+#### 6.3 Register OMS Plugins (Optional)
 
 If you want to use invoicing functionality, add OMS plugins to `src/Pyz/Zed/Oms/OmsDependencyProvider.php`:
 
@@ -155,7 +176,7 @@ protected function getOmsEventTriggeredListenerPlugins(Container $container): ar
 }
 ```
 
-#### 5.4 Register Glue API Plugin (Optional)
+#### 6.4 Register Glue API Plugin (Optional)
 
 If you want to expose tax validation via REST API, add the Glue plugin to `src/Pyz/Glue/GlueApplication/GlueApplicationDependencyProvider.php`:
 
@@ -173,20 +194,36 @@ protected function getResourceRoutePlugins(): array
 
 ## Configuration Options
 
-### Required Configuration
-- `IS_ACTIVE`: Enable or disable Vertex tax calculation
-- `CLIENT_ID`: OAuth client ID for Vertex API
-- `CLIENT_SECRET`: OAuth client secret for Vertex API
-- `SECURITY_URI`: Vertex OAuth security endpoint
-- `TRANSACTION_CALLS_URI`: Vertex transaction calls endpoint
+### Required Constants (`config/Shared/config_default.php`)
 
-### Optional Configuration
-- `IS_TAX_ID_VALIDATOR_ENABLED`: Enable tax ID validation via Taxamo
-- `TAXAMO_API_URL`: Taxamo API URL for tax ID validation
-- `TAXAMO_TOKEN`: Taxamo API authentication token
-- `IS_TAX_ASSIST_ENABLED`: Enable tax assist feature
-- `IS_INVOICING_ENABLED`: Enable invoicing functionality
-- `VENDOR_CODE`: Vendor code for Vertex tax calculations
+| Constant | Description |
+|----------|-------------|
+| `IS_ACTIVE` | Enable or disable Vertex tax calculation |
+| `CLIENT_ID` | OAuth client ID for Vertex API |
+| `CLIENT_SECRET` | OAuth client secret for Vertex API |
+| `SECURITY_URI` | Vertex OAuth security endpoint |
+| `TRANSACTION_CALLS_URI` | Vertex transaction calls endpoint |
+
+### Optional Constants (`config/Shared/config_default.php`)
+
+| Constant | Description |
+|----------|-------------|
+| `TAXAMO_API_URL` | Taxamo API URL for tax ID validation |
+| `TAXAMO_TOKEN` | Taxamo API authentication token |
+| `VENDOR_CODE` | Vendor code for Vertex tax calculations |
+| `DEFAULT_TAXPAYER_COMPANY_CODE` | Default taxpayer company code |
+
+### Config Methods (`src/Pyz/Zed/Vertex/VertexConfig.php`)
+
+The following methods default to `false` or empty string and must be overridden in the project config to enable the respective features:
+
+| Method | Default | Description |
+|--------|---------|-------------|
+| `isTaxIdValidatorEnabled()` | `false` | Enables tax ID validation via Taxamo. Requires `TAXAMO_API_URL` and `TAXAMO_TOKEN` to be set. |
+| `isTaxAssistEnabled()` | `false` | Enables the tax assist feature |
+| `isInvoicingEnabled()` | `false` | Enables invoicing functionality. Requires OMS plugins to be registered (see step 6.3). |
+| `getSellerCountryCode()` | `''` | Overrides the default seller country code (2-letter ISO, e.g. `US`). Defaults to the first country of the store. |
+| `getCustomerCountryCode()` | `''` | Overrides the customer country code used when no shipping address is provided. |
 
 ## Documentation
 

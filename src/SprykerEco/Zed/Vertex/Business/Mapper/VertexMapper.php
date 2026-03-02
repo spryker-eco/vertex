@@ -103,7 +103,7 @@ class VertexMapper implements VertexMapperInterface
                 $originalTransfer->getBillingAddress(),
             );
 
-            $vertexShipmentTransfer->setId($hash);
+            $vertexShipmentTransfer->setId((string)$hash);
             $vertexShipmentTransfers->append($vertexShipmentTransfer);
         }
 
@@ -125,7 +125,7 @@ class VertexMapper implements VertexMapperInterface
 
         $vertexItemTransfer->setId(sprintf('%s_%s', $itemTransfer->getSku(), $itemIndex));
         $vertexItemTransfer->setSku($itemTransfer->getSku());
-        $vertexItemTransfer->setQuantity($itemTransfer->getQuantity());
+        $vertexItemTransfer->setQuantity((int)$itemTransfer->getQuantity());
 
         $vertexItemTransfer->setPriceAmount($this->priceFormatter->getUnitPriceWithoutDiscount($itemTransfer, $priceMode));
 

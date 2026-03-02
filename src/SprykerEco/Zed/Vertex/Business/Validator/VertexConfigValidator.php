@@ -49,6 +49,10 @@ class VertexConfigValidator
     {
         $vertexValidationResponseTransfer = (new VertexValidationResponseTransfer());
 
+        if ($vertexConfigTransfer->getIsActive() === false) {
+            return $vertexValidationResponseTransfer->setIsValid(true);;
+        }
+
         $this->validateSecurityUri($vertexConfigTransfer, $vertexValidationResponseTransfer);
         $this->validateTransactionCallsUri($vertexConfigTransfer, $vertexValidationResponseTransfer);
         $this->validateClientId($vertexConfigTransfer, $vertexValidationResponseTransfer);

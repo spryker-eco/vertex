@@ -11,6 +11,7 @@ namespace SprykerEco\Zed\Vertex\Business\Resolver;
 
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
+use InvalidArgumentException;
 use Spryker\Shared\Log\LoggerTrait;
 use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerEco\Zed\Vertex\Business\Validator\VertexConfigValidator;
@@ -27,7 +28,7 @@ class VertexConfigResolver implements VertexConfigResolverInterface
     ) {
     }
 
-    public function resolve(): ?VertexConfigTransfer
+    public function resolve(): VertexConfigTransfer
     {
         $vertexConfigTransfer = (new VertexConfigTransfer())
             ->setClientId($this->vertexConfig->getClientId())
@@ -51,7 +52,7 @@ class VertexConfigResolver implements VertexConfigResolverInterface
                 $vertexValidationResponseTransfer->getMessage() ?: 'Vertex config is not valid',
             );
 
-            return null;
+            throw new InvalidArgumentException($vertexValidationResponseTransfer->getMessage() ?: 'Vertex config is not valid');
         }
 
         return $vertexConfigTransfer;
