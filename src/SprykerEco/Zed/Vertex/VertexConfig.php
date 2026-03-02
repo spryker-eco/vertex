@@ -151,7 +151,6 @@ class VertexConfig extends AbstractBundleConfig
         return $this->get(VertexConstants::IS_TAX_ASSIST_ENABLED, false);
     }
 
-
     /**
      * Specification:
      * - 2 letters ISO country code, for example US, DE
