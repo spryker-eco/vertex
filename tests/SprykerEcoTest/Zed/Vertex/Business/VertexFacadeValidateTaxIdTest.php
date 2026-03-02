@@ -12,7 +12,6 @@ namespace SprykerEcoTest\Zed\Vertex\Business;
 use Codeception\Test\Unit;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use SprykerEco\Client\Vertex\VertexClient;
-use SprykerEco\Shared\Vertex\VertexConstants;
 use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
 
 /**

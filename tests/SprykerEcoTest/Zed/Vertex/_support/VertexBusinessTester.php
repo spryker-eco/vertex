@@ -33,7 +33,6 @@ use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
-use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use Orm\Zed\Vertex\Persistence\SpyVertexTaxIdValidationHistoryQuery;
 use ReflectionProperty;
 use Spryker\Shared\Oms\OmsConstants;
@@ -44,6 +43,7 @@ use Spryker\Zed\Calculation\Dependency\Service\CalculationToUtilTextBridge;
 use Spryker\Zed\Kernel\Container;
 use Spryker\Zed\Oms\Business\OrderStateMachine\PersistenceManager;
 use SprykerEco\Client\Vertex\VertexClient;
+use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use SprykerEco\Zed\Vertex\VertexDependencyProvider;
 
 /**
