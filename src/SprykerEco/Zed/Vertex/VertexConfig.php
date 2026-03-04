@@ -118,7 +118,7 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function isActive(): bool
     {
-        return $this->get(VertexConstants::IS_ACTIVE, false);
+        return (bool)$this->get(VertexConstants::IS_ACTIVE, false);
     }
 
     /**
