@@ -12,11 +12,11 @@ namespace SprykerEco\Client\Vertex\ResponseBuilder;
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
-use SprykerEco\Client\Vertex\Builder\PriceConverter;
+use SprykerEco\Client\Vertex\Builder\PriceConverterInterface;
 
 class VertexSuppliesResponseBuilder implements VertexSuppliesResponseBuilderInterface
 {
-    public function __construct(protected PriceConverter $priceConverter)
+    public function __construct(protected PriceConverterInterface $priceConverter)
     {
     }
 

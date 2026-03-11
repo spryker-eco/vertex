@@ -24,15 +24,19 @@ use Spryker\Client\ZedRequest\ZedRequestClientInterface;
 use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
 use Spryker\Shared\Log\LoggerTrait;
 use SprykerEco\Client\Vertex\Api\V2\Builder\VertexSuppliesApiRequestBuilder;
+use SprykerEco\Client\Vertex\Api\V2\Builder\VertexSuppliesApiRequestBuilderInterface;
 use SprykerEco\Client\Vertex\Api\V2\Client\SecurityApi;
 use SprykerEco\Client\Vertex\Api\V2\Client\SecurityApiInterface;
 use SprykerEco\Client\Vertex\Api\V2\Client\SuppliesApi;
 use SprykerEco\Client\Vertex\Api\V2\Client\SuppliesApiInterface;
 use SprykerEco\Client\Vertex\Api\V2\Client\TaxamoApi;
+use SprykerEco\Client\Vertex\Api\V2\Client\TaxamoApiInterface;
 use SprykerEco\Client\Vertex\Authenticator\VertexApiAuthenticator;
 use SprykerEco\Client\Vertex\Authenticator\VertexApiAuthenticatorInterface;
 use SprykerEco\Client\Vertex\Builder\LocationMapper;
+use SprykerEco\Client\Vertex\Builder\LocationMapperInterface;
 use SprykerEco\Client\Vertex\Builder\PriceConverter;
+use SprykerEco\Client\Vertex\Builder\PriceConverterInterface;
 use SprykerEco\Client\Vertex\Builder\Supplies\LineItem\VertexLineItemCustomerBuilder;
 use SprykerEco\Client\Vertex\Builder\Supplies\LineItem\VertexLineItemDiscountBuilder;
 use SprykerEco\Client\Vertex\Builder\Supplies\LineItem\VertexLineItemIdBuilder;
@@ -54,6 +58,7 @@ use SprykerEco\Client\Vertex\Builder\Supplies\VertexSuppliesShipmentBuilder;
 use SprykerEco\Client\Vertex\Builder\Supplies\VertexSuppliesTransactionIdBuilder;
 use SprykerEco\Client\Vertex\Builder\Supplies\VertexSuppliesTransactionTypeBuilder;
 use SprykerEco\Client\Vertex\Builder\SuppliesRequestBuilder;
+use SprykerEco\Client\Vertex\Builder\SuppliesRequestBuilderInterface;
 use SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface;
 use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
 use SprykerEco\Client\Vertex\HttpClient\FilteringMessageFormatter;
@@ -178,7 +183,7 @@ class VertexFactory extends AbstractFactory
         );
     }
 
-    public function createTaxamoApi(): TaxamoApi
+    public function createTaxamoApi(): TaxamoApiInterface
     {
         return new TaxamoApi(
             $this->createHttpClient(),
@@ -207,7 +212,7 @@ class VertexFactory extends AbstractFactory
         );
     }
 
-    protected function createVertexSuppliesApiRequestBuilder(): VertexSuppliesApiRequestBuilder
+    protected function createVertexSuppliesApiRequestBuilder(): VertexSuppliesApiRequestBuilderInterface
     {
         return new VertexSuppliesApiRequestBuilder();
     }
@@ -244,17 +249,17 @@ class VertexFactory extends AbstractFactory
         return new FilteringMessageFormatter();
     }
 
-    protected function createLocationMapper(): LocationMapper
+    protected function createLocationMapper(): LocationMapperInterface
     {
         return new LocationMapper();
     }
 
-    protected function createPriceConverter(): PriceConverter
+    protected function createPriceConverter(): PriceConverterInterface
     {
         return new PriceConverter();
     }
 
-    public function createSuppliesQuotationRequestBuilder(): SuppliesRequestBuilder
+    public function createSuppliesQuotationRequestBuilder(): SuppliesRequestBuilderInterface
     {
         return new SuppliesRequestBuilder([
             $this->createVertexSuppliesDefaultsBuilder(),
@@ -267,7 +272,7 @@ class VertexFactory extends AbstractFactory
         ]);
     }
 
-    public function createSuppliesInvoiceRequestBuilder(): SuppliesRequestBuilder
+    public function createSuppliesInvoiceRequestBuilder(): SuppliesRequestBuilderInterface
     {
         return new SuppliesRequestBuilder([
             $this->createVertexSuppliesDefaultsBuilder(),

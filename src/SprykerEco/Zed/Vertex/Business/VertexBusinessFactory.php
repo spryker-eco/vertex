@@ -14,10 +14,15 @@ use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use Spryker\Zed\Sales\Business\SalesFacadeInterface;
 use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerEco\Client\Vertex\Validator\VertexAddressValidator;
+use SprykerEco\Client\Vertex\Validator\VertexAddressValidatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexItemValidator;
+use SprykerEco\Client\Vertex\Validator\VertexItemValidatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexSaleValidator;
+use SprykerEco\Client\Vertex\Validator\VertexSaleValidatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexShipmentValidator;
+use SprykerEco\Client\Vertex\Validator\VertexShipmentValidatorInterface;
 use SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidator;
+use SprykerEco\Client\Vertex\Validator\VertexShippingWarehouseValidatorInterface;
 use SprykerEco\Client\Vertex\VertexClientInterface as VertexVertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProvider;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
@@ -44,6 +49,7 @@ use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
 use SprykerEco\Zed\Vertex\Business\Validator\TaxIdValidator;
 use SprykerEco\Zed\Vertex\Business\Validator\TaxIdValidatorInterface;
 use SprykerEco\Zed\Vertex\Business\Validator\VertexConfigValidator;
+use SprykerEco\Zed\Vertex\Business\Validator\VertexConfigValidatorInterface;
 use SprykerEco\Zed\Vertex\VertexDependencyProvider;
 
 /**
@@ -180,17 +186,17 @@ class VertexBusinessFactory extends AbstractBusinessFactory
         );
     }
 
-    public function createAddressValidator(): VertexAddressValidator
+    public function createAddressValidator(): VertexAddressValidatorInterface
     {
         return new VertexAddressValidator();
     }
 
-    public function createShippingWarehouseValidator(): VertexShippingWarehouseValidator
+    public function createShippingWarehouseValidator(): VertexShippingWarehouseValidatorInterface
     {
         return new VertexShippingWarehouseValidator($this->createAddressValidator());
     }
 
-    public function createItemValidator(): VertexItemValidator
+    public function createItemValidator(): VertexItemValidatorInterface
     {
         return new VertexItemValidator(
             $this->createAddressValidator(),
@@ -198,12 +204,12 @@ class VertexBusinessFactory extends AbstractBusinessFactory
         );
     }
 
-    public function createShipmentValidator(): VertexShipmentValidator
+    public function createShipmentValidator(): VertexShipmentValidatorInterface
     {
         return new VertexShipmentValidator($this->createAddressValidator());
     }
 
-    public function createSaleValidator(): VertexSaleValidator
+    public function createSaleValidator(): VertexSaleValidatorInterface
     {
         return new VertexSaleValidator(
             $this->createItemValidator(),
@@ -230,7 +236,7 @@ class VertexBusinessFactory extends AbstractBusinessFactory
         );
     }
 
-    public function createVertexConfigValidator(): VertexConfigValidator
+    public function createVertexConfigValidator(): VertexConfigValidatorInterface
     {
         return new VertexConfigValidator($this->getVertexClient());
     }

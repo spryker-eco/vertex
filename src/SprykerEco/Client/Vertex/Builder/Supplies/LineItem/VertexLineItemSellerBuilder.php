@@ -13,12 +13,12 @@ use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
 use Generated\Shared\Transfer\VertexSellerTransfer;
 use Generated\Shared\Transfer\VertexShipmentTransfer;
-use SprykerEco\Client\Vertex\Builder\LocationMapper;
+use SprykerEco\Client\Vertex\Builder\LocationMapperInterface;
 use SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface;
 
 class VertexLineItemSellerBuilder implements VertexLineItemBuilderInterface
 {
-    public function __construct(protected LocationMapper $locationMapper)
+    public function __construct(protected LocationMapperInterface $locationMapper)
     {
     }
 

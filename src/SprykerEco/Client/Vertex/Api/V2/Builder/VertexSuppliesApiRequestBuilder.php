@@ -11,7 +11,7 @@ namespace SprykerEco\Client\Vertex\Api\V2\Builder;
 
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
 
-class VertexSuppliesApiRequestBuilder
+class VertexSuppliesApiRequestBuilder implements VertexSuppliesApiRequestBuilderInterface
 {
     /**
      * @param \Generated\Shared\Transfer\VertexSuppliesTransfer $vertexSuppliesTransfer

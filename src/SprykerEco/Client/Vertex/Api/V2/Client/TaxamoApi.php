@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-class TaxamoApi
+class TaxamoApi implements TaxamoApiInterface
 {
     use LoggerTrait;
 

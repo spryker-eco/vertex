@@ -12,7 +12,7 @@ namespace SprykerEco\Client\Vertex\Builder;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
 
-class SuppliesRequestBuilder
+class SuppliesRequestBuilder implements SuppliesRequestBuilderInterface
 {
     /**
      * @param array<\SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface> $vertexRequestBuilders

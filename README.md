@@ -220,11 +220,11 @@ The following methods default to `false` or empty string and must be overridden 
 | Method | Default | Description |
 |--------|---------|-------------|
 | `isTaxIdValidatorEnabled()` | `false` | Enables tax ID validation via Taxamo. Requires `TAXAMO_API_URL` and `TAXAMO_TOKEN` to be set. |
-| `isTaxAssistEnabled()` | `false` | Enables the tax assist feature |
+| `isTaxAssistEnabled()` | `false` | Enables the tax assist feature. Return Assisted Parameters in the response that will provide more details about the calculation. The logs can be checked in the Vertex Dashboard. |
 | `isInvoicingEnabled()` | `false` | Enables invoicing functionality. Requires OMS plugins to be registered (see step 6.3). |
 | `getSellerCountryCode()` | `''` | Overrides the default seller country code (2-letter ISO, e.g. `US`). Defaults to the first country of the store. |
-| `getCustomerCountryCode()` | `''` | Overrides the customer country code used when no shipping address is provided. |
+| `getCustomerCountryCode()` | `''` | Overrides the default customer country code (applied only when no customer billing address is provided).  Defaults to the first country of the store.  |
 
 ## Documentation
 
-[Spryker Documentation](https://docs.spryker.com/docs/pbc/all/tax-management/latest/base-shop/third-party-integrations/vertex/connect-vertex#prerequisites)
+[Spryker Documentation](https://docs.spryker.com/docs/pbc/all/tax-management/latest/base-shop/third-party-integrations/vertex/vertex)

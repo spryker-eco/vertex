@@ -13,7 +13,7 @@ use Generated\Shared\Transfer\VertexDiscountTransfer;
 use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
 use Generated\Shared\Transfer\VertexShipmentTransfer;
-use SprykerEco\Client\Vertex\Builder\PriceConverter;
+use SprykerEco\Client\Vertex\Builder\PriceConverterInterface;
 use SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface;
 
 class VertexLineItemDiscountBuilder implements VertexLineItemBuilderInterface
@@ -23,10 +23,7 @@ class VertexLineItemDiscountBuilder implements VertexLineItemBuilderInterface
      */
     protected const DISCOUNT_TYPE = 'DiscountAmount';
 
-    /**
-     * @param \SprykerEco\Client\Vertex\Builder\PriceConverter $priceConverter
-     */
-    public function __construct(protected PriceConverter $priceConverter)
+    public function __construct(protected PriceConverterInterface $priceConverter)
     {
     }
 

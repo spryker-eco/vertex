@@ -14,7 +14,7 @@ use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use InvalidArgumentException;
 use Spryker\Shared\Log\LoggerTrait;
 use Spryker\Zed\Store\Business\StoreFacadeInterface;
-use SprykerEco\Zed\Vertex\Business\Validator\VertexConfigValidator;
+use SprykerEco\Zed\Vertex\Business\Validator\VertexConfigValidatorInterface;
 use SprykerEco\Zed\Vertex\VertexConfig;
 
 class VertexConfigResolver implements VertexConfigResolverInterface
@@ -24,7 +24,7 @@ class VertexConfigResolver implements VertexConfigResolverInterface
     public function __construct(
         protected VertexConfig $vertexConfig,
         protected StoreFacadeInterface $storeFacade,
-        protected VertexConfigValidator $vertexConfigValidator,
+        protected VertexConfigValidatorInterface $vertexConfigValidator,
     ) {
     }
 

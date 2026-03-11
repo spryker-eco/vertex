@@ -13,7 +13,7 @@ use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 
-class VertexConfigValidator
+class VertexConfigValidator implements VertexConfigValidatorInterface
 {
     protected const ERROR_FIELD_IS_REQUIRED = 'Field %s is required';
 

@@ -14,7 +14,7 @@ use Generated\Shared\Transfer\TaxIdValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexApiResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
-use SprykerEco\Client\Vertex\Api\V2\Client\TaxamoApi;
+use SprykerEco\Client\Vertex\Api\V2\Client\TaxamoApiInterface;
 
 /**
  * This class validates a tax ID using the Vertex Validator API.
@@ -23,7 +23,7 @@ class VertexTaxIdValidator implements VertexTaxIdValidatorInterface
 {
     protected const ERROR_MESSAGE_INACTIVE_VERTEX_APP = 'Unable to connect to Vertex Validator API: Vertex App or Tax ID Validator is inactive.';
 
-    public function __construct(protected TaxamoApi $taxamoApi)
+    public function __construct(protected TaxamoApiInterface $taxamoApi)
     {
     }
 

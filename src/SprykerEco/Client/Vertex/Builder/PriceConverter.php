@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerEco\Client\Vertex\Builder;
 
-class PriceConverter
+class PriceConverter implements PriceConverterInterface
 {
     protected const CURRENCY_DENOMINATION_DEFAULT = 100;
 

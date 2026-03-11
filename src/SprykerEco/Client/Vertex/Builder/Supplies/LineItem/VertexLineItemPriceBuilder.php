@@ -12,15 +12,12 @@ namespace SprykerEco\Client\Vertex\Builder\Supplies\LineItem;
 use Generated\Shared\Transfer\VertexItemTransfer;
 use Generated\Shared\Transfer\VertexLineItemTransfer;
 use Generated\Shared\Transfer\VertexShipmentTransfer;
-use SprykerEco\Client\Vertex\Builder\PriceConverter;
+use SprykerEco\Client\Vertex\Builder\PriceConverterInterface;
 use SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface;
 
 class VertexLineItemPriceBuilder implements VertexLineItemBuilderInterface
 {
-    /**
-     * @param \SprykerEco\Client\Vertex\Builder\PriceConverter $priceConverter
-     */
-    public function __construct(protected PriceConverter $priceConverter)
+    public function __construct(protected PriceConverterInterface $priceConverter)
     {
     }
 

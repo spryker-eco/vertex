@@ -17,7 +17,7 @@ use GuzzleHttp\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
 use Spryker\Shared\Log\LoggerTrait;
-use SprykerEco\Client\Vertex\Api\V2\Builder\VertexSuppliesApiRequestBuilder;
+use SprykerEco\Client\Vertex\Api\V2\Builder\VertexSuppliesApiRequestBuilderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -31,7 +31,7 @@ class SuppliesApi implements SuppliesApiInterface
 
     public function __construct(
         protected ClientInterface $client,
-        protected VertexSuppliesApiRequestBuilder $vertexSuppliesApiRequestBuilder,
+        protected VertexSuppliesApiRequestBuilderInterface $vertexSuppliesApiRequestBuilder,
         protected UtilEncodingServiceInterface $utilEncodingService,
     ) {
     }

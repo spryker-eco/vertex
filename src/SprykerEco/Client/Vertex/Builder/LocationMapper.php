@@ -12,7 +12,7 @@ namespace SprykerEco\Client\Vertex\Builder;
 use Generated\Shared\Transfer\VertexAddressTransfer;
 use Generated\Shared\Transfer\VertexLocationTransfer;
 
-class LocationMapper
+class LocationMapper implements LocationMapperInterface
 {
     public function mapVertexAddressTransferToVertexLocationTransfer(VertexAddressTransfer $vertexAddressTransfer): VertexLocationTransfer
     {

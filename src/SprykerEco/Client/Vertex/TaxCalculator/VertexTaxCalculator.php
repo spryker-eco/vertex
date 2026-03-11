@@ -14,7 +14,7 @@ use Generated\Shared\Transfer\VertexCalculationResponseTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexSuppliesTransfer;
 use SprykerEco\Client\Vertex\Api\V2\Client\SuppliesApiInterface;
-use SprykerEco\Client\Vertex\Builder\SuppliesRequestBuilder;
+use SprykerEco\Client\Vertex\Builder\SuppliesRequestBuilderInterface;
 use SprykerEco\Client\Vertex\ResponseBuilder\VertexSuppliesResponseBuilderInterface;
 use SprykerEco\Client\Vertex\Validator\VertexValidatorInterface;
 
@@ -27,7 +27,7 @@ class VertexTaxCalculator implements VertexTaxCalculatorInterface
     protected const ERROR_MESSAGE_TRANSACTION_CALL_URI = 'Unable to connect to Vertex API: TransactionCallsUri config is not set';
 
     public function __construct(
-        protected SuppliesRequestBuilder $vertexSuppliesRequestBuilder,
+        protected SuppliesRequestBuilderInterface $vertexSuppliesRequestBuilder,
         protected SuppliesApiInterface $suppliesApi,
         protected VertexSuppliesResponseBuilderInterface $vertexSuppliesResponseBuilder,
         protected VertexValidatorInterface $quotationValidator,
