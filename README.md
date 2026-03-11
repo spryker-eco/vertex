@@ -29,7 +29,7 @@ $config[VertexConstants::CLIENT_SECRET] = getenv('VERTEX_CLIENT_SECRET');
 $config[VertexConstants::SECURITY_URI] = getenv('VERTEX_SECURITY_URI');
 $config[VertexConstants::TRANSACTION_CALLS_URI] = getenv('VERTEX_TRANSACTION_CALLS_URI');
 
-// Optional: Tax ID Validator (requires Taxamo)
+// Optional: Tax ID Validator (requires Vertex Validator, previously known as Taxamo, see https://developer.vertexinc.com/vertex-e-commerce/docs/stand-alone-deployments)
 $config[VertexConstants::TAXAMO_API_URL] = getenv('TAXAMO_API_URL');
 $config[VertexConstants::TAXAMO_TOKEN] = getenv('TAXAMO_TOKEN');
 
@@ -178,6 +178,8 @@ protected function getOmsEventTriggeredListenerPlugins(Container $container): ar
 
 #### 6.4 Register Glue API Plugin (Optional)
 
+Registers the `POST /tax-id-validate` Glue REST API endpoint that validates a customer's Tax Identification Number (VAT ID) against a given country code via the Vertex Taxamo service. This is useful for B2B storefronts where customers must provide a valid VAT ID during checkout or address management to qualify for tax-exempt or reverse-charge transactions within the EU.
+
 If you want to expose tax validation via REST API, add the Glue plugin to `src/Pyz/Glue/GlueApplication/GlueApplicationDependencyProvider.php`:
 
 ```php
@@ -208,8 +210,8 @@ protected function getResourceRoutePlugins(): array
 
 | Constant | Description |
 |----------|-------------|
-| `TAXAMO_API_URL` | Taxamo API URL for tax ID validation |
-| `TAXAMO_TOKEN` | Taxamo API authentication token |
+| `TAXAMO_API_URL` | Vertex Validator API URL for tax ID validation. [Details](https://developer.vertexinc.com/vertex-e-commerce/docs/stand-alone-deployments). |
+| `TAXAMO_TOKEN` | Vertex Validator API authentication token |
 | `VENDOR_CODE` | Vendor code for Vertex tax calculations |
 | `DEFAULT_TAXPAYER_COMPANY_CODE` | Default taxpayer company code |
 
@@ -217,13 +219,13 @@ protected function getResourceRoutePlugins(): array
 
 The following methods default to `false` or empty string and must be overridden in the project config to enable the respective features:
 
-| Method | Default | Description |
-|--------|---------|-------------|
-| `isTaxIdValidatorEnabled()` | `false` | Enables tax ID validation via Taxamo. Requires `TAXAMO_API_URL` and `TAXAMO_TOKEN` to be set. |
+| Method | Default | Description                                                                                                                                                                       |
+|--------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `isTaxIdValidatorEnabled()` | `false` | Enables tax ID validation via [Vertex Validator](https://developer.vertexinc.com/vertex-e-commerce/docs/stand-alone-deployments). Requires `TAXAMO_API_URL` and `TAXAMO_TOKEN` to be set.                                                                  |
 | `isTaxAssistEnabled()` | `false` | Enables the tax assist feature. Return Assisted Parameters in the response that will provide more details about the calculation. The logs can be checked in the Vertex Dashboard. |
-| `isInvoicingEnabled()` | `false` | Enables invoicing functionality. Requires OMS plugins to be registered (see step 6.3). |
-| `getSellerCountryCode()` | `''` | Overrides the default seller country code (2-letter ISO, e.g. `US`). Defaults to the first country of the store. |
-| `getCustomerCountryCode()` | `''` | Overrides the default customer country code (applied only when no customer billing address is provided).  Defaults to the first country of the store.  |
+| `isInvoicingEnabled()` | `false` | Enables invoicing functionality. Requires OMS plugins to be registered (see step 6.3).                                                                                            |
+| `getSellerCountryCode()` | `''` | Overrides the default seller country code (2-letter ISO, e.g. `US`). Defaults to the first country of the store.                                                                  |
+| `getCustomerCountryCode()` | `''` | Overrides the default customer country code (applied only when no customer billing address is provided).  Defaults to the first country of the store.                             |
 
 ## Documentation
 
