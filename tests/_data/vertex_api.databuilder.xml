@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<transfers
+        xmlns="spryker:databuilder-01"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="spryker:databuilder-01 http://static.spryker.com/databuilder-01.xsd"
+>
+
+    <transfer name="TaxamoApiRequest" strict="true">
+        <property name="taxamoToken" type="string" dataBuilderRule="word()"/>
+        <property name="taxamoApiUrl" type="string" dataBuilderRule="url()"/>
+        <property name="taxId" type="string" dataBuilderRule="word()"/>
+        <property name="countryCode" type="string" dataBuilderRule="word()"/>
+    </transfer>
+
+    <transfer name="VertexApiCredential" strict="true">
+        <property name="clientId" type="string" dataBuilderRule="word(10)"/>
+        <property name="clientSecret" type="string" dataBuilderRule="word(20)"/>
+        <property name="securityUri" type="string" dataBuilderRule="url()"/>
+    </transfer>
+
+    <transfer name="VertexAuthResponse" strict="true">
+        <property name="accessToken" type="string" dataBuilderRule="word(30)"/>
+        <property name="expiresIn" type="int" dataBuilderRule="randomNumber(4)"/>
+        <property name="errors" type="string[]" dataBuilderRule="=[]"/>
+    </transfer>
+
+
+    <transfer name="TaxIdValidationRequest" strict="true">
+        <property name="taxId" type="string" dataBuilderRule="word(30)"/>
+        <property name="countryCode" type="string" dataBuilderRule="word()"/>
+    </transfer>
+
+    <transfer name="VertexApiAccessToken" strict="true">
+        <property name="accessToken" type="string" dataBuilderRule="word(30)"/>
+        <property name="expirationDate" type="string" dataBuilderRule="date('Y-m-d H:i:s')"/>
+    </transfer>
+
+    <transfer name="VertexCalculationRequest" strict="true">
+        <property name="sale" type="VertexSale"/>
+        <property name="vertexConfiguration" type="VertexConfig"/>
+    </transfer>
+
+    <transfer name="VertexSale" strict="true">
+        <property name="documentNumber" type="string" dataBuilderRule="numerify('id####')"/>
+        <property name="documentDate" type="string" dataBuilderRule="date('Y-m-d')"/>
+        <property name="items"  type="VertexItem[]" singular="item"/>
+        <property name="shipments"  type="VertexShipment[]" singular="shipment"/>
+        <property name="taxMetadata" type="array" associative="true" singular="taxMetadataEntry"/>
+        <property name="refundedTaxTotal" type="int" dataBuilderRule="randomNumber(6)"/>
+        <property name="priceMode" type="string"/>
+        <property name="sellerCountryCode" type="string"/>
+        <property name="customerCountryCode" type="string"/>
+    </transfer>
+
+    <transfer name="VertexItem" strict="true">
+        <property name="shippingAddress" type="VertexAddress"/>
+        <property name="billingAddress" type="VertexAddress"/>
+        <property name="sellerAddress" type="VertexAddress"/>
+        <property name="warehouseAddress" type="VertexAddress"/>
+        <property name="taxMetadata" type="array" associative="true" singular="taxMetadataEntry"/>
+        <property name="vertexShippingWarehouses" dataBuilderRule="VertexShippingWarehouse"/>
+    </transfer>
+
+    <transfer name="VertexShippingWarehouse" strict="true">
+        <property name="quantity" dataBuilderRule="numberBetween(1, 9)"/>
+        <property name="warehouseAddress" dataBuilderRule="VertexAddress"/>
+    </transfer>
+
+    <transfer name="VertexShipment" strict="true">
+        <property name="shipmentMethodKey" type="string"/>
+        <property name="shippingAddress" type="VertexAddress"/>
+        <property name="billingAddress" type="VertexAddress"/>
+        <property name="method" type="ShipmentMethod"/>
+    </transfer>
+
+    <transfer name="ShipmentMethod">
+        <property name="shipmentMethodKey" type="string" dataBuilderRule="word(10)"/>
+    </transfer>
+</transfers>

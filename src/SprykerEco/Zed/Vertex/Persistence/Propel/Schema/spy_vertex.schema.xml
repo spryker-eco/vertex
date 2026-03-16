@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<database xmlns="spryker:schema-01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="zed"
+          xsi:schemaLocation="spryker:schema-01 https://static.spryker.com/schema-01.xsd"
+          namespace="Orm\Zed\Vertex\Persistence" package="src.Orm.Zed.Vertex.Persistence">
+
+    <table name="spy_vertex_api_access_token" identifierQuoting="true">
+        <column name="id_vertex_api_access_token" required="true" type="INTEGER" autoIncrement="true" primaryKey="true"/>
+        <column name="credential_hash" required="true" type="VARCHAR" size="32"/>
+        <column name="access_token" required="true" type="LONGVARCHAR"/>
+        <column name="expiration_date" required="true" type="DATETIME"/>
+
+        <unique name="spy_vertex_api_access_token-unique-credential_hash">
+            <unique-column name="credential_hash"/>
+        </unique>
+
+        <index name="spy_vertex_api_access_token-expiration_date">
+            <index-column name="expiration_date"/>
+        </index>
+
+        <behavior name="timestampable">
+            <parameter name="create_column" value="created_at"/>
+            <parameter name="update_column" value="updated_at"/>
+        </behavior>
+    </table>
+
+    <table name="spy_vertex_tax_id_validation_history" identifierQuoting="true">
+        <column name="id_vertex_tax_id_validation_history" required="true" type="INTEGER" autoIncrement="true" primaryKey="true"/>
+        <id-method-parameter value="spy_vertex_tax_id_validation_history_pk_seq"/>
+        <column name="tax_id" required="true" type="VARCHAR" size="255" description="A tax identification number provided by a customer or company."/>
+        <column name="is_valid" required="true" type="BOOLEAN" default="TRUE" description="A boolean flag indicating if a token or request is valid."/>
+        <column name="country_code" type="VARCHAR" size="3" required="false" description="The code for a country."/>
+        <column name="response_data" required="false" type="LONGVARCHAR" description="The raw response data received from a tax ID validation service."/>
+
+        <behavior name="timestampable">
+            <parameter name="disable_updated_at" value="true"/>
+        </behavior>
+    </table>
+
+</database>

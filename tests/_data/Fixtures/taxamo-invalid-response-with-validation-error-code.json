@@ -1,0 +1,8 @@
+{
+    "billing_country_code" : null,
+    "buyer_tax_number" : "IE123112348V",
+    "tax_deducted" : false,
+    "buyer_tax_number_valid" : false,
+    "buyer_tax_number_format_valid" : true,
+    "buyer_tax_number_validation_info": "NOT_REGISTERED"
+}

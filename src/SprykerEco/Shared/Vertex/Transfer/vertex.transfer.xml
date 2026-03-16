@@ -1,0 +1,435 @@
+<?xml version="1.0"?>
+<transfers xmlns="spryker:transfer-01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="spryker:transfer-01 http://static.spryker.com/transfer-01.xsd">
+
+    <transfer name="CalculableObject">
+        <property name="taxMetadata" type="SaleTaxMetadata" strict="true"/>
+        <property name="items" type="Item[]" singular="item"/>
+        <property name="store" type="Store"/>
+        <property name="totals" type="Totals"/>
+        <property name="originalQuote" type="Quote"/>
+        <property name="priceMode" type="string"/>
+        <property name="expenses" type="Expense[]" singular="expense"/>
+        <property name="originalOrder" type="Order"/>
+        <property name="vertexSaleHash" type="string" strict="true"/>
+        <property name="vertexCalculationResponse" type="VertexCalculationResponse" strict="true"/>
+    </transfer>
+
+    <transfer name="Order">
+        <property name="idSalesOrder" type="int"/>
+        <property name="taxMetadata" type="SaleTaxMetadata" strict="true"/>
+        <property name="items" type="Item[]" singular="item"/>
+        <property name="store" type="string"/>
+    </transfer>
+
+    <transfer name="Item">
+        <property name="taxMetadata" type="ItemTaxMetadata" strict="true"/>
+        <property name="sku" type="string"/>
+        <property name="idSalesOrderItem" type="int"/>
+        <property name="sumDiscountAmountFullAggregation" type="int"/>
+        <property name="canceledAmount" type="int"/>
+        <property name="quantity" type="int"/>
+        <property name="shipment" type="Shipment"/>
+        <property name="merchantProfileAddress" type="MerchantProfileAddress"/>
+        <property name="merchantStockAddresses" type="MerchantStockAddress[]" singular="merchantStockAddress"/>
+        <property name="unitTaxAmountFullAggregation" type="int"/>
+        <property name="unitTaxAmount" type="int"/>
+        <property name="sumTaxAmountFullAggregation" type="int"/>
+        <property name="sumTaxAmount" type="int"/>
+        <property name="sumSubtotalAggregation" type="int"/>
+        <property name="unitPriceToPayAggregation" type="int"/>
+        <property name="unitSubtotalAggregation" type="int"/>
+        <property name="unitDiscountAmountAggregation" type="int"/>
+        <property name="sumPriceToPayAggregation" type="int"/>
+        <property name="unitNetPrice" type="int"/>
+        <property name="unitDiscountAmountFullAggregation" type="int"/>
+        <property name="taxRateAverageAggregation" type="float"/>
+        <property name="taxAmountAfterCancellation" type="int"/>
+    </transfer>
+
+    <transfer name="Expense">
+        <property name="taxMetadata" type="ItemTaxMetadata" strict="true"/>
+        <property name="shipment" type="Shipment"/>
+        <property name="sumDiscountAmountAggregation" type="int"/>
+        <property name="canceledAmount" type="int"/>
+        <property name="type" type="string"/>
+        <property name="unitTaxAmount" type="int"/>
+        <property name="sumTaxAmount" type="int"/>
+        <property name="unitPriceToPayAggregation" type="int"/>
+        <property name="unitPrice" type="int"/>
+        <property name="unitDiscountAmountAggregation" type="int"/>
+        <property name="sumPriceToPayAggregation" type="int"/>
+        <property name="sumPrice" type="int"/>
+        <property name="taxAmountAfterCancellation" type="int"/>
+    </transfer>
+
+    <transfer name="SaleTaxMetadata" strict="true">
+        <property name="seller" type="array" associative="true" singular="sellerValue"/>
+        <property name="customer" type="array" associative="true" singular="customerValue"/>
+        <!--- the contents provided on a project level -->
+    </transfer>
+
+    <transfer name="ItemTaxMetadata" strict="true">
+        <property name="product" type="array" associative="true" singular="productValue"/>
+        <property name="flexibleFields" type="array" associative="true" singular="flexibleField"/>
+        <!--- the contents provided on a project level -->
+    </transfer>
+
+    <transfer name="VertexSale" strict="true">
+        <property name="transactionId" type="string"/>
+        <property name="documentNumber" type="string"/>
+        <property name="documentDate" type="string"/>
+        <property name="items" type="VertexItem[]" singular="item"/>
+        <property name="shipments" type="VertexShipment[]" singular="shipment"/>
+        <property name="taxMetadata" type="array" associative="true" singular="taxMetadataEntry"/>
+        <property name="taxTotal" type="int"/>
+        <property name="refundedTaxTotal" type="int"/>
+        <property name="priceMode" type="string"/>
+        <property name="sellerCountryCode" type="string"/>
+        <property name="customerCountryCode" type="string"/>
+    </transfer>
+
+    <transfer name="ProductOption">
+        <property name="taxMetadata" type="ItemTaxMetadata" strict="true"/>
+    </transfer>
+
+    <transfer name="VertexItem" strict="true">
+        <property name="id" type="string"/>
+        <property name="priceAmount" type="int"/>
+        <property name="refundableAmount" type="int"/>
+        <property name="discountAmount" type="int"/>
+        <property name="quantity" type="int"/>
+        <property name="taxTotal" type="int"/>
+        <property name="refundedTaxTotal" type="int"/>
+        <property name="shippingAddress" type="VertexAddress"/>
+        <property name="billingAddress" type="VertexAddress"/>
+        <property name="sellerAddress" type="VertexAddress"/>
+        <property name="vertexShippingWarehouses" type="VertexShippingWarehouse[]" singular="vertexShippingWarehouse"/>
+        <property name="taxMetadata" type="array" associative="true" singular="taxMetadataEntry"/>
+        <property name="sku" type="string"/>
+        <property name="warehouseAddress" type="VertexAddress"/>
+    </transfer>
+
+    <transfer name="VertexShipment" strict="true">
+        <property name="id" type="string"/>
+        <property name="shipmentMethodKey" type="string"/>
+        <property name="priceAmount" type="int"/>
+        <property name="refundableAmount" type="int"/>
+        <property name="discountAmount" type="int"/>
+        <property name="taxTotal" type="int"/>
+        <property name="refundedTaxTotal" type="int"/>
+        <property name="shippingAddress" type="VertexAddress"/>
+        <property name="billingAddress" type="VertexAddress"/>
+        <property name="method" type="ShipmentMethod"/>
+    </transfer>
+
+    <transfer name="VertexCalculationRequest" strict="true">
+        <property name="sale" type="VertexSale"/>
+        <property name="vertexApiAccessToken" type="VertexApiAccessToken"/>
+        <property name="reportingDate" type="string"/>
+        <property name="vertexConfiguration" type="VertexConfig"/>
+    </transfer>
+
+    <transfer name="VertexCalculationResponse" strict="true">
+        <property name="sale" type="VertexSale"/>
+        <property name="isSuccessful" type="bool"/>
+        <property name="errorMessage" type="string"/>
+    </transfer>
+
+    <transfer name="ApiErrorMessage" strict="true">
+        <property name="status" type="int"/>
+        <property name="code" type="string"/>
+        <property name="detail" type="string"/>
+    </transfer>
+
+    <transfer name="Store">
+        <property name="idStore" type="int"/>
+        <property name="storeReference" type="string"/>
+        <property name="name" type="string"/>
+        <property name="countries" type="array" singular="country"/>
+    </transfer>
+
+    <transfer name="VertexSubmitPaymentTaxInvoice" strict="true">
+         <property name="sale" type="VertexSale"/>
+        <property name="messageAttributes" type="MessageAttributes"/>
+    </transfer>
+
+    <transfer name="MessageResponse">
+    </transfer>
+
+    <transfer name="TaxTotal">
+        <property name="amount" type="int"/>
+    </transfer>
+
+    <transfer name="MerchantProfileAddress">
+    </transfer>
+
+    <transfer name="Totals">
+        <property name="taxTotal" type="TaxTotal"/>
+    </transfer>
+
+    <transfer name="Shipment">
+        <property name="shippingAddress" type="Address"/>
+        <property name="method" type="ShipmentMethod"/>
+    </transfer>
+
+    <transfer name="ShipmentMethod">
+        <property name="shipmentMethodKey" type="string"/>
+    </transfer>
+
+    <transfer name="Quote">
+        <property name="uuid" type="string"/>
+        <property name="billingAddress" type="Address"/>
+        <property name="hideTaxInCart" type="bool" strict="true"/>
+        <property name="vertexSaleHash" type="string" strict="true"/>
+        <property name="vertexCalculationResponse" type="VertexCalculationResponse" strict="true"/>
+        <property name="taxVendor" type="string" strict="true"/>
+    </transfer>
+
+    <transfer name="StockAddress">
+        <property name="country" type="Country"/>
+    </transfer>
+
+    <transfer name="MerchantStockAddress">
+        <property name="quantityToShip" type="decimal"/>
+        <property name="stockAddress" type="StockAddress"/>
+    </transfer>
+
+    <transfer name="Country">
+        <property name="iso2Code" type="string"/>
+    </transfer>
+
+    <transfer name="AccessTokenRequest">
+        <property name="grantType" type="string"/>
+        <property name="providerName" type="string"/>
+        <property name="accessTokenRequestOptions" type="AccessTokenRequestOptions"/>
+    </transfer>
+
+    <transfer name="AccessTokenRequestOptions">
+        <property name="audience" type="string"/>
+    </transfer>
+
+    <transfer name="AccessTokenResponse" strict="true">
+        <property name="isSuccessful" type="bool"/>
+        <property name="accessToken" type="string"/>
+        <property name="accessTokenError" type="AccessTokenError"/>
+    </transfer>
+
+    <transfer name="AccessTokenError" strict="true">
+        <property name="error" type="string"/>
+    </transfer>
+
+    <transfer name="OmsEventTriggered" strict="true">
+        <property name="idEvent" type="string"/>
+        <property name="orderItemIds" type="array" singular="idOrderItem"/>
+        <property name="idSalesOrder" type="int"/>
+    </transfer>
+
+    <transfer name="VertexValidationRequest" strict="true">
+        <property name="countryCode" type="string"/>
+        <property name="taxId" type="string"/>
+    </transfer>
+
+    <transfer name="VertexValidationResponse" strict="true">
+        <property name="isValid" type="bool"/>
+        <property name="messages" type="string[]" singular="message"/>
+        <property name="additionalInfo" type="string"/>
+        <property name="messageKey" type="string"/>
+    </transfer>
+
+    <transfer name="TaxIdValidationHistory" strict="true">
+        <property name="taxId" type="string"/>
+        <property name="isValid" type="bool"/>
+        <property name="countryCode" type="string"/>
+        <property name="responseData" type="string"/>
+    </transfer>
+
+    <transfer name="VertexConfig" strict="true">
+        <property name="clientId" type="string"/>
+        <property name="clientSecret" type="string"/>
+        <property name="securityUri" type="string"/>
+        <property name="idVertexConfig" type="int"/>
+        <property name="credentialHash" type="string"/>
+        <property name="taxamoToken" type="string"/>
+        <property name="taxamoApiUrl" type="string"/>
+        <property name="isTaxIdValidatorEnabled" type="bool"/>
+        <property name="transactionCallsUri" type="string"/>
+        <property name="isActive" type="bool"/>
+        <property name="isInvoicingEnabled" type="bool"/>
+        <property name="isTaxAssistEnabled" type="bool"/>
+        <property name="defaultTaxpayerCompanyCode" type="string"/>
+        <property name="vendorCode" type="string"/>
+    </transfer>
+
+    <transfer name="VertexAuthResponse" strict="true">
+        <property name="accessToken" type="string"/>
+        <property name="expiresIn" type="int"/>
+        <property name="errors" type="string[]" singular="error"/>
+    </transfer>
+
+    <transfer name="VertexApiCredential" strict="true">
+        <property name="clientId" type="string"/>
+        <property name="clientSecret" type="string"/>
+        <property name="securityUri" type="string"/>
+    </transfer>
+
+    <transfer name="VertexApiAccessToken" strict="true">
+        <property name="credentialHash" type="string"/>
+        <property name="accessToken" type="string"/>
+        <property name="expirationDate" type="string"/>
+    </transfer>
+
+    <transfer name="VertexApiAccessTokenCriteria" strict="true">
+        <property name="credentialHash" type="string"/>
+    </transfer>
+
+    <transfer name="SaleItem" strict="true">
+        <property name="id" type="string"/>
+        <property name="sku" type="string"/>
+        <property name="priceAmount" type="string"/>
+        <property name="refundableAmount" type="string"/>
+        <property name="discountAmount" type="string"/>
+        <property name="quantity" type="string"/>
+        <property name="taxTotal" type="string"/>
+        <property name="refundedTaxTotal" type="string"/>
+        <property name="shippingAddress" type="Address"/>
+        <property name="billingAddress" type="Address"/>
+        <property name="sellerAddress" type="Address"/>
+        <property name="warehouseAddress" type="Address"/>
+        <property name="vertexShippingWarehouses" type="VertexShippingWarehouse[]" singular="vertexShippingWarehouse"/>
+        <property name="taxMetadata" type="array" associative="true" singular="taxMetadataEntry"/>
+        <property name="sku" type="string"/>
+    </transfer>
+
+    <transfer name="Address">
+    </transfer>
+
+    <transfer name="VertexShippingWarehouse" strict="true">
+        <property name="quantity" type="int"/>
+        <property name="warehouseAddress" type="VertexAddress"/>
+    </transfer>
+
+    <transfer name="VertexAddress" strict="true">
+        <property name="address1" type="string"/>
+        <property name="address2" type="string"/>
+        <property name="city" type="string"/>
+        <property name="state" type="string"/>
+        <property name="country" type="string"/>
+        <property name="zipCode" type="string"/>
+    </transfer>
+
+    <transfer name="VertexSupplies" strict="true">
+        <property name="saleMessageType" type="string"/>
+        <property name="returnAssistedParametersIndicator" type="bool"/>
+        <property name="lineItems" type="VertexLineItem[]" singular="lineItem"/>
+        <property name="customer" type="VertexCustomer"/>
+        <property name="seller" type="VertexSeller"/>
+        <property name="discount" type="VertexDiscount"/>
+        <property name="documentNumber" type="string"/>
+        <property name="documentDate" type="string"/>
+        <property name="postingDate" type="string"/>
+        <property name="transactionId" type="string"/>
+        <property name="transactionType" type="string"/>
+        <property name="taxMetadata" type="array" associative="true" singular="metadataEntry"/>
+    </transfer>
+
+    <transfer name="VertexLineItem" strict="true">
+        <property name="quantity" type="VertexQuantity"/>
+        <property name="discount" type="VertexDiscount"/>
+        <property name="customer" type="VertexCustomer"/>
+        <property name="seller" type="VertexSeller"/>
+        <property name="lineItemId" type="string"/>
+        <property name="vendorSKU" type="string"/>
+        <property name="extendedPrice" type="float"/>
+        <property name="unitPrice" type="float"/>
+        <property name="product" type="VertexProduct"/>
+        <property name="taxMetadata" type="array" associative="true" singular="metadataEntry"/>
+        <property name="shouldBeGrouped" type="bool"/>
+        <property name="initialIdentifier" type="string"/>
+        <property name="taxIncludedIndicator" type="bool"/>
+    </transfer>
+
+    <transfer name="VertexQuantity" strict="true">
+        <property name="unitOfMeasure" type="string"/>
+        <property name="value" type="float"/>
+    </transfer>
+
+    <transfer name="VertexCustomer" strict="true">
+        <property name="destination" type="VertexLocation"/>
+        <property name="administrativeDestination" type="VertexLocation"/>
+    </transfer>
+
+    <transfer name="VertexSeller" strict="true">
+        <property name="administrativeOrigin" type="VertexLocation"/>
+        <property name="physicalOrigin" type="VertexLocation"/>
+        <property name="company" type="string" />
+    </transfer>
+
+    <transfer name="VertexLocation" strict="true">
+        <property name="streetAddress1" type="string"/>
+        <property name="streetAddress2" type="string"/>
+        <property name="city" type="string"/>
+        <property name="mainDivision" type="string"/>
+        <property name="subDivision" type="string"/>
+        <property name="postalCode" type="string"/>
+        <property name="country" type="string"/>
+        <property name="taxAreaId" type="string"/>
+    </transfer>
+
+    <transfer name="VertexProduct" strict="true">
+        <property name="value" type="string"/>
+    </transfer>
+
+    <transfer name="VertexDiscount" strict="true">
+        <property name="discountType" type="string"/>
+        <property name="discountValue" type="float"/>
+    </transfer>
+
+    <transfer name="VertexApiResponse" strict="true">
+        <property name="vertexResponse" type="array" singular="vertexResponse"/>
+        <property name="isSuccessful" type="bool"/>
+        <property name="errorMessage" type="string"/>
+        <property name="errorCode" type="string"/>
+    </transfer>
+
+    <transfer name="SubmitPaymentTaxInvoiceResponse" strict="true">
+        <property name="isSuccessful" type="bool"/>
+        <property name="infoMessage" type="string"/>
+        <property name="errorMessage" type="string"/>
+        <property name="messageAttributes" type="MessageAttributes"/>
+    </transfer>
+
+    <transfer name="TaxIdValidationRequest" strict="true">
+        <property name="countryCode" type="string"/>
+        <property name="taxId" type="string"/>
+        <property name="tenantIdentifier" type="string"/>
+    </transfer>
+
+    <transfer name="VertexValidationResponse" strict="true">
+        <property name="isValid" type="bool"/>
+        <property name="message" type="string"/>
+        <property name="additionalInfo" type="string"/>
+        <property name="errorCode" type="string"/>
+    </transfer>
+
+    <transfer name="TaxamoApiRequest" strict="true">
+        <property name="taxamoToken" type="string"/>
+        <property name="taxamoApiUrl" type="string"/>
+        <property name="taxId" type="string"/>
+        <property name="countryCode" type="string"/>
+    </transfer>
+
+    <transfer name="RestVertexValidationAttributes" strict="true">
+        <property name="countryCode" type="string" description="The code for a country."/>
+        <property name="taxId" type="string" description="A tax identification number provided by a customer or company."/>
+    </transfer>
+
+    <transfer name="VertexValidationRequest" strict="true">
+        <property name="countryCode" type="string" description="The code for a country."/>
+        <property name="taxId" type="string" description="A tax identification number provided by a customer or company."/>
+    </transfer>
+
+    <transfer name="RestErrorMessage">
+        <property name="status" type="int" description="A HTTP status code."/>
+        <property name="detail" type="string" description="A detailed error message providing more specific information about an issue."/>
+    </transfer>
+</transfers>

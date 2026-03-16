@@ -1,0 +1,177 @@
+<?php
+
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
+declare(strict_types = 1);
+
+namespace SprykerEcoTest\Zed\Vertex\Helper;
+
+use Codeception\Module;
+use Generated\Shared\Transfer\CalculableObjectTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
+use PHPUnit\Framework\Constraint\Callback;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
+use SprykerEco\Client\Vertex\VertexClient;
+
+class VertexBusinessAssertionHelper extends Module
+{
+    public function assertCalculableObjectTransferExtendedWithTaxMetadata(CalculableObjectTransfer $calculableObjectTransfer): void
+    {
+        $this->assertNotNull($calculableObjectTransfer->getTaxMetadata());
+        $this->assertNotNull($calculableObjectTransfer->getItems()[0]->getTaxMetadata());
+    }
+
+    public function assertRequestTaxQuotationReceivesSalesItemMappedWithMerchantStockAddress(VertexClient $vertexClientMock): void
+    {
+        $expectation = $this->haveExpectedTaxQuotationRequestSaleItems();
+
+        $vertexClientMock->expects(new InvokedCountMatcher(1))
+            ->method('calculateTax')
+            ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($expectation) {
+                $index = 0;
+
+                foreach ($vertexCalculationRequestTransfer->getSale()->getItems() as $saleItem) {
+                    foreach ($saleItem->getVertexShippingWarehouses() as $quantityWarehouseMap) {
+                        $saleItemExpectation = $expectation[$index++];
+
+                        self::assertEquals(
+                            $saleItemExpectation['quantity'],
+                            $quantityWarehouseMap->getQuantity(),
+                            'Warehouse mapping quantity must match with Calculated Object merchant stock address',
+                        );
+
+                        self::assertEquals(
+                            $saleItemExpectation['warehouseAddress']['address1'],
+                            $quantityWarehouseMap->getWarehouseAddress()->getAddress1(),
+                            'Warehouse mapping address must match with Calculated Object merchant stock address',
+                        );
+
+                        self::assertEquals(
+                            $saleItemExpectation['warehouseAddress']['city'],
+                            $quantityWarehouseMap->getWarehouseAddress()->getCity(),
+                            'Warehouse mapping city must match with Calculated Object merchant stock address',
+                        );
+
+                        self::assertEquals(
+                            $saleItemExpectation['warehouseAddress']['zip_code'],
+                            $quantityWarehouseMap->getWarehouseAddress()->getZipCode(),
+                            'Warehouse mapping zip code must match with Calculated Object merchant stock address',
+                        );
+
+                        self::assertIsString(
+                            $quantityWarehouseMap->getWarehouseAddress()->getCountry(),
+                            'Warehouse mapping country must be a string',
+                        );
+
+                        self::assertTrue(
+                            strlen($quantityWarehouseMap->getWarehouseAddress()->getCountry()) === 2,
+                            'Warehouse mapping country code must be a string with 2 characters',
+                        );
+                    }
+                }
+
+                return true;
+            }));
+    }
+
+    public function assertRequestTaxQuotationReceivesSalesItemWithCorrectItemsAndWithoutWarehouseAddress(
+        VertexClient $vertexClientMock,
+        CalculableObjectTransfer $mockedCalculableObjectTransfer,
+    ): void {
+        $this->haveExpectedTaxQuotationRequestSaleItems();
+
+        $vertexClientMock->expects(new InvokedCountMatcher(1))
+            ->method('calculateTax')
+            ->with(new Callback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use ($mockedCalculableObjectTransfer) {
+                self::assertEquals(
+                    $mockedCalculableObjectTransfer->getItems()->count(),
+                    $vertexCalculationRequestTransfer->getSale()->getItems()->count(),
+                    'Sale items count must match with Calculated Object',
+                );
+
+                foreach ($vertexCalculationRequestTransfer->getSale()->getItems() as $index => $saleItem) {
+                    /** @var \SprykerEcoTest\Zed\Vertex\Helper\ItemTransfer $calculableObjectItem */
+                    $calculableObjectItem = $mockedCalculableObjectTransfer->getItems()->offsetGet($index);
+
+                    self::assertEquals(
+                        $calculableObjectItem->getQuantity(),
+                        $saleItem->getQuantity(),
+                        'Sale item quantity must match with Calculated Object',
+                    );
+                }
+
+                return true;
+            }));
+    }
+
+    /**
+     * @return array<array>
+     */
+    protected function haveExpectedTaxQuotationRequestSaleItems(): array
+    {
+        return [
+            [
+                'quantity' => 3,
+                'warehouseAddress' => [
+                    'address1' => 'address-1-1',
+                    'city' => 'city-1-1',
+                    'zip_code' => 'zipcode-1-1',
+                ],
+            ],
+            [
+                'quantity' => 1,
+                'warehouseAddress' => [
+                    'address1' => 'address-1-2',
+                    'city' => 'city-1-2',
+                    'zip_code' => 'zipcode-1-2',
+                ],
+            ],
+            [
+                'quantity' => 10,
+                'warehouseAddress' => [
+                    'address1' => 'address-2-1',
+                    'city' => 'city-2-1',
+                    'zip_code' => 'zipcode-2-1',
+                ],
+            ],
+        ];
+    }
+
+    public function assertQuoteHasCorrectGrandTotal(CalculableObjectTransfer $calculableObjectTransfer): void
+    {
+        $itemsSumPriceToPayAggregation = 0;
+        foreach ($calculableObjectTransfer->getItems() as $item) {
+            $itemsSumPriceToPayAggregation += $item->getSumPriceToPayAggregation();
+        }
+
+        $expensesSumPriceToPayAggregation = 0;
+
+        foreach ($calculableObjectTransfer->getExpenses() as $expense) {
+            $expensesSumPriceToPayAggregation += $expense->getSumPriceToPayAggregation();
+        }
+
+        $grandTotal = $calculableObjectTransfer->getOriginalQuote()->getTotals()->getGrandTotal();
+
+        $this->assertEquals($grandTotal, ($expensesSumPriceToPayAggregation + $itemsSumPriceToPayAggregation));
+    }
+
+    public function assertQuoteHasZeroTaxTotal(CalculableObjectTransfer $calculableObjectTransfer): void
+    {
+        $itemsSumTaxAmountFullAggregation = 0;
+        foreach ($calculableObjectTransfer->getItems() as $item) {
+            $itemsSumTaxAmountFullAggregation += $item->getSumTaxAmountFullAggregation();
+        }
+
+        $expensesSumTaxAmount = 0;
+
+        foreach ($calculableObjectTransfer->getExpenses() as $expense) {
+            $expensesSumTaxAmount += $expense->getSumTaxAmount();
+        }
+
+        $this->assertEquals(0, $itemsSumTaxAmountFullAggregation);
+        $this->assertEquals(0, $expensesSumTaxAmount);
+    }
+}

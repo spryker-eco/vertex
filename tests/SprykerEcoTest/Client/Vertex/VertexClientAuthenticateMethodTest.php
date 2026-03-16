@@ -1,0 +1,117 @@
+<?php
+
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
+declare(strict_types = 1);
+
+namespace SprykerEcoTest\Client\Vertex;
+
+use Codeception\Test\Unit;
+
+/**
+ * @group SprykerEcoTest
+ * @group Client
+ * @group Vertex
+ * @group VertexClientAuthenticateMethodTest
+ */
+class VertexClientAuthenticateMethodTest extends Unit
+{
+    protected VertexClientTester $tester;
+
+    /**
+     * @return void
+     */
+    public function testAuthenticateMethodReturnsAccessTokenWhenVertexAPIRequestIsSuccessful(): void
+    {
+        // Arrange
+        $vertexConfigTransfer = $this->tester->haveVertexConfig();
+        $mockClient = $this->tester->mockClientForVertexApiCredentialWithValidResponse();
+        $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
+
+        // Act
+        $vertexApiAuthResponseTransfer = $vertexClient->authenticate($vertexConfigTransfer);
+
+        // Assert
+        $this->assertEquals('access-token', $vertexApiAuthResponseTransfer->getAccessToken());
+        $this->assertEmpty($vertexApiAuthResponseTransfer->getErrors());
+    }
+
+    /**
+     * @return void
+     */
+    public function testAuthenticateMethodReturnsErrorResponseWhenVertexAPIRequestHasFailed(): void
+    {
+        // Arrange
+        $vertexConfigTransfer = $this->tester->haveVertexConfig();
+        $vertexApiCredentialTransfer = $this->tester->haveVertexApiCredentialTransfer($vertexConfigTransfer->toArray());
+        $mockClient = $this->tester->mockClientForVertexApiCredentialWithFailedResponse($vertexApiCredentialTransfer);
+        $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
+
+        // Act
+        $vertexApiAccessTokenTransfer = $vertexClient->authenticate($vertexConfigTransfer);
+
+        // Assert
+        $this->assertEmpty($vertexApiAccessTokenTransfer->getAccessToken());
+        $this->assertEquals(['Request to Vertex API failed.'], $vertexApiAccessTokenTransfer->getErrors());
+    }
+
+    /**
+     * @return void
+     */
+    public function testAuthenticateMethodReturnsErrorResponseWhenVertexAPIRequestDoesHaveEmptyAccessToken(): void
+    {
+        // Arrange
+        $vertexConfigTransfer = $this->tester->haveVertexConfig();
+        $vertexApiCredentialTransfer = $this->tester->haveVertexApiCredentialTransfer($vertexConfigTransfer->toArray());
+        $mockClient = $this->tester->mockClientForVertexApiCredentialResponseWithEmptyAccessToken($vertexApiCredentialTransfer);
+        $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
+
+        // Act
+        $vertexApiAccessTokenTransfer = $vertexClient->authenticate($vertexConfigTransfer);
+
+        // Assert
+        $this->assertEmpty($vertexApiAccessTokenTransfer->getAccessToken());
+        $this->assertEquals(['Invalid response from Vertex API.'], $vertexApiAccessTokenTransfer->getErrors());
+    }
+
+    /**
+     * @return void
+     */
+    public function testAuthenticateMethodReturnsErrorResponseWhenVertexAPIRequestDoesNotContainAccessToken(): void
+    {
+        // Arrange
+        $vertexConfigTransfer = $this->tester->haveVertexConfig();
+        $vertexApiCredentialTransfer = $this->tester->haveVertexApiCredentialTransfer($vertexConfigTransfer->toArray());
+        $mockClient = $this->tester->mockClientForVertexApiCredentialResponseWithMissingAccessToken($vertexApiCredentialTransfer);
+        $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
+
+        // Act
+        $vertexApiAccessTokenTransfer = $vertexClient->authenticate($vertexConfigTransfer);
+
+        // Assert
+        $this->assertEmpty($vertexApiAccessTokenTransfer->getAccessToken());
+        $this->assertEquals(['Request to Vertex API failed.'], $vertexApiAccessTokenTransfer->getErrors());
+    }
+
+    /**
+     * @return void
+     */
+    public function testAuthenticateMethodReturnsErrorResponseWhenVertexAPIRequestResponseWith401InvalidCredentials(): void
+    {
+        // Arrange
+        $vertexConfigTransfer = $this->tester->haveVertexConfig();
+        $vertexApiCredentialTransfer = $this->tester->haveVertexApiCredentialTransfer($vertexConfigTransfer->toArray());
+        $mockClient = $this->tester->mockClientForVertexApiCredentialResponseWithInvalidCredentials($vertexApiCredentialTransfer);
+        $vertexClient = $this->tester->getVertexClientWithMockedFactory($mockClient);
+
+        // Act
+        $vertexApiAccessTokenTransfer = $vertexClient->authenticate($vertexConfigTransfer);
+
+        // Assert
+        $this->assertEmpty($vertexApiAccessTokenTransfer->getAccessToken());
+        $this->assertStringContainsString('Invalid credentials.', $vertexApiAccessTokenTransfer->getErrors()[0]);
+    }
+}
