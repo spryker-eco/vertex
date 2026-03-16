@@ -194,6 +194,37 @@ protected function getResourceRoutePlugins(): array
 }
 ```
 
+### 7. Import Data
+
+The module provides pre-configured data import files for translations.
+
+**Option 1: Import Using Module's Configuration File**
+
+```bash
+docker/sdk cli vendor/bin/console data:import --config=vendor/spryker-eco/vertex/data/import/vertex.yml
+```
+
+**Option 2: Copy File Content and Import Individually**
+
+Copy file's content from `vendor/spryker-eco/vertex/data/import/*.csv` to the same files in your project `data/import/common/common/`. Then run:
+
+```bash
+docker/sdk cli vendor/bin/console data:import glossary
+```
+
+**Option 3: Add to Project's Main Import Configuration**
+
+Add the import actions to your project's main data import configuration file and include in your regular import pipeline.
+
+**Customize Translations**
+
+Before importing, you can customize the translation data:
+
+File: `vendor/spryker-eco/vertex/data/import/glossary.csv`
+
+- Customize translations for tax validation messages
+- Add additional locales
+
 ## Configuration Options
 
 ### Required Constants (`config/Shared/config_default.php`)
