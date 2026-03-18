@@ -24,7 +24,7 @@ use Spryker\Zed\TaxApp\Communication\Plugin\MessageBroker\TaxAppMessageHandlerPl
 new TaxAppMessageHandlerPlugin(),
 ```
 
-### 2b. Remove TaxApp Publisher Plugin
+### 2b. Remove TaxApp Publisher Plugin (if you're running a DMS project)
 
 File: `src/Pyz/Zed/Publisher/PublisherDependencyProvider.php`
 
