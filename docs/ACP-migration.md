@@ -2,7 +2,7 @@
 
 If migrating from the MessageBroker-based [TaxApp ACP](https://docs-archive.spryker.com/docs/pbc/all/tax-management/202507.0/base-shop/third-party-integrations/vertex/vertex) integration to the direct `spryker-eco/vertex` module:
 
-> **Note:** The tax calculation logic remains the same. The key difference is the delivery mechanism: ACP uses MessageBroker for asynchronous communication with an external TaxApp service, while the ECO module communicates directly with the Vertex API from your application.
+> **Note:** The tax calculation logic remains the same. This ECO module communicates directly with the Vertex API from your application.
 
 ## Step 1: Install and Integrate the Module
 
@@ -96,7 +96,7 @@ new OrderRefundedEventListenerPlugin(),
 new VertexOrderRefundedEventListenerPlugin(),
 ```
 
-### 2e. Replace TaxApp Glue API Plugin
+### 2e. Replace TaxApp Glue Storefront API Plugin
 
 File: `src/Pyz/Glue/GlueApplication/GlueApplicationDependencyProvider.php`
 
@@ -328,7 +328,7 @@ Add the import actions to your project's main data import configuration file and
 1. Clear caches: `vendor/bin/console cache:empty-all`
 2. Place a test order and verify tax calculation works
 3. If invoicing is enabled, verify the `Vertex/SubmitPaymentTaxInvoice` OMS command triggers correctly
-4. If tax ID validation is enabled, test the `POST /tax-id-validate` Glue API endpoint
+4. If tax ID validation is enabled, test the `POST /tax-id-validate` Glue Storefront API endpoint
 
 ## Summary of Changes
 
