@@ -24,6 +24,8 @@ use Spryker\Zed\TaxApp\Communication\Plugin\MessageBroker\TaxAppMessageHandlerPl
 new TaxAppMessageHandlerPlugin(),
 ```
 
+> **Note:** If TaxApp was the only ACP App using the MessageBroker, you can also disable the `message-broker-consume-channels` cronjob in `config/Zed/cronjobs/jenkins.php` and set `MessageBrokerConstants::IS_ENABLED` to `false` in `config/Shared/config_default.php` to stop unnecessary background processing.
+
 ### 2b. Remove TaxApp Publisher Plugin (if you're running a DMS project)
 
 File: `src/Pyz/Zed/Publisher/PublisherDependencyProvider.php`
