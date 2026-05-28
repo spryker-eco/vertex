@@ -17,33 +17,14 @@ use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Glue\Vertex\Api\Storefront\Exception\VertexExceptionFactory;
 use SprykerEco\Glue\Vertex\VertexConfig;
 
-/**
- * Handles `POST /tax-id-validate`. Mirrors legacy
- * {@see \SprykerEco\Glue\Vertex\Processor\Validator\TaxIdValidator::validate()}:
- * config-disabled → 400, missing taxId/countryCode → 422, then delegates to the Vertex client.
- * Translates error messages through the same glossary prefix scheme as the legacy validator so
- * the response body keeps BC.
- */
 class TaxIdValidateStorefrontProcessor extends AbstractStorefrontProcessor
 {
-    /**
-     * @var string
-     */
     protected const string GLOSSARY_SUFFIX_VERTEX = 'vertex';
 
-    /**
-     * @var string
-     */
     protected const string GLOSSARY_KEY_VERTEX_IS_DISABLED = 'vertex.tax-app-disabled';
 
-    /**
-     * @var string
-     */
     protected const string GLOSSARY_KEY_INVALID_REQUEST_DATA = 'vertex.invalid-request-data';
 
-    /**
-     * @var string
-     */
     protected const string MESSAGE_VERTEX_IS_DISABLED = 'Tax service is disabled.';
 
     public function __construct(
@@ -59,13 +40,9 @@ class TaxIdValidateStorefrontProcessor extends AbstractStorefrontProcessor
      */
     protected function processPost(mixed $data): TaxIdValidateStorefrontResource
     {
-        assert($data instanceof TaxIdValidateStorefrontResource);
-
         $locale = $this->getLocale()->getLocaleNameOrFail();
 
         if ($this->vertexConfig->getIsActive() === false) {
-            // Legacy `prepareRestErrorMessageTransfer` double-prefixes the glossary key — mirrored
-            // here for BC; the storage lookup misses and the default detail is returned.
             $detail = $this->translateGlossaryMessage(
                 static::MESSAGE_VERTEX_IS_DISABLED,
                 $locale,
@@ -95,18 +72,15 @@ class TaxIdValidateStorefrontProcessor extends AbstractStorefrontProcessor
             return $data;
         }
 
-        if ($vertexValidationResponseTransfer->getMessage()) {
-            // Same double-prefix as the legacy `prepareRestErrorMessageTransfer` for any
-            // `messageKey` returned by the Vertex client.
-            $messageKey = $vertexValidationResponseTransfer->getMessageKey()
-                ? sprintf('%s.%s', static::GLOSSARY_SUFFIX_VERTEX, $vertexValidationResponseTransfer->getMessageKey())
+        $message = $vertexValidationResponseTransfer->getMessage();
+
+        if ($message !== null && $message !== '') {
+            $rawMessageKey = $vertexValidationResponseTransfer->getMessageKey();
+            $messageKey = $rawMessageKey !== null && $rawMessageKey !== ''
+                ? sprintf('%s.%s', static::GLOSSARY_SUFFIX_VERTEX, $rawMessageKey)
                 : null;
 
-            $detail = $this->translateGlossaryMessage(
-                (string)$vertexValidationResponseTransfer->getMessage(),
-                $locale,
-                $messageKey,
-            );
+            $detail = $this->translateGlossaryMessage($message, $locale, $messageKey);
 
             throw $this->exceptionFactory->createValidationFailedException($detail);
         }
