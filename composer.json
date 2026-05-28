@@ -23,7 +23,7 @@
         "spryker/zed-request": "^3.4.0"
     },
     "require-dev": {
-        "slevomat/coding-standard": "~8.15.0",
+        "spryker/api-platform": "*",
         "spryker/calculation": "*",
         "spryker/code-sniffer": "*",
         "spryker/container": "*",
@@ -33,6 +33,9 @@
         "spryker/oms": "*",
         "spryker/propel": "*",
         "spryker/testify": "*"
+    },
+    "conflict": {
+        "slevomat/coding-standard": ">=8.16.0"
     },
     "suggest": {
         "spryker/api-platform": "Required to expose API Platform resources.",
