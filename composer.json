@@ -23,6 +23,7 @@
         "spryker/zed-request": "^3.4.0"
     },
     "require-dev": {
+        "spryker/api-platform": "*",
         "spryker/calculation": "*",
         "spryker/code-sniffer": "*",
         "spryker/container": "*",
@@ -33,7 +34,11 @@
         "spryker/propel": "*",
         "spryker/testify": "*"
     },
+    "conflict": {
+        "slevomat/coding-standard": ">=8.16.0"
+    },
     "suggest": {
+        "spryker/api-platform": "Required to expose API Platform resources.",
         "spryker/calculation": "If you want to use Calculation plugin.",
         "spryker/oms": "If you want to use VertexSubmitPaymentTaxInvoicePlugin"
     },
