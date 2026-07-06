@@ -267,8 +267,6 @@ class VertexConfig extends AbstractBundleConfig
      * - Returns empty string if not configured.
      *
      * @api
-     *
-     * @return string
      */
     public function getDefaultTaxpayerCompanyCode(): string
     {
@@ -285,8 +283,6 @@ class VertexConfig extends AbstractBundleConfig
      * - Returns "spryker" (default Spryker tax calculation) by default.
      *
      * @api
-     *
-     * @return string
      */
     public function getTaxProvider(): string
     {
