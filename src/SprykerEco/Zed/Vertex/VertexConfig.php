@@ -12,6 +12,9 @@ namespace SprykerEco\Zed\Vertex;
 use Spryker\Zed\Kernel\AbstractBundleConfig;
 use SprykerEco\Shared\Vertex\VertexConstants;
 
+/**
+ * @method \SprykerEco\Shared\Vertex\VertexConfig getSharedConfig()
+ */
 class VertexConfig extends AbstractBundleConfig
 {
     public const MESSAGE_VERTEX_IS_DISABLED = 'Tax service is disabled.';
@@ -35,12 +38,6 @@ class VertexConfig extends AbstractBundleConfig
     protected const string CONFIGURATION_KEY_IS_INVOICING_ENABLED = 'integrations:vertex:invoicing:is_invoicing_enabled';
 
     protected const string CONFIGURATION_KEY_IS_TAX_ASSIST_ENABLED = 'integrations:vertex:tax_assist:is_tax_assist_enabled';
-
-    protected const string CONFIGURATION_KEY_TAX_PROVIDER = 'taxes:tax_provider:provider:tax_provider';
-
-    protected const string TAX_PROVIDER_SPRYKER = 'spryker';
-
-    protected const string TAX_PROVIDER_VERTEX = 'vertex';
 
     /**
      * Specification:
@@ -142,7 +139,7 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function isActive(): bool
     {
-        return $this->getTaxProvider() === static::TAX_PROVIDER_VERTEX
+        return $this->getTaxProvider() === $this->getSharedConfig()::TAX_PROVIDER_VERTEX
             || (bool)$this->get(VertexConstants::IS_ACTIVE, false);
     }
 
@@ -248,6 +245,9 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getTaxProvider(): string
     {
-        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_TAX_PROVIDER, static::TAX_PROVIDER_SPRYKER);
+        return (string)$this->getModuleConfig(
+            $this->getSharedConfig()::CONFIGURATION_KEY_TAX_PROVIDER,
+            $this->getSharedConfig()::TAX_PROVIDER_SPRYKER,
+        );
     }
 }

@@ -10,16 +10,12 @@ declare(strict_types = 1);
 namespace SprykerEco\Glue\Vertex;
 
 use Spryker\Glue\Kernel\AbstractBundleConfig;
-use SprykerEco\Shared\Vertex\VertexConstants;
 
+/**
+ * @method \SprykerEco\Shared\Vertex\VertexConfig getSharedConfig()
+ */
 class VertexConfig extends AbstractBundleConfig
 {
-    protected const string CONFIGURATION_KEY_TAX_PROVIDER = 'taxes:tax_provider:provider:tax_provider';
-
-    protected const string TAX_PROVIDER_VERTEX = 'vertex';
-
-    protected const string TAX_PROVIDER_SPRYKER = 'spryker';
-
     /**
      * Specification:
      * - Resource type identifier for the tax ID validation REST API endpoint.
@@ -60,7 +56,12 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getIsActive(): bool
     {
-        return $this->getModuleConfig(static::CONFIGURATION_KEY_TAX_PROVIDER, static::TAX_PROVIDER_SPRYKER) === static::TAX_PROVIDER_VERTEX
-            || (bool)$this->get(VertexConstants::IS_ACTIVE, false);
+        $vertexSharedConfig = $this->getSharedConfig();
+
+        return $this->getModuleConfig(
+            $vertexSharedConfig::CONFIGURATION_KEY_TAX_PROVIDER,
+            $vertexSharedConfig::TAX_PROVIDER_SPRYKER,
+        ) === $vertexSharedConfig::TAX_PROVIDER_VERTEX
+            || $this->getSharedConfig()->getIsActive();
     }
 }
