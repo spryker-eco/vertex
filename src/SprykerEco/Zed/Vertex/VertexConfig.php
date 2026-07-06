@@ -19,24 +19,84 @@ class VertexConfig extends AbstractBundleConfig
 {
     public const MESSAGE_VERTEX_IS_DISABLED = 'Tax service is disabled.';
 
+    /**
+     * Specification:
+     * - Back Office Configuration key of the Vertex security URI under Integrations > Vertex.
+     *
+     * @api
+     */
     protected const string CONFIGURATION_KEY_SECURITY_URI = 'integrations:vertex:configurations:security_uri';
 
+    /**
+     * Specification:
+     * - Back Office Configuration key of the Vertex transaction calls URI under Integrations > Vertex.
+     *
+     * @api
+     */
     protected const string CONFIGURATION_KEY_TRANSACTION_CALLS_URI = 'integrations:vertex:configurations:transaction_calls_uri';
 
+    /**
+     * Specification:
+     * - Back Office Configuration key of the Vertex OAuth client ID under Integrations > Vertex.
+     *
+     * @api
+     */
     protected const string CONFIGURATION_KEY_CLIENT_ID = 'integrations:vertex:configurations:client_id';
 
+    /**
+     * Specification:
+     * - Back Office Configuration key of the Vertex OAuth client secret under Integrations > Vertex.
+     *
+     * @api
+     */
     protected const string CONFIGURATION_KEY_CLIENT_SECRET = 'integrations:vertex:configurations:client_secret';
 
+    /**
+     * Specification:
+     * - Back Office Configuration key of the default taxpayer company code under Integrations > Vertex.
+     *
+     * @api
+     */
     protected const string CONFIGURATION_KEY_DEFAULT_TAXPAYER_COMPANY_CODE = 'integrations:vertex:configurations:default_taxpayer_company_code';
 
+    /**
+     * Specification:
+     * - Back Office Configuration key toggling the Taxamo tax ID validator under Integrations > Vertex.
+     *
+     * @api
+     */
     protected const string CONFIGURATION_KEY_IS_TAX_ID_VALIDATOR_ENABLED = 'integrations:vertex:taxamo:is_tax_id_validator_enabled';
 
+    /**
+     * Specification:
+     * - Back Office Configuration key of the Taxamo API URL under Integrations > Vertex.
+     *
+     * @api
+     */
     protected const string CONFIGURATION_KEY_TAXAMO_API_URL = 'integrations:vertex:taxamo:taxamo_api_url';
 
+    /**
+     * Specification:
+     * - Back Office Configuration key of the Taxamo API token under Integrations > Vertex.
+     *
+     * @api
+     */
     protected const string CONFIGURATION_KEY_TAXAMO_TOKEN = 'integrations:vertex:taxamo:taxamo_token';
 
+    /**
+     * Specification:
+     * - Back Office Configuration key toggling invoice save in Vertex under Integrations > Vertex.
+     *
+     * @api
+     */
     protected const string CONFIGURATION_KEY_IS_INVOICING_ENABLED = 'integrations:vertex:invoicing:is_invoicing_enabled';
 
+    /**
+     * Specification:
+     * - Back Office Configuration key toggling Tax Assist in Vertex under Integrations > Vertex.
+     *
+     * @api
+     */
     protected const string CONFIGURATION_KEY_IS_TAX_ASSIST_ENABLED = 'integrations:vertex:tax_assist:is_tax_assist_enabled';
 
     /**
