@@ -16,137 +16,141 @@ class VertexConfig extends AbstractBundleConfig
 {
     public const MESSAGE_VERTEX_IS_DISABLED = 'Tax service is disabled.';
 
+    protected const string CONFIGURATION_KEY_SECURITY_URI = 'integrations:vertex:configurations:security_uri';
+
+    protected const string CONFIGURATION_KEY_TRANSACTION_CALLS_URI = 'integrations:vertex:configurations:transaction_calls_uri';
+
+    protected const string CONFIGURATION_KEY_CLIENT_ID = 'integrations:vertex:configurations:client_id';
+
+    protected const string CONFIGURATION_KEY_CLIENT_SECRET = 'integrations:vertex:configurations:client_secret';
+
+    protected const string CONFIGURATION_KEY_DEFAULT_TAXPAYER_COMPANY_CODE = 'integrations:vertex:configurations:default_taxpayer_company_code';
+
+    protected const string CONFIGURATION_KEY_IS_TAX_ID_VALIDATOR_ENABLED = 'integrations:vertex:taxamo:is_tax_id_validator_enabled';
+
+    protected const string CONFIGURATION_KEY_TAXAMO_API_URL = 'integrations:vertex:taxamo:taxamo_api_url';
+
+    protected const string CONFIGURATION_KEY_TAXAMO_TOKEN = 'integrations:vertex:taxamo:taxamo_token';
+
+    protected const string CONFIGURATION_KEY_IS_INVOICING_ENABLED = 'integrations:vertex:invoicing:is_invoicing_enabled';
+
+    protected const string CONFIGURATION_KEY_IS_TAX_ASSIST_ENABLED = 'integrations:vertex:tax_assist:is_tax_assist_enabled';
+
+    protected const string CONFIGURATION_KEY_TAX_PROVIDER = 'taxes:tax_provider:provider:tax_provider';
+
+    protected const string TAX_PROVIDER_SPRYKER = 'spryker';
+
+    protected const string TAX_PROVIDER_VERTEX = 'vertex';
+
     /**
      * Specification:
      * - Returns the OAuth client ID for Vertex API authentication.
-     * - Retrieved from configuration using VertexConstants::CLIENT_ID.
-     * - Returns empty string if not configured.
+     * - Managed via Back Office Configuration under Integrations > Vertex.
      *
      * @api
-     *
-     * @return string
      */
     public function getClientId(): string
     {
-        return $this->get(VertexConstants::CLIENT_ID, '');
+        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_CLIENT_ID, '');
     }
 
     /**
      * Specification:
      * - Returns the OAuth client secret for Vertex API authentication.
-     * - Retrieved from configuration using VertexConstants::CLIENT_SECRET.
-     * - Returns empty string if not configured.
+     * - Managed via Back Office Configuration under Integrations > Vertex.
      *
      * @api
-     *
-     * @return string
      */
     public function getClientSecret(): string
     {
-        return $this->get(VertexConstants::CLIENT_SECRET, '');
+        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_CLIENT_SECRET, '');
     }
 
     /**
      * Specification:
      * - Returns the security URI endpoint for Vertex API OAuth authentication.
-     * - Retrieved from configuration using VertexConstants::SECURITY_URI.
-     * - Returns empty string if not configured.
+     * - Managed via Back Office Configuration under Integrations > Vertex.
      *
      * @api
-     *
-     * @return string
      */
     public function getSecurityUri(): string
     {
-        return $this->get(VertexConstants::SECURITY_URI, '');
+        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_SECURITY_URI, '');
     }
 
     /**
      * Specification:
      * - Returns the transaction calls URI endpoint for Vertex API tax calculations.
-     * - Retrieved from configuration using VertexConstants::TRANSACTION_CALLS_URI.
-     * - Returns empty string if not configured.
+     * - Managed via Back Office Configuration under Integrations > Vertex.
      *
      * @api
-     *
-     * @return string
      */
     public function getTransactionCallsUri(): string
     {
-        return $this->get(VertexConstants::TRANSACTION_CALLS_URI, '');
+        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_TRANSACTION_CALLS_URI, '');
     }
 
     /**
      * Specification:
      * - Returns the Taxamo API URL for tax ID validation.
-     * - Retrieved from configuration using VertexConstants::TAXAMO_API_URL.
-     * - Returns empty string if not configured.
+     * - Managed via Back Office Configuration under Integrations > Vertex.
      *
      * @api
-     *
-     * @return string
      */
     public function getTaxamoApiUrl(): string
     {
-        return $this->get(VertexConstants::TAXAMO_API_URL, '');
+        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_TAXAMO_API_URL, '');
     }
 
     /**
      * Specification:
      * - Returns the Taxamo API token for authentication.
-     * - Retrieved from configuration using VertexConstants::TAXAMO_TOKEN.
-     * - Returns empty string if not configured.
+     * - Managed via Back Office Configuration under Integrations > Vertex.
      *
      * @api
-     *
-     * @return string
      */
     public function getTaxamoToken(): string
     {
-        return $this->get(VertexConstants::TAXAMO_TOKEN, '');
+        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_TAXAMO_TOKEN, '');
     }
 
     /**
      * Specification:
      * - Returns whether Vertex tax calculation is active.
-     * - Retrieved from configuration using VertexConstants::IS_ACTIVE.
+     * - Managed via Back Office Configuration under Integrations > Vertex.
      * - Returns false by default if not configured.
      *
      * @api
-     *
-     * @return bool
      */
     public function isActive(): bool
     {
-        return (bool)$this->get(VertexConstants::IS_ACTIVE, false);
+        return $this->getTaxProvider() === static::TAX_PROVIDER_VERTEX;
     }
 
     /**
      * Specification:
      * - Returns whether the tax ID validator feature is enabled.
+     * - Managed via Back Office Configuration under Integrations > Vertex.
      * - Returns false by default if not configured.
      *
      * @api
-     *
-     * @return bool
      */
     public function isTaxIdValidatorEnabled(): bool
     {
-        return false;
+        return (bool)$this->getModuleConfig(static::CONFIGURATION_KEY_IS_TAX_ID_VALIDATOR_ENABLED, false);
     }
 
     /**
      * Specification:
      * - Returns whether the tax assist feature is enabled.
+     * - Managed via Back Office Configuration under Integrations > Vertex.
      * - Returns false by default if not configured.
      *
      * @api
-     *
-     * @return bool
      */
     public function isTaxAssistEnabled(): bool
     {
-        return false;
+        return (bool)$this->getModuleConfig(static::CONFIGURATION_KEY_IS_TAX_ASSIST_ENABLED, false);
     }
 
     /**
@@ -155,8 +159,6 @@ class VertexConfig extends AbstractBundleConfig
      * - Overrides the default value (the first country of the store defined in the Quote/Order).
      *
      * @api
-     *
-     * @return string
      */
     public function getSellerCountryCode(): string
     {
@@ -170,8 +172,6 @@ class VertexConfig extends AbstractBundleConfig
      * - Overrides the default value (the first country of the store defined in the Quote/Order).
      *
      * @api
-     *
-     * @return string
      */
     public function getCustomerCountryCode(): string
     {
@@ -181,15 +181,14 @@ class VertexConfig extends AbstractBundleConfig
     /**
      * Specification:
      * - Returns whether invoicing feature is enabled for Vertex.
+     * - Managed via Back Office Configuration under Integrations > Vertex.
      * - Returns false by default if not configured.
      *
      * @api
-     *
-     * @return bool
      */
     public function isInvoicingEnabled(): bool
     {
-        return false;
+        return (bool)$this->getModuleConfig(static::CONFIGURATION_KEY_IS_INVOICING_ENABLED, false);
     }
 
     /**
@@ -199,16 +198,34 @@ class VertexConfig extends AbstractBundleConfig
      * - Returns empty string by default if not configured.
      *
      * @api
-     *
-     * @return string
      */
     public function getVendorCode(): string
     {
         return $this->get(VertexConstants::VENDOR_CODE, '');
     }
 
+    /**
+     * Specification:
+     * - Returns the default taxpayer company code identifying the organization in Vertex.
+     * - Managed via Back Office Configuration under Integrations > Vertex.
+     *
+     * @api
+     */
     public function getDefaultTaxpayerCompanyCode(): string
     {
-        return $this->get(VertexConstants::DEFAULT_TAXPAYER_COMPANY_CODE, '');
+        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_DEFAULT_TAXPAYER_COMPANY_CODE, '');
+    }
+
+    /**
+     * Specification:
+     * - Returns the selected tax provider used for tax calculation.
+     * - Managed via Back Office Configuration under Taxes > Tax Provider.
+     * - Returns "spryker" (default Spryker tax calculation) by default.
+     *
+     * @api
+     */
+    public function getTaxProvider(): string
+    {
+        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_TAX_PROVIDER, static::TAX_PROVIDER_SPRYKER);
     }
 }
