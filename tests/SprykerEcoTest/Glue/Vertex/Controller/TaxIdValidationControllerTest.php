@@ -21,7 +21,6 @@ use Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Glue\Vertex\Controller\TaxIdValidationController;
 use SprykerEco\Glue\Vertex\VertexDependencyProvider;
-use SprykerEco\Shared\Vertex\VertexConstants;
 use SprykerEcoTest\Glue\Vertex\VertexTester;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -78,7 +77,7 @@ class TaxIdValidationControllerTest extends Unit
     public function testPostrequestTaxIdValidationWhenRequestIsValidReturnsSuccessfulResponse(): void
     {
         // Arrange
-        $this->tester->setConfig(VertexConstants::IS_ACTIVE, true);
+        $this->tester->mockConfigMethod('getIsActive', true);
 
         $restVertexValidationAttributesTransfer = $this->tester->createRestVertexValidationAttributesTransfer();
 
@@ -113,7 +112,7 @@ class TaxIdValidationControllerTest extends Unit
     public function testGivenAMalformedRequestWhenTheTaxIdValidationApiIsCalledThenTheErrorMessageIsReturnedInTheResponse(): void
     {
         // Arrange
-        $this->tester->setConfig(VertexConstants::IS_ACTIVE, true);
+        $this->tester->mockConfigMethod('getIsActive', true);
 
         $restVertexValidationAttributesTransfer = (new RestVertexValidationAttributesTransfer())->setTaxId('test')->setCountryCode('DE');
 
@@ -157,7 +156,7 @@ class TaxIdValidationControllerTest extends Unit
         string $expectedMessage,
     ): void {
         // Arrange
-        $this->tester->setConfig(VertexConstants::IS_ACTIVE, true);
+        $this->tester->mockConfigMethod('getIsActive', true);
 
         $vertexClientMock = $this->getMockBuilder(VertexClientInterface::class)->getMock();
         $glossaryStorageClientMock = $this->getMockBuilder(GlossaryStorageClientInterface::class)->getMock();

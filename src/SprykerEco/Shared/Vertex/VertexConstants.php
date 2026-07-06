@@ -20,6 +20,8 @@ interface VertexConstants
      *
      * @api
      *
+     * @deprecated Use the Back Office Configuration under "Integrations > Vertex" instead.
+     *
      * @var string
      */
     public const CLIENT_ID = 'VERTEX:CLIENT_ID';
@@ -29,6 +31,8 @@ interface VertexConstants
      * - Secret key of the Vertex application.
      *
      * @api
+     *
+     * @deprecated Use the Back Office Configuration under "Integrations > Vertex" instead.
      *
      * @var string
      */
@@ -40,6 +44,8 @@ interface VertexConstants
      *
      * @api
      *
+     * @deprecated Use the Back Office Configuration under "Integrations > Vertex" instead.
+     *
      * @var string
      */
     public const SECURITY_URI = 'VERTEX:SECURITY_URI';
@@ -49,6 +55,8 @@ interface VertexConstants
      * - The transactions URI of the Vertex application.
      *
      * @api
+     *
+     * @deprecated Use the Back Office Configuration under "Integrations > Vertex" instead.
      *
      * @var string
      */
@@ -60,6 +68,8 @@ interface VertexConstants
      *
      * @api
      *
+     * @deprecated Use the Back Office Configuration "Taxes > Tax Provider" switch instead.
+     *
      * @var string
      */
     public const IS_ACTIVE = 'VERTEX:IS_ACTIVE';
@@ -70,6 +80,8 @@ interface VertexConstants
      *
      * @api
      *
+     * @deprecated Use the Back Office Configuration under "Integrations > Vertex" instead.
+     *
      * @var string
      */
     public const TAXAMO_API_URL = 'VERTEX:TAXAMO_API_URL';
@@ -79,6 +91,8 @@ interface VertexConstants
      * - The Vertex Taxamo API token for tax calculation.
      *
      * @api
+     *
+     * @deprecated Use the Back Office Configuration under "Integrations > Vertex" instead.
      *
      * @var string
      */
@@ -99,6 +113,8 @@ interface VertexConstants
      * - Default taxpayer company code.
      *
      * @api
+     *
+     * @deprecated Use the Back Office Configuration under "Integrations > Vertex" instead.
      *
      * @var string
      */
