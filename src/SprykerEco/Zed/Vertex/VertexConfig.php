@@ -227,7 +227,7 @@ class VertexConfig extends AbstractBundleConfig
     public function isActive(): bool
     {
         return $this->getTaxProvider() === $this->getSharedConfig()::TAX_PROVIDER_VERTEX
-            || (bool)$this->get(VertexConstants::IS_ACTIVE, false);
+            || $this->get(VertexConstants::IS_ACTIVE, false);
     }
 
     /**
