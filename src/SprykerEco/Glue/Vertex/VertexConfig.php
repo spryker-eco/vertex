@@ -10,6 +10,7 @@ declare(strict_types = 1);
 namespace SprykerEco\Glue\Vertex;
 
 use Spryker\Glue\Kernel\AbstractBundleConfig;
+use SprykerEco\Shared\Vertex\VertexConstants;
 
 class VertexConfig extends AbstractBundleConfig
 {
@@ -59,6 +60,7 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getIsActive(): bool
     {
-        return $this->getModuleConfig(static::CONFIGURATION_KEY_TAX_PROVIDER, static::TAX_PROVIDER_SPRYKER) === static::TAX_PROVIDER_VERTEX;
+        return $this->getModuleConfig(static::CONFIGURATION_KEY_TAX_PROVIDER, static::TAX_PROVIDER_SPRYKER) === static::TAX_PROVIDER_VERTEX
+            || (bool)$this->get(VertexConstants::IS_ACTIVE, false);
     }
 }

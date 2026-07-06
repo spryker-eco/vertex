@@ -51,7 +51,10 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getClientId(): string
     {
-        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_CLIENT_ID, '');
+        return (string)$this->getModuleConfig(
+            static::CONFIGURATION_KEY_CLIENT_ID,
+            $this->get(VertexConstants::CLIENT_ID, ''),
+        );
     }
 
     /**
@@ -63,7 +66,10 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getClientSecret(): string
     {
-        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_CLIENT_SECRET, '');
+        return (string)$this->getModuleConfig(
+            static::CONFIGURATION_KEY_CLIENT_SECRET,
+            $this->get(VertexConstants::CLIENT_SECRET, ''),
+        );
     }
 
     /**
@@ -75,7 +81,10 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getSecurityUri(): string
     {
-        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_SECURITY_URI, '');
+        return (string)$this->getModuleConfig(
+            static::CONFIGURATION_KEY_SECURITY_URI,
+            $this->get(VertexConstants::SECURITY_URI, ''),
+        );
     }
 
     /**
@@ -87,7 +96,10 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getTransactionCallsUri(): string
     {
-        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_TRANSACTION_CALLS_URI, '');
+        return (string)$this->getModuleConfig(
+            static::CONFIGURATION_KEY_TRANSACTION_CALLS_URI,
+            $this->get(VertexConstants::TRANSACTION_CALLS_URI, ''),
+        );
     }
 
     /**
@@ -99,7 +111,10 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getTaxamoApiUrl(): string
     {
-        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_TAXAMO_API_URL, '');
+        return (string)$this->getModuleConfig(
+            static::CONFIGURATION_KEY_TAXAMO_API_URL,
+            $this->get(VertexConstants::TAXAMO_API_URL, ''),
+        );
     }
 
     /**
@@ -111,7 +126,10 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getTaxamoToken(): string
     {
-        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_TAXAMO_TOKEN, '');
+        return (string)$this->getModuleConfig(
+            static::CONFIGURATION_KEY_TAXAMO_TOKEN,
+            $this->get(VertexConstants::TAXAMO_TOKEN, ''),
+        );
     }
 
     /**
@@ -124,7 +142,8 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function isActive(): bool
     {
-        return $this->getTaxProvider() === static::TAX_PROVIDER_VERTEX;
+        return $this->getTaxProvider() === static::TAX_PROVIDER_VERTEX
+            || (bool)$this->get(VertexConstants::IS_ACTIVE, false);
     }
 
     /**
@@ -213,7 +232,10 @@ class VertexConfig extends AbstractBundleConfig
      */
     public function getDefaultTaxpayerCompanyCode(): string
     {
-        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_DEFAULT_TAXPAYER_COMPANY_CODE, '');
+        return (string)$this->getModuleConfig(
+            static::CONFIGURATION_KEY_DEFAULT_TAXPAYER_COMPANY_CODE,
+            $this->get(VertexConstants::DEFAULT_TAXPAYER_COMPANY_CODE, ''),
+        );
     }
 
     /**

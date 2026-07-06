@@ -19,8 +19,6 @@ class VertexConfig extends AbstractSharedConfig
      *
      * @api
      *
-     * @deprecated Use the Back Office Configuration "Taxes > Tax Provider" switch instead, read via the layer-specific VertexConfig (Zed VertexConfig::isActive() / Glue VertexConfig::getIsActive()).
-     *
      * @return bool
      */
     public function getIsActive(): bool
