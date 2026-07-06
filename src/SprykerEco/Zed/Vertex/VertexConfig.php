@@ -61,14 +61,6 @@ class VertexConfig extends AbstractBundleConfig
 
     /**
      * Specification:
-     * - Back Office Configuration key toggling the Taxamo tax ID validator under Integrations > Vertex.
-     *
-     * @api
-     */
-    protected const string CONFIGURATION_KEY_IS_TAX_ID_VALIDATOR_ENABLED = 'integrations:vertex:taxamo:is_tax_id_validator_enabled';
-
-    /**
-     * Specification:
      * - Back Office Configuration key of the Taxamo API URL under Integrations > Vertex.
      *
      * @api
@@ -233,16 +225,13 @@ class VertexConfig extends AbstractBundleConfig
     /**
      * Specification:
      * - Returns whether the tax ID validator feature is enabled.
-     * - Managed via Back Office Configuration under Integrations > Vertex.
      * - Returns false by default if not configured.
      *
      * @api
-     *
-     * @return bool
      */
     public function isTaxIdValidatorEnabled(): bool
     {
-        return (bool)$this->getModuleConfig(static::CONFIGURATION_KEY_IS_TAX_ID_VALIDATOR_ENABLED, false);
+        return false;
     }
 
     /**
