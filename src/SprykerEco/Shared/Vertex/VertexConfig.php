@@ -53,6 +53,6 @@ class VertexConfig extends AbstractSharedConfig
      */
     public function getIsActive(): bool
     {
-        return (bool)$this->get(VertexConstants::IS_ACTIVE, false);
+        return $this->get(VertexConstants::IS_ACTIVE, false);
     }
 }

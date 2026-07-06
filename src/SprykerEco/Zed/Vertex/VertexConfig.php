@@ -43,8 +43,12 @@ class VertexConfig extends AbstractBundleConfig
      * Specification:
      * - Returns the OAuth client ID for Vertex API authentication.
      * - Managed via Back Office Configuration under Integrations > Vertex.
+     * - Retrieved from configuration using VertexConstants::CLIENT_ID.
+     * - Returns empty string if not configured.
      *
      * @api
+     *
+     * @return string
      */
     public function getClientId(): string
     {
@@ -58,8 +62,12 @@ class VertexConfig extends AbstractBundleConfig
      * Specification:
      * - Returns the OAuth client secret for Vertex API authentication.
      * - Managed via Back Office Configuration under Integrations > Vertex.
+     * - Retrieved from configuration using VertexConstants::CLIENT_SECRET.
+     * - Returns empty string if not configured.
      *
      * @api
+     *
+     * @return string
      */
     public function getClientSecret(): string
     {
@@ -73,8 +81,12 @@ class VertexConfig extends AbstractBundleConfig
      * Specification:
      * - Returns the security URI endpoint for Vertex API OAuth authentication.
      * - Managed via Back Office Configuration under Integrations > Vertex.
+     * - Retrieved from configuration using VertexConstants::SECURITY_URI.
+     * - Returns empty string if not configured.
      *
      * @api
+     *
+     * @return string
      */
     public function getSecurityUri(): string
     {
@@ -88,8 +100,12 @@ class VertexConfig extends AbstractBundleConfig
      * Specification:
      * - Returns the transaction calls URI endpoint for Vertex API tax calculations.
      * - Managed via Back Office Configuration under Integrations > Vertex.
+     * - Retrieved from configuration using VertexConstants::TRANSACTION_CALLS_URI.
+     * - Returns empty string if not configured.
      *
      * @api
+     *
+     * @return string
      */
     public function getTransactionCallsUri(): string
     {
@@ -103,8 +119,12 @@ class VertexConfig extends AbstractBundleConfig
      * Specification:
      * - Returns the Taxamo API URL for tax ID validation.
      * - Managed via Back Office Configuration under Integrations > Vertex.
+     * - Retrieved from configuration using VertexConstants::TAXAMO_API_URL.
+     * - Returns empty string if not configured.
      *
      * @api
+     *
+     * @return string
      */
     public function getTaxamoApiUrl(): string
     {
@@ -118,8 +138,12 @@ class VertexConfig extends AbstractBundleConfig
      * Specification:
      * - Returns the Taxamo API token for authentication.
      * - Managed via Back Office Configuration under Integrations > Vertex.
+     * - Retrieved from configuration using VertexConstants::TAXAMO_TOKEN.
+     * - Returns empty string if not configured.
      *
      * @api
+     *
+     * @return string
      */
     public function getTaxamoToken(): string
     {
@@ -132,10 +156,13 @@ class VertexConfig extends AbstractBundleConfig
     /**
      * Specification:
      * - Returns whether Vertex tax calculation is active.
-     * - Managed via Back Office Configuration under Integrations > Vertex.
+     * - Managed via Back Office Configuration under Taxes > Tax Provider.
+     * - Retrieved from configuration using VertexConstants::IS_ACTIVE.
      * - Returns false by default if not configured.
      *
      * @api
+     *
+     * @return bool
      */
     public function isActive(): bool
     {
@@ -150,6 +177,8 @@ class VertexConfig extends AbstractBundleConfig
      * - Returns false by default if not configured.
      *
      * @api
+     *
+     * @return bool
      */
     public function isTaxIdValidatorEnabled(): bool
     {
@@ -163,6 +192,8 @@ class VertexConfig extends AbstractBundleConfig
      * - Returns false by default if not configured.
      *
      * @api
+     *
+     * @return bool
      */
     public function isTaxAssistEnabled(): bool
     {
@@ -175,6 +206,8 @@ class VertexConfig extends AbstractBundleConfig
      * - Overrides the default value (the first country of the store defined in the Quote/Order).
      *
      * @api
+     *
+     * @return string
      */
     public function getSellerCountryCode(): string
     {
@@ -188,6 +221,8 @@ class VertexConfig extends AbstractBundleConfig
      * - Overrides the default value (the first country of the store defined in the Quote/Order).
      *
      * @api
+     *
+     * @return string
      */
     public function getCustomerCountryCode(): string
     {
@@ -201,6 +236,8 @@ class VertexConfig extends AbstractBundleConfig
      * - Returns false by default if not configured.
      *
      * @api
+     *
+     * @return bool
      */
     public function isInvoicingEnabled(): bool
     {
@@ -214,6 +251,8 @@ class VertexConfig extends AbstractBundleConfig
      * - Returns empty string by default if not configured.
      *
      * @api
+     *
+     * @return string
      */
     public function getVendorCode(): string
     {
@@ -224,8 +263,12 @@ class VertexConfig extends AbstractBundleConfig
      * Specification:
      * - Returns the default taxpayer company code identifying the organization in Vertex.
      * - Managed via Back Office Configuration under Integrations > Vertex.
+     * - Retrieved from configuration using VertexConstants::DEFAULT_TAXPAYER_COMPANY_CODE.
+     * - Returns empty string if not configured.
      *
      * @api
+     *
+     * @return string
      */
     public function getDefaultTaxpayerCompanyCode(): string
     {
@@ -242,6 +285,8 @@ class VertexConfig extends AbstractBundleConfig
      * - Returns "spryker" (default Spryker tax calculation) by default.
      *
      * @api
+     *
+     * @return string
      */
     public function getTaxProvider(): string
     {
