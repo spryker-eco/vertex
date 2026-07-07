@@ -19,6 +19,7 @@ features:
                   order: 1
                   scopes:
                       - global
+                      - store
                   settings:
                       - key: security_uri
                         name: Security URI
@@ -32,6 +33,7 @@ features:
                         default_value: ''
                         scopes:
                             - global
+                            - store
                         constraints:
                             - type: required
                               message: Security URI is required.
@@ -49,6 +51,7 @@ features:
                         default_value: ''
                         scopes:
                             - global
+                            - store
                         constraints:
                             - type: required
                               message: Transaction calls URI is required.
@@ -66,6 +69,7 @@ features:
                         default_value: ''
                         scopes:
                             - global
+                            - store
                         constraints:
                             - type: required
                               message: Client ID is required.
@@ -81,6 +85,7 @@ features:
                         default_value: ''
                         scopes:
                             - global
+                            - store
                         constraints:
                             - type: required
                               message: Client secret is required.
@@ -96,6 +101,7 @@ features:
                         default_value: ''
                         scopes:
                             - global
+                            - store
 
                 - key: taxamo
                   name: Tax ID validation (Taxamo)
@@ -104,6 +110,7 @@ features:
                   order: 2
                   scopes:
                       - global
+                      - store
                   settings:
                       - key: taxamo_api_url
                         name: Vertex Validator (Taxamo) API URL
@@ -118,6 +125,7 @@ features:
                         default_value: ''
                         scopes:
                             - global
+                            - store
                       - key: taxamo_token
                         name: Taxamo token
                         description: The Taxamo API token used for authentication.
@@ -131,6 +139,7 @@ features:
                         default_value: ''
                         scopes:
                             - global
+                            - store
 
                 - key: invoicing
                   name: Invoicing
@@ -138,6 +147,7 @@ features:
                   order: 3
                   scopes:
                       - global
+                      - store
                   settings:
                       - key: is_invoicing_enabled
                         name: Enable Invoice Save in Vertex
@@ -150,6 +160,7 @@ features:
                         default_value: false
                         scopes:
                             - global
+                            - store
 
                 - key: tax_assist
                   name: Tax Assist
@@ -157,6 +168,7 @@ features:
                   order: 4
                   scopes:
                       - global
+                      - store
                   settings:
                       - key: is_tax_assist_enabled
                         name: Enable Tax Assist in Vertex
@@ -169,6 +181,7 @@ features:
                         default_value: false
                         scopes:
                             - global
+                            - store
 
     - key: taxes
       name: Taxes
@@ -189,6 +202,7 @@ features:
                   order: 0
                   scopes:
                       - global
+                      - store
                   settings:
                       - key: tax_provider
                         name: Tax provider
@@ -201,6 +215,7 @@ features:
                         default_value: spryker
                         scopes:
                             - global
+                            - store
                         options:
                             - value: spryker
                               label: Default (Spryker)
