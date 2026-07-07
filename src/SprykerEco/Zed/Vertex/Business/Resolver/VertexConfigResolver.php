@@ -9,10 +9,12 @@ declare(strict_types = 1);
 
 namespace SprykerEco\Zed\Vertex\Business\Resolver;
 
+use Generated\Shared\Transfer\ConfigurationScopeTransfer;
 use Generated\Shared\Transfer\VertexConfigTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
 use InvalidArgumentException;
 use Spryker\Shared\Log\LoggerTrait;
+use Spryker\Shared\Store\StoreConstants;
 use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerEco\Zed\Vertex\Business\Validator\VertexConfigValidatorInterface;
 use SprykerEco\Zed\Vertex\VertexConfig;
@@ -30,20 +32,22 @@ class VertexConfigResolver implements VertexConfigResolverInterface
 
     public function resolve(): VertexConfigTransfer
     {
+        $configurationScopeTransfers = $this->createConfigurationScopeTransfers();
+
         $vertexConfigTransfer = (new VertexConfigTransfer())
-            ->setClientId($this->vertexConfig->getClientId())
-            ->setClientSecret($this->vertexConfig->getClientSecret())
-            ->setSecurityUri($this->vertexConfig->getSecurityUri())
-            ->setTransactionCallsUri($this->vertexConfig->getTransactionCallsUri())
-            ->setIsActive($this->vertexConfig->isActive())
+            ->setClientId($this->vertexConfig->getClientId($configurationScopeTransfers))
+            ->setClientSecret($this->vertexConfig->getClientSecret($configurationScopeTransfers))
+            ->setSecurityUri($this->vertexConfig->getSecurityUri($configurationScopeTransfers))
+            ->setTransactionCallsUri($this->vertexConfig->getTransactionCallsUri($configurationScopeTransfers))
+            ->setIsActive($this->vertexConfig->isActive($configurationScopeTransfers))
             ->setIsTaxIdValidatorEnabled($this->vertexConfig->isTaxIdValidatorEnabled())
-            ->setIsTaxAssistEnabled($this->vertexConfig->isTaxAssistEnabled())
-            ->setTaxamoToken($this->vertexConfig->getTaxamoToken())
-            ->setTaxamoApiUrl($this->vertexConfig->getTaxamoApiUrl())
-            ->setCredentialHash($this->getCredentialHash($this->vertexConfig->getClientId(), $this->vertexConfig->getClientSecret()))
-            ->setIsInvoicingEnabled($this->vertexConfig->isInvoicingEnabled())
-            ->setVendorCode($this->vertexConfig->getVendorCode())
-            ->setDefaultTaxpayerCompanyCode($this->vertexConfig->getDefaultTaxpayerCompanyCode());
+            ->setIsTaxAssistEnabled($this->vertexConfig->isTaxAssistEnabled($configurationScopeTransfers))
+            ->setTaxamoToken($this->vertexConfig->getTaxamoToken($configurationScopeTransfers))
+            ->setTaxamoApiUrl($this->vertexConfig->getTaxamoApiUrl($configurationScopeTransfers))
+            ->setCredentialHash($this->getCredentialHash($this->vertexConfig->getClientId($configurationScopeTransfers), $this->vertexConfig->getClientSecret($configurationScopeTransfers)))
+            ->setIsInvoicingEnabled($this->vertexConfig->isInvoicingEnabled($configurationScopeTransfers))
+            ->setVendorCode($this->vertexConfig->getVendorCode($configurationScopeTransfers))
+            ->setDefaultTaxpayerCompanyCode($this->vertexConfig->getDefaultTaxpayerCompanyCode($configurationScopeTransfers));
 
         $vertexValidationResponseTransfer = $this->vertexConfigValidator->validate($vertexConfigTransfer);
 
@@ -61,6 +65,22 @@ class VertexConfigResolver implements VertexConfigResolverInterface
     protected function getCredentialHash(string $clientId, string $clientSecret): string
     {
         return md5(hash('sha512', $clientId . $clientSecret));
+    }
+
+    /**
+     * @return array<\Generated\Shared\Transfer\ConfigurationScopeTransfer>
+     */
+    protected function createConfigurationScopeTransfers(): array
+    {
+        if (!$this->storeFacade->isCurrentStoreDefined()) {
+            return [];
+        }
+
+        return [
+            (new ConfigurationScopeTransfer())
+                ->setKey(StoreConstants::SCOPE_STORE)
+                ->setIdentifier($this->storeFacade->getCurrentStore()->getNameOrFail()),
+        ];
     }
 
     protected function validate(VertexConfigTransfer $vertexConfigTransfer): VertexValidationResponseTransfer

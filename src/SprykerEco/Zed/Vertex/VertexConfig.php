@@ -93,6 +93,30 @@ class VertexConfig extends AbstractBundleConfig
 
     /**
      * Specification:
+     * - Back Office Configuration key of the Vertex vendor code under Integrations > Vertex.
+     *
+     * @api
+     */
+    protected const string CONFIGURATION_KEY_VENDOR_CODE = 'integrations:vertex:configurations:vendor_code';
+
+    /**
+     * Specification:
+     * - Back Office Configuration key of the seller country code under Integrations > Vertex.
+     *
+     * @api
+     */
+    protected const string CONFIGURATION_KEY_SELLER_COUNTRY_CODE = 'integrations:vertex:configurations:seller_country_code';
+
+    /**
+     * Specification:
+     * - Back Office Configuration key of the customer country code under Integrations > Vertex.
+     *
+     * @api
+     */
+    protected const string CONFIGURATION_KEY_CUSTOMER_COUNTRY_CODE = 'integrations:vertex:configurations:customer_country_code';
+
+    /**
+     * Specification:
      * - Returns the OAuth client ID for Vertex API authentication.
      * - Managed via Back Office Configuration under Integrations > Vertex.
      * - Retrieved from configuration using VertexConstants::CLIENT_ID.
@@ -100,13 +124,14 @@ class VertexConfig extends AbstractBundleConfig
      *
      * @api
      *
-     * @return string
+     * @param array<\Generated\Shared\Transfer\ConfigurationScopeTransfer> $configurationScopeTransfers
      */
-    public function getClientId(): string
+    public function getClientId(array $configurationScopeTransfers = []): string
     {
         return (string)$this->getModuleConfig(
             static::CONFIGURATION_KEY_CLIENT_ID,
             $this->get(VertexConstants::CLIENT_ID, ''),
+            $configurationScopeTransfers,
         );
     }
 
@@ -119,13 +144,14 @@ class VertexConfig extends AbstractBundleConfig
      *
      * @api
      *
-     * @return string
+     * @param array<\Generated\Shared\Transfer\ConfigurationScopeTransfer> $configurationScopeTransfers
      */
-    public function getClientSecret(): string
+    public function getClientSecret(array $configurationScopeTransfers = []): string
     {
         return (string)$this->getModuleConfig(
             static::CONFIGURATION_KEY_CLIENT_SECRET,
             $this->get(VertexConstants::CLIENT_SECRET, ''),
+            $configurationScopeTransfers,
         );
     }
 
@@ -138,13 +164,14 @@ class VertexConfig extends AbstractBundleConfig
      *
      * @api
      *
-     * @return string
+     * @param array<\Generated\Shared\Transfer\ConfigurationScopeTransfer> $configurationScopeTransfers
      */
-    public function getSecurityUri(): string
+    public function getSecurityUri(array $configurationScopeTransfers = []): string
     {
         return (string)$this->getModuleConfig(
             static::CONFIGURATION_KEY_SECURITY_URI,
             $this->get(VertexConstants::SECURITY_URI, ''),
+            $configurationScopeTransfers,
         );
     }
 
@@ -157,13 +184,14 @@ class VertexConfig extends AbstractBundleConfig
      *
      * @api
      *
-     * @return string
+     * @param array<\Generated\Shared\Transfer\ConfigurationScopeTransfer> $configurationScopeTransfers
      */
-    public function getTransactionCallsUri(): string
+    public function getTransactionCallsUri(array $configurationScopeTransfers = []): string
     {
         return (string)$this->getModuleConfig(
             static::CONFIGURATION_KEY_TRANSACTION_CALLS_URI,
             $this->get(VertexConstants::TRANSACTION_CALLS_URI, ''),
+            $configurationScopeTransfers,
         );
     }
 
@@ -176,13 +204,14 @@ class VertexConfig extends AbstractBundleConfig
      *
      * @api
      *
-     * @return string
+     * @param array<\Generated\Shared\Transfer\ConfigurationScopeTransfer> $configurationScopeTransfers
      */
-    public function getTaxamoApiUrl(): string
+    public function getTaxamoApiUrl(array $configurationScopeTransfers = []): string
     {
         return (string)$this->getModuleConfig(
             static::CONFIGURATION_KEY_TAXAMO_API_URL,
             $this->get(VertexConstants::TAXAMO_API_URL, ''),
+            $configurationScopeTransfers,
         );
     }
 
@@ -195,13 +224,14 @@ class VertexConfig extends AbstractBundleConfig
      *
      * @api
      *
-     * @return string
+     * @param array<\Generated\Shared\Transfer\ConfigurationScopeTransfer> $configurationScopeTransfers
      */
-    public function getTaxamoToken(): string
+    public function getTaxamoToken(array $configurationScopeTransfers = []): string
     {
         return (string)$this->getModuleConfig(
             static::CONFIGURATION_KEY_TAXAMO_TOKEN,
             $this->get(VertexConstants::TAXAMO_TOKEN, ''),
+            $configurationScopeTransfers,
         );
     }
 
@@ -214,11 +244,11 @@ class VertexConfig extends AbstractBundleConfig
      *
      * @api
      *
-     * @return bool
+     * @param array<\Generated\Shared\Transfer\ConfigurationScopeTransfer> $configurationScopeTransfers
      */
-    public function isActive(): bool
+    public function isActive(array $configurationScopeTransfers = []): bool
     {
-        return $this->getTaxProvider() === $this->getSharedConfig()::TAX_PROVIDER_VERTEX
+        return $this->getTaxProvider($configurationScopeTransfers) === $this->getSharedConfig()::TAX_PROVIDER_VERTEX
             || $this->get(VertexConstants::IS_ACTIVE, false);
     }
 
@@ -242,40 +272,44 @@ class VertexConfig extends AbstractBundleConfig
      *
      * @api
      *
-     * @return bool
+     * @param array<\Generated\Shared\Transfer\ConfigurationScopeTransfer> $configurationScopeTransfers
      */
-    public function isTaxAssistEnabled(): bool
+    public function isTaxAssistEnabled(array $configurationScopeTransfers = []): bool
     {
-        return (bool)$this->getModuleConfig(static::CONFIGURATION_KEY_IS_TAX_ASSIST_ENABLED, false);
+        return (bool)$this->getModuleConfig(static::CONFIGURATION_KEY_IS_TAX_ASSIST_ENABLED, false, $configurationScopeTransfers);
     }
 
     /**
      * Specification:
      * - 2 letters ISO country code, for example US, DE
+     * - Managed via Back Office Configuration under Integrations > Vertex.
      * - Overrides the default value (the first country of the store defined in the Quote/Order).
+     * - Returns empty string if not configured.
      *
      * @api
      *
-     * @return string
+     * @param array<\Generated\Shared\Transfer\ConfigurationScopeTransfer> $configurationScopeTransfers
      */
-    public function getSellerCountryCode(): string
+    public function getSellerCountryCode(array $configurationScopeTransfers = []): string
     {
-        return '';
+        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_SELLER_COUNTRY_CODE, '', $configurationScopeTransfers);
     }
 
     /**
      * Specification:
      * - 2 letters ISO country code, for example US, DE
      * - Used for tax calculation when a customer did not provide shipping address.
+     * - Managed via Back Office Configuration under Integrations > Vertex.
      * - Overrides the default value (the first country of the store defined in the Quote/Order).
+     * - Returns empty string if not configured.
      *
      * @api
      *
-     * @return string
+     * @param array<\Generated\Shared\Transfer\ConfigurationScopeTransfer> $configurationScopeTransfers
      */
-    public function getCustomerCountryCode(): string
+    public function getCustomerCountryCode(array $configurationScopeTransfers = []): string
     {
-        return '';
+        return (string)$this->getModuleConfig(static::CONFIGURATION_KEY_CUSTOMER_COUNTRY_CODE, '', $configurationScopeTransfers);
     }
 
     /**
@@ -286,26 +320,31 @@ class VertexConfig extends AbstractBundleConfig
      *
      * @api
      *
-     * @return bool
+     * @param array<\Generated\Shared\Transfer\ConfigurationScopeTransfer> $configurationScopeTransfers
      */
-    public function isInvoicingEnabled(): bool
+    public function isInvoicingEnabled(array $configurationScopeTransfers = []): bool
     {
-        return (bool)$this->getModuleConfig(static::CONFIGURATION_KEY_IS_INVOICING_ENABLED, false);
+        return (bool)$this->getModuleConfig(static::CONFIGURATION_KEY_IS_INVOICING_ENABLED, false, $configurationScopeTransfers);
     }
 
     /**
      * Specification:
      * - Returns the vendor code used for Vertex tax calculations.
+     * - Managed via Back Office Configuration under Integrations > Vertex.
      * - Retrieved from configuration using VertexConstants::VENDOR_CODE.
      * - Returns empty string by default if not configured.
      *
      * @api
      *
-     * @return string
+     * @param array<\Generated\Shared\Transfer\ConfigurationScopeTransfer> $configurationScopeTransfers
      */
-    public function getVendorCode(): string
+    public function getVendorCode(array $configurationScopeTransfers = []): string
     {
-        return $this->get(VertexConstants::VENDOR_CODE, '');
+        return (string)$this->getModuleConfig(
+            static::CONFIGURATION_KEY_VENDOR_CODE,
+            $this->get(VertexConstants::VENDOR_CODE, ''),
+            $configurationScopeTransfers,
+        );
     }
 
     /**
@@ -316,12 +355,15 @@ class VertexConfig extends AbstractBundleConfig
      * - Returns empty string if not configured.
      *
      * @api
+     *
+     * @param array<\Generated\Shared\Transfer\ConfigurationScopeTransfer> $configurationScopeTransfers
      */
-    public function getDefaultTaxpayerCompanyCode(): string
+    public function getDefaultTaxpayerCompanyCode(array $configurationScopeTransfers = []): string
     {
         return (string)$this->getModuleConfig(
             static::CONFIGURATION_KEY_DEFAULT_TAXPAYER_COMPANY_CODE,
             $this->get(VertexConstants::DEFAULT_TAXPAYER_COMPANY_CODE, ''),
+            $configurationScopeTransfers,
         );
     }
 
@@ -332,12 +374,15 @@ class VertexConfig extends AbstractBundleConfig
      * - Returns "spryker" (default Spryker tax calculation) by default.
      *
      * @api
+     *
+     * @param array<\Generated\Shared\Transfer\ConfigurationScopeTransfer> $configurationScopeTransfers
      */
-    public function getTaxProvider(): string
+    public function getTaxProvider(array $configurationScopeTransfers = []): string
     {
         return (string)$this->getModuleConfig(
             $this->getSharedConfig()::CONFIGURATION_KEY_TAX_PROVIDER,
             $this->getSharedConfig()::TAX_PROVIDER_SPRYKER,
+            $configurationScopeTransfers,
         );
     }
 }

@@ -106,6 +106,36 @@ class VertexConfigTest extends Unit
     }
 
     /**
+     * @dataProvider countryCodeConfigGetterDataProvider
+     */
+    public function testCountryCodeGetterReturnsBackOfficeConfigurationWhenSet(string $method, string $backOfficeConfigKey): void
+    {
+        // Arrange
+        $vertexConfig = $this->createVertexConfig([$backOfficeConfigKey => static::BACK_OFFICE_VALUE], []);
+
+        // Act
+        $configValue = $vertexConfig->{$method}();
+
+        // Assert
+        $this->assertSame(static::BACK_OFFICE_VALUE, $configValue);
+    }
+
+    /**
+     * @dataProvider countryCodeConfigGetterDataProvider
+     */
+    public function testCountryCodeGetterReturnsEmptyStringWhenNotConfigured(string $method): void
+    {
+        // Arrange
+        $vertexConfig = $this->createVertexConfig([], []);
+
+        // Act
+        $configValue = $vertexConfig->{$method}();
+
+        // Assert
+        $this->assertSame('', $configValue);
+    }
+
+    /**
      * @return array<string, array{string, string, string}>
      */
     public function configGetterDataProvider(): array
@@ -118,6 +148,18 @@ class VertexConfigTest extends Unit
             'taxamo api url' => ['getTaxamoApiUrl', 'VERTEX:TAXAMO_API_URL', 'integrations:vertex:taxamo:taxamo_api_url'],
             'taxamo token' => ['getTaxamoToken', 'VERTEX:TAXAMO_TOKEN', 'integrations:vertex:taxamo:taxamo_token'],
             'default taxpayer company code' => ['getDefaultTaxpayerCompanyCode', 'VERTEX:DEFAULT_TAXPAYER_COMPANY_CODE', 'integrations:vertex:configurations:default_taxpayer_company_code'],
+            'vendor code' => ['getVendorCode', 'VERTEX:VENDOR_CODE', 'integrations:vertex:configurations:vendor_code'],
+        ];
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public function countryCodeConfigGetterDataProvider(): array
+    {
+        return [
+            'seller country code' => ['getSellerCountryCode', 'integrations:vertex:configurations:seller_country_code'],
+            'customer country code' => ['getCustomerCountryCode', 'integrations:vertex:configurations:customer_country_code'],
         ];
     }
 

@@ -92,12 +92,55 @@ features:
                       - key: default_taxpayer_company_code
                         name: Default taxpayer company code
                         description: "The company code you set in your Vertex account, used to identify your organization in tax calculations."
+                        note: Optional. Leave empty to use the default company code from your Vertex account.
                         placeholder: For example, MAIN
                         type: string
                         enabled: true
                         secret: false
                         storefront: false
                         order: 4
+                        default_value: ''
+                        scopes:
+                            - global
+                            - store
+                      - key: vendor_code
+                        name: Vendor code
+                        description: The vendor code used to identify this seller for Vertex tax calculations.
+                        note: Optional. Leave empty if not applicable.
+                        placeholder: Your Vertex vendor code
+                        type: string
+                        enabled: true
+                        secret: false
+                        storefront: false
+                        order: 5
+                        default_value: ''
+                        scopes:
+                            - global
+                            - store
+                      - key: seller_country_code
+                        name: Seller country code
+                        description: Overrides the seller's country used for tax calculation.
+                        note: Optional. 2-letter ISO country code, for example US, DE. Defaults to the store's country when left empty.
+                        placeholder: For example, US
+                        type: string
+                        enabled: true
+                        secret: false
+                        storefront: false
+                        order: 6
+                        default_value: ''
+                        scopes:
+                            - global
+                            - store
+                      - key: customer_country_code
+                        name: Customer country code
+                        description: Overrides the customer's country used for tax calculation when no shipping address is provided.
+                        note: Optional. 2-letter ISO country code, for example US, DE. Defaults to the store's country when left empty.
+                        placeholder: For example, US
+                        type: string
+                        enabled: true
+                        secret: false
+                        storefront: false
+                        order: 7
                         default_value: ''
                         scopes:
                             - global
@@ -173,6 +216,7 @@ features:
                       - key: is_tax_assist_enabled
                         name: Enable Tax Assist in Vertex
                         description: Return Assisted Parameters in the Vertex dashboard
+                        note: Increases log size, but adds a detailed calculation explanation for each quote item.
                         type: boolean
                         enabled: true
                         secret: false
