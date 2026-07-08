@@ -193,7 +193,7 @@ features:
                       - store
                   settings:
                       - key: is_invoicing_enabled
-                        name: Enable Invoice Save in Vertex
+                        name: Submit Tax invoices to Vertex
                         description: Allow tax invoices to be viewed and reported in the Vertex dashboard
                         type: boolean
                         enabled: true

@@ -33,7 +33,7 @@
 "Taxamo token","Taxamo-Token"
 "The Taxamo API token used for authentication.","Das zur Authentifizierung verwendete Taxamo-API-Token."
 "Invoicing","Rechnungsstellung"
-"Enable Invoice Save in Vertex","Rechnungsspeicherung in Vertex aktivieren"
+"Submit Tax invoices to Vertex","Steuerrechnungen an Vertex übermitteln"
 "Allow tax invoices to be viewed and reported in the Vertex dashboard","Steuerrechnungen im Vertex-Dashboard anzeigen und auswerten lassen"
 "Tax Assist","Tax Assist"
 "Enable Tax Assist in Vertex","Tax Assist in Vertex aktivieren"
