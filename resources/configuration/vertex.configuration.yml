@@ -1,0 +1,269 @@
+# yaml-language-server: $schema=../../../../../src/Spryker/Configuration/resources/configuration/configuration-schema-v1.json
+features:
+    - key: integrations
+      name: Integrations
+      description: Third-party integrations configuration.
+      enabled: true
+      order: 100
+      tabs:
+          - key: vertex
+            name: Vertex
+            description: Vertex tax calculation integration.
+            enabled: true
+            order: 10
+            groups:
+                - key: configurations
+                  name: Configuration
+                  description: Enter the connection details from your Vertex account.
+                  enabled: true
+                  order: 1
+                  scopes:
+                      - global
+                      - store
+                  settings:
+                      - key: security_uri
+                        name: Security URI
+                        description: Vertex OAuth security endpoint used to obtain access tokens.
+                        placeholder: https://auth.vertexsmb.com/
+                        type: string
+                        enabled: true
+                        secret: false
+                        storefront: false
+                        order: 0
+                        default_value: ''
+                        scopes:
+                            - global
+                            - store
+                        constraints:
+                            - type: required
+                              message: Security URI is required.
+                            - type: url
+                              message: Please enter a valid URL.
+                      - key: transaction_calls_uri
+                        name: Transaction calls URI
+                        description: Vertex transaction calls endpoint used for tax calculations.
+                        placeholder: https://api.vertexsmb.com/
+                        type: string
+                        enabled: true
+                        secret: false
+                        storefront: false
+                        order: 1
+                        default_value: ''
+                        scopes:
+                            - global
+                            - store
+                        constraints:
+                            - type: required
+                              message: Transaction calls URI is required.
+                            - type: url
+                              message: Please enter a valid URL.
+                      - key: client_id
+                        name: Client ID
+                        description: OAuth client ID for the Vertex API.
+                        placeholder: Your Vertex client ID
+                        type: string
+                        enabled: true
+                        secret: true
+                        storefront: false
+                        order: 2
+                        default_value: ''
+                        scopes:
+                            - global
+                            - store
+                        constraints:
+                            - type: required
+                              message: Client ID is required.
+                      - key: client_secret
+                        name: Client secret
+                        description: OAuth client secret for the Vertex API.
+                        placeholder: Your Vertex client secret
+                        type: string
+                        enabled: true
+                        secret: true
+                        storefront: false
+                        order: 3
+                        default_value: ''
+                        scopes:
+                            - global
+                            - store
+                        constraints:
+                            - type: required
+                              message: Client secret is required.
+                      - key: default_taxpayer_company_code
+                        name: Default taxpayer company code
+                        description: "The company code you set in your Vertex account, used to identify your organization in tax calculations."
+                        note: Optional. Leave empty to use the default company code from your Vertex account.
+                        placeholder: For example, MAIN
+                        type: string
+                        enabled: true
+                        secret: false
+                        storefront: false
+                        order: 4
+                        default_value: ''
+                        scopes:
+                            - global
+                            - store
+                      - key: vendor_code
+                        name: Vendor code
+                        description: The vendor code used to identify this seller for Vertex tax calculations.
+                        note: Optional. Leave empty if not applicable.
+                        placeholder: Your Vertex vendor code
+                        type: string
+                        enabled: true
+                        secret: false
+                        storefront: false
+                        order: 5
+                        default_value: ''
+                        scopes:
+                            - global
+                            - store
+                      - key: seller_country_code
+                        name: Seller country code
+                        description: Overrides the seller's country used for tax calculation.
+                        note: Optional. 2-letter ISO country code, for example US, DE. Defaults to the store's country when left empty.
+                        placeholder: For example, US
+                        type: string
+                        enabled: true
+                        secret: false
+                        storefront: false
+                        order: 6
+                        default_value: ''
+                        scopes:
+                            - global
+                            - store
+                      - key: customer_country_code
+                        name: Customer country code
+                        description: Overrides the customer's country used for tax calculation when no shipping address is provided.
+                        note: Optional. 2-letter ISO country code, for example US, DE. Defaults to the store's country when left empty.
+                        placeholder: For example, US
+                        type: string
+                        enabled: true
+                        secret: false
+                        storefront: false
+                        order: 7
+                        default_value: ''
+                        scopes:
+                            - global
+                            - store
+
+                - key: taxamo
+                  name: Tax ID validation (Taxamo)
+                  description: Configure Taxamo to validate customer tax IDs.
+                  enabled: true
+                  order: 2
+                  scopes:
+                      - global
+                      - store
+                  settings:
+                      - key: taxamo_api_url
+                        name: Vertex Validator (Taxamo) API URL
+                        description: The Vertex Validator (Taxamo) API URL used for tax ID validation.
+                        placeholder: https://api.taxamo.com/
+                        note: Used only when Tax ID validator is enabled.
+                        type: string
+                        enabled: true
+                        secret: false
+                        storefront: false
+                        order: 0
+                        default_value: ''
+                        scopes:
+                            - global
+                            - store
+                      - key: taxamo_token
+                        name: Taxamo token
+                        description: The Taxamo API token used for authentication.
+                        placeholder: Your Taxamo API token
+                        note: Used only when Tax ID validator is enabled.
+                        type: string
+                        enabled: true
+                        secret: true
+                        storefront: false
+                        order: 1
+                        default_value: ''
+                        scopes:
+                            - global
+                            - store
+
+                - key: invoicing
+                  name: Invoicing
+                  enabled: true
+                  order: 3
+                  scopes:
+                      - global
+                      - store
+                  settings:
+                      - key: is_invoicing_enabled
+                        name: Submit Tax invoices to Vertex
+                        description: Allow tax invoices to be viewed and reported in the Vertex dashboard
+                        type: boolean
+                        enabled: true
+                        secret: false
+                        storefront: false
+                        order: 0
+                        default_value: false
+                        scopes:
+                            - global
+                            - store
+
+                - key: tax_assist
+                  name: Tax Assist
+                  enabled: true
+                  order: 4
+                  scopes:
+                      - global
+                      - store
+                  settings:
+                      - key: is_tax_assist_enabled
+                        name: Enable Tax Assist in Vertex
+                        description: Return Assisted Parameters in the Vertex dashboard
+                        note: Increases log size, but adds a detailed calculation explanation for each quote item.
+                        type: boolean
+                        enabled: true
+                        secret: false
+                        storefront: false
+                        order: 0
+                        default_value: false
+                        scopes:
+                            - global
+                            - store
+
+    - key: taxes
+      name: Taxes
+      description: Tax calculation configuration.
+      enabled: true
+      order: 40
+      tabs:
+          - key: tax_provider
+            name: Tax Provider
+            description: Select the service used to calculate taxes.
+            enabled: true
+            order: 0
+            groups:
+                - key: provider
+                  name: Tax Provider
+                  description: "Selecting Vertex requires credentials configured under Integrations > Vertex."
+                  enabled: true
+                  order: 0
+                  scopes:
+                      - global
+                      - store
+                  settings:
+                      - key: tax_provider
+                        name: Tax provider
+                        description: Select which service calculates taxes for orders.
+                        type: radio
+                        enabled: true
+                        secret: false
+                        storefront: false
+                        order: 0
+                        default_value: spryker
+                        scopes:
+                            - global
+                            - store
+                        options:
+                            - value: spryker
+                              label: Default (Spryker)
+                              description: Use the built-in Spryker tax rates.
+                            - value: vertex
+                              label: Vertex
+                              description: "Use Vertex for tax calculation. Ensure Vertex credentials are configured and the integration is active."

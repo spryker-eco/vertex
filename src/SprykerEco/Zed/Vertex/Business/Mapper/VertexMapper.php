@@ -14,6 +14,7 @@ use DateTime;
 use Exception;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\CalculableObjectTransfer;
+use Generated\Shared\Transfer\ConfigurationScopeTransfer;
 use Generated\Shared\Transfer\ExpenseTransfer;
 use Generated\Shared\Transfer\ItemTransfer;
 use Generated\Shared\Transfer\MerchantStockAddressTransfer;
@@ -27,6 +28,7 @@ use Generated\Shared\Transfer\VertexSaleTransfer;
 use Generated\Shared\Transfer\VertexShipmentTransfer;
 use Generated\Shared\Transfer\VertexShippingWarehouseTransfer;
 use Ramsey\Uuid\Uuid;
+use Spryker\Shared\Store\StoreConstants;
 use Spryker\Zed\Store\Business\StoreFacadeInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetrieverInterface;
@@ -273,13 +275,14 @@ class VertexMapper implements VertexMapperInterface
         OrderTransfer|QuoteTransfer $originalTransfer,
     ): VertexSaleTransfer {
         $sellerCountryCode = $customerCountryCode = $this->findStoreCountryCode($calculableObjectTransfer);
+        $configurationScopeTransfers = $this->createConfigurationScopeTransfers();
 
-        if ($this->vertexConfig->getSellerCountryCode()) {
-            $sellerCountryCode = $this->vertexConfig->getSellerCountryCode();
+        if ($this->vertexConfig->getSellerCountryCode($configurationScopeTransfers)) {
+            $sellerCountryCode = $this->vertexConfig->getSellerCountryCode($configurationScopeTransfers);
         }
 
-        if ($this->vertexConfig->getCustomerCountryCode()) {
-            $customerCountryCode = $this->vertexConfig->getCustomerCountryCode();
+        if ($this->vertexConfig->getCustomerCountryCode($configurationScopeTransfers)) {
+            $customerCountryCode = $this->vertexConfig->getCustomerCountryCode($configurationScopeTransfers);
         }
 
         if ($originalTransfer->getBillingAddress() && $originalTransfer->getBillingAddress()->getIso2Code()) {
@@ -301,5 +304,21 @@ class VertexMapper implements VertexMapperInterface
         $storeTransfer = $this->storeFacade->getStoreByName($calculableObjectTransfer->getStoreOrFail()->getNameOrFail());
 
         return $storeTransfer->getCountries() !== [] ? $storeTransfer->getCountries()[0] : null;
+    }
+
+    /**
+     * @return array<\Generated\Shared\Transfer\ConfigurationScopeTransfer>
+     */
+    protected function createConfigurationScopeTransfers(): array
+    {
+        if (!$this->storeFacade->isCurrentStoreDefined()) {
+            return [];
+        }
+
+        return [
+            (new ConfigurationScopeTransfer())
+                ->setKey(StoreConstants::SCOPE_STORE)
+                ->setIdentifier($this->storeFacade->getCurrentStore()->getNameOrFail()),
+        ];
     }
 }

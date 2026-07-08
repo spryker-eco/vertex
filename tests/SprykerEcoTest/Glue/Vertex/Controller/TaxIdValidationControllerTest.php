@@ -20,8 +20,10 @@ use Spryker\Glue\GlueApplication\Rest\Request\Data\MetadataInterface;
 use Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface;
 use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Glue\Vertex\Controller\TaxIdValidationController;
+use SprykerEco\Glue\Vertex\VertexConfig;
 use SprykerEco\Glue\Vertex\VertexDependencyProvider;
-use SprykerEco\Shared\Vertex\VertexConstants;
+use SprykerEco\Glue\Vertex\VertexFactory;
+use SprykerEco\Shared\Vertex\VertexConfig as VertexSharedConfig;
 use SprykerEcoTest\Glue\Vertex\VertexTester;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -78,8 +80,6 @@ class TaxIdValidationControllerTest extends Unit
     public function testPostrequestTaxIdValidationWhenRequestIsValidReturnsSuccessfulResponse(): void
     {
         // Arrange
-        $this->tester->setConfig(VertexConstants::IS_ACTIVE, true);
-
         $restVertexValidationAttributesTransfer = $this->tester->createRestVertexValidationAttributesTransfer();
 
         $vertexClientMock = $this->getMockBuilder(VertexClientInterface::class)->getMock();
@@ -100,7 +100,7 @@ class TaxIdValidationControllerTest extends Unit
         $this->tester->setDependency(VertexDependencyProvider::CLIENT_VERTEX, $vertexClientMock);
 
         // Act
-        $restResponse = (new TaxIdValidationController())->postAction($restRequestMock, $restVertexValidationAttributesTransfer);
+        $restResponse = $this->createTaxIdValidationController()->postAction($restRequestMock, $restVertexValidationAttributesTransfer);
 
         //Assert
         $this->assertCount(0, $restResponse->getErrors());
@@ -113,8 +113,6 @@ class TaxIdValidationControllerTest extends Unit
     public function testGivenAMalformedRequestWhenTheTaxIdValidationApiIsCalledThenTheErrorMessageIsReturnedInTheResponse(): void
     {
         // Arrange
-        $this->tester->setConfig(VertexConstants::IS_ACTIVE, true);
-
         $restVertexValidationAttributesTransfer = (new RestVertexValidationAttributesTransfer())->setTaxId('test')->setCountryCode('DE');
 
         $vertexClientMock = $this->getMockBuilder(VertexClientInterface::class)->getMock();
@@ -130,7 +128,7 @@ class TaxIdValidationControllerTest extends Unit
         $this->tester->setDependency(VertexDependencyProvider::CLIENT_VERTEX, $vertexClientMock);
 
         // Act
-        $restResponse = (new TaxIdValidationController())->postAction($restRequestMock, $restVertexValidationAttributesTransfer);
+        $restResponse = $this->createTaxIdValidationController()->postAction($restRequestMock, $restVertexValidationAttributesTransfer);
 
         //Assert
         $this->assertCount(1, $restResponse->getErrors());
@@ -157,8 +155,6 @@ class TaxIdValidationControllerTest extends Unit
         string $expectedMessage,
     ): void {
         // Arrange
-        $this->tester->setConfig(VertexConstants::IS_ACTIVE, true);
-
         $vertexClientMock = $this->getMockBuilder(VertexClientInterface::class)->getMock();
         $glossaryStorageClientMock = $this->getMockBuilder(GlossaryStorageClientInterface::class)->getMock();
 
@@ -186,7 +182,7 @@ class TaxIdValidationControllerTest extends Unit
         $this->tester->setDependency(VertexDependencyProvider::CLIENT_GLOSSARY_STORAGE, $glossaryStorageClientMock);
 
         // Act
-        $restResponse = (new TaxIdValidationController())->postAction($restRequestMock, $restVertexValidationAttributesTransfer);
+        $restResponse = $this->createTaxIdValidationController()->postAction($restRequestMock, $restVertexValidationAttributesTransfer);
 
         // Assert
         $this->assertCount(1, $restResponse->getErrors());
@@ -269,5 +265,20 @@ class TaxIdValidationControllerTest extends Unit
                 'The tax ID format is invalid.',
             ],
         ];
+    }
+
+    protected function createTaxIdValidationController(): TaxIdValidationController
+    {
+        $vertexConfig = Stub::make(VertexConfig::class, [
+            'getModuleConfig' => fn () => VertexSharedConfig::TAX_PROVIDER_VERTEX,
+            'getSharedConfig' => new VertexSharedConfig(),
+        ]);
+
+        $vertexFactory = new VertexFactory();
+        $vertexFactory->setConfig($vertexConfig);
+
+        return Stub::make(TaxIdValidationController::class, [
+            'getFactory' => $vertexFactory,
+        ]);
     }
 }
