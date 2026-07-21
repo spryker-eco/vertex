@@ -34,6 +34,8 @@ use SprykerEco\Zed\Vertex\Business\Calculator\FallbackCalculator;
 use SprykerEco\Zed\Vertex\Business\Calculator\FallbackCalculatorInterface;
 use SprykerEco\Zed\Vertex\Business\Calculator\VertexCalculator;
 use SprykerEco\Zed\Vertex\Business\Calculator\VertexCalculatorInterface;
+use SprykerEco\Zed\Vertex\Business\Configuration\TaxProviderPreSaveValidator;
+use SprykerEco\Zed\Vertex\Business\Configuration\TaxProviderPreSaveValidatorInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapper;
 use SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetriever;
@@ -239,6 +241,15 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     public function createVertexConfigValidator(): VertexConfigValidatorInterface
     {
         return new VertexConfigValidator($this->getVertexClient());
+    }
+
+    public function createTaxProviderPreSaveValidator(): TaxProviderPreSaveValidatorInterface
+    {
+        return new TaxProviderPreSaveValidator(
+            $this->getConfig(),
+            $this->createVertexConfigValidator(),
+            $this->getStoreFacade(),
+        );
     }
 
     /**

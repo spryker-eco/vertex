@@ -32,10 +32,16 @@ class VertexConfigTest extends Unit
 
     protected const string ENVIRONMENT_KEY_IS_ACTIVE = 'VERTEX:IS_ACTIVE';
 
+    protected const string CONFIGURATION_KEY_TAX_PROVIDER = 'taxes:tax_provider:provider:tax_provider';
+
+    protected const string TAX_PROVIDER_VERTEX = 'vertex';
+
+    protected const string TAX_PROVIDER_SPRYKER = 'spryker';
+
     /**
      * @dataProvider configGetterDataProvider
      */
-    public function testReturnsBackOfficeConfigurationWhenBackOfficeAndEnvironmentConfigurationsAreSet(
+    public function testReturnsBackOfficeConfigurationWhenConfigurationModuleIsUsed(
         string $method,
         string $environmentConfigKey,
         string $backOfficeConfigKey,
@@ -44,6 +50,7 @@ class VertexConfigTest extends Unit
         $vertexConfig = $this->createVertexConfig(
             [$backOfficeConfigKey => static::BACK_OFFICE_VALUE],
             [$environmentConfigKey => static::ENVIRONMENT_VALUE],
+            true,
         );
 
         // Act
@@ -56,14 +63,17 @@ class VertexConfigTest extends Unit
     /**
      * @dataProvider configGetterDataProvider
      */
-    public function testReturnsEnvironmentConfigurationWhenBackOfficeConfigurationIsNotSet(
+    public function testReturnsEnvironmentConfigurationWhenConfigurationModuleIsNotUsed(
         string $method,
         string $environmentConfigKey,
+        string $backOfficeConfigKey,
     ): void {
         // Arrange
+        // Even though the Back Office value is set, the flag switches the source back to the environment configuration.
         $vertexConfig = $this->createVertexConfig(
-            [],
+            [$backOfficeConfigKey => static::BACK_OFFICE_VALUE],
             [$environmentConfigKey => static::ENVIRONMENT_VALUE],
+            false,
         );
 
         // Act
@@ -73,13 +83,28 @@ class VertexConfigTest extends Unit
         $this->assertSame(static::ENVIRONMENT_VALUE, $configValue);
     }
 
-    public function testIsActiveReturnsTrueWhenVertexTaxProviderIsSelectedInBackOffice(): void
+    /**
+     * @dataProvider configGetterDataProvider
+     */
+    public function testReturnsDefaultWhenConfigurationModuleIsUsedButValueIsNotSet(string $method): void
     {
         // Arrange
-        // Back Office activation via the Vertex tax provider wins over the disabled environment flag.
+        $vertexConfig = $this->createVertexConfig([], [], true);
+
+        // Act
+        $configValue = $vertexConfig->{$method}();
+
+        // Assert
+        $this->assertSame('', $configValue);
+    }
+
+    public function testIsActiveReturnsTrueWhenVertexTaxProviderIsSelectedAndConfigurationModuleIsUsed(): void
+    {
+        // Arrange
         $vertexConfig = $this->createVertexConfig(
-            ['taxes:tax_provider:provider:tax_provider' => 'vertex'],
+            [static::CONFIGURATION_KEY_TAX_PROVIDER => static::TAX_PROVIDER_VERTEX],
             [static::ENVIRONMENT_KEY_IS_ACTIVE => false],
+            true,
         );
 
         // Act
@@ -89,13 +114,31 @@ class VertexConfigTest extends Unit
         $this->assertTrue($isActive);
     }
 
-    public function testIsActiveFallsBackToEnvironmentFlagWhenBackOfficeTaxProviderIsNotSelected(): void
+    public function testIsActiveReturnsFalseWhenNonVertexTaxProviderIsSelectedAndConfigurationModuleIsUsed(): void
     {
         // Arrange
-        // Without a Back Office tax provider the environment flag drives activation as a fallback.
         $vertexConfig = $this->createVertexConfig(
-            [],
+            [static::CONFIGURATION_KEY_TAX_PROVIDER => static::TAX_PROVIDER_SPRYKER],
             [static::ENVIRONMENT_KEY_IS_ACTIVE => true],
+            true,
+        );
+
+        // Act
+        $isActive = $vertexConfig->isActive();
+
+        // Assert
+        // With the Configuration module in use, the environment flag no longer drives activation.
+        $this->assertFalse($isActive);
+    }
+
+    public function testIsActiveUsesEnvironmentFlagWhenConfigurationModuleIsNotUsed(): void
+    {
+        // Arrange
+        // The Back Office tax provider is ignored because the flag keeps activation on the environment configuration.
+        $vertexConfig = $this->createVertexConfig(
+            [static::CONFIGURATION_KEY_TAX_PROVIDER => static::TAX_PROVIDER_VERTEX],
+            [static::ENVIRONMENT_KEY_IS_ACTIVE => true],
+            false,
         );
 
         // Act
@@ -103,15 +146,76 @@ class VertexConfigTest extends Unit
 
         // Assert
         $this->assertTrue($isActive);
+    }
+
+    public function testIsActiveReturnsFalseWhenConfigurationModuleIsNotUsedAndEnvironmentFlagIsDisabled(): void
+    {
+        // Arrange
+        $vertexConfig = $this->createVertexConfig(
+            [static::CONFIGURATION_KEY_TAX_PROVIDER => static::TAX_PROVIDER_VERTEX],
+            [static::ENVIRONMENT_KEY_IS_ACTIVE => false],
+            false,
+        );
+
+        // Act
+        $isActive = $vertexConfig->isActive();
+
+        // Assert
+        $this->assertFalse($isActive);
+    }
+
+    public function testGetTaxProviderReturnsBackOfficeSelectionWhenConfigurationModuleIsUsed(): void
+    {
+        // Arrange
+        $vertexConfig = $this->createVertexConfig(
+            [static::CONFIGURATION_KEY_TAX_PROVIDER => static::TAX_PROVIDER_VERTEX],
+            [],
+            true,
+        );
+
+        // Act
+        $taxProvider = $vertexConfig->getTaxProvider();
+
+        // Assert
+        $this->assertSame(static::TAX_PROVIDER_VERTEX, $taxProvider);
+    }
+
+    public function testGetTaxProviderReturnsBackOfficeSelectionEvenWhenConfigurationModuleIsNotUsed(): void
+    {
+        // Arrange
+        // The tax provider has no environment configuration source, so it is always read from the Back Office.
+        $vertexConfig = $this->createVertexConfig(
+            [static::CONFIGURATION_KEY_TAX_PROVIDER => static::TAX_PROVIDER_VERTEX],
+            [],
+            false,
+        );
+
+        // Act
+        $taxProvider = $vertexConfig->getTaxProvider();
+
+        // Assert
+        $this->assertSame(static::TAX_PROVIDER_VERTEX, $taxProvider);
+    }
+
+    public function testGetTaxProviderReturnsSprykerByDefaultWhenNotConfigured(): void
+    {
+        // Arrange
+        $vertexConfig = $this->createVertexConfig([], [], true);
+
+        // Act
+        $taxProvider = $vertexConfig->getTaxProvider();
+
+        // Assert
+        $this->assertSame(static::TAX_PROVIDER_SPRYKER, $taxProvider);
     }
 
     /**
      * @dataProvider countryCodeConfigGetterDataProvider
      */
-    public function testCountryCodeGetterReturnsBackOfficeConfigurationWhenSet(string $method, string $backOfficeConfigKey): void
+    public function testCountryCodeGetterReturnsBackOfficeConfigurationWhenConfigurationModuleIsUsed(string $method, string $backOfficeConfigKey): void
     {
         // Arrange
-        $vertexConfig = $this->createVertexConfig([$backOfficeConfigKey => static::BACK_OFFICE_VALUE], []);
+        $vertexConfig = $this->createVertexConfig([$backOfficeConfigKey => static::BACK_OFFICE_VALUE], [], true);
 
         // Act
         $configValue = $vertexConfig->{$method}();
@@ -126,7 +230,7 @@ class VertexConfigTest extends Unit
     public function testCountryCodeGetterReturnsEmptyStringWhenNotConfigured(string $method): void
     {
         // Arrange
-        $vertexConfig = $this->createVertexConfig([], []);
+        $vertexConfig = $this->createVertexConfig([], [], true);
 
         // Act
         $configValue = $vertexConfig->{$method}();
@@ -167,10 +271,14 @@ class VertexConfigTest extends Unit
      * @param array<string, mixed> $backOfficeConfig
      * @param array<string, mixed> $environmentConfig
      */
-    protected function createVertexConfig(array $backOfficeConfig, array $environmentConfig): VertexConfig
+    protected function createVertexConfig(array $backOfficeConfig, array $environmentConfig, bool $isConfigurationModuleUsed): VertexConfig
     {
+        $vertexSharedConfig = Stub::make(VertexSharedConfig::class, [
+            'isConfigurationModuleUsed' => $isConfigurationModuleUsed,
+        ]);
+
         return Stub::make(VertexConfig::class, [
-            // Simulates the Back Office configuration: returns the stored value or the passed env fallback default.
+            // Simulates the Back Office configuration: returns the stored value or the passed default.
             'getModuleConfig' => function (string $key, mixed $default = null) use ($backOfficeConfig): mixed {
                 return $backOfficeConfig[$key] ?? $default;
             },
@@ -178,8 +286,7 @@ class VertexConfigTest extends Unit
             'get' => function (string $key, mixed $default = null) use ($environmentConfig): mixed {
                 return $environmentConfig[$key] ?? $default;
             },
-            // The shared config cannot be resolved by the mock class name, so provide a real instance for its constants.
-            'getSharedConfig' => new VertexSharedConfig(),
+            'getSharedConfig' => $vertexSharedConfig,
         ]);
     }
 }
