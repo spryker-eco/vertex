@@ -34,7 +34,7 @@ class TaxProviderPreSaveValidator implements TaxProviderPreSaveValidatorInterfac
         ConfigurationValueCollectionRequestTransfer $configurationValueCollectionRequestTransfer,
     ): ConfigurationValueCollectionRequestTransfer {
         $this->validateTaxProviderSelection($configurationValueCollectionRequestTransfer);
-        $this->validateVertexConfigurationRemoval($configurationValueCollectionRequestTransfer);
+        $this->validateVertexConfigurationCompleteness($configurationValueCollectionRequestTransfer);
 
         return $configurationValueCollectionRequestTransfer;
     }
@@ -59,7 +59,7 @@ class TaxProviderPreSaveValidator implements TaxProviderPreSaveValidatorInterfac
         }
     }
 
-    protected function validateVertexConfigurationRemoval(
+    protected function validateVertexConfigurationCompleteness(
         ConfigurationValueCollectionRequestTransfer $configurationValueCollectionRequestTransfer,
     ): void {
         $credentialRequestGroups = $this->groupCredentialRequestsByScope($configurationValueCollectionRequestTransfer);
