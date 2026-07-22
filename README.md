@@ -258,6 +258,77 @@ The following methods default to `false` or empty string and must be overridden 
 | `getSellerCountryCode()` | `''` | Overrides the default seller country code (2-letter ISO, e.g. `US`). Defaults to the first country of the store.                                                                  |
 | `getCustomerCountryCode()` | `''` | Overrides the default customer country code (applied only when no customer billing address is provided).  Defaults to the first country of the store.                             |
 
+## Back Office Configuration
+
+As an alternative to the environment constants above, Vertex can be configured from the **Back Office Configuration** page (per scope: global and per store), backed by the `spryker/configuration` module. This is opt-in and disabled by default.
+
+When enabled, `VertexConfig` reads its values from the Configuration module instead of `config/Shared/config_default.php`, and "Vertex is active" means Vertex is selected as the tax provider for the given scope (see below) rather than `VertexConstants::IS_ACTIVE`.
+
+### 1. Enable the Configuration source
+
+Override `isConfigurationModuleUsed()` to return `true` in `src/Pyz/Shared/Vertex/VertexConfig.php`:
+
+```php
+namespace Pyz\Shared\Vertex;
+
+use SprykerEco\Shared\Vertex\VertexConfig as SprykerEcoVertexConfig;
+
+class VertexConfig extends SprykerEcoVertexConfig
+{
+    public function isConfigurationModuleUsed(): bool
+    {
+        return true;
+    }
+}
+```
+
+### 2. Register the pre-save validation plugin
+
+Add `VertexTaxProviderPreSavePlugin` to `src/Pyz/Zed/Configuration/ConfigurationDependencyProvider.php`:
+
+```php
+use SprykerEco\Zed\Vertex\Communication\Plugin\Configuration\VertexTaxProviderPreSavePlugin;
+
+/**
+ * @return array<\Spryker\Zed\ConfigurationExtension\Dependency\Plugin\ConfigurationValuePreSavePluginInterface>
+ */
+protected function getConfigurationValuePreSavePlugins(): array
+{
+    return [
+        // ... other plugins
+        new VertexTaxProviderPreSavePlugin(),
+    ];
+}
+```
+
+### 3. Sync the schema
+
+The module ships its schema in `resources/configuration/vertex.configuration.yml`. Merge it into the settings map:
+
+```bash
+docker/sdk cli console configuration:sync
+```
+
+### Where the settings live
+
+| Back Office location | Settings |
+|----------------------|----------|
+| **Integrations > Vertex > Configuration** | Security URI, Transaction calls URI, Client ID, Client secret, Default taxpayer company code, Vendor code, Seller country code, Customer country code |
+| **Integrations > Vertex > Tax ID validation (Taxamo)** | Vertex Validator (Taxamo) API URL, Taxamo token |
+| **Integrations > Vertex > Invoicing** | Submit Tax invoices to Vertex |
+| **Integrations > Vertex > Tax Assist** | Enable Tax Assist in Vertex |
+| **Taxes > Tax Provider** | Tax provider (Default (Spryker) / Vertex) |
+
+Client ID, Client secret, and Taxamo token are stored as secrets (encrypted, never published to storage). All settings support the `global` and `store` scopes, with `store` overriding `global`.
+
+### Save-time validation
+
+`VertexTaxProviderPreSavePlugin` guards the save so the Vertex integration cannot be left in a broken state:
+
+- **Tax provider selection** — selecting Vertex under Taxes > Tax Provider is blocked unless the Vertex configuration is complete for that scope.
+- **Credential removal / incomplete configuration** — while Vertex is the selected tax provider for a scope, saving a credential change that would leave the configuration incomplete (including clearing a field) is blocked. Global changes are also checked against every store that inherits the global values and has Vertex selected.
+- **URL format** — the Security URI, Transaction calls URI, and Taxamo API URL fields must contain a valid URL (including the scheme, e.g. `https://`) whenever a value is present, even if Vertex is not the selected tax provider.
+
 ## Documentation
 
 [Spryker Documentation](https://docs.spryker.com/docs/pbc/all/tax-management/latest/base-shop/third-party-integrations/vertex/vertex)

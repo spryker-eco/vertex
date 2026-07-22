@@ -35,10 +35,8 @@ features:
                             - global
                             - store
                         constraints:
-                            - type: required
-                              message: Security URI is required.
-                            - type: url
-                              message: Please enter a valid URL.
+                            - type: 'SprykerEco\Zed\Vertex\Communication\Constraint\VertexConfigurationRemovalConstraint'
+                            - type: 'SprykerEco\Zed\Vertex\Communication\Constraint\VertexUrlConstraint'
                       - key: transaction_calls_uri
                         name: Transaction calls URI
                         description: Vertex transaction calls endpoint used for tax calculations.
@@ -53,10 +51,8 @@ features:
                             - global
                             - store
                         constraints:
-                            - type: required
-                              message: Transaction calls URI is required.
-                            - type: url
-                              message: Please enter a valid URL.
+                            - type: 'SprykerEco\Zed\Vertex\Communication\Constraint\VertexConfigurationRemovalConstraint'
+                            - type: 'SprykerEco\Zed\Vertex\Communication\Constraint\VertexUrlConstraint'
                       - key: client_id
                         name: Client ID
                         description: OAuth client ID for the Vertex API.
@@ -71,8 +67,7 @@ features:
                             - global
                             - store
                         constraints:
-                            - type: required
-                              message: Client ID is required.
+                            - type: 'SprykerEco\Zed\Vertex\Communication\Constraint\VertexConfigurationRemovalConstraint'
                       - key: client_secret
                         name: Client secret
                         description: OAuth client secret for the Vertex API.
@@ -87,8 +82,7 @@ features:
                             - global
                             - store
                         constraints:
-                            - type: required
-                              message: Client secret is required.
+                            - type: 'SprykerEco\Zed\Vertex\Communication\Constraint\VertexConfigurationRemovalConstraint'
                       - key: default_taxpayer_company_code
                         name: Default taxpayer company code
                         description: "The company code you set in your Vertex account, used to identify your organization in tax calculations."
@@ -169,6 +163,9 @@ features:
                         scopes:
                             - global
                             - store
+                        constraints:
+                            - type: 'SprykerEco\Zed\Vertex\Communication\Constraint\VertexConfigurationRemovalConstraint'
+                            - type: 'SprykerEco\Zed\Vertex\Communication\Constraint\VertexUrlConstraint'
                       - key: taxamo_token
                         name: Taxamo token
                         description: The Taxamo API token used for authentication.
@@ -183,6 +180,8 @@ features:
                         scopes:
                             - global
                             - store
+                        constraints:
+                            - type: 'SprykerEco\Zed\Vertex\Communication\Constraint\VertexConfigurationRemovalConstraint'
 
                 - key: invoicing
                   name: Invoicing
@@ -267,3 +266,5 @@ features:
                             - value: vertex
                               label: Vertex
                               description: "Use Vertex for tax calculation. Ensure Vertex credentials are configured and the integration is active."
+                        constraints:
+                            - type: 'SprykerEco\Zed\Vertex\Communication\Constraint\VertexTaxProviderConstraint'
