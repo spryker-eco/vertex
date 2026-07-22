@@ -11,9 +11,9 @@ namespace SprykerEco\Zed\Vertex\Business\Configuration;
 
 use Generated\Shared\Transfer\ConfigurationValueCollectionRequestTransfer;
 
-interface TaxProviderPreSaveValidatorInterface
+interface VertexTaxProviderSelectionGuardInterface
 {
-    public function validate(
+    public function guard(
         ConfigurationValueCollectionRequestTransfer $configurationValueCollectionRequestTransfer,
-    ): ConfigurationValueCollectionRequestTransfer;
+    ): void;
 }

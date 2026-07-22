@@ -134,6 +134,19 @@ class VertexConfig extends AbstractBundleConfig
     protected const string CONFIGURATION_KEY_CUSTOMER_COUNTRY_CODE = 'integrations:vertex:configurations:customer_country_code';
 
     /**
+     * Specification:
+     * - Returns the Back Office Configuration keys of the Vertex credential fields guarded during pre-save validation.
+     *
+     * @api
+     *
+     * @return array<string>
+     */
+    public function getVertexConfigurationCredentialKeys(): array
+    {
+        return static::VERTEX_CONFIGURATION_CREDENTIAL_KEYS;
+    }
+
+    /**
      * Resolves a configuration value from either the environment configuration or the Back Office Configuration module,
      * depending on the {@link \SprykerEco\Shared\Vertex\VertexConfig::isConfigurationModuleUsed()} flag.
      *

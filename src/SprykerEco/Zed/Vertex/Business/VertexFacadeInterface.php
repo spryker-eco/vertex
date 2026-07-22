@@ -100,13 +100,7 @@ interface VertexFacadeInterface
     /**
      * Specification:
      * - Intended to be called from a {@link \Spryker\Zed\ConfigurationExtension\Dependency\Plugin\ConfigurationValuePreSavePluginInterface} on the Back Office Configuration save flow.
-     * - Iterates over the configuration values in the request and detects Vertex selections of the tax provider setting (`taxes:tax_provider:provider:tax_provider`).
-     * - For each Vertex selection, resolves the Vertex configuration for the selection scope (store or global) and validates it via {@link \SprykerEco\Zed\Vertex\Business\Validator\VertexConfigValidatorInterface}.
-     * - When Vertex is not fully configured for that scope, replaces the value with an internal sentinel so the tax provider constraint blocks the save with a validation error.
-     * - Detects saves and deletions of the Vertex credential settings (security URI, transaction calls URI, client ID, client secret, Taxamo API URL/token) grouped by scope.
-     * - For each scope where Vertex is the selected tax provider, validates the resulting Vertex configuration (request changes merged over stored values, with cleared store values falling back to global and cleared global values falling back to the default).
-     * - When such a change would leave the Vertex configuration incomplete, replaces the affected values with an internal sentinel (converting deletions into sentinel values) so the Vertex configuration removal constraint blocks the save with a validation error.
-     * - For changes to the global (default) scope, additionally validates every store that has Vertex selected as its tax provider and inherits the changed global values, blocking the save when the change would break any such store.
+     * - Validates Vertex tax provider selections and credential changes per scope, and blocks incomplete configurations by replacing the affected values with an internal sentinel.
      * - Leaves all other configuration values untouched.
      *
      * @api

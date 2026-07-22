@@ -36,6 +36,14 @@ use SprykerEco\Zed\Vertex\Business\Calculator\VertexCalculator;
 use SprykerEco\Zed\Vertex\Business\Calculator\VertexCalculatorInterface;
 use SprykerEco\Zed\Vertex\Business\Configuration\TaxProviderPreSaveValidator;
 use SprykerEco\Zed\Vertex\Business\Configuration\TaxProviderPreSaveValidatorInterface;
+use SprykerEco\Zed\Vertex\Business\Configuration\VertexConfigTransferBuilder;
+use SprykerEco\Zed\Vertex\Business\Configuration\VertexConfigTransferBuilderInterface;
+use SprykerEco\Zed\Vertex\Business\Configuration\VertexConfigurationCompletenessGuard;
+use SprykerEco\Zed\Vertex\Business\Configuration\VertexConfigurationCompletenessGuardInterface;
+use SprykerEco\Zed\Vertex\Business\Configuration\VertexSentinelEncoder;
+use SprykerEco\Zed\Vertex\Business\Configuration\VertexSentinelEncoderInterface;
+use SprykerEco\Zed\Vertex\Business\Configuration\VertexTaxProviderSelectionGuard;
+use SprykerEco\Zed\Vertex\Business\Configuration\VertexTaxProviderSelectionGuardInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapper;
 use SprykerEco\Zed\Vertex\Business\Mapper\Addresses\AddressMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\Prices\ItemExpensePriceRetriever;
@@ -246,10 +254,39 @@ class VertexBusinessFactory extends AbstractBusinessFactory
     public function createTaxProviderPreSaveValidator(): TaxProviderPreSaveValidatorInterface
     {
         return new TaxProviderPreSaveValidator(
+            $this->createVertexTaxProviderSelectionGuard(),
+            $this->createVertexConfigurationCompletenessGuard(),
+        );
+    }
+
+    public function createVertexTaxProviderSelectionGuard(): VertexTaxProviderSelectionGuardInterface
+    {
+        return new VertexTaxProviderSelectionGuard(
+            $this->createVertexConfigValidator(),
+            $this->createVertexConfigTransferBuilder(),
+            $this->createVertexSentinelEncoder(),
+        );
+    }
+
+    public function createVertexConfigurationCompletenessGuard(): VertexConfigurationCompletenessGuardInterface
+    {
+        return new VertexConfigurationCompletenessGuard(
             $this->getConfig(),
             $this->createVertexConfigValidator(),
             $this->getStoreFacade(),
+            $this->createVertexConfigTransferBuilder(),
+            $this->createVertexSentinelEncoder(),
         );
+    }
+
+    public function createVertexConfigTransferBuilder(): VertexConfigTransferBuilderInterface
+    {
+        return new VertexConfigTransferBuilder($this->getConfig());
+    }
+
+    public function createVertexSentinelEncoder(): VertexSentinelEncoderInterface
+    {
+        return new VertexSentinelEncoder();
     }
 
     /**
