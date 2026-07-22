@@ -17,6 +17,7 @@ use Spryker\Zed\Kernel\Communication\AbstractPlugin;
  * @method \SprykerEco\Zed\Vertex\Business\VertexFacadeInterface getFacade()
  * @method \SprykerEco\Zed\Vertex\VertexConfig getConfig()
  * @method \SprykerEco\Zed\Vertex\Communication\VertexCommunicationFactory getFactory()
+ * @method \SprykerEco\Zed\Vertex\Business\VertexBusinessFactory getBusinessFactory()
  */
 class VertexTaxProviderPreSavePlugin extends AbstractPlugin implements ConfigurationValuePreSavePluginInterface
 {
@@ -28,6 +29,6 @@ class VertexTaxProviderPreSavePlugin extends AbstractPlugin implements Configura
     public function preSave(
         ConfigurationValueCollectionRequestTransfer $requestTransfer,
     ): ConfigurationValueCollectionRequestTransfer {
-        return $this->getFacade()->validateTaxProviderConfigurationPreSave($requestTransfer);
+        return $this->getBusinessFactory()->createTaxProviderPreSaveValidator()->validate($requestTransfer);
     }
 }

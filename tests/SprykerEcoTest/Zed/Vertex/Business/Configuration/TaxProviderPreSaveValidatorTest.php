@@ -7,7 +7,7 @@
 
 declare(strict_types = 1);
 
-namespace SprykerEcoTest\Zed\Vertex\Business;
+namespace SprykerEcoTest\Zed\Vertex\Business\Configuration;
 
 use Codeception\Stub;
 use Codeception\Test\Unit;
@@ -34,11 +34,11 @@ use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
  * @group Zed
  * @group Vertex
  * @group Business
- * @group Facade
- * @group VertexFacadeValidateTaxProviderConfigurationPreSaveTest
+ * @group Configuration
+ * @group TaxProviderPreSaveValidatorTest
  * Add your own group annotations below this line
  */
-class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
+class TaxProviderPreSaveValidatorTest extends Unit
 {
     protected VertexBusinessTester $tester;
 
@@ -71,7 +71,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
     public function testMarksVertexSelectionWithSentinelWhenVertexIsNotConfigured(): void
     {
         // Arrange
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createVertexConfigStub(static::UNCONFIGURED_VERTEX_CONFIG),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock(),
@@ -82,7 +82,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
         $configurationValueTransfer = $configurationValueCollectionRequestTransfer->getConfigurationValues()->offsetGet(0);
@@ -95,7 +95,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
     public function testKeepsVertexSelectionWhenVertexIsConfigured(): void
     {
         // Arrange
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createVertexConfigStub(static::CONFIGURED_VERTEX_CONFIG),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock(),
@@ -106,7 +106,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
         $configurationValueTransfer = $configurationValueCollectionRequestTransfer->getConfigurationValues()->offsetGet(0);
@@ -116,7 +116,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
     public function testDoesNotTouchNonVertexTaxProviderSelection(): void
     {
         // Arrange
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createVertexConfigStub(static::UNCONFIGURED_VERTEX_CONFIG),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock(),
@@ -127,7 +127,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
         $configurationValueTransfer = $configurationValueCollectionRequestTransfer->getConfigurationValues()->offsetGet(0);
@@ -137,19 +137,18 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
     public function testDoesNotTouchUnrelatedSettingKey(): void
     {
         // Arrange
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createVertexConfigStub(static::UNCONFIGURED_VERTEX_CONFIG),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock(),
         );
-        // A value that happens to equal "vertex" but belongs to another setting key must be left untouched.
         $configurationValueCollectionRequestTransfer = $this->createRequestTransfer(
             static::UNRELATED_SETTING_KEY,
             VertexSharedConfig::TAX_PROVIDER_VERTEX,
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
         $configurationValueTransfer = $configurationValueCollectionRequestTransfer->getConfigurationValues()->offsetGet(0);
@@ -164,7 +163,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
                 ->setKey(StoreConstants::SCOPE_STORE)
                 ->setIdentifier(static::STORE_NAME),
         ];
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createScopeAssertingVertexConfigStub($expectedConfigurationScopeTransfers),
             $this->createValidVertexConfigValidatorMock(),
             $this->createStoreFacadeMock(),
@@ -177,13 +176,13 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act & Assert (assertions run inside the config stub getters)
-        $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
     }
 
     public function testPassesEmptyScopeToVertexConfigWhenSelectionIsGlobalScoped(): void
     {
         // Arrange
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createScopeAssertingVertexConfigStub([]),
             $this->createValidVertexConfigValidatorMock(),
             $this->createStoreFacadeMock(),
@@ -195,14 +194,13 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act & Assert (assertions run inside the config stub getters)
-        $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
     }
 
     public function testMarksGuardedCredentialWithSentinelWhenClearedWhileVertexIsSelected(): void
     {
         // Arrange
-        // Vertex is the selected tax provider and the Tax ID validator is enabled, but the Taxamo token is being cleared.
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createReverseVertexConfigStub(VertexSharedConfig::TAX_PROVIDER_VERTEX, true),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock(),
@@ -213,7 +211,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
         $configurationValueTransfer = $configurationValueCollectionRequestTransfer->getConfigurationValues()->offsetGet(0);
@@ -223,7 +221,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
     public function testKeepsGuardedCredentialWhenConfigurationStaysComplete(): void
     {
         // Arrange
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createReverseVertexConfigStub(VertexSharedConfig::TAX_PROVIDER_VERTEX, true),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock(),
@@ -234,7 +232,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
         $configurationValueTransfer = $configurationValueCollectionRequestTransfer->getConfigurationValues()->offsetGet(0);
@@ -244,8 +242,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
     public function testDoesNotMarkGuardedCredentialWhenVertexIsNotSelected(): void
     {
         // Arrange
-        // Vertex is not the selected tax provider, so clearing its configuration is allowed.
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createReverseVertexConfigStub(VertexSharedConfig::TAX_PROVIDER_SPRYKER, true),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock(),
@@ -256,7 +253,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
         $configurationValueTransfer = $configurationValueCollectionRequestTransfer->getConfigurationValues()->offsetGet(0);
@@ -266,8 +263,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
     public function testDoesNotMarkGuardedCredentialWhenTaxIdValidatorIsDisabled(): void
     {
         // Arrange
-        // With the Tax ID validator disabled, the Taxamo credentials are not part of the required Vertex configuration.
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createReverseVertexConfigStub(VertexSharedConfig::TAX_PROVIDER_VERTEX, false),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock(),
@@ -278,7 +274,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
         $configurationValueTransfer = $configurationValueCollectionRequestTransfer->getConfigurationValues()->offsetGet(0);
@@ -288,8 +284,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
     public function testMarksCredentialDeletionWithSentinelWhenClearedWhileVertexIsSelected(): void
     {
         // Arrange
-        // Clearing a credential in the Back Office arrives as a deletion key; at global scope it falls back to the empty default.
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createReverseVertexConfigStub(VertexSharedConfig::TAX_PROVIDER_VERTEX, true),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock(),
@@ -300,10 +295,9 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
-        // A sentinel configuration value is added so the removal constraint blocks the save; the deletion key is left in place because the writer short-circuits on the validation error before processing any deletion.
         $this->assertCount(1, $configurationValueCollectionRequestTransfer->getDeletionKeys());
         $this->assertCount(1, $configurationValueCollectionRequestTransfer->getConfigurationValues());
         $configurationValueTransfer = $configurationValueCollectionRequestTransfer->getConfigurationValues()->offsetGet(0);
@@ -314,8 +308,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
     public function testKeepsStoreScopedCredentialDeletionWhenGlobalFallbackIsValid(): void
     {
         // Arrange
-        // Deleting a store override falls back to the global value, which is complete, so the deletion must be allowed.
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createReverseVertexConfigStub(VertexSharedConfig::TAX_PROVIDER_VERTEX, true),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock(),
@@ -327,7 +320,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
         $this->assertCount(1, $configurationValueCollectionRequestTransfer->getDeletionKeys());
@@ -342,7 +335,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
                 ->setKey(StoreConstants::SCOPE_STORE)
                 ->setIdentifier(static::STORE_NAME),
         ];
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createReverseScopeAssertingVertexConfigStub($expectedConfigurationScopeTransfers, VertexSharedConfig::TAX_PROVIDER_VERTEX),
             $this->createValidVertexConfigValidatorMock(),
             $this->createStoreFacadeMock(),
@@ -355,14 +348,13 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act & Assert (assertions run inside the config stub getters)
-        $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
     }
 
     public function testBlocksGlobalRemovalWhenStoreInheritsVertexConfiguration(): void
     {
         // Arrange
-        // Global uses Spryker (so the global change itself is valid), but store AT selected Vertex and inherits the global credentials being removed.
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createCrossScopeVertexConfigStub(VertexSharedConfig::TAX_PROVIDER_SPRYKER, VertexSharedConfig::TAX_PROVIDER_VERTEX, true),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock([static::STORE_NAME]),
@@ -373,10 +365,9 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
-        // The blocking sentinel is added as a configuration value; the deletion key stays because the writer short-circuits on the error before deletions run.
         $this->assertCount(1, $configurationValueCollectionRequestTransfer->getDeletionKeys());
         $this->assertCount(1, $configurationValueCollectionRequestTransfer->getConfigurationValues());
         $configurationValueTransfer = $configurationValueCollectionRequestTransfer->getConfigurationValues()->offsetGet(0);
@@ -387,7 +378,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
     {
         // Arrange
         // Store AT still uses Spryker, so removing global Vertex configuration breaks nothing.
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createCrossScopeVertexConfigStub(VertexSharedConfig::TAX_PROVIDER_SPRYKER, VertexSharedConfig::TAX_PROVIDER_SPRYKER, true),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock([static::STORE_NAME]),
@@ -398,7 +389,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
         $this->assertCount(1, $configurationValueCollectionRequestTransfer->getDeletionKeys());
@@ -408,8 +399,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
     public function testAllowsGlobalRemovalWhenStoreWithVertexHasOwnConfiguration(): void
     {
         // Arrange
-        // Store AT selected Vertex but has its own complete credentials, so it is unaffected by the global removal.
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createCrossScopeVertexConfigStub(VertexSharedConfig::TAX_PROVIDER_SPRYKER, VertexSharedConfig::TAX_PROVIDER_VERTEX, false),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock([static::STORE_NAME]),
@@ -420,7 +410,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
         $this->assertCount(1, $configurationValueCollectionRequestTransfer->getDeletionKeys());
@@ -430,8 +420,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
     public function testIncompleteSentinelCarriesRemovalScopeAndConcreteReasons(): void
     {
         // Arrange
-        // Vertex is selected globally and the Client ID is being cleared, leaving the configuration incomplete.
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createReverseVertexConfigStub(VertexSharedConfig::TAX_PROVIDER_VERTEX, false),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock(),
@@ -442,7 +431,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
         $configurationValueTransfer = $configurationValueCollectionRequestTransfer->getConfigurationValues()->offsetGet(0);
@@ -455,8 +444,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
     public function testIncompleteSentinelCarriesCrossScopeStoreAndReasons(): void
     {
         // Arrange
-        // Global uses Spryker, but store DE selected Vertex and inherits the global Client ID being removed.
-        $this->configureFacade(
+        $this->configureValidator(
             $this->createCrossScopeVertexConfigStub(VertexSharedConfig::TAX_PROVIDER_SPRYKER, VertexSharedConfig::TAX_PROVIDER_VERTEX, true),
             $this->createVertexConfigValidator(),
             $this->createStoreFacadeMock([static::STORE_NAME]),
@@ -467,7 +455,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         );
 
         // Act
-        $configurationValueCollectionRequestTransfer = $this->tester->getFacade()->validateTaxProviderConfigurationPreSave($configurationValueCollectionRequestTransfer);
+        $configurationValueCollectionRequestTransfer = $this->tester->getFactory()->createTaxProviderPreSaveValidator()->validate($configurationValueCollectionRequestTransfer);
 
         // Assert
         $configurationValueTransfer = $configurationValueCollectionRequestTransfer->getConfigurationValues()->offsetGet(0);
@@ -489,7 +477,7 @@ class VertexFacadeValidateTaxProviderConfigurationPreSaveTest extends Unit
         return json_decode($encodedPayload, true);
     }
 
-    protected function configureFacade(
+    protected function configureValidator(
         VertexConfig $vertexConfig,
         VertexConfigValidatorInterface $vertexConfigValidator,
         StoreFacadeInterface $storeFacade,

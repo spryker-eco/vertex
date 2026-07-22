@@ -10,7 +10,6 @@ declare(strict_types = 1);
 namespace SprykerEco\Zed\Vertex\Business;
 
 use Generated\Shared\Transfer\CalculableObjectTransfer;
-use Generated\Shared\Transfer\ConfigurationValueCollectionRequestTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
@@ -78,18 +77,5 @@ class VertexFacade extends AbstractFacade implements VertexFacadeInterface
     public function validateTaxId(VertexValidationRequestTransfer $vertexValidationRequestTransfer): VertexValidationResponseTransfer
     {
         return $this->getFactory()->createTaxIdValidator()->validate($vertexValidationRequestTransfer);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     */
-    public function validateTaxProviderConfigurationPreSave(
-        ConfigurationValueCollectionRequestTransfer $configurationValueCollectionRequestTransfer,
-    ): ConfigurationValueCollectionRequestTransfer {
-        return $this->getFactory()
-            ->createTaxProviderPreSaveValidator()
-            ->validate($configurationValueCollectionRequestTransfer);
     }
 }

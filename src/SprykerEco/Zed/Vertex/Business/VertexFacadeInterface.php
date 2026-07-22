@@ -10,7 +10,6 @@ declare(strict_types = 1);
 namespace SprykerEco\Zed\Vertex\Business;
 
 use Generated\Shared\Transfer\CalculableObjectTransfer;
-use Generated\Shared\Transfer\ConfigurationValueCollectionRequestTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\VertexValidationRequestTransfer;
 use Generated\Shared\Transfer\VertexValidationResponseTransfer;
@@ -96,16 +95,4 @@ interface VertexFacadeInterface
      * @return \Generated\Shared\Transfer\VertexValidationResponseTransfer
      */
     public function validateTaxId(VertexValidationRequestTransfer $vertexValidationRequestTransfer): VertexValidationResponseTransfer;
-
-    /**
-     * Specification:
-     * - Intended to be called from a {@link \Spryker\Zed\ConfigurationExtension\Dependency\Plugin\ConfigurationValuePreSavePluginInterface} on the Back Office Configuration save flow.
-     * - Validates Vertex tax provider selections and credential changes per scope, and blocks incomplete configurations by replacing the affected values with an internal sentinel.
-     * - Leaves all other configuration values untouched.
-     *
-     * @api
-     */
-    public function validateTaxProviderConfigurationPreSave(
-        ConfigurationValueCollectionRequestTransfer $configurationValueCollectionRequestTransfer,
-    ): ConfigurationValueCollectionRequestTransfer;
 }
