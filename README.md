@@ -15,7 +15,9 @@ composer require spryker-eco/vertex
 
 ### 2. Configure the Module
 
-Add the following configuration to your `config/Shared/config_default.php` file:
+The module can be configured in two ways: via environment configuration (constants in `config/Shared/config_default.php`) or via the Back Office (see [Back Office Configuration](#back-office-configuration)). Both can be used together — when a value is set in the Back Office, it takes priority over the corresponding constant; environment configuration acts as the fallback for anything left unset in the Back Office.
+
+Only set the constants below if you don't want to manage the corresponding value through the Back Office:
 
 ```php
 use SprykerEco\Shared\Vertex\VertexConstants;
@@ -39,7 +41,7 @@ $config[VertexConstants::VENDOR_CODE] = '';
 
 ### 3. Override Feature Flags in Config
 
-`isTaxIdValidatorEnabled`, `isTaxAssistEnabled`, and `isInvoicingEnabled` default to `false` and are not driven by constants. Override them in `src/Pyz/Zed/Vertex/VertexConfig.php`:
+`isTaxIdValidatorEnabled` defaults to `false` and is not driven by a constant or Back Office Configuration. Override it in `src/Pyz/Zed/Vertex/VertexConfig.php`:
 
 ```php
 namespace Pyz\Zed\Vertex;
@@ -52,18 +54,10 @@ class VertexConfig extends SprykerEcoVertexConfig
     {
         return true;
     }
-
-    public function isTaxAssistEnabled(): bool
-    {
-        return true;
-    }
-
-    public function isInvoicingEnabled(): bool
-    {
-        return true;
-    }
 }
 ```
+
+`isTaxAssistEnabled` and `isInvoicingEnabled` also default to `false`, but they no longer require a project-level override — see [Back Office Configuration](#back-office-configuration) below to enable them without code changes.
 
 ### 4. Set Up Database Schema
 
@@ -227,6 +221,30 @@ File: `vendor/spryker-eco/vertex/data/import/glossary.csv`
 
 ## Configuration Options
 
+### Back Office Configuration
+
+Most Vertex settings can also be managed from the Back Office instead of `config/Shared/config_default.php` or a project-level `VertexConfig` override. Go to **Back Office > Integrations > Vertex** (credentials, Taxamo/tax ID validation, invoicing, tax assist) and **Back Office > Taxes > Tax Provider** (to select Vertex as the active tax provider) to configure these values through the UI.
+
+When a value is set in the Back Office, it takes precedence over the corresponding constant or config method; if it's left empty, the module falls back to the environment configuration described below.
+
+| Back Office setting | Location | Equivalent constant / method |
+|---|---|---|
+| Tax provider | Taxes > Tax Provider | `IS_ACTIVE` |
+| Client ID | Integrations > Vertex > Configuration | `CLIENT_ID` |
+| Client secret | Integrations > Vertex > Configuration | `CLIENT_SECRET` |
+| Security URI | Integrations > Vertex > Configuration | `SECURITY_URI` |
+| Transaction calls URI | Integrations > Vertex > Configuration | `TRANSACTION_CALLS_URI` |
+| Default taxpayer company code | Integrations > Vertex > Configuration | `DEFAULT_TAXPAYER_COMPANY_CODE` |
+| Vendor code | Integrations > Vertex > Configuration | `VENDOR_CODE` |
+| Seller country code | Integrations > Vertex > Configuration | `getSellerCountryCode()` |
+| Customer country code | Integrations > Vertex > Configuration | `getCustomerCountryCode()` |
+| Vertex Validator (Taxamo) API URL | Integrations > Vertex > Tax ID validation (Taxamo) | `TAXAMO_API_URL` |
+| Taxamo token | Integrations > Vertex > Tax ID validation (Taxamo) | `TAXAMO_TOKEN` |
+| Submit Tax invoices to Vertex | Integrations > Vertex > Invoicing | `isInvoicingEnabled()` |
+| Enable Tax Assist in Vertex | Integrations > Vertex > Tax Assist | `isTaxAssistEnabled()` |
+
+`isTaxIdValidatorEnabled` is the only flag not exposed in the Back Office; it must still be overridden in `src/Pyz/Zed/Vertex/VertexConfig.php` (see step 3).
+
 ### Required Constants (`config/Shared/config_default.php`)
 
 | Constant | Description |
@@ -248,7 +266,7 @@ File: `vendor/spryker-eco/vertex/data/import/glossary.csv`
 
 ### Config Methods (`src/Pyz/Zed/Vertex/VertexConfig.php`)
 
-The following methods default to `false` or empty string and must be overridden in the project config to enable the respective features:
+The following methods default to `false` or empty string. `isTaxAssistEnabled()`, `isInvoicingEnabled()`, `getSellerCountryCode()`, and `getCustomerCountryCode()` can be set via the Back Office instead of an override (see [Back Office Configuration](#back-office-configuration) above); `isTaxIdValidatorEnabled()` must still be overridden in the project config to enable the feature:
 
 | Method | Default | Description                                                                                                                                                                       |
 |--------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
