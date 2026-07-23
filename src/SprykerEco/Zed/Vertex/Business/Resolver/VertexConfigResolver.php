@@ -52,11 +52,11 @@ class VertexConfigResolver implements VertexConfigResolverInterface
         $vertexValidationResponseTransfer = $this->vertexConfigValidator->validate($vertexConfigTransfer);
 
         if (!$vertexValidationResponseTransfer->getIsValid()) {
-            $this->getLogger()->warning(
-                $vertexValidationResponseTransfer->getMessage() ?: 'Vertex config is not valid',
-            );
+            $message = implode(', ', $vertexValidationResponseTransfer->getMessages()) ?: 'Vertex config is not valid';
 
-            throw new InvalidArgumentException($vertexValidationResponseTransfer->getMessage() ?: 'Vertex config is not valid');
+            $this->getLogger()->warning($message);
+
+            throw new InvalidArgumentException($message);
         }
 
         return $vertexConfigTransfer;
