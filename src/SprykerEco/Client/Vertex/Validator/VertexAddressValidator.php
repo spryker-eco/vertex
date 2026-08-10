@@ -25,10 +25,6 @@ class VertexAddressValidator implements VertexAddressValidatorInterface
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ADDRESS_FIELD_IS_REQUIRED, $fieldName . '.' . VertexAddressTransfer::ADDRESS1));
         }
 
-        if ($address->getAddress2() === null) {
-            $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ADDRESS_FIELD_IS_REQUIRED, $fieldName . '.' . VertexAddressTransfer::ADDRESS2));
-        }
-
         if (!$address->getCity()) {
             $vertexValidationResponseTransfer->addMessage(sprintf(static::ERROR_ADDRESS_FIELD_IS_REQUIRED, $fieldName . '.' . VertexAddressTransfer::CITY));
         }
