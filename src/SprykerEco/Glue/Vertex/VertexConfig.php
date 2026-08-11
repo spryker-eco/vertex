@@ -49,14 +49,19 @@ class VertexConfig extends AbstractBundleConfig
     /**
      * Specification:
      * - Returns whether Vertex tax calculation is active.
+     * - Active when the Vertex tax provider is selected in Back Office Configuration under Taxes > Tax Provider.
      * - Returns false by default if not configured.
      *
      * @api
-     *
-     * @return bool
      */
     public function getIsActive(): bool
     {
-        return $this->getSharedConfig()->getIsActive();
+        $vertexSharedConfig = $this->getSharedConfig();
+
+        return $this->getModuleConfig(
+            $vertexSharedConfig::CONFIGURATION_KEY_TAX_PROVIDER,
+            $vertexSharedConfig::TAX_PROVIDER_SPRYKER,
+        ) === $vertexSharedConfig::TAX_PROVIDER_VERTEX
+            || $this->getSharedConfig()->getIsActive();
     }
 }

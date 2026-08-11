@@ -39,7 +39,7 @@ class VertexConfigValidator implements VertexConfigValidatorInterface
 
     protected const RESPONSE_MESSAGE_NOT_STRING_CLIENT_SECRET_FIELD = 'Client Secret must be a string.';
 
-    protected const RESPONSE_MESSAGE_BLANK_TAXAMO_TOKEN_FIELD = 'Seller token is required.';
+    protected const RESPONSE_MESSAGE_BLANK_TAXAMO_TOKEN_FIELD = 'Seller (Taxamo) token is required.';
 
     public function __construct(protected VertexClientInterface $vertexClient)
     {

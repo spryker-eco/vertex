@@ -1,0 +1,50 @@
+resource:
+    name: TaxIdValidate
+    shortName: tax-id-validate
+    description: 'Validates a tax ID for a given country code via the Vertex service.'
+
+    processor: SprykerEco\Glue\Vertex\Api\Storefront\Processor\TaxIdValidateStorefrontProcessor
+    paginationEnabled: false
+
+    security: "is_granted('ROLE_CUSTOMER')"
+
+    operations:
+        - type: Post
+          uriTemplate: '/tax-id-validate'
+          status: 200
+          description: 'Validates a tax ID for a country code via the Vertex service.'
+          normalizationContext:
+              gen_id: false
+          openapiContext:
+              responses:
+                  200:
+                      description: 'Tax ID is valid.'
+                  400:
+                      description: 'Validation failed or Vertex service is disabled.'
+                  401:
+                      description: 'Missing access token.'
+                  403:
+                      description: 'Missing access token.'
+                  422:
+                      description: 'Tax ID or country code is missing.'
+
+    properties:
+        taxId:
+            type: string
+            nullable: true
+            writable: true
+            readable: false
+            required: false
+            description: 'Tax identification number provided by a customer or company.'
+            openapiContext:
+                example: 'DE123456789'
+
+        countryCode:
+            type: string
+            nullable: true
+            writable: true
+            readable: false
+            required: false
+            description: 'ISO 3166-1 alpha-2 country code the tax ID belongs to.'
+            openapiContext:
+                example: 'DE'
