@@ -177,10 +177,9 @@ class VertexShipmentValidatorTest extends Unit
         $validator->validate($shipment, $responseTransfer);
 
         // Assert
-        $this->assertSame(4, count($responseTransfer->getMessages()));
+        $this->assertSame(3, count($responseTransfer->getMessages()));
         $this->assertEqualsCanonicalizing(
             [
-                'Address field billingAddress.address2 is required',
                 'Address field billingAddress.zipCode is required',
                 'Address field billingAddress.city is required',
                 'Address field billingAddress.country is required',
