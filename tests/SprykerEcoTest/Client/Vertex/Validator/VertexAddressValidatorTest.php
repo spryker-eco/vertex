@@ -66,7 +66,12 @@ class VertexAddressValidatorTest extends Unit
         $this->assertStringContainsString('testField.address1', $responseTransfer->getMessages()[0]);
     }
 
-    public function testValidateAddsErrorWhenAddress2IsNull(): void
+    /**
+     * address2 is optional, so an absent second address line must not fail the calculation.
+     * LocationMapper nulls an empty streetAddress2 while building the request anyway, so the
+     * request sent to Vertex is the same whether the value arrives as null or as an empty string.
+     */
+    public function testValidateReturnsNoErrorsWhenAddress2IsNull(): void
     {
         // Arrange
         $address = (new VertexAddressTransfer())
@@ -83,8 +88,27 @@ class VertexAddressValidatorTest extends Unit
         $validator->validate($address, 'testField', $responseTransfer);
 
         // Assert
-        $this->assertCount(1, $responseTransfer->getMessages());
-        $this->assertStringContainsString('testField.address2', $responseTransfer->getMessages()[0]);
+        $this->assertEmpty($responseTransfer->getMessages());
+    }
+
+    public function testValidateReturnsNoErrorsWhenAddress2IsEmptyString(): void
+    {
+        // Arrange
+        $address = (new VertexAddressTransfer())
+            ->setAddress1('123 Main St')
+            ->setAddress2('')
+            ->setCity('New York')
+            ->setCountry('US')
+            ->setZipCode('10001');
+
+        $responseTransfer = new VertexValidationResponseTransfer();
+        $validator = new VertexAddressValidator();
+
+        // Act
+        $validator->validate($address, 'testField', $responseTransfer);
+
+        // Assert
+        $this->assertEmpty($responseTransfer->getMessages());
     }
 
     public function testValidateAddsErrorWhenCityIsMissing(): void
