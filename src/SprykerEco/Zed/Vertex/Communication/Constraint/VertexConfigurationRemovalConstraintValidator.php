@@ -10,12 +10,18 @@ declare(strict_types = 1);
 namespace SprykerEco\Zed\Vertex\Communication\Constraint;
 
 use SprykerEco\Shared\Vertex\VertexConfig;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class VertexConfigurationRemovalConstraintValidator extends ConstraintValidator
 {
+    /**
+     * @var string
+     */
+    protected const REASON_PLACEHOLDER_PATTERN = '{{ reason_%d }}';
+
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof VertexConfigurationRemovalConstraint) {
@@ -37,8 +43,10 @@ class VertexConfigurationRemovalConstraintValidator extends ConstraintValidator
             : $constraint->message;
 
         $this->context->buildViolation($message)
-            ->setParameter('{{ scope }}', $payload[VertexConfig::VERTEX_CONFIGURATION_INCOMPLETE_PAYLOAD_KEY_SCOPE])
-            ->setParameter('{{ reasons }}', $this->formatReasons($payload[VertexConfig::VERTEX_CONFIGURATION_INCOMPLETE_PAYLOAD_KEY_REASONS]))
+            ->setParameters([
+                '{{ scope }}' => new TranslatableMessage($payload[VertexConfig::VERTEX_CONFIGURATION_INCOMPLETE_PAYLOAD_KEY_SCOPE]),
+                '{{ reasons }}' => $this->formatReasons($payload[VertexConfig::VERTEX_CONFIGURATION_INCOMPLETE_PAYLOAD_KEY_REASONS]),
+            ])
             ->addViolation();
     }
 
@@ -71,10 +79,23 @@ class VertexConfigurationRemovalConstraintValidator extends ConstraintValidator
     }
 
     /**
+     * Violation parameters are substituted into the message without being translated, so every reason is
+     * handed over as a translatable message. `Translator::trans()` resolves each of them before the
+     * substitution, which keeps the reasons in the language of the Back Office user.
+     *
      * @param array<string> $reasons
      */
-    protected function formatReasons(array $reasons): string
+    protected function formatReasons(array $reasons): TranslatableMessage
     {
-        return implode(' ', $reasons);
+        $translatableReasons = [];
+        $placeholders = [];
+
+        foreach (array_values($reasons) as $index => $reason) {
+            $placeholder = sprintf(static::REASON_PLACEHOLDER_PATTERN, $index);
+            $placeholders[] = $placeholder;
+            $translatableReasons[$placeholder] = new TranslatableMessage($reason);
+        }
+
+        return new TranslatableMessage(implode(' ', $placeholders), $translatableReasons);
     }
 }

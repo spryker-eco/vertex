@@ -13,6 +13,8 @@ use Codeception\Test\Unit;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
+use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
+use Generated\Shared\Transfer\VertexSaleTransfer;
 use SprykerEco\Client\Vertex\VertexClient;
 use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
 
@@ -91,6 +93,91 @@ class VertexFacadeRefundTest extends Unit
 
         // Act
         $this->tester->getFacade()->processOrderRefund($orderItemsIds, $orderTransfer->getIdSalesOrder());
+    }
+
+    public function testRefundRequestContainsShipmentsWhenShipmentIsRefundable(): void
+    {
+        // Arrange
+        $storeTransfer = $this->tester->haveStore();
+        $this->tester->mockVertexConfigResolver();
+
+        $orderTransfer = $this->getOrderTransferForRefund($storeTransfer);
+        $orderItemsIds = $this->getOrderItemIds($orderTransfer);
+
+        $vertexSaleTransfer = null;
+        $vertexClientMock = $this->createMock(VertexClient::class);
+        $vertexClientMock->method('authenticate')->willReturn(
+            (new VertexAuthResponseTransfer())
+                ->setAccessToken('test-token')
+                ->setExpiresIn(1000),
+        );
+        $vertexClientMock->expects($this->once())
+            ->method('sendTaxRefund')
+            ->willReturnCallback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use (&$vertexSaleTransfer) {
+                $vertexSaleTransfer = $vertexCalculationRequestTransfer->getSale();
+
+                return $this->tester->haveTaxCalculationResponseTransfer(['isSuccessful' => true]);
+            });
+        $this->tester->setDependency(static::CLIENT_VERTEX, $vertexClientMock);
+
+        // Act
+        $this->tester->getFacade()->processOrderRefund($orderItemsIds, $orderTransfer->getIdSalesOrder());
+
+        // Assert
+        $this->assertInstanceOf(VertexSaleTransfer::class, $vertexSaleTransfer);
+        $this->assertGreaterThan(
+            0,
+            $vertexSaleTransfer->getShipments()->count(),
+            'Expected the shipments of the order to be refunded by default.',
+        );
+    }
+
+    public function testRefundRequestContainsNoShipmentsWhenShipmentIsNotRefundable(): void
+    {
+        // Arrange
+        $storeTransfer = $this->tester->haveStore();
+        $this->tester->mockVertexConfigResolver();
+        $this->tester->mockConfigMethod('isShipmentRefundable', false);
+
+        $orderTransfer = $this->getOrderTransferForRefund($storeTransfer);
+        $orderItemsIds = $this->getOrderItemIds($orderTransfer);
+
+        $vertexSaleTransfer = null;
+        $vertexClientMock = $this->createMock(VertexClient::class);
+        $vertexClientMock->method('authenticate')->willReturn(
+            (new VertexAuthResponseTransfer())
+                ->setAccessToken('test-token')
+                ->setExpiresIn(1000),
+        );
+        $vertexClientMock->expects($this->once())
+            ->method('sendTaxRefund')
+            ->willReturnCallback(function (VertexCalculationRequestTransfer $vertexCalculationRequestTransfer) use (&$vertexSaleTransfer) {
+                $vertexSaleTransfer = $vertexCalculationRequestTransfer->getSale();
+
+                return $this->tester->haveTaxCalculationResponseTransfer(['isSuccessful' => true]);
+            });
+        $this->tester->setDependency(static::CLIENT_VERTEX, $vertexClientMock);
+
+        // Act
+        $this->tester->getFacade()->processOrderRefund($orderItemsIds, $orderTransfer->getIdSalesOrder());
+
+        // Assert
+        $this->assertInstanceOf(VertexSaleTransfer::class, $vertexSaleTransfer);
+        $this->assertCount(
+            0,
+            $vertexSaleTransfer->getShipments(),
+            'Expected no shipment to be credited when the shipment is not refundable.',
+        );
+    }
+
+    /**
+     * @return array<int>
+     */
+    protected function getOrderItemIds(OrderTransfer $orderTransfer): array
+    {
+        return array_map(function ($itemTransfer) {
+            return $itemTransfer->getIdSalesOrderItem();
+        }, $orderTransfer->getItems()->getArrayCopy());
     }
 
     protected function getOrderTransferForRefund(StoreTransfer $storeTransfer): OrderTransfer
