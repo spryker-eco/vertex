@@ -177,6 +177,45 @@ class SuppliesRequestBuilderTest extends Unit
         $this->assertEquals(true, $suppliesTransfer->getLineItems()[0]->getTaxIncludedIndicator());
     }
 
+    /**
+     * The shipment line item must carry the same tax-included indicator as the item line items, so that
+     * Vertex nets the already tax-inclusive shipment price down instead of adding tax on top of it.
+     *
+     * @return void
+     */
+    public function testSuppliesLineItemsShipmentHasTaxIncludedIndicatorWhenPriceModeIsGross(): void
+    {
+        // Arrange
+        $vertexCalculationRequestTransfer = $this->tester->haveVertexCalculationRequestTransfer();
+        $vertexCalculationRequestTransfer->getSale()->setPriceMode('GROSS_MODE');
+        $suppliesRequestBuilder = $this->tester->getFactory()->createSuppliesQuotationRequestBuilder();
+
+        // Act
+        $suppliesTransfer = $suppliesRequestBuilder->build($vertexCalculationRequestTransfer, (new VertexSuppliesTransfer()));
+
+        // Assert
+        $shipmentLineItem = $suppliesTransfer->getLineItems()[$suppliesTransfer->getLineItems()->count() - 1];
+        $this->assertEquals(true, $shipmentLineItem->getTaxIncludedIndicator());
+    }
+
+    /**
+     * @return void
+     */
+    public function testSuppliesLineItemsShipmentHasNoTaxIncludedIndicatorWhenPriceModeIsNet(): void
+    {
+        // Arrange
+        $vertexCalculationRequestTransfer = $this->tester->haveVertexCalculationRequestTransfer();
+        $vertexCalculationRequestTransfer->getSale()->setPriceMode('NET_MODE');
+        $suppliesRequestBuilder = $this->tester->getFactory()->createSuppliesQuotationRequestBuilder();
+
+        // Act
+        $suppliesTransfer = $suppliesRequestBuilder->build($vertexCalculationRequestTransfer, (new VertexSuppliesTransfer()));
+
+        // Assert
+        $shipmentLineItem = $suppliesTransfer->getLineItems()[$suppliesTransfer->getLineItems()->count() - 1];
+        $this->assertEquals(false, $shipmentLineItem->getTaxIncludedIndicator());
+    }
+
     public function testSuppliesLineItemsCustomerHasCountryWhenNoShippingAddressAndSellerCountryCodeIsSet(): void
     {
         // Arrange

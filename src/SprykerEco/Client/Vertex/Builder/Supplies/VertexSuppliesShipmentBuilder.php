@@ -17,6 +17,11 @@ use SprykerEco\Client\Vertex\Builder\VertexSuppliesRequestBuilderInterface;
 class VertexSuppliesShipmentBuilder implements VertexSuppliesRequestBuilderInterface
 {
     /**
+     * @var string
+     */
+    protected const PRICE_MODE_GROSS = 'GROSS_MODE';
+
+    /**
      * @param array<\SprykerEco\Client\Vertex\Builder\VertexLineItemBuilderInterface> $vertexLineItemBuilders
      */
     public function __construct(protected array $vertexLineItemBuilders)
@@ -33,8 +38,12 @@ class VertexSuppliesShipmentBuilder implements VertexSuppliesRequestBuilderInter
         VertexCalculationRequestTransfer $vertexCalculationRequestTransfer,
         VertexSuppliesTransfer $vertexSuppliesTransfer,
     ): VertexSuppliesTransfer {
+        $isGrossPriceMode = $vertexCalculationRequestTransfer->getSaleOrFail()->getPriceMode() === static::PRICE_MODE_GROSS;
+
         foreach ($vertexCalculationRequestTransfer->getSaleOrFail()->getShipments() as $shipment) {
-            $vertexLineItemTransfer = new VertexLineItemTransfer();
+            $vertexLineItemTransfer = (new VertexLineItemTransfer())
+                ->setTaxIncludedIndicator($isGrossPriceMode);
+
             foreach ($this->vertexLineItemBuilders as $builder) {
                 $vertexLineItemTransfer = $builder->build($shipment, $vertexLineItemTransfer);
             }
