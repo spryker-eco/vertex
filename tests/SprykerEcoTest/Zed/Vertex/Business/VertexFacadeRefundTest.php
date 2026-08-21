@@ -10,13 +10,16 @@ declare(strict_types = 1);
 namespace SprykerEcoTest\Zed\Vertex\Business;
 
 use Codeception\Test\Unit;
+use Generated\Shared\Transfer\ExpenseTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
+use Generated\Shared\DataBuilder\ExpenseBuilder;
 use SprykerEco\Client\Vertex\VertexClient;
 use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
+use Orm\Zed\Sales\Persistence\SpySalesExpense;
 
 /**
  * Auto-generated group annotations
@@ -104,6 +107,16 @@ class VertexFacadeRefundTest extends Unit
         $orderTransfer = $this->getOrderTransferForRefund($storeTransfer);
         $orderItemsIds = $this->getOrderItemIds($orderTransfer);
 
+        $shipmentExpenseTransfer = new ExpenseBuilder()->build();
+        $salesExpenseEntity = (new SpySalesExpense())->fromArray($shipmentExpenseTransfer->toArray())
+            ->setFkSalesOrder($orderTransfer->getIdSalesOrder())
+            ->setType('SHIPMENT_EXPENSE_TYPE')
+            ->setNetPrice($shipmentExpenseTransfer->getSumNetPrice())
+            ->setGrossPrice($shipmentExpenseTransfer->getSumGrossPrice())
+            ->setRefundableAmount($shipmentExpenseTransfer->getSumNetPrice());
+
+        $salesExpenseEntity->save();
+
         $vertexSaleTransfer = null;
         $vertexClientMock = $this->createMock(VertexClient::class);
         $vertexClientMock->method('authenticate')->willReturn(
@@ -125,10 +138,18 @@ class VertexFacadeRefundTest extends Unit
 
         // Assert
         $this->assertInstanceOf(VertexSaleTransfer::class, $vertexSaleTransfer);
-        $this->assertGreaterThan(
-            0,
-            $vertexSaleTransfer->getShipments()->count(),
-            'Expected the shipments of the order to be refunded by default.',
+        $this->assertCount(
+            1,
+            $vertexSaleTransfer->getShipments(),
+            'Expected the shipment of the order to be refunded by default.',
+        );
+
+        $vertexShipmentTransfer = $vertexSaleTransfer->getShipments()[0];
+
+        $this->assertSame(
+            $shipmentExpenseTransfer->getSumNetPrice(),
+            $vertexShipmentTransfer->getPriceAmount(),
+            'Expected the shipment sent to Vertex to carry the price of the actually refunded shipment.',
         );
     }
 
