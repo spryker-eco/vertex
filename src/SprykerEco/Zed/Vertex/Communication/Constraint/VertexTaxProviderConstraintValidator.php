@@ -54,10 +54,6 @@ class VertexTaxProviderConstraintValidator extends ConstraintValidator
     }
 
     /**
-     * Violation parameters are substituted into the message without being translated, so every reason is
-     * handed over as a translatable message. `Translator::trans()` resolves each of them before the
-     * substitution, which keeps the reasons in the language of the Back Office user.
-     *
      * @param array<string> $reasons
      */
     protected function formatReasons(array $reasons): TranslatableMessage

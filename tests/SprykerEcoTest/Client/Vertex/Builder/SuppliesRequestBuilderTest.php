@@ -177,12 +177,6 @@ class SuppliesRequestBuilderTest extends Unit
         $this->assertEquals(true, $suppliesTransfer->getLineItems()[0]->getTaxIncludedIndicator());
     }
 
-    /**
-     * The shipment line item must carry the same tax-included indicator as the item line items, so that
-     * Vertex nets the already tax-inclusive shipment price down instead of adding tax on top of it.
-     *
-     * @return void
-     */
     public function testSuppliesLineItemsShipmentHasTaxIncludedIndicatorWhenPriceModeIsGross(): void
     {
         // Arrange

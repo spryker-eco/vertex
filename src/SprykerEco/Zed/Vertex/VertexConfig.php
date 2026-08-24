@@ -344,8 +344,7 @@ class VertexConfig extends AbstractBundleConfig
     /**
      * Specification:
      * - Returns whether shipment costs are refunded together with the refunded order items.
-     * - When disabled, the shipments are excluded from the refund request sent to Vertex, so no tax is
-     *   credited for them.
+     * - When disabled, the shipments are excluded from the refund request sent to Vertex, so no tax is credited for them.
      * - Returns true by default.
      *
      * @api

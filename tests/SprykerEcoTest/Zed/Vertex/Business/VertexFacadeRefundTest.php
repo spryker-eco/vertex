@@ -10,16 +10,15 @@ declare(strict_types = 1);
 namespace SprykerEcoTest\Zed\Vertex\Business;
 
 use Codeception\Test\Unit;
-use Generated\Shared\Transfer\ExpenseTransfer;
+use Generated\Shared\DataBuilder\ExpenseBuilder;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\VertexAuthResponseTransfer;
 use Generated\Shared\Transfer\VertexCalculationRequestTransfer;
 use Generated\Shared\Transfer\VertexSaleTransfer;
-use Generated\Shared\DataBuilder\ExpenseBuilder;
+use Orm\Zed\Sales\Persistence\SpySalesExpense;
 use SprykerEco\Client\Vertex\VertexClient;
 use SprykerEcoTest\Zed\Vertex\VertexBusinessTester;
-use Orm\Zed\Sales\Persistence\SpySalesExpense;
 
 /**
  * Auto-generated group annotations
