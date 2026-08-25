@@ -22,6 +22,7 @@ use SprykerEco\Client\Vertex\VertexClientInterface;
 use SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface;
 use SprykerEco\Zed\Vertex\Business\Mapper\VertexMapperInterface;
 use SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface;
+use SprykerEco\Zed\Vertex\VertexConfig;
 
 class RefundProcessor implements RefundProcessorInterface
 {
@@ -37,6 +38,7 @@ class RefundProcessor implements RefundProcessorInterface
      * @param array<\SprykerEco\Zed\Vertex\Dependency\Plugin\OrderVertexExpanderPluginInterface|\Spryker\Zed\TaxAppExtension\Dependency\Plugin\OrderTaxAppExpanderPluginInterface> $orderVertexExpanderPlugins
      * @param \SprykerEco\Zed\Vertex\Business\AccessTokenProvider\VertexAccessTokenProviderInterface $vertexAccessTokenProvider
      * @param \SprykerEco\Zed\Vertex\Business\Resolver\VertexConfigResolverInterface $configResolver
+     * @param \SprykerEco\Zed\Vertex\VertexConfig $vertexConfig
      */
     public function __construct(
         protected VertexClientInterface $vertexClient,
@@ -46,6 +48,7 @@ class RefundProcessor implements RefundProcessorInterface
         protected array $orderVertexExpanderPlugins,
         protected VertexAccessTokenProviderInterface $vertexAccessTokenProvider,
         protected VertexConfigResolverInterface $configResolver,
+        protected VertexConfig $vertexConfig,
     ) {
     }
 
@@ -90,6 +93,10 @@ class RefundProcessor implements RefundProcessorInterface
         $orderTransfer = $this->executeOrderVertexExpanderPlugins($orderTransfer);
 
         $vertexSaleTransfer = $this->vertexMapper->mapOrderTransferToVertexSaleTransfer($orderTransfer, new VertexSaleTransfer());
+
+        if (!$this->vertexConfig->isShipmentRefundable()) {
+            $vertexSaleTransfer->setShipments(new ArrayObject());
+        }
 
         $vertexApiAccessTokenTransfer = $this->vertexAccessTokenProvider->provideVertexAccessToken($vertexConfigTransfer);
 

@@ -10,12 +10,18 @@ declare(strict_types = 1);
 namespace SprykerEco\Zed\Vertex\Communication\Constraint;
 
 use SprykerEco\Shared\Vertex\VertexConfig;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class VertexTaxProviderConstraintValidator extends ConstraintValidator
 {
+    /**
+     * @var string
+     */
+    protected const REASON_PLACEHOLDER_PATTERN = '{{ reason_%d }}';
+
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof VertexTaxProviderConstraint) {
@@ -27,7 +33,7 @@ class VertexTaxProviderConstraintValidator extends ConstraintValidator
         }
 
         $this->context->buildViolation($constraint->message)
-            ->setParameter('{{ reasons }}', $this->formatReasons($this->decodeReasons($value)))
+            ->setParameters(['{{ reasons }}' => $this->formatReasons($this->decodeReasons($value))])
             ->addViolation();
     }
 
@@ -50,8 +56,17 @@ class VertexTaxProviderConstraintValidator extends ConstraintValidator
     /**
      * @param array<string> $reasons
      */
-    protected function formatReasons(array $reasons): string
+    protected function formatReasons(array $reasons): TranslatableMessage
     {
-        return implode(' ', $reasons);
+        $translatableReasons = [];
+        $placeholders = [];
+
+        foreach (array_values($reasons) as $index => $reason) {
+            $placeholder = sprintf(static::REASON_PLACEHOLDER_PATTERN, $index);
+            $placeholders[] = $placeholder;
+            $translatableReasons[$placeholder] = new TranslatableMessage($reason);
+        }
+
+        return new TranslatableMessage(implode(' ', $placeholders), $translatableReasons);
     }
 }
