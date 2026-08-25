@@ -106,7 +106,7 @@ class VertexFacadeRefundTest extends Unit
         $orderTransfer = $this->getOrderTransferForRefund($storeTransfer);
         $orderItemsIds = $this->getOrderItemIds($orderTransfer);
 
-        $shipmentExpenseTransfer = new ExpenseBuilder()->build();
+        $shipmentExpenseTransfer = (new ExpenseBuilder())->build();
         $salesExpenseEntity = (new SpySalesExpense())->fromArray($shipmentExpenseTransfer->toArray())
             ->setFkSalesOrder($orderTransfer->getIdSalesOrder())
             ->setType('SHIPMENT_EXPENSE_TYPE')
