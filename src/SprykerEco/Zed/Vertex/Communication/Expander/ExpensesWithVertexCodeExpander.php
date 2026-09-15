@@ -49,13 +49,16 @@ class ExpensesWithVertexCodeExpander
 
     protected function getExpenseKey(ExpenseTransfer $expenseTransfer): string
     {
-        return implode(
-            '|',
-            [
-                $expenseTransfer->getType(),
-                $expenseTransfer->getName(),
-                $expenseTransfer->getMerchantReference(),
-            ],
-        );
+        $keyParts = [
+            $expenseTransfer->getType(),
+            $expenseTransfer->getName(),
+        ];
+
+        /** @phpstan-ignore function.alreadyNarrowedType */
+        if (method_exists($expenseTransfer, 'getMerchantReference') && $expenseTransfer->getMerchantReference()) {
+            $keyParts[] = $expenseTransfer->getMerchantReference();
+        }
+
+        return implode('|', $keyParts);
     }
 }
