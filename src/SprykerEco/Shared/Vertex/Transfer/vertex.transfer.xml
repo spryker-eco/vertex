@@ -90,6 +90,7 @@
 
     <transfer name="ProductOption">
         <property name="taxMetadata" type="ItemTaxMetadata" strict="true"/>
+        <property name="sku" type="string" description="The Stock Keeping Unit, a unique identifier for a concrete product."/>
     </transfer>
 
     <transfer name="VertexItem" strict="true">
@@ -224,16 +225,12 @@
         <property name="idSalesOrder" type="int"/>
     </transfer>
 
-    <transfer name="VertexValidationRequest" strict="true">
-        <property name="countryCode" type="string"/>
-        <property name="taxId" type="string"/>
-    </transfer>
-
     <transfer name="VertexValidationResponse" strict="true">
         <property name="isValid" type="bool"/>
         <property name="messages" type="string[]" singular="message"/>
         <property name="additionalInfo" type="string"/>
         <property name="messageKey" type="string"/>
+        <property name="message" type="string"/>
     </transfer>
 
     <transfer name="TaxIdValidationHistory" strict="true">
@@ -297,7 +294,6 @@
         <property name="warehouseAddress" type="Address"/>
         <property name="vertexShippingWarehouses" type="VertexShippingWarehouse[]" singular="vertexShippingWarehouse"/>
         <property name="taxMetadata" type="array" associative="true" singular="taxMetadataEntry"/>
-        <property name="sku" type="string"/>
     </transfer>
 
     <transfer name="Address">
@@ -404,13 +400,6 @@
         <property name="tenantIdentifier" type="string"/>
     </transfer>
 
-    <transfer name="VertexValidationResponse" strict="true">
-        <property name="isValid" type="bool"/>
-        <property name="message" type="string"/>
-        <property name="additionalInfo" type="string"/>
-        <property name="errorCode" type="string"/>
-    </transfer>
-
     <transfer name="TaxamoApiRequest" strict="true">
         <property name="taxamoToken" type="string"/>
         <property name="taxamoApiUrl" type="string"/>
@@ -431,5 +420,35 @@
     <transfer name="RestErrorMessage">
         <property name="status" type="int" description="A HTTP status code."/>
         <property name="detail" type="string" description="A detailed error message providing more specific information about an issue."/>
+    </transfer>
+
+    <transfer name="ConfigurationValueCollectionRequest" strict="true">
+        <property name="configurationValues" type="ConfigurationValue[]" singular="configurationValue"/>
+        <property name="deletionKeys" type="ConfigurationValueDeletion[]" singular="deletionKey"/>
+    </transfer>
+
+    <transfer name="AclEntityMetadataConfig">
+    </transfer>
+
+    <transfer name="AclEntityMetadata">
+    </transfer>
+
+    <transfer name="ConfigurationScope">
+    </transfer>
+
+    <transfer name="ConfigurationValueDeletion" strict="true">
+        <property name="settingKey" type="string"/>
+        <property name="scope" type="string"/>
+        <property name="scopeIdentifier" type="string"/>
+    </transfer>
+
+    <transfer name="ConfigurationValue" strict="true">
+        <property name="settingKey" type="string"/>
+        <property name="scope" type="string"/>
+        <property name="scopeIdentifier" type="string"/>
+        <property name="value" type="string"/>
+    </transfer>
+
+    <transfer name="MessageAttributes">
     </transfer>
 </transfers>
