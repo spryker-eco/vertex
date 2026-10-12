@@ -233,6 +233,7 @@
         <property name="additionalInfo" type="string"/>
         <property name="messageKey" type="string"/>
         <property name="message" type="string"/>
+        <property name="errorCode" type="string"/>
     </transfer>
 
     <transfer name="TaxIdValidationHistory" strict="true">
