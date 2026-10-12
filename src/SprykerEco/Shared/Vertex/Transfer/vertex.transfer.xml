@@ -44,6 +44,7 @@
         <property name="unitDiscountAmountFullAggregation" type="int"/>
         <property name="taxRateAverageAggregation" type="float"/>
         <property name="taxAmountAfterCancellation" type="int"/>
+        <property name="productOptions" type="ProductOption[]" singular="productOption"/>
     </transfer>
 
     <transfer name="Expense">
@@ -60,6 +61,7 @@
         <property name="sumPriceToPayAggregation" type="int"/>
         <property name="sumPrice" type="int"/>
         <property name="taxAmountAfterCancellation" type="int"/>
+        <property name="name" type="string"/>
     </transfer>
 
     <transfer name="SaleTaxMetadata" strict="true">
@@ -297,6 +299,8 @@
     </transfer>
 
     <transfer name="Address">
+        <property name="country" type="Country"/>
+        <property name="iso2Code" type="string"/>
     </transfer>
 
     <transfer name="VertexShippingWarehouse" strict="true">
@@ -428,12 +432,17 @@
     </transfer>
 
     <transfer name="AclEntityMetadataConfig">
+        <property name="aclEntityMetadataCollection" type="AclEntityMetadataCollection"/>
     </transfer>
 
     <transfer name="AclEntityMetadata">
+        <property name="entityName" type="string"/>
+        <property name="defaultGlobalOperationMask" type="int"/>
     </transfer>
 
     <transfer name="ConfigurationScope">
+        <property name="key" type="string"/>
+        <property name="identifier" type="string"/>
     </transfer>
 
     <transfer name="ConfigurationValueDeletion" strict="true">
@@ -450,5 +459,14 @@
     </transfer>
 
     <transfer name="MessageAttributes">
+        <property name="storeReference" type="string"/>
+    </transfer>
+
+    <transfer name="Locale">
+        <property name="localeName" type="string"/>
+    </transfer>
+
+    <transfer name="AclEntityMetadataCollection">
+        <property name="collection" type="array" singular="aclEntityMetadata" associative="true"/>
     </transfer>
 </transfers>
